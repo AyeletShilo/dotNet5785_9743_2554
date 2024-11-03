@@ -1,19 +1,19 @@
 ﻿//Console.WriteLine("Hello, World!");
 
-namespace Targil0
+namespace Stage0
 
 {
     partial class Program
     {
         private static void Main(string[] args)
         {
-            welcome2554();
-            welcome9743();
+            Welcome2554();
+            Welcome9743();
             Console.ReadKey();
         }
 
-        static partial void welcome9743();
-        private static void welcome2554()
+        static partial void Welcome9743();
+        private static void Welcome2554()
         {
             Console.WriteLine("Enter your name: ");
             string name = Console.ReadLine();
