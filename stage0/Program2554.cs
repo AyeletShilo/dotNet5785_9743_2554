@@ -1,7 +1,6 @@
 ﻿//Console.WriteLine("Hello, World!");
 
 namespace Stage0
-
 {
     partial class Program
     {
