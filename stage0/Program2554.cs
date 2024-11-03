@@ -1,6 +1,6 @@
 ﻿//Console.WriteLine("Hello, World!");
 
-namespace Targil0
+namespace Stage0
 
 {
     partial class Program
