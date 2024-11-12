@@ -11,7 +11,7 @@ public enum Range
 
 public enum Role
 { 
- managar,
+ manager,
  donater 
 }
 
@@ -20,5 +20,10 @@ public enum Type
    //toDo..
 
    a
+}
+
+public enum AssignmentEnum
+{
+    EndTreatment
 }
 
