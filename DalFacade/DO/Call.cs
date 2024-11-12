@@ -15,5 +15,5 @@ public record Call
    DateTime? MaxTime=null
 )
 {
-
+  public Call(): this(0,Type.a/*?*/,)
 }

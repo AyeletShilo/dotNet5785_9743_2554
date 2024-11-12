@@ -18,5 +18,6 @@ public enum Role
 public enum Type
 {
    //toDo..
+   a
 }
 
