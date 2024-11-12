@@ -24,6 +24,9 @@ public enum Type
 
 public enum AssignmentEnum
 {
-    EndTreatment
+  takenCare,
+  selfCancel,
+  cancelAdmin,
+  cancelExpired
 }
 
