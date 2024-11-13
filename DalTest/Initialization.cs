@@ -19,30 +19,7 @@ public static class Initialization
     {
 
     }
-    private static void createCall()
-    {
-   
-
-
-        for(int i=0; i<10; i++)
-        {
-            string[] studentNames =
-            { "Dani Levy", "Eli Amar", "Yair Cohen", "Ariela Levin", "Dina Klein", "Hazit 5 Sdarot" };
-
-            Type callType =
-            string callAddress
-            double latitude
-            double longitude
-            DateTime openTime
-            string? description =
-            DateTime? maxTime =
-
-
-
-
-
-            s_dalCall!.Create(new());
-        }
+    
         private static void createVolunteer()
     {
 
