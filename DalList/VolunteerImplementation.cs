@@ -9,7 +9,7 @@ public class VolunteerImplementation : IVolunteer
     public void Create(Volunteer item)
     {
         if (Read(item.Id) == item)
-            throw new Exception("\"Object of type Assignment with such ID does already exist\""/*?*/);
+            throw new Exception($"Object of type Assignment with ID={item.Id} does already exist");
         else
             DataSource.Volunteers?.Add(item);
     }
@@ -22,7 +22,7 @@ public class VolunteerImplementation : IVolunteer
             bool? x = DataSource.Volunteers?.Remove(item);
         }
         else
-            throw new Exception("\"Object of type Assignment with such ID does not exist\""/*?*/);
+            throw new Exception($"Object of type Assignment with ID={item?.Id} does not exist");
     }
 
     public void DeleteAll()
@@ -40,7 +40,7 @@ public class VolunteerImplementation : IVolunteer
     public List<Volunteer> ReadAll()
     {
         List<Volunteer>? copyList = new();
-        if (DataSource.Volunteers != null)
+        if (DataSource.Volunteers is not null)
             copyList.AddRange(DataSource.Volunteers);
         return copyList;
     }

@@ -14,15 +14,15 @@
 /// <param name="MaxTime">Time (date and hour) by which the call should be closed.</param>
 public record Call
 (
-   int Id,//?//
-   Type callType,
-   string callAddress,
+   int Id,
+   Type CallType,
+   string CallAddress,
    double Latitude,
    double Longitude,
    DateTime OpenTime,
-   string? description=null,
+   string? Description=null,
    DateTime? MaxTime=null
 )
 {
-    public Call() : this(0, Type.a/*?*/, "", 0, 0, DateTime.MinValue) { }
+    public Call() : this(0, Type.A/*?*/, "", 0, 0, DateTime.MinValue) { }
 }

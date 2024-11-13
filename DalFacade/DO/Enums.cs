@@ -4,29 +4,29 @@ using System.Data;
 namespace DO;
 
 public enum Range
-{ air,
-  walking,
-  car
+{ Air,
+  Walking,
+  Car
 }
 
 public enum Role
 { 
- manager,
- donater 
+ Manager,
+ Donater 
 }
 
 public enum Type
 {
    //toDo..
 
-   a
+   A
 }
 
 public enum AssignmentEnum
 {
-  takenCare,
-  selfCancel,
-  cancelAdmin,
-  cancelExpired
+  TakenCare,
+  SelfCancel,
+  CancelAdmin,
+  CancelExpired
 }
 

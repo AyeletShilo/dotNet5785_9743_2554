@@ -10,9 +10,9 @@ public class CallImplementation : ICall
 {
     public void Create(Call item)
     {
-
-        int NewId = DataSource.Config();//?//
-        Call newItem = new(NewId, item.callType,item.callAddress,item.Latitude,item.Longitude,item.OpenTime,item.description,item.MaxTime);
+        
+        int NewId = Config.nextCallId;
+        Call newItem = new(NewId, item.CallType,item.CallAddress,item.Latitude,item.Longitude,item.OpenTime,item.Description,item.MaxTime);
         DataSource.Calls?.Add(newItem);
     }
 
@@ -24,7 +24,7 @@ public class CallImplementation : ICall
             bool? x = DataSource.Calls?.Remove(item);
         }
         else
-            throw new Exception("\"Object of type Call with such ID does not exist\""/*?*/);
+            throw new Exception($"Object of type Call with ID={item?.Id} does not exist");
     }
 
     public void DeleteAll()

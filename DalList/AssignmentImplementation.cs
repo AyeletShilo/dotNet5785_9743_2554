@@ -9,7 +9,7 @@ public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        int NewId = DataSource.Config();//?//
+        int NewId = Config.nextAssignmentId;//?//
         Assignment newItem = new(NewId,item.CallId, item.VolunteerId, item.InterTime, item.EndTime, item.EndTreatment);
         DataSource.Assignments?.Add(newItem);
     }
@@ -22,7 +22,7 @@ public class AssignmentImplementation : IAssignment
             bool? x = DataSource.Assignments?.Remove(item);
         }
         else
-            throw new Exception("\"Object of type Assignment with such ID does not exist\""/*?*/);   
+            throw new Exception($"Object of type Assignment with ID={item?.Id} does not exists");   
     }
 
     public void DeleteAll()
