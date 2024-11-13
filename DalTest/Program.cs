@@ -23,7 +23,7 @@ namespace DalTest
                     string callAddress
                         double latitude
                         double longitude
-                        DateTime openTime
+                        DateTime openTimen
                         string? description =
             DateTime ? maxTime =
 
