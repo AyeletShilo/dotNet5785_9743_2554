@@ -9,7 +9,7 @@ public class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        int NewId = Config.nextAssignmentId;//?//
+        int NewId = Config.nextAssignmentId;
         Assignment newItem = new(NewId,item.CallId, item.VolunteerId, item.InterTime, item.EndTime, item.EndTreatment);
         DataSource.Assignments?.Add(newItem);
     }

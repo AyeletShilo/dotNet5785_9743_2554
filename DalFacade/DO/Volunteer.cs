@@ -22,15 +22,12 @@ public record Volunteer
     string Email,
     Role Job,
     bool Active,
-    Range Distance, //extra
-    //string? password, //extra
+    Range Distance,
     string? VolAddress = null,
     double? Latitude = null,
     double? Longitude =null,
     double? MaxDistance=null
 )
-    
-
-{
+{ 
     public Volunteer(): this(0,"","","",Role.Donater,false,Range.Air) {}
 };

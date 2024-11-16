@@ -3,6 +3,8 @@
 
 namespace DalApi;
 using DO;
+
+
 public interface ICall
 {
     void Create(Call item); //Creates new entity object in DAL
