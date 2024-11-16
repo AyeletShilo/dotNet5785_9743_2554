@@ -22,7 +22,7 @@ public record Volunteer
     string Email,
     Role Job,
     bool Active,
-    Range Distance, //extra
+    RangeType Distance, //extra
     //string? password, //extra
     string? VolAddress = null,
     double? Latitude = null,
@@ -32,5 +32,5 @@ public record Volunteer
     
 
 {
-    public Volunteer(): this(0,"","","",Role.Donater,false,Range.Air) {}
+    public Volunteer(): this(0,"","","",Role.Donater,false,RangeType.Air) {}
 };
