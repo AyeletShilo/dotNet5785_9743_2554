@@ -126,7 +126,7 @@ public static class Initialization
                     break;
             }
             double latitude = latitudes[i];
-            double longitude = longitudes[i];
+            double longitude = longitudes[i++];
             DateTime openTime = GenerateOpeningTime();
             //DateTime? MaxTime = null;
             rType=s_rand.Next(0, 2);
