@@ -235,12 +235,16 @@ namespace DalTest
                         switch (d)
                         {
                             case choicesC.call:
+                                //Console.WriteLine(nextCallId);
                                 break;
                             case choicesC.assignment:
+                                //Console.WriteLine(nextAssignmentId);
                                 break;
                             case choicesC.clock:
+                                Console.WriteLine(s_dalConfig.Clock);
                                 break;
                             case choicesC.risk:
+                                Console.WriteLine(s_dalConfig.RiskRang);
                                 break;
                         }
 
@@ -273,7 +277,7 @@ namespace DalTest
                 press 5 for talking ");
 
 
-                DO.Type cType = (DO.Type)Console.Read();
+                DO.TypeOfCall cType = (DO.TypeOfCall)Console.Read();
 
                 Console.WriteLine("new address:\n");
                 string address = Console.ReadLine()!;
@@ -371,7 +375,7 @@ namespace DalTest
                 press 4 for thechnologyHelp,
                 press 5 for talking ");
 
-                    DO.Type cType = (DO.Type)Console.Read();
+                    DO.TypeOfCall cType = (DO.TypeOfCall)Console.Read();
                     if (cType == null)
                         cType = oldItem.CallType;
 

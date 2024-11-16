@@ -18,7 +18,51 @@ public static class Initialization
 
     private static void createAssignment()
     {
+        List<Call>? existsingCall = s_dalCall?.ReadAll();
+        List<Volunteer>? exsistingVul = s_dalVolunteer?.ReadAll();
+        int counter = 0;
 
+        foreach (Call item in existsingCall)
+        {
+            int callId = item.Id;
+            Random rand = new Random();
+            int randomV = rand.Next(exsistingVul.Count);
+            int volunteerId = exsistingVul[randomV].Id;
+
+            DateTime start = item.OpenTime;
+            DateTime? end = item.MaxTime;
+            int time = (end - start).Value.Days;
+            DateTime entry = start.AddDays(rand.Next(time));
+
+
+            DateTime? stop;
+            AssignmentEnum? stopEnum;
+            if (counter > 23)
+            {
+                int timeToStop = (end - entry).Value.Days;
+                stop = entry.AddDays(rand.Next(timeToStop));
+                if (counter > 41)
+                    stopEnum = AssignmentEnum.TakenCare;
+                else if (counter > 33)
+                    stopEnum = AssignmentEnum.SelfCancel;
+                else
+                    stopEnum = AssignmentEnum.CancelAdmin;
+            }
+            else if (counter > 10)
+            {
+                stop = entry.AddDays(rand.Next());
+                stopEnum = AssignmentEnum.CancelExpired;
+            }
+            else
+            {
+                stop = null;
+                stopEnum = null;
+            }
+
+            Assignment newA = new(0, callId, volunteerId, entry, stop, stopEnum);
+            s_dalAssignment.Create(newA);
+            counter++;
+        }
     }
     private static void createCall()
     {
@@ -93,8 +137,6 @@ public static class Initialization
         
        
     }
-
-
     private static void createVolunteer()
     {
         string emailExt1 = @"@gmail.com", emailExt2 = @"@walla.co.il", emailExt3 = @"@g.jct.ac.il", location = @"Jerusalem, Israel";
