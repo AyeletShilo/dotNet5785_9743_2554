@@ -18,9 +18,11 @@ public enum Role
 
 public enum Type
 {
-    //toDo..
-
-    A
+    shopping,
+    cleaning,
+    repairing,
+    thechnologyHelp,
+    talking
 }
 
 public enum AssignmentEnum
