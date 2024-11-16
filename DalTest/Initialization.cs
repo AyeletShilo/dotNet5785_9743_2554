@@ -7,7 +7,7 @@ using Microsoft.VisualBasic;
 using System;
 using System.Xml.Linq;
 
-public static class Initialization
+public static partial class Initialization
 {
     private static IAssignment? s_Assignment; //stage 1
     private static ICall? s_dalCall; //stage 1
@@ -16,7 +16,7 @@ public static class Initialization
 
     private static readonly Random s_rand = new();
 
-    private static void createAssignment()
+    private static partial void createAssignment()
     {
 
     }
