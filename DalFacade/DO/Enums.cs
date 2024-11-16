@@ -16,12 +16,12 @@ public enum Role
     Donater
 }
 
-public enum Type
+public enum CallType
 {
     shopping,
     cleaning,
     repairing,
-    thechnologyHelp,
+    technologyHelp,
     talking
 }
 
