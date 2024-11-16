@@ -22,8 +22,7 @@ public record Volunteer
     string Email,
     Role Job,
     bool Active,
-    RangeType Distance, //extra
-    //string? password, //extra
+    RangeType Distance, 
     string? VolAddress = null,
     double? Latitude = null,
     double? Longitude =null,

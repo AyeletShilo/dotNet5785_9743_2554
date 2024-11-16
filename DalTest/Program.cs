@@ -330,7 +330,7 @@ namespace DalTest
                 Console.WriteLine(@"press 0 for manager
                 press 1 for volunteer:\n");
 
-                DO.Range distance = (DO.Range)Console.Read();
+                DO.RangeType distance = (DO.RangeType)Console.Read();
 
                 Console.WriteLine("new address:\n");
                 string? add = Console.ReadLine();
@@ -447,12 +447,12 @@ namespace DalTest
                     Console.WriteLine(@"press 0 for manager
                     press 1 for volunteer:\n");
 
-                    DO.Range? temp = (DO.Range)Console.Read();
-                    DO.Range distance;
+                    DO.RangeType? temp = (DO.RangeType)Console.Read();
+                    DO.RangeType distance;
                     if (temp is null)
                         distance = oldItem.Distance;
                     else
-                        distance = (DO.Range)temp;
+                        distance = (DO.RangeType)temp;
 
                     Console.WriteLine("new address:\n");
                     string? add = Console.ReadLine() ?? oldItem.VolAddress;
