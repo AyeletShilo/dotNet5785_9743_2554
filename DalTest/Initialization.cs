@@ -7,16 +7,16 @@ using Microsoft.VisualBasic;
 using System;
 using System.Xml.Linq;
 
-public static partial class Initialization
+public static class Initialization
 {
-    private static IAssignment? s_Assignment; //stage 1
+    private static IAssignment? s_dalAssignment; //stage 1
     private static ICall? s_dalCall; //stage 1
     private static IVolunteer? s_dalVolunteer; //stage 1
     private static IConfig? s_dalConfig; //stage 1
 
     private static readonly Random s_rand = new();
 
-    private static partial void createAssignment()
+    private static void createAssignment()
     {
 
     }
@@ -27,7 +27,7 @@ public static partial class Initialization
           { $"Jaffa 23, {location}", $"Ben Yehuda 12, {location}", $"Herzl Boulevard 45, {location}", $"Hanevi'im 37, {location}", $"King David 10, {location}", $"Emek Refaim 28, {location}",
             $"Azza 15, {location}", $"King George 32, {location}", $"Rothschild Boulevard 5, {location}", $"Shmuel Hanavi 14, {location}", $"Hillel 8, {location}", $"Agron 18, {location}",
             $"Bezalel 9, {location}", $"Hagra 6, {location}", $"Derech Hevron 50, {location}", $"Derech Beit Lehem 77, {location}", $"Hatzvi 3, {location}", $"Palmach 20, {location}", $"Misgav Ladach 1, {location}",
-            $"Carmel 13, {location}",, $"Shahal 22, {location}", $"Beit Hadfus 7, {location}", $"Naomi 19, {location}", $"Michael 2, {location}", $"Arlozorov 11, {location}", $"Jabotinsky 24, {location}",
+            $"Carmel 13, {location}", $"Shahal 22, {location}", $"Beit Hadfus 7, {location}", $"Naomi 19, {location}", $"Michael 2, {location}", $"Arlozorov 11, {location}", $"Jabotinsky 24, {location}",
             $"Chopin 5, {location}", $"Haturim 17, {location}", $"Tchernichovsky 14, {location}", $"Mordechai Alkahi 7, {location}", $"David Remez 4, {location}",$"Mendele Mokher Sfarim 10, {location}",
             $"Nissim Behar 12, {location}", $"Ha-Rav Kook 6, {location}", $"Ein Gedi 16, {location}", $"Yishayahu 18, {location}", $"Shaked 13, {location}", $"Geula 10, {location}", $"Hanurit 8, {location}",
             $"Hanarkisim 15, {location}", $"Hapa'amon 2, {location}", $"Golda Meir Boulevard 68, {location}", $"Yad Harutsim 4, {location}", $"Hagan 6, {location}", $"Ma'aleh Hazeytim 19, {location}", $"Habika 21, {location}",
@@ -52,51 +52,46 @@ public static partial class Initialization
         int i = 0;
         foreach (var address in addresses)
         {
-
-
-          
-   Type callType,
-   string callAddress,
-   double latitud = latitudes[i];
+            TypeOfCall callType = TypeOfCall.shopping;
+            string? description = null;
+            int rType = s_rand.Next(0, 5);
+            switch (rType)
+            {
+                case 0:
+                    callType = TypeOfCall.repairing;
+                    description = "Certain repairs in the house - replacing a light bulb, plumbing work and minor renovations.";
+                    break;
+                case 1:
+                    callType = TypeOfCall.cleaning;
+                    description = "Floor washing, kitchen cleaning, dust removal, and toilet cleaning.";
+                    break;
+                case 2:
+                    callType = TypeOfCall.technologyHelp;
+                    description = "Learning and helping with technology - connecting to social networks, installing the Internet, dealing with viruses, learning how to use it.";
+                    break;
+                case 3:
+                    callType = TypeOfCall.talking;
+                    description = "An hour or more of conversation to relieve loneliness";
+                    break;
+                case 4:
+                    callType = TypeOfCall.shopping;
+                    description = "Doing weekly shopping at the local supermarket.";
+                    break;
+                default:
+                    callType = TypeOfCall.shopping;
+                    break;
+            }
+            double latitude = latitudes[i];
             double longitude = longitudes[i];
-            DateTime openTime = new DateTime(s_dalConfig.Clock);
-            string? Description = null,
-   DateTime? MaxTime = null
+            DateTime openTime = GenerateOpeningTime();
+            //DateTime? MaxTime = null;
+            rType=s_rand.Next(0, 2);
+            DateTime? maxTime = (rType%2==0)?null:GenerateEndingTime();
+
+            s_dalCall!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime));
         }
-        //for (int i = 0; i < 10; i++)
-        //{
-
-        //    string location = addresses[i];
-
-        //    int rType = s_rand.Next(0, 3);
-        //    Type type;
-        //    switch (rType)
-        //    {
-        //        case 0:
-        //            //
-        //            break;
-        //        case 1:
-        //            //
-        //            break;
-        //        //
-        //        case 2:
-        //            //
-        //            break;
-
-        //        default:
-        //            //
-        //            break;
-        //    }
-
-        //    DateTime openTime = new DateTime(s_dalConfig.Clock; //stage 1
-        //    string? description =
-        //    DateTime ? maxTime =
-
-
-
-
-
-        s_dalCall!.Create(new());
+        
+       
     }
 
 
@@ -105,13 +100,13 @@ public static partial class Initialization
         string emailExt1 = @"@gmail.com", emailExt2 = @"@walla.co.il", emailExt3 = @"@g.jct.ac.il", location = @"Jerusalem, Israel";
         int i = 0;
         string[] fullNames =
-            {"Amit Nakesh", "Nir Kuda", "Beni Mus", "Beti Bam","Avi Ron", "Gila Zahav", "Ram Kol", "Chani Chaim","Poli Din","Maya Gido","Ori Gami", "Dina Barzily" };
+            {"Amit Nakesh", "Nir Kuda", "Beni Mus", "Beti Bam","Avi Ron", "Gila Zahav", "Ram Kol", "Chani Chaim","Poli Din","Maya Gido","Ori Gami", "Dina Barzily", "Moise Simon", "Ran Amitz", "Nurit Lady", "Jonathan Shapira" };
         string[] Emails =
-        {"amit234{0}", "nirkush{1}", "cbh{0}", "bamb{0}" ,"54avi{1}","gila43{0}" , "rkol{2}", "chch{0}" , "poli{0}", "mgido{2}", "ogami{1}", "barzilay{2}", emailExt1,emailExt2,emailExt3};
+        {"amit234{0}", "nirkush{1}", "cbh{0}", "bamb{0}" ,"54avi{1}","gila43{0}" , "rkol{2}", "chch{0}" , "poli{0}", "mgido{2}", "ogami{1}", "barzilay{2}", "Simoni98{2}","rAmitz{3}", "perach{2}","jShapira{3}", emailExt1,emailExt2,emailExt3};
         string[] Addresses =
         {$"Ha-Narkis 3,{location}", $"Jaffa 210,{location}", $"Brazil 101,{location}", $"Nechama 32,{location}", $"Bayit Va-Gan 46,{location}", $"Ha-Pisga 90,{location}",
             $"Bar-Lev 119,{location}", $"Najara 19,{location}",$"Agron 5,{location}", $"Hilel 67,{location}",$"Iben-Ezra 27,{location}", $"Rivka 118,{location}",
-            $"Daniel 41,{location}", $"Ha-Sigalit 6,{location}", $"Dagan 5,{location}"};
+            $"Daniel 41,{location}", $"Ha-Sigalit 6,{location}", $"Dagan 5,{location}", $"Shmuel Hanavi 20, {location}"};
         double[] latitudes =
         {   31.7771, 31.7814, 31.7859, 31.7790, 31.7798, 31.7742, 31.7725, 31.7633, 31.7808,
             31.7723, 31.7727, 31.7731, 31.7756, 31.7664, 31.7650  };
@@ -123,8 +118,8 @@ public static partial class Initialization
         {
             int id;
             do
-                //id = calculId();
-                id = s_rand.Next(20000000, 40000000));
+                id = calculId();
+               // id = s_rand.Next(20000000, 40000000));
             while (s_dalVolunteer!.Read(id) != null) ;
             string email = Emails[i];
             int toSwitch = s_rand.Next(1, 5);
@@ -172,24 +167,65 @@ public static partial class Initialization
             }
             s_dalVolunteer!.Create(new(id, name, phoneNumber, email, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
         }
-
-
         //Range Distance, //extra
         //string? password, //extra
 
     }
+    public static void Do(IAssignment? dalAssignment, ICall? dalCall, IVolunteer? dalVolunteer, IConfig? dalConfig) 
+    {
+        s_dalAssignment= dalAssignment ?? throw new NullReferenceException("DAL object can not be null!"); 
+        s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!");
 
-    //private int calculId()
-    //{
-    //    int randId = s_rand.Next(20000000, 40000000), tmpId = randId, digits = 0, sumDigits = 0, tmpSum = 0;
-    //    for (int i = 0; i < 9; i++)
-    //    {
-    //        digits = tmpId % 10 * ((i % 2 == 0) ? 2 : 1);
-    //        sumDigits += (digits > 9) ? digits % 10 + digits / 10 : digits;
-    //        tmpId /= 10;
-    //    }
-    //    return randId * 10 + 10 - (sumDigits % 10);
-    //}
+        Console.WriteLine("Reset Configuration values and List values...");
+        s_dalConfig.Reset(); 
+        s_dalAssignment.DeleteAll();
+        s_dalCall.DeleteAll();
+        s_dalVolunteer.DeleteAll();
+                                  
+        Console.WriteLine("Initializing Students list ...");
+        createAssignment();
+        createCall();
+        createVolunteer();
+      
+
+    }
+    private static int calculId()
+    {
+        int randId = s_rand.Next(20000000, 40000000), tmpId = randId, digits = 0, sumDigits = 0, tmpSum = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            digits = tmpId % 10 * ((i % 2 == 0) ? 2 : 1);
+            sumDigits += (digits > 9) ? digits % 10 + digits / 10 : digits;
+            tmpId /= 10;
+        }
+        return randId * 10 + 10 - (sumDigits % 10);
+    }
+    private static DateTime GenerateOpeningTime()
+    {
+        DateTime currentTime = DateTime.Now;
+        double daysAgo = s_rand.Next(0, 30);
+        double hoursAgo = s_rand.Next(0, 24);  
+        double minutesAgo = s_rand.Next(0, 60);
+
+        DateTime openingTime = currentTime.AddDays(-daysAgo).AddHours(-hoursAgo).AddMinutes(-minutesAgo);
+
+        return openingTime;
+    }
+
+    private static DateTime GenerateEndingTime()
+    {
+        DateTime currentTime = DateTime.Now;
+        double daysAgo = s_rand.Next(-15, 30);
+        double hoursAgo = s_rand.Next(-23, 24);
+        double minutesAgo = s_rand.Next(-59, 60);
+
+        DateTime openingTime = currentTime.AddDays(+daysAgo).AddHours(+hoursAgo).AddMinutes(+minutesAgo).AddSeconds(0);
+
+        return openingTime;
+    }
 }
+
 
 

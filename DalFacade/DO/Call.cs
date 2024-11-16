@@ -15,7 +15,7 @@
 public record Call
 (
    int Id,
-   CallType CallTypes,
+   TypeOfCall CallType,
    string CallAddress,
    double Latitude,
    double Longitude,
@@ -24,5 +24,5 @@ public record Call
    DateTime? MaxTime=null
 )
 {
-    public Call() : this(0, CallType.shopping, "", 0, 0, DateTime.MinValue) { }
+    public Call() : this(0, TypeOfCall.shopping, "", 0, 0, DateTime.MinValue) { }
 }

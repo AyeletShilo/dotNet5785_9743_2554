@@ -16,7 +16,7 @@ public enum Role
     Donater
 }
 
-public enum CallType
+public enum TypeOfCall
 {
     shopping,
     cleaning,
