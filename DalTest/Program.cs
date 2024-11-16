@@ -1,31 +1,14 @@
-﻿using Dal;
-using DalApi;
-using DO;
-using System;
-using System.ComponentModel.Design;
-using System.Diagnostics;
-using System.Linq.Expressions;
-using System.Net;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks.Dataflow;
-
+﻿using DalApi;
+using System.Net.Mail;
 
 namespace DalTest
 {
     internal class Program
     {
-        enum choices { exit, assignment, call, volunteer, init, print, congfi, reset };
-        enum choicesA { exit, create, read, readAll, update, delete, deleteAll };
-        enum choicesB { exit, minute, hour, day, month, year, clock, update, read, delete };
-        enum choicesC { call, assignment, clock, risk };
-
-        private static ICall? s_dalCall = new CallImplementation();
-        private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();
-        private static IAssignment? s_dalAssignment = new AssignmentImplementation();
-        private static IConfig? s_dalConfig = new ConfigImplementation();
-
         static void Main(string[] args)
         {
+<<<<<<< HEAD
+=======
             try
             {
                 Program p = new();
@@ -497,25 +480,14 @@ namespace DalTest
                 foreach (var item in vList)
                     Console.WriteLine(item);
         }
+>>>>>>> 08f1ace6120384c5879fd21c083059f7964e1b4e
 
+          private static IConfig? s_dalConfig; //stage 1
+        private static ICall? s_dalCall; //stage 1
+        private static readonly Random s_rand = new();
+        
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
