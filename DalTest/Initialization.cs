@@ -98,7 +98,7 @@ public static class Initialization
         {
             TypeOfCall callType = TypeOfCall.shopping;
             string? description = null;
-            int rType = s_rand.Next(0, 5);
+            int rType = s_rand.Next(5);
             switch (rType)
             {
                 case 0:
@@ -134,8 +134,6 @@ public static class Initialization
 
             s_dalCall!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime));
         }
-        
-       
     }
     private static void createVolunteer()
     {
@@ -184,10 +182,10 @@ public static class Initialization
             string phoneNumber = phonPre + s_rand.Next(1000000, 10000000);
             double? latitude = latitudes[i];
             double? longitude = longitudes[i];
-            toSwitch = s_rand.Next(0, 2);
+            toSwitch = s_rand.Next(2);
             Role job = (toSwitch % 2 == 0) ? Role.Manager : Role.Donater;
             string? volAddress = Addresses[i++];
-            toSwitch = s_rand.Next(0, 2);
+            toSwitch = s_rand.Next(2);
             bool active = (toSwitch % 2 == 0) ? true : false;
             double? maxDistance = null;
             RangeType typeDis;
@@ -209,7 +207,6 @@ public static class Initialization
             }
             s_dalVolunteer!.Create(new(id, name, phoneNumber, email, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
         }
-        //Range Distance, //extra
         //string? password, //extra
 
     }
@@ -268,6 +265,3 @@ public static class Initialization
         return openingTime;
     }
 }
-
-
-
