@@ -183,58 +183,58 @@ Press 0 to exit\n");
                 {
 
                     case choicesB.minute:
-                        s_dalConfig.Clock = new(s_dalConfig.Clock.Minute + 1);
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
                         break;
                     case choicesB.hour:
-                        s_dalConfig.Clock = new(s_dalConfig.Clock.Hour + 1);
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
                         break;
                     case choicesB.day:
-                        s_dalConfig.Clock = new(s_dalConfig.Clock.Day + 1);
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddDays(1);
                         break;
                     case choicesB.month:
-                        s_dalConfig.Clock = new(s_dalConfig.Clock.Month + 1);
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddMonths(1);
                         break;
                     case choicesB.year:
-                        s_dalConfig.Clock = new(s_dalConfig.Clock.Year + 1);
+                        s_dalConfig.Clock = s_dalConfig.Clock.AddYears(1);
                         break;
                     case choicesB.clock:
                         Console.WriteLine(s_dalConfig?.Clock);
                         break;
                     case choicesB.update:
-                        Console.WriteLine("Press 1 for next call id,"+
-                        "Press 2 next Assignment Id,"+
-                        "Press 3 for clock," +
-                        "Press 4 for risk range\n");
-
-                        choicesC c = (choicesC)Console.Read();
-                        Console.WriteLine("Write update value:\n");
-                        switch (c)
+                        Console.WriteLine(
+                        "Press 0 for clock, " +
+                        "Press 1 for risk range");
+                        string inputD = Console.ReadLine();
+                        if (Enum.TryParse(typeof(choicesC), inputD, true, out object? result2) && result2 is choicesC d)
                         {
-                            case choicesC.clock:
-                                int newClock = Console.Read();
-                                s_dalConfig.Clock = new(newClock);
-                                break;
-                            case choicesC.risk:
-                                int newRisk = Console.Read();
-                                s_dalConfig.RiskRang = new(newRisk);
-                                break;
+                            Console.WriteLine("Write update value:");
+                            switch (d)
+                            {
+                                case choicesC.clock:
+                                    s_dalConfig.Clock = DateTime.Parse(Console.ReadLine());
+                                    break;
+                                case choicesC.risk:
+                                    s_dalConfig.RiskRang = TimeSpan.Parse(Console.ReadLine());
+                                    break;
+                            }
+                            
                         }
                         break;
                     case choicesB.read:
-                        Console.WriteLine("Press 1 for clock,"+
-                        "Press 2 for risk range\n");
-                        choicesC d;
-                        d = (choicesC)Console.Read();
+                        Console.WriteLine("Press 0 for clock,"+
+                        "Press 1 for risk range");
 
-                        switch (d)
-                        {
+                        string inputE = Console.ReadLine();
+                        if (Enum.TryParse(typeof(choicesC), inputE, true, out object? result3) && result3 is choicesC e)
+                            switch (e)
+                            {
                             case choicesC.clock:
                                 Console.WriteLine(s_dalConfig.Clock);
                                 break;
                             case choicesC.risk:
                                 Console.WriteLine(s_dalConfig.RiskRang);
                                 break;
-                        }
+                            }
 
 
                         break;
@@ -247,10 +247,6 @@ Press 0 to exit\n");
                 }
             }
         }
-
-
-
-
     }
     private void createA(string type)
     {
@@ -258,11 +254,11 @@ Press 0 to exit\n");
         {
             Console.WriteLine("Write new values:\n");
 
-            Console.WriteLine("new callId:\n");
-            int callId = (int)Console.Read();
+            Console.WriteLine("new callId:");
+            int callId = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("new volunteerId:\n");
-            int volunteerId = (int)Console.Read();
+            Console.WriteLine("new volunteerId:");
+            int volunteerId = int.Parse(Console.ReadLine());
 
             DateTime openTime = DateTime.Now;
             DateTime closeTime = DateTime.Now + s_dalConfig.RiskRang;
@@ -270,17 +266,20 @@ Press 0 to exit\n");
             Console.WriteLine("press 0 for TakenCare"+
                     "press 1 for SelfCancel,"+
                     "press 2 for CancelAdmin," +
-                    "press 3 for CancelExpired\n");
+                    "press 3 for CancelExpired");
 
             string input = Console.ReadLine();
             DO.AssignmentEnum? finishType = Enum.Parse<DO.AssignmentEnum>(input);
+
+            s_dalAssignment.Create(new(0,callId,volunteerId,openTime,closeTime,finishType));
+
         }
         if (type == "Call")
         {
-            Console.WriteLine("new call type:" +
-                "press 1 for shopping"+
-                "press 2 for cleaning"+
-                "press 3 for repairing"+
+            Console.WriteLine(
+                "press 1 for shopping,"+
+                "press 2 for cleaning,"+
+                "press 3 for repairing,"+
                 "press 4 for thechnologyHelp,"+
                 "press 5 for talking");
 
@@ -288,64 +287,63 @@ Press 0 to exit\n");
             DO.TypeOfCall cType = Enum.Parse<DO.TypeOfCall>(input);
 
 
-            Console.WriteLine("new address:\n");
+            Console.WriteLine("new address:");
             string address = Console.ReadLine()!;
 
-            double latitude = (double)Console.Read();
-            double longitude = (double)Console.Read();
+
+            double latitude = double.Parse(Console.ReadLine());
+            double longitude = double.Parse(Console.ReadLine());
 
             DateTime? tempOpen = s_dalConfig?.Clock;
             DateTime openTime = (DateTime)tempOpen!;
 
             DateTime maxTime = openTime + s_dalConfig.RiskRang;
 
-            Console.WriteLine("new description :\n");
+            Console.WriteLine("new description :");
             string description = Console.ReadLine();
 
-            Call NewItem = new(0, cType, address, 0, 0, openTime, description, maxTime);
-            s_dalCall?.Create(NewItem);
+            s_dalCall?.Create(new(0, cType, address, latitude, longitude, openTime, description, maxTime));
         }
         if (type == "Volunteer")
         {
-            Console.WriteLine("\nnew Id:");
-            int id = Console.Read();
+            Console.WriteLine("new Id:");
+            int id = int.Parse(Console.ReadLine());
 
-            Console.WriteLine("new name:\n");
+            Console.WriteLine("new name:");
             string fullName = Console.ReadLine()!;
 
-            Console.WriteLine("new phone number:\n");
+            Console.WriteLine("new phone number:");
             string phoneNumber = Console.ReadLine()!;
 
-            Console.WriteLine("new email:\n");
+            Console.WriteLine("new email:");
             string email = Console.ReadLine()!;
 
-            Console.WriteLine("press 0 for manager"+
-                "press 1 for volunteer:\n");
+            Console.WriteLine("press 0 for manager, "+
+                "press 1 for volunteer:");
 
             string input = Console.ReadLine();
             DO.Role job = Enum.Parse<DO.Role>(input);
 
-            Console.WriteLine("active?\n");
+            Console.WriteLine("active?");
             string tempActive = Console.ReadLine()!;
             bool active = false;
             if (tempActive == "true")
                 active = true;
 
-            Console.WriteLine("press 0 for air" +
-                               "press 1 for walking" +
-                               "press 2 for car\n");
+            Console.WriteLine("press 0 for air, " +
+                               "press 1 for walking, " +
+                               "press 2 for car");
 
             input = Console.ReadLine();
             DO.RangeType distance = Enum.Parse<DO.RangeType>(input);
 
-            Console.WriteLine("new address:\n");
+            Console.WriteLine("new address:");
             string? add = Console.ReadLine();
 
-            Console.WriteLine("new maximom distance:\n");
-            double dis = (double)Console.Read();
+            Console.WriteLine("new maximom distance:");
+            double dis = double.Parse(Console.ReadLine());
 
-            Volunteer NewItem = new(id, fullName, phoneNumber, email, job, active, distance, add, 0, 0, dis);
-            s_dalVolunteer?.Create(NewItem);
+            s_dalVolunteer?.Create(new(id, fullName, phoneNumber, email, job, active, distance, add, 0, 0, dis));
 
 
         }
@@ -364,26 +362,26 @@ Press 0 to exit\n");
     {
         if (type == "Assignment")
         {
-            Assignment? oldItem = s_dalAssignment?.Read((int)Console.Read());
+            Assignment? oldItem = s_dalAssignment?.Read(int.Parse(Console.ReadLine()));
 
-            Console.WriteLine("Write new values for update:\n");
-            Console.WriteLine("new callId:\n");
-            int callId= (int)Console.Read();
+            Console.WriteLine("Write new values for update:");
+            Console.WriteLine("new callId:");
+            int callId= int.Parse(Console.ReadLine());
             if (callId == null)
                 callId = oldItem.CallId;
 
-            Console.WriteLine("new volunteerId:\n");
-            int volunteerId = (int)Console.Read();
+            Console.WriteLine("new volunteerId:");
+            int volunteerId = int.Parse(Console.ReadLine());
             if (volunteerId == null)
                 volunteerId = oldItem.VolunteerId;
             
             DateTime openTime = DateTime.Now;
             DateTime closeTime = DateTime.Now+ s_dalConfig.RiskRang;
 
-            Console.WriteLine("press 0 for TakenCare" +
-                    "press 1 for SelfCancel," +
-                    "press 2 for CancelAdmin," +
-                    "press 3 for CancelExpired\n");
+            Console.WriteLine("press 0 for TakenCare, " +
+                    "press 1 for SelfCancel, " +
+                    "press 2 for CancelAdmin, " +
+                    "press 3 for CancelExpired");
 
             string input = Console.ReadLine();
             DO.AssignmentEnum? finishType = Enum.Parse<DO.AssignmentEnum>(input);
@@ -395,14 +393,14 @@ Press 0 to exit\n");
         }
         if (type == "Call")
         {
-            Call? oldItem = s_dalCall?.Read((int)Console.Read());
+            Call? oldItem = s_dalCall?.Read(int.Parse(Console.ReadLine()));
             if (oldItem != null)
             {
-                Console.WriteLine("Write new values for update:\n");
-                Console.WriteLine("new call type:" +
-                    "press 1 for shopping" +
-                    "press 2 for cleaning" +
-                    "press 3 for repairing" +
+                Console.WriteLine("Write new values for update:");
+                Console.WriteLine(
+                    "press 1 for shopping, " +
+                    "press 2 for cleaning, " +
+                    "press 3 for repairing, " +
                     "press 4 for thechnologyHelp," +
                     "press 5 for talking");
 
@@ -411,25 +409,24 @@ Press 0 to exit\n");
                 if (cType == null)
                     cType = oldItem.CallType;
 
-                Console.WriteLine("new address:\n");
+                Console.WriteLine("new address:");
                 string? address = Console.ReadLine();
                 if (address == null)
                     address = oldItem.CallAddress;
 
-                double latitude = (double)Console.Read();
-                double longitude = (double)Console.Read();
+                double latitude = double.Parse(Console.ReadLine());
+                double longitude = double.Parse(Console.ReadLine());
                 
 
                 DateTime? openTime = DateTime.Now;
                 DateTime? maxTime = DateTime.Now + s_dalConfig.RiskRang;
 
-                Console.WriteLine("new description :\n");
+                Console.WriteLine("new description :");
                 string? description = Console.ReadLine();
                 if (description == null)
                     description = oldItem.CallAddress;
 
-                Call NewItem = new(oldItem.Id, cType, address, 0, 0, DateTime.MinValue, description, null);
-                s_dalCall?.Update(NewItem);
+                s_dalCall?.Update(new(oldItem.Id, cType, address, 0, 0, DateTime.MinValue, description, null));
 
             }
             else
@@ -437,27 +434,27 @@ Press 0 to exit\n");
         }
         if (type == "Volunteer")
         {
-            Volunteer? oldItem = s_dalVolunteer?.Read((int)Console.Read());
+            Volunteer? oldItem = s_dalVolunteer?.Read(int.Parse(Console.ReadLine()));
             if (oldItem != null)
             {
-                Console.WriteLine("Write new values for update:\n");
-                Console.WriteLine("new name:\n");
+                Console.WriteLine("Write new values for update:");
+                Console.WriteLine("new name:");
                 string? fullName = Console.ReadLine();
                 if (fullName == null)
                     fullName = oldItem.FullName;
 
-                Console.WriteLine("new phone number:\n");
+                Console.WriteLine("new phone number:");
                 string? phoneNumber = Console.ReadLine();
                 if (phoneNumber == null)
                     phoneNumber = oldItem.PhoneNumber;
 
-                Console.WriteLine("new email:\n");
+                Console.WriteLine("new email:");
                 string? email = Console.ReadLine();
                 if (email == null)
                     email = oldItem.Email;
 
-                Console.WriteLine("press 0 for manager" +
-                    "press 1 for volunteer:\n");
+                Console.WriteLine("press 0 for manager, " +
+                    "press 1 for volunteer:");
 
                 string input = Console.ReadLine();
                 DO.Role? tempRole = Enum.Parse<DO.Role>(input);
@@ -467,7 +464,7 @@ Press 0 to exit\n");
                 else
                     job = (DO.Role)tempRole;
 
-                Console.WriteLine("active?\n");
+                Console.WriteLine("active?");
                 string? tempActive = Console.ReadLine();
                 bool active = false;
                 if (tempActive != null)
@@ -476,9 +473,9 @@ Press 0 to exit\n");
                     else
                         active = oldItem.Active;
 
-                Console.WriteLine("press 0 for air"+
-                    "press 1 for walking"+
-                    "press 2 for car\n");
+                Console.WriteLine("press 0 for air, "+
+                    "press 1 for walking, "+
+                    "press 2 for car");
 
 
                 input = Console.ReadLine();
@@ -489,19 +486,18 @@ Press 0 to exit\n");
                 else
                     distance = (DO.RangeType)temp;
 
-                Console.WriteLine("new address:\n");
+                Console.WriteLine("new address:");
                 string? add = Console.ReadLine() ?? oldItem.VolAddress;
 
-                double latitude = (double)Console.Read();
-                double longitude = (double)Console.Read();
+                double latitude = double.Parse(Console.ReadLine());
+                double longitude = double.Parse(Console.ReadLine());
 
-                Console.WriteLine("new maximom distance:\n");
-                double? dis = (double)Console.Read();
+                Console.WriteLine("new maximom distance:");
+                double? dis = double.Parse(Console.ReadLine());
                 if (dis == null)
                     dis = oldItem.MaxDistance;
 
-                Volunteer NewItem = new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, 0, 0, dis);
-                s_dalVolunteer?.Update(NewItem);
+                s_dalVolunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis));
 
             }
             else
