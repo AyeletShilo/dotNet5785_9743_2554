@@ -9,17 +9,19 @@ using System.Xml.Linq;
 
 public static class Initialization
 {
-    private static IAssignment? s_dalAssignment; //stage 1
-    private static ICall? s_dalCall; //stage 1
-    private static IVolunteer? s_dalVolunteer; //stage 1
-    private static IConfig? s_dalConfig; //stage 1
+    //private static IAssignment? s_dalAssignment; //stage 1
+    //private static ICall? s_dalCall; //stage 1
+    //private static IVolunteer? s_dalVolunteer; //stage 1
+    //private static IConfig? s_dalConfig; //stage 1
+
+    private static IDal? s_dal;//stage 2
 
     private static readonly Random s_rand = new();
 
     private static void createAssignment()
     {
-        List<Call>? existsingCall = s_dalCall?.ReadAll();
-        List<Volunteer>? exsistingVul = s_dalVolunteer?.ReadAll();
+        List<Call>? existsingCall = s_dal.Call?.ReadAll();
+        List<Volunteer>? exsistingVul = s_dal.Volunteer?.ReadAll();
         int counter = 0;
 
         foreach (Call item in existsingCall)
@@ -60,7 +62,7 @@ public static class Initialization
             }
 
             Assignment newA = new(0, callId, volunteerId, entry, stop, stopEnum);
-            s_dalAssignment.Create(newA);
+            s_dal.Assignment.Create(newA);
             counter++;
         }
     }
@@ -132,7 +134,7 @@ public static class Initialization
             rType=s_rand.Next(0, 2);
             DateTime? maxTime = (rType%2==0)?null:GenerateEndingTime();
 
-            s_dalCall!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime));
+            s_dal.Call!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime));
         }
     }
     private static void createVolunteer()
@@ -161,7 +163,7 @@ public static class Initialization
             do
                 id = calculId();
                // id = s_rand.Next(20000000, 40000000));
-            while (s_dalVolunteer!.Read(id) != null) ;
+            while (s_dal.Volunteer!.Read(id) != null) ;
             int toSwitch = s_rand.Next(3);
             string email = Emails[i]+ emailsEnds[toSwitch];
             toSwitch = s_rand.Next(1, 5);
@@ -207,23 +209,27 @@ public static class Initialization
                     typeDis = RangeType.Air;
                     break;
             }
-            s_dalVolunteer!.Create(new(id, name, phoneNumber, email, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
+            s_dal.Volunteer!.Create(new(id, name, phoneNumber, email, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
         }
         //string? password, //extra
 
     }
-    public static void Do(IAssignment? dalAssignment, ICall? dalCall, IVolunteer? dalVolunteer, IConfig? dalConfig) 
+    public static void Do(IDal dal)
     {
-        s_dalAssignment= dalAssignment ?? throw new NullReferenceException("DAL object can not be null!"); 
-        s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!");
-        s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!");
-        s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!");
+        //s_dalAssignment= dalAssignment ?? throw new NullReferenceException("DAL object can not be null!"); 
+        //s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!");
+        //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!");
+        //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!");
+        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
 
-        Console.WriteLine("Reset Configuration values and List values...");
-        s_dalConfig.Reset(); 
-        s_dalAssignment.DeleteAll();
-        s_dalCall.DeleteAll();
-        s_dalVolunteer.DeleteAll();
+
+    Console.WriteLine("Reset Configuration values and List values...");
+        //s_dalConfig.Reset(); 
+        //s_dalAssignment.DeleteAll();
+        //s_dalCall.DeleteAll();
+        //s_dalVolunteer.DeleteAll();
+
+        s_dal.ResetDB(); //stage2
                                   
         Console.WriteLine("Initializing Students list ...");
         createAssignment();
