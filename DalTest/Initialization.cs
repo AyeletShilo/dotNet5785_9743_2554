@@ -138,7 +138,7 @@ public static class Initialization
             DateTime? maxTime = (rType%2==0)?null:GenerateEndingTime();
 
            // s_dalCall!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage1
-            s_dal.Call!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage2
+            s_dal!.Call!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage2
         }
     }
     private static void createVolunteer()
@@ -168,7 +168,7 @@ public static class Initialization
                 id = calculId();
                // id = s_rand.Next(20000000, 40000000));
             //while (s_daVolunteer!.Read(id) != null); //stage1
-            while (s_dal.Volunteer!.Read(id) != null) ;  //stage2
+            while (s_dal!.Volunteer!.Read(id) != null) ;  //stage2
 
             int toSwitch = s_rand.Next(3);
             string email = Emails[i]+ emailsEnds[toSwitch];

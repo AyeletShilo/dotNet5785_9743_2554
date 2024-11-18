@@ -16,13 +16,8 @@ internal class AssignmentImplementation : IAssignment
 
     public void Delete(int id)
     {
-        Assignment? item = DataSource.Assignments?.Find(x => x.Id == id);
-        if (item != null)
-        {
-            bool? x = DataSource.Assignments?.Remove(item);
-        }
-        else
-            throw new Exception($"Object of type Assignment with ID={item?.Id} does not exists");   
+        Assignment? item = DataSource.Assignments?.Find(x => x.Id == id) ?? throw new Exception($"Object of type Assignment with ID={id} does not exists");
+        bool? x = DataSource.Assignments?.Remove(item);
     }
 
     public void DeleteAll()

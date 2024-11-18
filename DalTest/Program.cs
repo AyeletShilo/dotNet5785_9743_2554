@@ -203,27 +203,27 @@ Press 0 to exit
                 {
                     case choiceB.minute:
                         //s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1); //stage 1
-                        s_dal.Config.Clock = s_dal.Config.Clock.AddMinutes(1); //stage 2
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddMinutes(1); //stage 2
                         break;
                     case choiceB.hour:
                         //s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1); //stage 1
-                        s_dal.Config.Clock = s_dal.Config.Clock.AddHours(1); //stage 2
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddHours(1); //stage 2
                         break;
                     case choiceB.day:
                         //s_dalConfig.Clock = s_dalConfig.Clock.AddDays(1);  //stage 1
-                        s_dal.Config.Clock = s_dal.Config.Clock.AddDays(1); //stage 2
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddDays(1); //stage 2
                         break;
                     case choiceB.month:
                         //s_dalConfig.Clock = s_dalConfig.Clock.AddMonths(1); //stage1
-                        s_dal.Config.Clock = s_dal.Config.Clock.AddMonths(1); //stage 2
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddMonths(1); //stage 2
                         break;
                     case choiceB.year:
                         //s_dalConfig.Clock = s_dalConfig.Clock.AddYears(1); //stage 1
-                        s_dal.Config.Clock = s_dal.Config.Clock.AddYears(1); //stage 2
+                        s_dal!.Config.Clock = s_dal!.Config.Clock.AddYears(1); //stage 2
                         break;
                     case choiceB.clock:
                         //Console.WriteLine(s_dalConfig?.Clock); //stage 1
-                        Console.WriteLine(s_dal.Config?.Clock); //stage 2
+                        Console.WriteLine(s_dal!.Config?.Clock); //stage 2
                         break;
                     case choiceB.update:
                         Console.WriteLine(
@@ -237,11 +237,11 @@ Press 0 to exit
                             {
                                 case choiceC.clock:
                                     //s_dalConfig.Clock = DateTime.Parse(Console.ReadLine()); //stage 1
-                                    s_dal.Config.Clock = DateTime.Parse(Console.ReadLine()); //stage 2
+                                    s_dal!.Config.Clock = DateTime.Parse(Console.ReadLine()); //stage 2
                                     break;
                                 case choiceC.risk:
                                     //s_dalConfig.RiskRang = TimeSpan.Parse(Console.ReadLine()); //stage 1
-                                    s_dal.Config.RiskRang = TimeSpan.Parse(Console.ReadLine()); //stage 2
+                                    s_dal!.Config.RiskRang = TimeSpan.Parse(Console.ReadLine()); //stage 2
                                     break;
                             }
                         }
@@ -265,7 +265,7 @@ Press 0 to exit
                         break;
                     case choiceB.delete:
                         //s_dalConfig?.Reset(); //stage 1
-                        s_dal.Config?.Reset(); //stage 2
+                        s_dal!.Config?.Reset(); //stage 2
                         break;
                     default:
                         stopB = true;
@@ -299,7 +299,7 @@ Press 0 to exit
             DO.AssignmentEnum? finishType = Enum.Parse<DO.AssignmentEnum>(input);
 
             //s_dalAssignment.Create(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 1
-            s_dal.Assignment.Create(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
+            s_dal!.Assignment.Create(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
 
         }
         if (type == "Call")
@@ -323,17 +323,17 @@ Press 0 to exit
             double longitude = double.Parse(Console.ReadLine());
 
             //DateTime? tempOpen = s_dalConfig?.Clock; //stage 1
-            DateTime? tempOpen = s_dal.Config?.Clock; //stage 2
+            DateTime? tempOpen = s_dal!.Config?.Clock; //stage 2
             DateTime openTime = (DateTime)tempOpen!;
 
             //DateTime maxTime = openTime + s_dalConfig.RiskRang; //stage 1
-            DateTime maxTime = openTime + s_dal.Config.RiskRang; //stage 2
+            DateTime maxTime = openTime + s_dal!.Config.RiskRang; //stage 2
 
             Console.WriteLine("new description:");
             string description = Console.ReadLine();
 
             //s_dalCall?.Create(new(0, cType, address, latitude, longitude, openTime, description, maxTime)); //stage 1
-            s_dal.Call?.Create(new(0, cType, address, latitude, longitude, openTime, description, maxTime)); //stage 2
+            s_dal!.Call?.Create(new(0, cType, address, latitude, longitude, openTime, description, maxTime)); //stage 2
         }
         if (type == "Volunteer")
         {
@@ -430,7 +430,7 @@ Press 0 to exit
                 finishType = oldItem.EndTreatment;
 
             //s_dalAssignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 1
-            s_dal.Assignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
+            s_dal!.Assignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
 
         }
         if (type == "Call")

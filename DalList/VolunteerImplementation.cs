@@ -16,15 +16,9 @@ internal class VolunteerImplementation : IVolunteer
 
     public void Delete(int id)
     {
-        Volunteer? item = DataSource.Volunteers?.Find(x => x.Id == id);
-        if (item != null)
-        {
-            bool? x = DataSource.Volunteers?.Remove(item);
-        }
-        else
-            throw new Exception($"Object of type Assignment with ID={item?.Id} does not exist");
+        Volunteer? item = DataSource.Volunteers?.Find(x => x.Id == id) ?? throw new Exception($"Object of type Assignment with ID={id} does not exist");
+        bool? x = DataSource.Volunteers?.Remove(item);
     }
-
     public void DeleteAll()
     {
         DataSource.Volunteers?.Clear();
