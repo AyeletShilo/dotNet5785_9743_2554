@@ -20,8 +20,10 @@ public static class Initialization
 
     private static void createAssignment()
     {
-        List<Call>? existsingCall = s_dal.Call?.ReadAll();
-        List<Volunteer>? exsistingVul = s_dal.Volunteer?.ReadAll();
+        //List<Call>? existsingCall = s_dalCall?.ReadAll(); //stage1
+        //List<Volunteer>? exsistingVul = s_dalVolunteer?.ReadAll(); //stage1
+        List<Call>? existsingCall = s_dal.Call?.ReadAll(); //stage2
+        List<Volunteer>? exsistingVul = s_dal.Volunteer?.ReadAll(); //stage2
         int counter = 0;
 
         foreach (Call item in existsingCall)
@@ -62,7 +64,8 @@ public static class Initialization
             }
 
             Assignment newA = new(0, callId, volunteerId, entry, stop, stopEnum);
-            s_dal.Assignment.Create(newA);
+            //s_dalAssignment.Create(newA); //stage1
+            s_dal.Assignment.Create(newA); //stage2
             counter++;
         }
     }
@@ -134,7 +137,8 @@ public static class Initialization
             rType=s_rand.Next(0, 2);
             DateTime? maxTime = (rType%2==0)?null:GenerateEndingTime();
 
-            s_dal.Call!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime));
+           // s_dalCall!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage1
+            s_dal.Call!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage2
         }
     }
     private static void createVolunteer()
@@ -163,7 +167,9 @@ public static class Initialization
             do
                 id = calculId();
                // id = s_rand.Next(20000000, 40000000));
-            while (s_dal.Volunteer!.Read(id) != null) ;
+            //while (s_daVolunteer!.Read(id) != null); //stage1
+            while (s_dal.Volunteer!.Read(id) != null) ;  //stage2
+
             int toSwitch = s_rand.Next(3);
             string email = Emails[i]+ emailsEnds[toSwitch];
             toSwitch = s_rand.Next(1, 5);
@@ -209,6 +215,7 @@ public static class Initialization
                     typeDis = RangeType.Air;
                     break;
             }
+            //s_dalVolunteer!.Create(new(id, name, phoneNumber, email, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
             s_dal.Volunteer!.Create(new(id, name, phoneNumber, email, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
         }
         //string? password, //extra
@@ -216,18 +223,18 @@ public static class Initialization
     }
     public static void Do(IDal dal)
     {
-        //s_dalAssignment= dalAssignment ?? throw new NullReferenceException("DAL object can not be null!"); 
-        //s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!");
-        //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!");
-        //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!");
+        //s_dalAssignment= dalAssignment ?? throw new NullReferenceException("DAL object can not be null!"); //stage1
+        //s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!"); //stage1
+        //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!"); //stage1
+        //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!"); //stage1
         s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
 
 
     Console.WriteLine("Reset Configuration values and List values...");
-        //s_dalConfig.Reset(); 
-        //s_dalAssignment.DeleteAll();
-        //s_dalCall.DeleteAll();
-        //s_dalVolunteer.DeleteAll();
+        //s_dalConfig.Reset(); //stage1
+        //s_dalAssignment.DeleteAll(); //stage1
+        //s_dalCall.DeleteAll(); //stage1
+        //s_dalVolunteer.DeleteAll(); //stage1
 
         s_dal.ResetDB(); //stage2
                                   
