@@ -14,12 +14,10 @@ enum choicesC { clock, risk };
 
 internal class Program
 {
-
     private static ICall? s_dalCall = new CallImplementation();
     private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();
     private static IAssignment? s_dalAssignment = new AssignmentImplementation();
     private static IConfig? s_dalConfig = new ConfigImplementation();
-
 
     static void Main(string[] args)
     {
@@ -37,18 +35,18 @@ internal class Program
         bool stop = false;
         while (stop is not true)
         {
-            Console.WriteLine(  $@"Press 1 to display submenu for Assignment,
+            Console.WriteLine(@"
+Press 1 to display submenu for Assignment,
 Press 2 to display submenu for Call,
 Press 3 to display submenu for Volunteer,
 Press 4 to perform an initialization,
 Press 5 to show all data objects,
 Press 6 to display submenu for configuration,
 Press 7 to reset the database and the configuration,
-Press 0 to exit\n"
+Press 0 to exit"
         );
 
             string input = Console.ReadLine();
-
             try
             {
                 if (Enum.TryParse(typeof(choices), input, true, out object? result) && result is choices c)
@@ -98,13 +96,14 @@ Press 0 to exit\n"
         bool stopA = false;
         while (stopA != true)
         {
-            Console.WriteLine(@"Press 1 to create new object,
+            Console.WriteLine(@"
+Press 1 to create new object,
 Press 2 to print an object,
 Press 3 to print all the objects,
 Press 4 to update an existing object,
 Press 5 to delete an existing object
 Press 6 to delete all the objects,
-Press 0 to exit\n"
+Press 0 to exit"
         );
             string inputB = Console.ReadLine();
 
@@ -116,7 +115,7 @@ Press 0 to exit\n"
                     createA(type);
                     break;
                 case choicesA.read:
-                    Console.WriteLine("Write ID to read:\n");
+                    Console.WriteLine("Write ID to read:");
                     readA(type);
                     break;
                 case choicesA.readAll:
@@ -131,8 +130,8 @@ Press 0 to exit\n"
                     updateA(type);
                     break;
                 case choicesA.delete:
-                    Console.WriteLine("Write ID to delete:\n");
-                    int num = (int)Console.Read();
+                    Console.WriteLine("Write ID to delete:");
+                    int num = int.Parse(Console.ReadLine());
                     try
                     {
                         if (type == "Assignment")
@@ -173,7 +172,8 @@ Press 6 to show current system clock value,
 Press 7 to Set a new value to any configuration variable,
 Press 8 to show a current value for any configuration variable,
 Press 9 to reset values ​​for all configuration variables,
-Press 0 to exit\n");
+Press 0 to exit
+");
 
             string inputC = Console.ReadLine();
 
@@ -181,7 +181,6 @@ Press 0 to exit\n");
             {
                 switch (b)
                 {
-
                     case choicesB.minute:
                         s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
                         break;
@@ -217,13 +216,11 @@ Press 0 to exit\n");
                                     s_dalConfig.RiskRang = TimeSpan.Parse(Console.ReadLine());
                                     break;
                             }
-                            
                         }
                         break;
                     case choicesB.read:
                         Console.WriteLine("Press 0 for clock,"+
                         "Press 1 for risk range");
-
                         string inputE = Console.ReadLine();
                         if (Enum.TryParse(typeof(choicesC), inputE, true, out object? result3) && result3 is choicesC e)
                             switch (e)
@@ -235,8 +232,6 @@ Press 0 to exit\n");
                                 Console.WriteLine(s_dalConfig.RiskRang);
                                 break;
                             }
-
-
                         break;
                     case choicesB.delete:
                         s_dalConfig?.Reset();
@@ -280,7 +275,7 @@ Press 0 to exit\n");
                 "press 1 for shopping,"+
                 "press 2 for cleaning,"+
                 "press 3 for repairing,"+
-                "press 4 for thechnologyHelp,"+
+                "press 4 for technologyHelp,"+
                 "press 5 for talking");
 
             string input = Console.ReadLine();
@@ -290,7 +285,7 @@ Press 0 to exit\n");
             Console.WriteLine("new address:");
             string address = Console.ReadLine()!;
 
-
+            Console.WriteLine("latitude and longitude:");
             double latitude = double.Parse(Console.ReadLine());
             double longitude = double.Parse(Console.ReadLine());
 
@@ -299,7 +294,7 @@ Press 0 to exit\n");
 
             DateTime maxTime = openTime + s_dalConfig.RiskRang;
 
-            Console.WriteLine("new description :");
+            Console.WriteLine("new description:");
             string description = Console.ReadLine();
 
             s_dalCall?.Create(new(0, cType, address, latitude, longitude, openTime, description, maxTime));
@@ -350,7 +345,7 @@ Press 0 to exit\n");
     }
     private void readA(string type)
     {
-        int num = (int)Console.Read();
+        int num = int.Parse(Console.ReadLine());
         if (type == "Assignment")
             Console.WriteLine(s_dalAssignment?.Read(num));
         if (type == "Call")
@@ -401,7 +396,7 @@ Press 0 to exit\n");
                     "press 1 for shopping, " +
                     "press 2 for cleaning, " +
                     "press 3 for repairing, " +
-                    "press 4 for thechnologyHelp," +
+                    "press 4 for technologyHelp," +
                     "press 5 for talking");
 
                 string input = Console.ReadLine();
@@ -434,6 +429,7 @@ Press 0 to exit\n");
         }
         if (type == "Volunteer")
         {
+            Console.WriteLine("Write ID to update:");
             Volunteer? oldItem = s_dalVolunteer?.Read(int.Parse(Console.ReadLine()));
             if (oldItem != null)
             {
@@ -498,7 +494,6 @@ Press 0 to exit\n");
                     dis = oldItem.MaxDistance;
 
                 s_dalVolunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis));
-
             }
             else
                 throw new Exception($"Object of type Volunteer with this ID does not exists");
@@ -510,7 +505,6 @@ Press 0 to exit\n");
         if (aList != null)
             foreach (var item in aList)
                 Console.WriteLine(item);
-
     }
     private void printC()
     {
@@ -527,6 +521,3 @@ Press 0 to exit\n");
                 Console.WriteLine(item);
     }
 }
-
-
-

@@ -6,7 +6,7 @@ namespace Stage0
     {
         static partial void Welcome9743()
         {
-            console.WriteLine("I am hereee");
+            Console.WriteLine("I am hereee");
         }
-    
+    }
 }

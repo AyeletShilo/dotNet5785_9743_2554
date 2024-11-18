@@ -137,12 +137,13 @@ public static class Initialization
     }
     private static void createVolunteer()
     {
-        string emailExt1 = @"@gmail.com", emailExt2 = @"@walla.co.il", emailExt3 = @"@g.jct.ac.il", location = @"Jerusalem, Israel";
+        string location = @"Jerusalem, Israel";
+        string[] emailsEnds = { @"@gmail.com", @"@walla.co.il", @"@g.jct.ac.il" };
         int i = 0;
         string[] fullNames =
             {"Amit Nakesh", "Nir Kuda", "Beni Mus", "Beti Bam","Avi Ron", "Gila Zahav", "Ram Kol", "Chani Chaim","Poli Din","Maya Gido","Ori Gami", "Dina Barzily", "Moise Simon", "Ran Amitz", "Nurit Lady", "Jonathan Shapira" };
         string[] Emails =
-        {"amit234{0}", "nirkush{1}", "cbh{0}", "bamb{0}" ,"54avi{1}","gila43{0}" , "rkol{2}", "chch{0}" , "poli{0}", "mgido{2}", "ogami{1}", "barzilay{2}", "Simoni98{2}","rAmitz{3}", "perach{2}","jShapira{3}", emailExt1,emailExt2,emailExt3};
+        {"amit234", "nirkush", "cbh", "bamb" ,"54avi","gila43" , "rkol", "chch" , "poli", "mgido", "ogami", "barzilay", "Simoni98","rAmitz", "perach" ,"jShapira"};
         string[] Addresses =
         {$"Ha-Narkis 3,{location}", $"Jaffa 210,{location}", $"Brazil 101,{location}", $"Nechama 32,{location}", $"Bayit Va-Gan 46,{location}", $"Ha-Pisga 90,{location}",
             $"Bar-Lev 119,{location}", $"Najara 19,{location}",$"Agron 5,{location}", $"Hilel 67,{location}",$"Iben-Ezra 27,{location}", $"Rivka 118,{location}",
@@ -161,8 +162,9 @@ public static class Initialization
                 id = calculId();
                // id = s_rand.Next(20000000, 40000000));
             while (s_dalVolunteer!.Read(id) != null) ;
-            string email = Emails[i];
-            int toSwitch = s_rand.Next(1, 5);
+            int toSwitch = s_rand.Next(3);
+            string email = Emails[i]+ emailsEnds[toSwitch];
+            toSwitch = s_rand.Next(1, 5);
             string phonPre = "";
             switch (toSwitch)
             {
