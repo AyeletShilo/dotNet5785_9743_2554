@@ -6,7 +6,7 @@ using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using System.Net.Mail;
 
-public class CallImplementation : ICall
+internal class CallImplementation : ICall
 {
     public void Create(Call item)
     {

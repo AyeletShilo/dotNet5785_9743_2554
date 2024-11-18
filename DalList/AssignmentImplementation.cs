@@ -5,7 +5,7 @@ using DO;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 
-public class AssignmentImplementation : IAssignment
+internal class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
