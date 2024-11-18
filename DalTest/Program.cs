@@ -5,19 +5,20 @@ using DalApi;
 using DO;
 using System.Net.Mail;
 
-enum choices { exit, assignment, call, volunteer, init, print, congfi, reset };
-enum choicesA { exit, create, read, readAll, update, delete, deleteAll };
-enum choicesB { exit, minute, hour, day, month, year, clock, update, read, delete };
-enum choicesC { clock, risk };
+enum choiceMain { exit, assignment, call, volunteer, init, print, congfi, reset };
+enum choiceA { exit, create, read, readAll, update, delete, deleteAll };
+enum choiceB { exit, minute, hour, day, month, year, clock, update, read, delete };
+enum choiceC { clock, risk };
 
 
 
 internal class Program
 {
-    private static ICall? s_dalCall = new CallImplementation();
-    private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();
-    private static IAssignment? s_dalAssignment = new AssignmentImplementation();
-    private static IConfig? s_dalConfig = new ConfigImplementation();
+    //private static ICall? s_dalCall = new CallImplementation();//stage 1
+    //private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();//stage 1
+    //private static IAssignment? s_dalAssignment = new AssignmentImplementation();//stage 
+    //private static IConfig? s_dalConfig = new ConfigImplementation();//stage 1
+    static readonly IDal s_dal = new DalList(); //stage 2
 
     static void Main(string[] args)
     {
@@ -31,7 +32,7 @@ internal class Program
 
     private void menu()
     {
-        
+
         bool stop = false;
         while (stop is not true)
         {
@@ -49,48 +50,49 @@ Press 0 to exit"
             string input = Console.ReadLine();
             try
             {
-                if (Enum.TryParse(typeof(choices), input, true, out object? result) && result is choices c)
+                if (Enum.TryParse(typeof(choiceMain), input, true, out object? result) && result is choiceMain c)
                     switch (c)
-                {
-                    case choices.assignment:
-                        subMenu("Assignment");
-                        break;
-                    case choices.call:
-                        subMenu("Call");
-                        break;
-                    case choices.volunteer:
-                        subMenu("Volunteer");
-                        break;
-                    case choices.init:
-                        Initialization.Do(s_dalAssignment, s_dalCall, s_dalVolunteer, s_dalConfig);
-                        break;
-                    case choices.print:
-                        printA();
-                        Console.WriteLine("\n");
-                        printC();
-                        Console.WriteLine("\n");
-                        printV();
-                        Console.WriteLine("\n");
-                        break;
-                    case choices.congfi:
-                        subConfig();
-                        break;
-                    case choices.reset:
-                        s_dalAssignment?.DeleteAll();
-                        s_dalCall?.DeleteAll();
-                        s_dalVolunteer?.DeleteAll();
-                        s_dalConfig?.Reset();
-                        break;
-                    default:
-                        stop = true;
-                        break;
-                }
+                    {
+                        case choiceMain.assignment:
+                            subMenu("Assignment");
+                            break;
+                        case choiceMain.call:
+                            subMenu("Call");
+                            break;
+                        case choiceMain.volunteer:
+                            subMenu("Volunteer");
+                            break;
+                        case choiceMain.init:
+                            //Initialization.Do(s_dalAssignment, s_dalCall, s_dalVolunteer, s_dalConfig); //stage 1
+                            Initialization.Do(s_dal);//stage 2
+                            break;
+                        case choiceMain.print:
+                            printA();
+                            Console.WriteLine("\n");
+                            printC();
+                            Console.WriteLine("\n");
+                            printV();
+                            Console.WriteLine("\n");
+                            break;
+                        case choiceMain.congfi:
+                            subConfig();
+                            break;
+                        case choiceMain.reset:
+                            //s_dalAssignment?.DeleteAll(); //stage 1
+                            //s_dalCall?.DeleteAll(); //stage 1
+                            //s_dalVolunteer?.DeleteAll(); //stage 1
+                            //s_dalConfig?.Reset(); //stage 1
+                            s_dal.ResetDB();//stage 2
+                            break;
+                        default:
+                            stop = true;
+                            break;
+                    }
             }
             catch (Exception e) { Console.WriteLine(e); }
         }
     }
 
-       
     private void subMenu(string type)
     {
         bool stopA = false;
@@ -107,54 +109,72 @@ Press 0 to exit"
         );
             string inputB = Console.ReadLine();
 
-            if (Enum.TryParse(typeof(choicesA), inputB, true, out object? result) && result is choicesA c)
+            if (Enum.TryParse(typeof(choiceA), inputB, true, out object? result) && result is choiceA c)
                 switch (c)
-            {
-                
-                case choicesA.create:
-                    createA(type);
-                    break;
-                case choicesA.read:
-                    Console.WriteLine("Write ID to read:");
-                    readA(type);
-                    break;
-                case choicesA.readAll:
-                    if (type == "Assignment")
-                        printA();
-                    if (type == "Call")
-                        printC();
-                    if (type == "Volunteer")
-                        printV();
-                    break;
-                case choicesA.update:
-                    updateA(type);
-                    break;
-                case choicesA.delete:
-                    Console.WriteLine("Write ID to delete:");
-                    int num = int.Parse(Console.ReadLine());
-                    try
-                    {
+                {
+
+                    case choiceA.create:
+                        createA(type);
+                        break;
+                    case choiceA.read:
+                        Console.WriteLine("Write ID to read:");
+                        readA(type);
+                        break;
+                    case choiceA.readAll:
                         if (type == "Assignment")
-                            s_dalAssignment?.Delete(num);
+                            printA();
                         if (type == "Call")
-                            s_dalCall?.Delete(num);
+                            printC();
                         if (type == "Volunteer")
-                            s_dalVolunteer?.Delete(num);
-                    }
-                    catch (Exception e) { Console.WriteLine(e); }
-                    break;
-                case choicesA.deleteAll:
-                    if (type == "Assignment")
-                        s_dalAssignment?.DeleteAll();
-                    if (type == "Call")
-                        s_dalCall?.DeleteAll();
-                    if (type == "Volunteer")
-                        s_dalVolunteer?.DeleteAll();
-                    break;
-                default:
-                    stopA = true;
-                    break;
-            }
+                            printV();
+                        break;
+                    case choiceA.update:
+                        updateA(type);
+                        break;
+                    case choiceA.delete:
+                        Console.WriteLine("Write ID to delete:");
+                        int num = int.Parse(Console.ReadLine());
+                        try
+                        {
+                            if (type == "Assignment")
+                            {
+                                //s_dalAssignment?.Delete(num); //stage 1
+                                s_dal?.Assignment.Delete(num); //stage 2
+                            }
+                            if (type == "Call")
+                            {
+                                //s_dalCall?.Delete(num); //stage 1
+                                s_dal?.Call.Delete(num); //stage 2
+                            }
+                            if (type == "Volunteer")
+                            {
+                                //s_dalVolunteer?.Delete(num); //stage 1
+                                s_dal?.Volunteer.Delete(num); //stage 2
+                            }
+                        }
+                        catch (Exception e) { Console.WriteLine(e); }
+                        break;
+                    case choiceA.deleteAll:
+                        if (type == "Assignment")
+                        {
+                            //s_dalAssignment?.DeleteAll(); //stage 1
+                            s_dal?.Assignment.DeleteAll(); //stage 2
+                        }
+                        if (type == "Call")
+                        {
+                            //s_dalCall?.DeleteAll(); //stage 1
+                            s_dal?.Call.DeleteAll(); //stage 2
+                        }
+                        if (type == "Volunteer")
+                        {
+                            //s_dalVolunteer?.DeleteAll(); //stage 1
+                            s_dal?.Volunteer.DeleteAll(); //stage 2
+                        }
+                        break;
+                    default:
+                        stopA = true;
+                        break;
+                }
 
         }
     }
@@ -177,64 +197,75 @@ Press 0 to exit
 
             string inputC = Console.ReadLine();
 
-            if (Enum.TryParse(typeof(choicesB), inputC, true, out object? result) && result is choicesB b)
+            if (Enum.TryParse(typeof(choiceB), inputC, true, out object? result) && result is choiceB b)
             {
                 switch (b)
                 {
-                    case choicesB.minute:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1);
+                    case choiceB.minute:
+                        //s_dalConfig.Clock = s_dalConfig.Clock.AddMinutes(1); //stage 1
+                        s_dal.Config.Clock = s_dal.Config.Clock.AddMinutes(1); //stage 2
                         break;
-                    case choicesB.hour:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1);
+                    case choiceB.hour:
+                        //s_dalConfig.Clock = s_dalConfig.Clock.AddHours(1); //stage 1
+                        s_dal.Config.Clock = s_dal.Config.Clock.AddHours(1); //stage 2
                         break;
-                    case choicesB.day:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddDays(1);
+                    case choiceB.day:
+                        //s_dalConfig.Clock = s_dalConfig.Clock.AddDays(1);  //stage 1
+                        s_dal.Config.Clock = s_dal.Config.Clock.AddDays(1); //stage 2
                         break;
-                    case choicesB.month:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddMonths(1);
+                    case choiceB.month:
+                        //s_dalConfig.Clock = s_dalConfig.Clock.AddMonths(1); //stage1
+                        s_dal.Config.Clock = s_dal.Config.Clock.AddMonths(1); //stage 2
                         break;
-                    case choicesB.year:
-                        s_dalConfig.Clock = s_dalConfig.Clock.AddYears(1);
+                    case choiceB.year:
+                        //s_dalConfig.Clock = s_dalConfig.Clock.AddYears(1); //stage 1
+                        s_dal.Config.Clock = s_dal.Config.Clock.AddYears(1); //stage 2
                         break;
-                    case choicesB.clock:
-                        Console.WriteLine(s_dalConfig?.Clock);
+                    case choiceB.clock:
+                        //Console.WriteLine(s_dalConfig?.Clock); //stage 1
+                        Console.WriteLine(s_dal.Config?.Clock); //stage 2
                         break;
-                    case choicesB.update:
+                    case choiceB.update:
                         Console.WriteLine(
                         "Press 0 for clock, " +
                         "Press 1 for risk range");
                         string inputD = Console.ReadLine();
-                        if (Enum.TryParse(typeof(choicesC), inputD, true, out object? result2) && result2 is choicesC d)
+                        if (Enum.TryParse(typeof(choiceC), inputD, true, out object? result2) && result2 is choiceC d)
                         {
                             Console.WriteLine("Write update value:");
                             switch (d)
                             {
-                                case choicesC.clock:
-                                    s_dalConfig.Clock = DateTime.Parse(Console.ReadLine());
+                                case choiceC.clock:
+                                    //s_dalConfig.Clock = DateTime.Parse(Console.ReadLine()); //stage 1
+                                    s_dal.Config.Clock = DateTime.Parse(Console.ReadLine()); //stage 2
                                     break;
-                                case choicesC.risk:
-                                    s_dalConfig.RiskRang = TimeSpan.Parse(Console.ReadLine());
+                                case choiceC.risk:
+                                    //s_dalConfig.RiskRang = TimeSpan.Parse(Console.ReadLine()); //stage 1
+                                    s_dal.Config.RiskRang = TimeSpan.Parse(Console.ReadLine()); //stage 2
                                     break;
                             }
                         }
                         break;
-                    case choicesB.read:
-                        Console.WriteLine("Press 0 for clock,"+
+                    case choiceB.read:
+                        Console.WriteLine("Press 0 for clock," +
                         "Press 1 for risk range");
                         string inputE = Console.ReadLine();
-                        if (Enum.TryParse(typeof(choicesC), inputE, true, out object? result3) && result3 is choicesC e)
+                        if (Enum.TryParse(typeof(choiceC), inputE, true, out object? result3) && result3 is choiceC e)
                             switch (e)
                             {
-                            case choicesC.clock:
-                                Console.WriteLine(s_dalConfig.Clock);
-                                break;
-                            case choicesC.risk:
-                                Console.WriteLine(s_dalConfig.RiskRang);
-                                break;
+                                case choiceC.clock:
+                                    //Console.WriteLine(s_dalConfig.Clock); //stage 1
+                                    Console.WriteLine(s_dal.Config.Clock); //stage 2
+                                    break;
+                                case choiceC.risk:
+                                    //Console.WriteLine(s_dalConfig.RiskRang); //stage 1
+                                    Console.WriteLine(s_dal.Config.RiskRang); //stage 2
+                                    break;
                             }
                         break;
-                    case choicesB.delete:
-                        s_dalConfig?.Reset();
+                    case choiceB.delete:
+                        //s_dalConfig?.Reset(); //stage 1
+                        s_dal.Config?.Reset(); //stage 2
                         break;
                     default:
                         stopB = true;
@@ -256,26 +287,28 @@ Press 0 to exit
             int volunteerId = int.Parse(Console.ReadLine());
 
             DateTime openTime = DateTime.Now;
-            DateTime closeTime = DateTime.Now + s_dalConfig.RiskRang;
+            //DateTime closeTime = DateTime.Now + s_dalConfig.RiskRang; //stage 1
+            DateTime closeTime = DateTime.Now + s_dal.Config.RiskRang; //stage 2
 
-            Console.WriteLine("press 0 for TakenCare"+
-                    "press 1 for SelfCancel,"+
+            Console.WriteLine("press 0 for TakenCare" +
+                    "press 1 for SelfCancel," +
                     "press 2 for CancelAdmin," +
                     "press 3 for CancelExpired");
 
             string input = Console.ReadLine();
             DO.AssignmentEnum? finishType = Enum.Parse<DO.AssignmentEnum>(input);
 
-            s_dalAssignment.Create(new(0,callId,volunteerId,openTime,closeTime,finishType));
+            //s_dalAssignment.Create(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 1
+            s_dal.Assignment.Create(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
 
         }
         if (type == "Call")
         {
             Console.WriteLine(
-                "press 1 for shopping,"+
-                "press 2 for cleaning,"+
-                "press 3 for repairing,"+
-                "press 4 for technologyHelp,"+
+                "press 1 for shopping," +
+                "press 2 for cleaning," +
+                "press 3 for repairing," +
+                "press 4 for technologyHelp," +
                 "press 5 for talking");
 
             string input = Console.ReadLine();
@@ -289,15 +322,18 @@ Press 0 to exit
             double latitude = double.Parse(Console.ReadLine());
             double longitude = double.Parse(Console.ReadLine());
 
-            DateTime? tempOpen = s_dalConfig?.Clock;
+            //DateTime? tempOpen = s_dalConfig?.Clock; //stage 1
+            DateTime? tempOpen = s_dal.Config?.Clock; //stage 2
             DateTime openTime = (DateTime)tempOpen!;
 
-            DateTime maxTime = openTime + s_dalConfig.RiskRang;
+            //DateTime maxTime = openTime + s_dalConfig.RiskRang; //stage 1
+            DateTime maxTime = openTime + s_dal.Config.RiskRang; //stage 2
 
             Console.WriteLine("new description:");
             string description = Console.ReadLine();
 
-            s_dalCall?.Create(new(0, cType, address, latitude, longitude, openTime, description, maxTime));
+            //s_dalCall?.Create(new(0, cType, address, latitude, longitude, openTime, description, maxTime)); //stage 1
+            s_dal.Call?.Create(new(0, cType, address, latitude, longitude, openTime, description, maxTime)); //stage 2
         }
         if (type == "Volunteer")
         {
@@ -313,7 +349,7 @@ Press 0 to exit
             Console.WriteLine("new email:");
             string email = Console.ReadLine()!;
 
-            Console.WriteLine("press 0 for manager, "+
+            Console.WriteLine("press 0 for manager, " +
                 "press 1 for volunteer:");
 
             string input = Console.ReadLine();
@@ -338,30 +374,39 @@ Press 0 to exit
             Console.WriteLine("new maximom distance:");
             double dis = double.Parse(Console.ReadLine());
 
-            s_dalVolunteer?.Create(new(id, fullName, phoneNumber, email, job, active, distance, add, 0, 0, dis));
-
-
+            //s_dalVolunteer?.Create(new(id, fullName, phoneNumber, email, job, active, distance, add, 0, 0, dis)); //stage 1
+            s_dal.Volunteer?.Create(new(id, fullName, phoneNumber, email, job, active, distance, add, 0, 0, dis)); //stage 2
         }
     }
     private void readA(string type)
     {
         int num = int.Parse(Console.ReadLine());
         if (type == "Assignment")
-            Console.WriteLine(s_dalAssignment?.Read(num));
+        {
+            //Console.WriteLine(s_dalAssignment?.Read(num)); //stage 1
+            Console.WriteLine(s_dal.Assignment?.Read(num)); //stage 2
+        }
         if (type == "Call")
-            Console.WriteLine(s_dalCall?.Read(num));
+        {
+            //Console.WriteLine(s_dalCall?.Read(num)); //stage 1
+            Console.WriteLine(s_dal.Call?.Read(num)); //stage 2
+        }
         if (type == "Volunteer")
-            Console.WriteLine(s_dalVolunteer?.Read(num));
+        {
+            //Console.WriteLine(s_dalVolunteer?.Read(num)); //stage 1
+            Console.WriteLine(s_dal.Volunteer?.Read(num)); //stage 2
+        }
     }
     private void updateA(string type)
     {
         if (type == "Assignment")
         {
-            Assignment? oldItem = s_dalAssignment?.Read(int.Parse(Console.ReadLine()));
+            //Assignment? oldItem = s_dalAssignment?.Read(int.Parse(Console.ReadLine())); //stage 1
+            Assignment? oldItem = s_dal.Assignment?.Read(int.Parse(Console.ReadLine())); //stage 2
 
             Console.WriteLine("Write new values for update:");
             Console.WriteLine("new callId:");
-            int callId= int.Parse(Console.ReadLine());
+            int callId = int.Parse(Console.ReadLine());
             if (callId == null)
                 callId = oldItem.CallId;
 
@@ -369,9 +414,10 @@ Press 0 to exit
             int volunteerId = int.Parse(Console.ReadLine());
             if (volunteerId == null)
                 volunteerId = oldItem.VolunteerId;
-            
+
             DateTime openTime = DateTime.Now;
-            DateTime closeTime = DateTime.Now+ s_dalConfig.RiskRang;
+            //DateTime closeTime = DateTime.Now + s_dalConfig.RiskRang; //stage 1
+            DateTime closeTime = DateTime.Now + s_dal.Config.RiskRang; //stage 2
 
             Console.WriteLine("press 0 for TakenCare, " +
                     "press 1 for SelfCancel, " +
@@ -383,12 +429,14 @@ Press 0 to exit
             if (finishType == null)
                 finishType = oldItem.EndTreatment;
 
-            s_dalAssignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType));
+            //s_dalAssignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 1
+            s_dal.Assignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
 
         }
         if (type == "Call")
         {
-            Call? oldItem = s_dalCall?.Read(int.Parse(Console.ReadLine()));
+            //Call? oldItem = s_dalCall?.Read(int.Parse(Console.ReadLine())); //stage 1
+            Call? oldItem = s_dal.Call?.Read(int.Parse(Console.ReadLine())); //stage 2
             if (oldItem != null)
             {
                 Console.WriteLine("Write new values for update:");
@@ -411,18 +459,19 @@ Press 0 to exit
 
                 double latitude = double.Parse(Console.ReadLine());
                 double longitude = double.Parse(Console.ReadLine());
-                
+
 
                 DateTime? openTime = DateTime.Now;
-                DateTime? maxTime = DateTime.Now + s_dalConfig.RiskRang;
+                //DateTime? maxTime = DateTime.Now + s_dalConfig.RiskRang; //stage 1
+                DateTime? maxTime = DateTime.Now + s_dal.Config.RiskRang; //stage 2
 
                 Console.WriteLine("new description :");
                 string? description = Console.ReadLine();
                 if (description == null)
                     description = oldItem.CallAddress;
 
-                s_dalCall?.Update(new(oldItem.Id, cType, address, 0, 0, DateTime.MinValue, description, null));
-
+                //s_dalCall?.Update(new(oldItem.Id, cType, address, 0, 0, DateTime.MinValue, description, null)); //stage 1
+                s_dal.Call?.Update(new(oldItem.Id, cType, address, 0, 0, DateTime.MinValue, description, null)); //stage 2
             }
             else
                 throw new Exception($"Object of type Call with this ID does not exists");
@@ -430,7 +479,8 @@ Press 0 to exit
         if (type == "Volunteer")
         {
             Console.WriteLine("Write ID to update:");
-            Volunteer? oldItem = s_dalVolunteer?.Read(int.Parse(Console.ReadLine()));
+            //Volunteer? oldItem = s_dalVolunteer?.Read(int.Parse(Console.ReadLine())); //stage 1
+            Volunteer? oldItem = s_dal.Volunteer?.Read(int.Parse(Console.ReadLine())); //stage 2
             if (oldItem != null)
             {
                 Console.WriteLine("Write new values for update:");
@@ -469,8 +519,8 @@ Press 0 to exit
                     else
                         active = oldItem.Active;
 
-                Console.WriteLine("press 0 for air, "+
-                    "press 1 for walking, "+
+                Console.WriteLine("press 0 for air, " +
+                    "press 1 for walking, " +
                     "press 2 for car");
 
 
@@ -493,7 +543,8 @@ Press 0 to exit
                 if (dis == null)
                     dis = oldItem.MaxDistance;
 
-                s_dalVolunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis));
+                //s_dalVolunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis)); //stage 1
+                s_dal.Volunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis)); //stage 2
             }
             else
                 throw new Exception($"Object of type Volunteer with this ID does not exists");
@@ -501,21 +552,24 @@ Press 0 to exit
     }
     private void printA()
     {
-        List<Assignment>? aList = s_dalAssignment?.ReadAll();
+        //List<Assignment>? aList = s_dalAssignment?.ReadAll(); //stage 1
+        List<Assignment>? aList = s_dal.Assignment?.ReadAll(); //stage 2
         if (aList != null)
             foreach (var item in aList)
                 Console.WriteLine(item);
     }
     private void printC()
     {
-        List<Call>? cList = s_dalCall?.ReadAll();
+        //List<Call>? cList = s_dalCall?.ReadAll(); //stage 1
+        List<Call>? cList = s_dal.Call?.ReadAll(); //stage 2
         if (cList != null)
             foreach (var item in cList)
                 Console.WriteLine(item);
     }
     private void printV()
     {
-        List<Volunteer>? vList = s_dalVolunteer?.ReadAll();
+        //List<Volunteer>? vList = s_dalVolunteer?.ReadAll(); //stage 1
+        List<Volunteer>? vList = s_dal.Volunteer?.ReadAll(); //stage 2
         if (vList != null)
             foreach (var item in vList)
                 Console.WriteLine(item);
