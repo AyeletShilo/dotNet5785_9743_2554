@@ -26,18 +26,21 @@ internal class VolunteerImplementation : IVolunteer
 
     public Volunteer? Read(int id)
     {
-
-        Volunteer? item = DataSource.Volunteers?.Find(x => x.Id == id);
+        //Volunteer? item = DataSource.Volunteers?.Find(x => x.Id == id); //stage 1
+        Volunteer? item = DataSource.Volunteers?.FirstOrDefault(x => x.Id == id); //stage 2
         return item;
     }
 
-    public List<Volunteer> ReadAll()
+    public Volunteer? Read(Func<Volunteer, bool> filter) //stage 2
     {
-        List<Volunteer>? copyList = new();
-        if (DataSource.Volunteers is not null)
-            copyList.AddRange(DataSource.Volunteers);
-        return copyList;
+        Volunteer? item = DataSource.Volunteers?.FirstOrDefault(filter); 
+        return item;
     }
+
+    public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null) //stage 2
+       => filter == null
+            ? DataSource.Volunteers.Select(item => item)
+            : DataSource.Volunteers.Where(filter);
 
     public void Update(Volunteer item)
     {

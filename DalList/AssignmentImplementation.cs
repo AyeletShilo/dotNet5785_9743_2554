@@ -1,5 +1,4 @@
-﻿
-namespace Dal;
+﻿namespace Dal;
 using DalApi;
 using DO;
 using System.Diagnostics.CodeAnalysis;
@@ -10,7 +9,7 @@ internal class AssignmentImplementation : IAssignment
     public void Create(Assignment item)
     {
         int NewId = Config.nextAssignmentId;//?//
-        Assignment newItem = new(NewId,item.CallId, item.VolunteerId, item.InterTime, item.EndTime, item.EndTreatment);
+        Assignment newItem = new(NewId, item.CallId, item.VolunteerId, item.InterTime, item.EndTime, item.EndTreatment);
         DataSource.Assignments?.Add(newItem);
     }
 
@@ -27,17 +26,22 @@ internal class AssignmentImplementation : IAssignment
 
     public Assignment? Read(int id)
     {
-        Assignment? item = DataSource.Assignments?.Find(x => x.Id == id);
+        //Assignment? item = DataSource.Assignments?.Find(x => x.Id == id); //stage 1
+        Assignment? item = DataSource.Assignments?.FirstOrDefault(x => x.Id == id); //stage 2
         return item;
     }
 
-    public List<Assignment> ReadAll()
+    public Assignment? Read(Func<Assignment, bool> filter) //stage 2
     {
-        List<Assignment>? copyList= new();
-        if (DataSource.Assignments != null)
-            copyList.AddRange(DataSource.Assignments);
-        return copyList;
+        Assignment? item = DataSource.Assignments?.FirstOrDefault(filter);
+        return item;
     }
+
+    public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null) //stage 2
+        => filter == null
+            ? DataSource.Assignments.Select(item => item)
+            : DataSource.Assignments.Where(filter);
+
 
     public void Update(Assignment item)
     {

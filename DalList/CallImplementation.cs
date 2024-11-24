@@ -10,16 +10,16 @@ internal class CallImplementation : ICall
 {
     public void Create(Call item)
     {
-        
+
         int NewId = Config.nextCallId;
-        Call newItem = new(NewId, item.CallType,item.CallAddress,item.Latitude,item.Longitude,item.OpenTime,item.Description,item.MaxTime);
+        Call newItem = new(NewId, item.CallType, item.CallAddress, item.Latitude, item.Longitude, item.OpenTime, item.Description, item.MaxTime);
         DataSource.Calls?.Add(newItem);
     }
 
     public void Delete(int id)
     {
-        Call item = DataSource.Calls?.Find(x => x.Id == id) ?? throw new Exception($"Object of type Call with ID={id} does not exist");
-        bool? x = DataSource.Calls?.Remove(item);
+        Call? item = DataSource.Calls?.Find(x => x.Id == id) ?? throw new Exception($"Object of type Assignment with ID={id} does not exists");
+        bool? x = DataSource.Assignments?.Remove(item);
     }
 
     public void DeleteAll()
@@ -27,20 +27,23 @@ internal class CallImplementation : ICall
         DataSource.Calls?.Clear();
     }
 
-        public Call? Read(int id)
+    public Call? Read(int id)
     {
-
-        Call? item = DataSource.Calls?.Find(x => x.Id == id);
+        //Call? item = DataSource.Calls?.Find(x => x.Id == id); //stage 1
+        Call? item = DataSource.Calls?.FirstOrDefault(x => x.Id == id); //stage 2
         return item;
     }
 
-    public List<Call> ReadAll()
+    public Call? Read(Func<Call, bool> filter) //stage 2
     {
-        List<Call>? copyList = new();
-        if (DataSource.Calls != null)
-            copyList.AddRange(DataSource.Calls);
-        return copyList;
+        Call? item = DataSource.Calls?.FirstOrDefault(filter);
+        return item;
     }
+
+    public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) //stage 2
+       => filter == null
+            ? DataSource.Calls.Select(item => item)
+            : DataSource.Calls.Where(filter);
 
     public void Update(Call item)
     {
