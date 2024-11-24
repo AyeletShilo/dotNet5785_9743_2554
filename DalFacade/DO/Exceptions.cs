@@ -13,11 +13,11 @@ public class DalAlreadyExistException : Exception
 }
 
 
-[Serializable]
-public class DalDeletionImpossible : Exception
-{
-    public DalDeletionImpossible(string? message) : base(message) { }
-}
+//[Serializable]
+//public class DalDeletionImpossible : Exception
+//{
+//    public DalDeletionImpossible(string? message) : base(message) { }
+//}
 
 
 

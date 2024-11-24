@@ -22,16 +22,20 @@ public static class Initialization
     {
         //List<Call>? existsingCall = s_dalCall?.ReadAll(); //stage1
         //List<Volunteer>? exsistingVul = s_dalVolunteer?.ReadAll(); //stage1
-        List<Call>? existsingCall = s_dal.Call?.ReadAll(); //stage2
-        List<Volunteer>? exsistingVul = s_dal.Volunteer?.ReadAll(); //stage2
+        IEnumerable<Call>? existsingCall = s_dal.Call?.ReadAll(); //stage2
+        IEnumerable<Volunteer>? exsistingVul = s_dal.Volunteer?.ReadAll(); //stage2
         int counter = 0;
 
         foreach (Call item in existsingCall)
         {
             int callId = item.Id;
             Random rand = new Random();
-            int randomV = rand.Next(exsistingVul.Count);
-            int volunteerId = exsistingVul[randomV].Id;
+            //int randomV = rand.Next(exsistingVul.Count); //stage1
+            //int volunteerId = exsistingVul[randomV].Id; //stage1
+           
+            int volunteerId = GetRandomId(exsistingVul, rand).Id; //stage2
+
+
 
             DateTime start = item.OpenTime;
             DateTime? end = item.MaxTime;
@@ -238,11 +242,11 @@ public static class Initialization
 
         s_dal.ResetDB(); //stage2
                                   
-        Console.WriteLine("Initializing Students list ...");
-        createAssignment();
+        Console.WriteLine("Initializing lists ...");
         createCall();
         createVolunteer();
-      
+        createAssignment();
+
 
     }
     private static int calculId()
@@ -278,5 +282,25 @@ public static class Initialization
         DateTime openingTime = currentTime.AddDays(+daysAgo).AddHours(+hoursAgo).AddMinutes(+minutesAgo).AddSeconds(0);
 
         return openingTime;
+    }
+
+
+    private static Volunteer GetRandomId(IEnumerable<Volunteer> enumerable,Random random)
+    {
+        if (enumerable != null)
+        {
+            int count = 0;
+            foreach (Volunteer v in enumerable)
+            {
+                count++;
+                if (random.Next(count) == 0)
+                {
+                    return v;
+                }
+            }
+        }
+
+        return default(Volunteer);
+        
     }
 }

@@ -18,8 +18,8 @@ internal class CallImplementation : ICall
 
     public void Delete(int id)
     {
-        Call? item = DataSource.Calls?.Find(x => x.Id == id) ?? throw new Exception($"Object of type Assignment with ID={id} does not exists");
-        bool? x = DataSource.Assignments?.Remove(item);
+        Call item = DataSource.Calls?.Find(x => x.Id == id) ?? throw new DalDoesNotExistException($"Object of type Call with ID={id} does not exists");
+        bool? x = DataSource.Calls?.Remove(item);
     }
 
     public void DeleteAll()

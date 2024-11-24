@@ -553,7 +553,7 @@ Press 0 to exit
     private void printA()
     {
         //List<Assignment>? aList = s_dalAssignment?.ReadAll(); //stage 1
-        List<Assignment>? aList = s_dal.Assignment?.ReadAll(); //stage 2
+        IEnumerable<Assignment>? aList = s_dal.Assignment?.ReadAll(); //stage 2
         if (aList != null)
             foreach (var item in aList)
                 Console.WriteLine(item);
@@ -561,7 +561,7 @@ Press 0 to exit
     private void printC()
     {
         //List<Call>? cList = s_dalCall?.ReadAll(); //stage 1
-        List<Call>? cList = s_dal.Call?.ReadAll(); //stage 2
+        IEnumerable<Call>? cList = s_dal.Call?.ReadAll(); //stage 2
         if (cList != null)
             foreach (var item in cList)
                 Console.WriteLine(item);
@@ -569,7 +569,7 @@ Press 0 to exit
     private void printV()
     {
         //List<Volunteer>? vList = s_dalVolunteer?.ReadAll(); //stage 1
-        List<Volunteer>? vList = s_dal.Volunteer?.ReadAll(); //stage 2
+        IEnumerable<Volunteer>? vList = s_dal.Volunteer?.ReadAll(); //stage 2
         if (vList != null)
             foreach (var item in vList)
                 Console.WriteLine(item);

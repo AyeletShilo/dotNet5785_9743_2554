@@ -8,14 +8,14 @@ internal class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        int NewId = Config.nextAssignmentId;//?//
+        int NewId = Config.nextAssignmentId; 
         Assignment newItem = new(NewId, item.CallId, item.VolunteerId, item.InterTime, item.EndTime, item.EndTreatment);
         DataSource.Assignments?.Add(newItem);
     }
 
     public void Delete(int id)
     {
-        Assignment? item = DataSource.Assignments?.Find(x => x.Id == id) ?? throw new Exception($"Object of type Assignment with ID={id} does not exists");
+        Assignment? item = DataSource.Assignments?.Find(x => x.Id == id) ?? throw new DalDoesNotExistException($"Object of type Assignment with ID={id} does not exists");
         bool? x = DataSource.Assignments?.Remove(item);
     }
 
