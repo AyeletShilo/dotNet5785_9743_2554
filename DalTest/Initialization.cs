@@ -32,14 +32,30 @@ public static class Initialization
             Random rand = new Random();
             //int randomV = rand.Next(exsistingVul.Count); //stage1
             //int volunteerId = exsistingVul[randomV].Id; //stage1
-           
-            int volunteerId = GetRandomId(exsistingVul, rand).Id; //stage2
 
+            counter = rand.Next(1, 50);
+            int count = 0;
+            Volunteer selected = default;
 
+            
+            foreach (var vul in exsistingVul)
+            {
+                count++;
+                if (rand.Next(count) == 0) 
+                {
+                    selected = vul;
+                }
+            }
+            int volunteerId = selected.Id;
 
             DateTime start = item.OpenTime;
             DateTime? end = item.MaxTime;
-            int time = (end - start).Value.Days;
+            int time = 1;
+            if (end is null)
+                end = new DateTime(2026,01,01);
+            else
+                time = (end - start).Value.Days;
+            
             DateTime entry = start.AddDays(rand.Next(time));
 
 
@@ -58,7 +74,7 @@ public static class Initialization
             }
             else if (counter > 10)
             {
-                stop = entry.AddDays(rand.Next());
+                stop = entry.AddDays(rand.Next(30,100));
                 stopEnum = AssignmentEnum.CancelExpired;
             }
             else
@@ -70,7 +86,6 @@ public static class Initialization
             Assignment newA = new(0, callId, volunteerId, entry, stop, stopEnum);
             //s_dalAssignment.Create(newA); //stage1
             s_dal.Assignment.Create(newA); //stage2
-            counter++;
         }
     }
     private static void createCall()
@@ -139,7 +154,12 @@ public static class Initialization
             DateTime openTime = GenerateOpeningTime();
             //DateTime? MaxTime = null;
             rType=s_rand.Next(0, 2);
-            DateTime? maxTime = (rType%2==0)?null:GenerateEndingTime();
+
+            DateTime? maxTime;
+            do
+                maxTime = (rType % 2 == 0) ? null : GenerateEndingTime();
+            while (maxTime < openTime);
+
 
            // s_dalCall!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage1
             s_dal!.Call.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage2
@@ -160,10 +180,10 @@ public static class Initialization
             $"Daniel 41,{location}", $"Ha-Sigalit 6,{location}", $"Dagan 5,{location}", $"Shmuel Hanavi 20, {location}"};
         double[] latitudes =
         {   31.7771, 31.7814, 31.7859, 31.7790, 31.7798, 31.7742, 31.7725, 31.7633, 31.7808,
-            31.7723, 31.7727, 31.7731, 31.7756, 31.7664, 31.7650  };
+            31.7723, 31.7727, 31.7731, 31.7756, 31.7664, 31.7650 ,31.8017 };
         double[] longitudes =
         {   35.2255, 35.2277, 35.2090, 35.2201, 35.2280, 35.2116, 35.2212, 35.2083, 35.2139,
-            35.2134, 35.2128, 35.2123, 35.2167, 35.2150, 35.2143  };
+            35.2134, 35.2128, 35.2123, 35.2167, 35.2150, 35.2143 , 35.2171 };
 
         foreach (var name in fullNames)
         {
@@ -246,8 +266,6 @@ public static class Initialization
         createCall();
         createVolunteer();
         createAssignment();
-
-
     }
     private static int calculId()
     {
