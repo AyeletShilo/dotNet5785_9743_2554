@@ -3,6 +3,6 @@
 public interface IConfig
 {
     DateTime Clock { get; set; }
-    TimeSpan RiskRang { get; set; }
+    TimeSpan RiskRange { get; set; }
     void Reset();
 }

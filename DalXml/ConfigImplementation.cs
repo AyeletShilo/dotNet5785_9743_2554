@@ -1,9 +1,10 @@
 ﻿
 using DalApi;
+using DalXml;
 
 namespace Dal;
 
-internal class ConfigImplementation: IConfig
+internal class ConfigImplementation : IConfig
 {
     public DateTime Clock
     {
@@ -11,12 +12,13 @@ internal class ConfigImplementation: IConfig
         set => Config.Clock = value;
     }
     public TimeSpan RiskRange
-    { 
-      get => Config.RiskRange;
-      set => Config.RiskRange = value;
+    {
+        get => Config.RiskRange;
+        set => Config.RiskRange = value;
     }
     public void Reset()
     {
         Config.Reset();
     }
 }
+

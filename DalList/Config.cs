@@ -13,7 +13,7 @@ internal class Config
     internal static int nextAssignmentId { get => NextAssignmentId++; }
 
     internal static DateTime Clock { get; set; } = DateTime.Now;
-    internal TimeSpan riskRange { get; set; }
+    internal static TimeSpan RiskRange { get; set; }
 
    // private TimeSpan RiskRange= TimeSpan.Zero;
     internal static void Reset()
@@ -21,6 +21,7 @@ internal class Config
         NextCallId = startNextCallId;
         NextAssignmentId = startNextAssignmentId;
         Clock = DateTime.Now;
+        RiskRange= TimeSpan.FromDays(2);
     }
 
 }

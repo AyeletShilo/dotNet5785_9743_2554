@@ -240,8 +240,8 @@ Press 0 to exit
                                     s_dal!.Config.Clock = DateTime.Parse(Console.ReadLine()); //stage 2
                                     break;
                                 case choiceC.risk:
-                                    //s_dalConfig.RiskRang = TimeSpan.Parse(Console.ReadLine()); //stage 1
-                                    s_dal!.Config.RiskRang = TimeSpan.Parse(Console.ReadLine()); //stage 2
+                                    //s_dalConfig.RiskRange = TimeSpan.Parse(Console.ReadLine()); //stage 1
+                                    s_dal!.Config.RiskRange = TimeSpan.Parse(Console.ReadLine()); //stage 2
                                     break;
                             }
                         }
@@ -258,8 +258,8 @@ Press 0 to exit
                                     Console.WriteLine(s_dal.Config.Clock); //stage 2
                                     break;
                                 case choiceC.risk:
-                                    //Console.WriteLine(s_dalConfig.RiskRang); //stage 1
-                                    Console.WriteLine(s_dal.Config.RiskRang); //stage 2
+                                    //Console.WriteLine(s_dalConfig.RiskRange); //stage 1
+                                    Console.WriteLine(s_dal.Config.RiskRange); //stage 2
                                     break;
                             }
                         break;
@@ -288,7 +288,7 @@ Press 0 to exit
 
             DateTime openTime = DateTime.Now;
             //DateTime closeTime = DateTime.Now + s_dalConfig.RiskRang; //stage 1
-            DateTime closeTime = DateTime.Now + s_dal.Config.RiskRang; //stage 2
+            DateTime closeTime = DateTime.Now + s_dal.Config.RiskRange; //stage 2
 
             Console.WriteLine("press 0 for TakenCare" +
                     "press 1 for SelfCancel," +
@@ -326,8 +326,8 @@ Press 0 to exit
             DateTime? tempOpen = s_dal!.Config?.Clock; //stage 2
             DateTime openTime = (DateTime)tempOpen!;
 
-            //DateTime maxTime = openTime + s_dalConfig.RiskRang; //stage 1
-            DateTime maxTime = openTime + s_dal!.Config.RiskRang; //stage 2
+            //DateTime maxTime = openTime + s_dalConfig.RiskRange; //stage 1
+            DateTime maxTime = openTime + s_dal!.Config.RiskRange; //stage 2
 
             Console.WriteLine("new description:");
             string description = Console.ReadLine();
@@ -416,8 +416,8 @@ Press 0 to exit
                 volunteerId = oldItem.VolunteerId;
 
             DateTime openTime = DateTime.Now;
-            //DateTime closeTime = DateTime.Now + s_dalConfig.RiskRang; //stage 1
-            DateTime closeTime = DateTime.Now + s_dal.Config.RiskRang; //stage 2
+            //DateTime closeTime = DateTime.Now + s_dalConfig.RiskRange; //stage 1
+            DateTime closeTime = DateTime.Now + s_dal.Config.RiskRange; //stage 2
 
             Console.WriteLine("press 0 for TakenCare, " +
                     "press 1 for SelfCancel, " +
@@ -462,8 +462,8 @@ Press 0 to exit
 
 
                 DateTime? openTime = DateTime.Now;
-                //DateTime? maxTime = DateTime.Now + s_dalConfig.RiskRang; //stage 1
-                DateTime? maxTime = DateTime.Now + s_dal.Config.RiskRang; //stage 2
+                //DateTime? maxTime = DateTime.Now + s_dalConfig.RiskRange; //stage 1
+                DateTime? maxTime = DateTime.Now + s_dal.Config.RiskRange; //stage 2
 
                 Console.WriteLine("new description :");
                 string? description = Console.ReadLine();
