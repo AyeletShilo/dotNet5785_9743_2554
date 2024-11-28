@@ -25,7 +25,7 @@ internal class AssignmentImplementation : IAssignment
 
     public void DeleteAll()
     {
-        XMLTools.SaveListToXMLSerializer(new List<Assignment>(),Config.s_assignments_xml);
+        XMLTools.SaveListToXMLSerializer(new List<Assignment>(), Config.s_assignments_xml);
     }
 
     public Assignment? Read(int id)
@@ -46,13 +46,10 @@ internal class AssignmentImplementation : IAssignment
 
     public IEnumerable<Assignment> ReadAll(Func<Assignment, bool>? filter = null)
     {
-        List<Assignment> listA = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
-
-          //=>filter == null
-          //  ? listA.Select(item => item)
-          //  : listA.Where(filter);
-        
+        List<Assignment> listA = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml) ?? new List<Assignment>();
+        IEnumerable<Assignment> filteredList = filter == null ? listA : listA.Where(filter);
         XMLTools.SaveListToXMLSerializer(listA, Config.s_assignments_xml);
+        return filteredList;
     }
 
     public void Update(Assignment item)

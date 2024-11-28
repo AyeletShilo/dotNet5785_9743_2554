@@ -48,11 +48,10 @@ internal class CallImplementation : ICall
 
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null)
     {
-        List<Call> listC = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
-         //=> filter == null
-         //   ? listC.Select(item => item)
-         //   : listC.Where(filter);
+        List<Call> listC = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml) ?? new List<Call>();
+        IEnumerable<Call> filteredList = filter == null ? listC : listC.Where(filter);
         XMLTools.SaveListToXMLSerializer<Call>(listC, Config.s_calls_xml);
+        return filteredList;
     }
 
     public void Update(Call item)
