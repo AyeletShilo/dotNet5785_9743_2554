@@ -269,7 +269,7 @@ public static class Initialization
     }
     private static int calculId()
     {
-        int randId = s_rand.Next(20000000, 40000000), tmpId = randId, digits = 0, sumDigits = 0, tmpSum = 0;
+        int randId = s_rand.Next(20000000, 40000000), tmpId = randId, digits = 0, sumDigits = 0;
         for (int i = 0; i < 9; i++)
         {
             digits = tmpId % 10 * ((i % 2 == 0) ? 2 : 1);
@@ -303,22 +303,22 @@ public static class Initialization
     }
 
 
-    private static Volunteer GetRandomId(IEnumerable<Volunteer> enumerable,Random random)
-    {
-        if (enumerable != null)
-        {
-            int count = 0;
-            foreach (Volunteer v in enumerable)
-            {
-                count++;
-                if (random.Next(count) == 0)
-                {
-                    return v;
-                }
-            }
-        }
+    //private static Volunteer GetRandomId(IEnumerable<Volunteer> enumerable,Random random)
+    //{
+    //    if (enumerable != null)
+    //    {
+    //        int count = 0;
+    //        foreach (Volunteer v in enumerable)
+    //        {
+    //            count++;
+    //            if (random.Next(count) == 0)
+    //            {
+    //                return v;
+    //            }
+    //        }
+    //    }
 
-        return default(Volunteer);
+    //    return default(Volunteer);
         
-    }
+    //}
 }
