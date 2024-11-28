@@ -57,7 +57,7 @@ XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefau
 
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
     {
-        return ןXMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v => getVolunteer(v)).Where(filter);
+        return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v => getVolunteer(v)).Where(filter);
         //throw new NotImplementedException();
     }
 
