@@ -2,7 +2,7 @@
 
 using DalApi;
 using DO;
-using DalXml;
+using global::DalXml;
 using System.Runtime.CompilerServices;
 
 internal class CallImplementation : ICall

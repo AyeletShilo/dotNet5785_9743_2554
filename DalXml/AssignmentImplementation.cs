@@ -2,7 +2,7 @@
 
 using DalApi;
 using DO;
-using DalXml;
+using global::DalXml;
 
 internal class AssignmentImplementation : IAssignment
 {

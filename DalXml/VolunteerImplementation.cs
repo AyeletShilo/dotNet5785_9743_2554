@@ -1,7 +1,7 @@
 ﻿namespace Dal;
 
 using DalApi;
-using DalXml;
+using global::DalXml;
 using DO;
 using System;
 using System.Linq;
