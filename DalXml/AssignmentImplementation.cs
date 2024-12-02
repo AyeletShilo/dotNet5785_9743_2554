@@ -48,7 +48,7 @@ internal class AssignmentImplementation : IAssignment
     {
         List<Assignment> listA = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml) ?? new List<Assignment>();
         IEnumerable<Assignment> filteredList = filter == null ? listA : listA.Where(filter);
-        XMLTools.SaveListToXMLSerializer(listA, Config.s_assignments_xml);
+        //XMLTools.SaveListToXMLSerializer(listA, Config.s_assignments_xml);
         return filteredList;
     }
 

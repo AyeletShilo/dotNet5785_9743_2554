@@ -57,7 +57,7 @@ internal class CallImplementation : ICall
     public void Update(Call item)
     {
         List<Call> listC = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
-        Delete(item.Id);
+        listC.Remove(item);
         listC.Add(item);
         XMLTools.SaveListToXMLSerializer<Call>(listC, Config.s_calls_xml);
     }

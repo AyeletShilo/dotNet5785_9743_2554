@@ -20,25 +20,25 @@ public static class Initialization
 
     private static void createAssignment()
     {
-        //List<Call>? existsingCall = s_dalCall?.ReadAll(); //stage1
-        //List<Volunteer>? exsistingVol = s_dalVolunteer?.ReadAll(); //stage1
-        IEnumerable<Call>? existsingCall = s_dal.Call?.ReadAll(); //stage2
-        IEnumerable<Volunteer>? exsistingVol = s_dal.Volunteer?.ReadAll(); //stage2
+        //List<Call>? existingCall = s_dalCall?.ReadAll(); //stage1
+        //List<Volunteer>? existingVol = s_dalVolunteer?.ReadAll(); //stage1
+        IEnumerable<Call>? existingCall = s_dal.Call?.ReadAll(); //stage2
+        IEnumerable<Volunteer>? existingVol = s_dal.Volunteer?.ReadAll(); //stage2
         int counter = 0;
 
-        foreach (Call item in existsingCall)
+        foreach (Call item in existingCall)
         {
             int callId = item.Id;
             Random rand = new Random();
-            //int randomV = rand.Next(exsistingVol.Count); //stage1
-            //int volunteerId = exsistingVol[randomV].Id; //stage1
+            //int randomV = rand.Next(existingVol.Count); //stage1
+            //int volunteerId = existingVol[randomV].Id; //stage1
 
             counter = rand.Next(1, 50);
             int count = 0;
             Volunteer selected = default;
 
             
-            foreach (var vol in exsistingVol)
+            foreach (var vol in existingVol)
             {
                 count++;
                 if (rand.Next(count) == 0) 

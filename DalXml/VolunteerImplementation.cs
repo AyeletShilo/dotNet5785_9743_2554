@@ -6,6 +6,7 @@ using DO;
 using System;
 using System.Linq;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 internal class VolunteerImplementation : IVolunteer
 {
@@ -21,9 +22,9 @@ internal class VolunteerImplementation : IVolunteer
             Active = (bool?)v.Element("Active") ?? false,
             Distance = v.ToEnumNullable<RangeType>("Distance") ?? RangeType.Walking,
             VolAddress = (string?)v.Element("VolAddress") ?? null,
-            Latitude = (double?)v.Element("Latitude") ?? null,
-            Longitude = (double?)v.Element("Longitude") ?? null,
-            MaxDistance = (double?)v.Element("MaxDistance") ?? null,
+            Latitude = v.ToDoubleNullable("Latitude") ?? null,
+            Longitude = v.ToDoubleNullable("Longitude") ?? null,
+            MaxDistance = v.ToDoubleNullable("MaxDistance") ?? null,
         };
     }
 
@@ -31,32 +32,31 @@ internal class VolunteerImplementation : IVolunteer
 
     public void Create(Volunteer item)
     {
-        XElement newVolunteer= new XElement("Volunteer");
-        newVolunteer.Add(item.Id, item.FullName, item.PhoneNumber, item.Email, item.Job, item.Active, item.Distance, item.VolAddress, 
-            item.Latitude,item.Longitude, item.MaxDistance);
-        newVolunteer.Save(Config.s_volunteers_xml);
+        XElement rootVolunteer = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
+        rootVolunteer.Add(createVolunteerElement(item));
+        XMLTools.SaveListToXMLElement(rootVolunteer,Config.s_volunteers_xml);
     }
 
     public void Delete(int id)
     {
-        XElement? elemToDelete = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(vol=> (int?)vol.Element("Id")==id);
-        if(elemToDelete!=null)
+        XElement? rootVolunteer = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);
+        XElement? elemToDelete= rootVolunteer.Elements().FirstOrDefault(vol => (int?)vol.Element("Id") == id);
+        if (elemToDelete!=null)
             elemToDelete.Remove();
-        XMLTools.SaveListToXMLElement(elemToDelete,Config.s_volunteers_xml);
+        XMLTools.SaveListToXMLElement(rootVolunteer,Config.s_volunteers_xml);
         //elemToDelete.Save(Config.s_volunteers_xml);
     }
 
     public void DeleteAll()
     {
-        XElement? resetVol = new XElement("Volunteer");
+        XElement? resetVol = new XElement("ArrayOfVolunteers");
         XMLTools.SaveListToXMLElement(resetVol, Config.s_volunteers_xml);
        // XElement? elemToDelete= XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault
     }
 
     public Volunteer? Read(int id)
     {
-        XElement? volunteerElem =
-XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(vt => (int?)vt.Element("Id") == id);
+        XElement? volunteerElem = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefault(vt => (int?)vt.Element("Id") == id);
         return volunteerElem is null ? null : getVolunteer(volunteerElem);
     }
 
@@ -67,8 +67,16 @@ XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().FirstOrDefau
 
     public IEnumerable<Volunteer> ReadAll(Func<Volunteer, bool>? filter = null)
     {
-        return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v => getVolunteer(v)).Where(filter ?? (_ => true));
-    }
+        /*XElement*/var toFilter = XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml);//.Elements().Select(v => getVolunteer(v)).Where(filter ?? (_ => true));
+        //IEnumerable<Volunteer> filteredList = filter == null ? toFilter.Elements().Select(v => getVolunteer(v)) : toFilter.Elements().Select(v => getVolunteer(v)).Where(filter); 
+        //IEnumerable<Volunteer> filteredList;
+        if (filter == null)
+            return toFilter.Elements().Select(v => getVolunteer(v));
+        else
+           return toFilter.Elements().Select(v => getVolunteer(v)).Where(filter); 
+        //XMLTools.SaveListToXMLElement(toFilter, Config.s_volunteers_xml);
+        //return filteredList;
+            }
 
     public void Update(Volunteer item)
     { 

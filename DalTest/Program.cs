@@ -436,6 +436,7 @@ Press 0 to exit
         }
         if (type == "Call")
         {
+            Console.WriteLine("Write CallId to update:");
             //Call? oldItem = s_dalCall?.Read(int.Parse(Console.ReadLine())); //stage 1
             Call? oldItem = s_dal.Call?.Read(int.Parse(Console.ReadLine())); //stage 2
             if (oldItem != null)
@@ -448,18 +449,25 @@ Press 0 to exit
                     "press 4 for technologyHelp," +
                     "press 5 for talking");
 
-                string input = Console.ReadLine();
-                DO.TypeOfCall cType = Enum.Parse<DO.TypeOfCall>(input);
-                if (cType == null)
+                string? input = Console.ReadLine();
+                DO.TypeOfCall cType;
+                if (input == "")
                     cType = oldItem.CallType;
+                else
+                {
+                    DO.TypeOfCall? tempType = Enum.Parse<DO.TypeOfCall>(input);
+                    cType = (DO.TypeOfCall)tempType;
+                }
 
                 Console.WriteLine("new address:");
                 string? address = Console.ReadLine();
-                if (address == null)
+                if (address == "")
                     address = oldItem.CallAddress;
 
-                double latitude = double.Parse(Console.ReadLine());
-                double longitude = double.Parse(Console.ReadLine());
+                double latitude = oldItem.Latitude;
+                double longitude = oldItem.Longitude;
+                //double latitude = double.Parse(Console.ReadLine());
+                //double longitude = double.Parse(Console.ReadLine());
 
 
                 DateTime? openTime = DateTime.Now;
@@ -468,7 +476,7 @@ Press 0 to exit
 
                 Console.WriteLine("new description :");
                 string? description = Console.ReadLine();
-                if (description == null)
+                if (description == "")
                     description = oldItem.CallAddress;
 
                 //s_dalCall?.Update(new(oldItem.Id, cType, address, 0, 0, DateTime.MinValue, description, null)); //stage 1
@@ -497,52 +505,63 @@ Press 0 to exit
 
                 Console.WriteLine("new email:");
                 string? email = Console.ReadLine();
-                if (email == null)
+                if (email =="")
                     email = oldItem.Email;
 
                 Console.WriteLine("press 0 for manager, " +
                     "press 1 for volunteer:");
 
-                string input = Console.ReadLine();
-                DO.Role? tempRole = Enum.Parse<DO.Role>(input);
+                string? input = Console.ReadLine();
                 DO.Role job;
-                if (tempRole is null)
+                if (input=="")
                     job = oldItem.Job;
                 else
+                {
+                    DO.Role? tempRole = Enum.Parse<DO.Role>(input);
                     job = (DO.Role)tempRole;
+                }
 
                 Console.WriteLine("active?");
                 string? tempActive = Console.ReadLine();
                 bool active = false;
-                if (tempActive != null)
+                if (tempActive != "")
+                {
                     if (tempActive == "true")
                         active = true;
-                    else
-                        active = oldItem.Active;
+                }
+                else
+                    active = oldItem.Active;
 
                 Console.WriteLine("press 0 for air, " +
                     "press 1 for walking, " +
                     "press 2 for car");
 
-
                 input = Console.ReadLine();
-                DO.RangeType? temp = Enum.Parse<DO.RangeType>(input);
                 DO.RangeType distance;
-                if (temp is null)
+                if (input == "")
                     distance = oldItem.Distance;
                 else
-                    distance = (DO.RangeType)temp;
-
+                {
+                    DO.RangeType? tempRole = Enum.Parse<DO.RangeType>(input);
+                    distance = (DO.RangeType)tempRole;
+                }
+                
                 Console.WriteLine("new address:");
                 string? add = Console.ReadLine() ?? oldItem.VolAddress;
 
-                double latitude = double.Parse(Console.ReadLine());
-                double longitude = double.Parse(Console.ReadLine());
+                double? latitude = oldItem.Latitude;
+                double? longitude = oldItem.Longitude;
+                //double latitude = double.Parse(Console.ReadLine());
+                //double longitude = double.Parse(Console.ReadLine());
 
                 Console.WriteLine("new maximom distance:");
-                double? dis = double.Parse(Console.ReadLine());
-                if (dis == null)
+                input = Console.ReadLine();
+                double? dis;// = double.Parse(Console.ReadLine());
+                if (input == "")
                     dis = oldItem.MaxDistance;
+                else
+                    dis = double.Parse(input);
+                   
 
                 //s_dalVolunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis)); //stage 1
                 s_dal.Volunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis)); //stage 2
