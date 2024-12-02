@@ -87,8 +87,8 @@ internal class AssignmentImplementation : IAssignment
     public void Update(Assignment item)
     {
         List<Assignment> listA = XMLTools.LoadListFromXMLSerializer<Assignment>(Config.s_assignments_xml);
-        Assignment itemTodelete = listA.Find(x => x.Id == item.Id) ?? throw new DalDoesNotExistException($"Object of type assignment with ID={item.Id} does not exists");
-        bool? x = listA.Remove(itemTodelete);
+        Assignment itemToDelete = listA.Find(x => x.Id == item.Id) ?? throw new DalDoesNotExistException($"Object of type assignment with ID={item.Id} does not exists");
+        bool? x = listA.Remove(itemToDelete);
         listA.Add(item);
         XMLTools.SaveListToXMLSerializer(listA, Config.s_assignments_xml);
     }

@@ -89,8 +89,8 @@ internal class CallImplementation : ICall
     public void Update(Call item)
     {
         List<Call> listC = XMLTools.LoadListFromXMLSerializer<Call>(Config.s_calls_xml);
-        Call itemTodelete = listC.Find(x => x.Id == item.Id) ?? throw new DalDoesNotExistException($"Object of type Call with ID={item.Id} does not exists");
-        bool? x = listC.Remove(itemTodelete);
+        Call itemToDelete = listC.Find(x => x.Id == item.Id) ?? throw new DalDoesNotExistException($"Object of type Call with ID={item.Id} does not exists");
+        bool? x = listC.Remove(itemToDelete);
         listC.Add(item);
         XMLTools.SaveListToXMLSerializer<Call>(listC, Config.s_calls_xml);
     }

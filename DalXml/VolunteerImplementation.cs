@@ -129,7 +129,7 @@ internal class VolunteerImplementation : IVolunteer
     }
 
     /// <summary>
-    /// Creates Xelement with new volunteer from the recive volunteer
+    /// Creates XElement with new volunteer from the receive volunteer
     /// </summary>
     /// <param name="item">Volunteer to add to the xml file</param>
     /// <returns> The XElement with the new volunteer</returns>

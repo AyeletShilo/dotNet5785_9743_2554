@@ -408,14 +408,22 @@ Press 0 to exit
 
             Console.WriteLine("Write new values for update:");
             Console.WriteLine("new callId:");
-            int callId = int.Parse(Console.ReadLine());
-            if (callId == null)
+           
+            string input = Console.ReadLine();
+            int callId;
+            if (input == "")
                 callId = oldItem.CallId;
+            else
+                callId = int.Parse(input);
+
 
             Console.WriteLine("new volunteerId:");
-            int volunteerId = int.Parse(Console.ReadLine());
-            if (volunteerId == null)
+            input = Console.ReadLine();
+            int volunteerId;
+            if (input == "")
                 volunteerId = oldItem.VolunteerId;
+            else
+                volunteerId= int.Parse(input);
 
             DateTime openTime = DateTime.Now;
             //DateTime closeTime = DateTime.Now + s_dalConfig.RiskRange; //stage 1
@@ -426,10 +434,12 @@ Press 0 to exit
                     "press 2 for CancelAdmin, " +
                     "press 3 for CancelExpired");
 
-            string input = Console.ReadLine();
-            DO.AssignmentEnum? finishType = Enum.Parse<DO.AssignmentEnum>(input);
-            if (finishType == null)
+            input = Console.ReadLine();
+            DO.AssignmentEnum? finishType; 
+            if (input == "")
                 finishType = oldItem.EndTreatment;
+            else
+                finishType= Enum.Parse<DO.AssignmentEnum>(input);
 
             //s_dalAssignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 1
             s_dal!.Assignment.Update(new(oldItem.Id, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
@@ -455,10 +465,7 @@ Press 0 to exit
                 if (input == "")
                     cType = oldItem.CallType;
                 else
-                {
-                    DO.TypeOfCall? tempType = Enum.Parse<DO.TypeOfCall>(input);
-                    cType = (DO.TypeOfCall)tempType;
-                }
+                    cType = Enum.Parse<DO.TypeOfCall>(input);
 
                 Console.WriteLine("new address:");
                 string? address = Console.ReadLine();
@@ -517,11 +524,8 @@ Press 0 to exit
                 if (input=="")
                     job = oldItem.Job;
                 else
-                {
-                    DO.Role? tempRole = Enum.Parse<DO.Role>(input);
-                    job = (DO.Role)tempRole;
-                }
-
+                    job = Enum.Parse<DO.Role>(input);
+           
                 Console.WriteLine("active?");
                 string? tempActive = Console.ReadLine();
                 bool active = false;
@@ -542,11 +546,8 @@ Press 0 to exit
                 if (input == "")
                     distance = oldItem.Distance;
                 else
-                {
-                    DO.RangeType? tempRole = Enum.Parse<DO.RangeType>(input);
-                    distance = (DO.RangeType)tempRole;
-                }
-                
+                    distance = Enum.Parse<DO.RangeType>(input);
+                                    
                 Console.WriteLine("new address:");
                 string? add = Console.ReadLine() ?? oldItem.VolAddress;
 
@@ -557,7 +558,7 @@ Press 0 to exit
 
                 Console.WriteLine("new maximom distance:");
                 input = Console.ReadLine();
-                double? dis;// = double.Parse(Console.ReadLine());
+                double? dis;
                 if (input == "")
                     dis = oldItem.MaxDistance;
                 else
