@@ -21,3 +21,6 @@ sealed public class DalXml : IDal
         Config.Reset();
     }
 }
+
+
+
