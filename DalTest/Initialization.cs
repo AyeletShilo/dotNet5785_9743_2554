@@ -302,23 +302,4 @@ public static class Initialization
         return openingTime;
     }
 
-
-    //private static Volunteer GetRandomId(IEnumerable<Volunteer> enumerable,Random random)
-    //{
-    //    if (enumerable != null)
-    //    {
-    //        int count = 0;
-    //        foreach (Volunteer v in enumerable)
-    //        {
-    //            count++;
-    //            if (random.Next(count) == 0)
-    //            {
-    //                return v;
-    //            }
-    //        }
-    //    }
-
-    //    return default(Volunteer);
-        
-    //}
 }

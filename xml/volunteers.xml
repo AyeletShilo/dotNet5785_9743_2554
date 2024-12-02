@@ -1,2 +1,195 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ArrayOfVolunteers />
+<ArrayOfVolunteers>
+  <Volunteer>
+    <Id>213063316</Id>
+    <FullName>Nir Kuda</FullName>
+    <Email>nirkush@g.jct.ac.il</Email>
+    <Job>Donater</Job>
+    <Active>true</Active>
+    <Distance>Walking</Distance>
+    <VolAddress>Jaffa 210,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7814</Latitude>
+    <Longitude>35.2277</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>316608447</Id>
+    <FullName>Beni Mus</FullName>
+    <Email>cbh@walla.co.il</Email>
+    <Job>Donater</Job>
+    <Active>false</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Brazil 101,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7859</Latitude>
+    <Longitude>35.209</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>367417615</Id>
+    <FullName>Beti Bam</FullName>
+    <Email>bamb@gmail.com</Email>
+    <Job>Manager</Job>
+    <Active>false</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Nechama 32,Jerusalem, Israel</VolAddress>
+    <Latitude>31.779</Latitude>
+    <Longitude>35.2201</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>317755593</Id>
+    <FullName>Avi Ron</FullName>
+    <Email>54avi@gmail.com</Email>
+    <Job>Donater</Job>
+    <Active>false</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Bayit Va-Gan 46,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7798</Latitude>
+    <Longitude>35.228</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>392044079</Id>
+    <FullName>Gila Zahav</FullName>
+    <Email>gila43@g.jct.ac.il</Email>
+    <Job>Manager</Job>
+    <Active>false</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Ha-Pisga 90,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7742</Latitude>
+    <Longitude>35.2116</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>284402807</Id>
+    <FullName>Ram Kol</FullName>
+    <Email>rkol@walla.co.il</Email>
+    <Job>Donater</Job>
+    <Active>false</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Bar-Lev 119,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7725</Latitude>
+    <Longitude>35.2212</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>204886295</Id>
+    <FullName>Chani Chaim</FullName>
+    <Email>chch@walla.co.il</Email>
+    <Job>Manager</Job>
+    <Active>false</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Najara 19,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7633</Latitude>
+    <Longitude>35.2083</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>382742393</Id>
+    <FullName>Poli Din</FullName>
+    <Email>poli@walla.co.il</Email>
+    <Job>Donater</Job>
+    <Active>true</Active>
+    <Distance>Walking</Distance>
+    <VolAddress>Agron 5,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7808</Latitude>
+    <Longitude>35.2139</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>393552047</Id>
+    <FullName>Maya Gido</FullName>
+    <Email>mgido@walla.co.il</Email>
+    <Job>Manager</Job>
+    <Active>false</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Hilel 67,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7723</Latitude>
+    <Longitude>35.2134</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>356596262</Id>
+    <FullName>Ori Gami</FullName>
+    <Email>ogami@g.jct.ac.il</Email>
+    <Job>Donater</Job>
+    <Active>false</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Iben-Ezra 27,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7727</Latitude>
+    <Longitude>35.2128</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>258128354</Id>
+    <FullName>Dina Barzily</FullName>
+    <Email>barzilay@walla.co.il</Email>
+    <Job>Donater</Job>
+    <Active>true</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Rivka 118,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7731</Latitude>
+    <Longitude>35.2123</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>323546762</Id>
+    <FullName>Moise Simon</FullName>
+    <Email>Simoni98@gmail.com</Email>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Walking</Distance>
+    <VolAddress>Daniel 41,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7756</Latitude>
+    <Longitude>35.2167</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>305528887</Id>
+    <FullName>Ran Amitz</FullName>
+    <Email>rAmitz@g.jct.ac.il</Email>
+    <Job>Donater</Job>
+    <Active>true</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Ha-Sigalit 6,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7664</Latitude>
+    <Longitude>35.215</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>323242461</Id>
+    <FullName>Nurit Lady</FullName>
+    <Email>perach@g.jct.ac.il</Email>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
+    <Latitude>31.765</Latitude>
+    <Longitude>35.2143</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>218392720</Id>
+    <FullName>Jonathan Shapira</FullName>
+    <Email>jShapira@walla.co.il</Email>
+    <Job>Donater</Job>
+    <Active>true</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Shmuel Hanavi 20, Jerusalem, Israel</VolAddress>
+    <Latitude>31.8017</Latitude>
+    <Longitude>35.2171</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>222276966</Id>
+    <FullName>ayelet</FullName>
+    <Email>thka841@gmail.com</Email>
+    <Job>Donater</Job>
+    <Active>false</Active>
+    <Distance>Car</Distance>
+    <VolAddress>betel 5</VolAddress>
+    <Latitude>31.7771</Latitude>
+    <Longitude>35.2255</Longitude>
+    <MaxDistance />
+  </Volunteer>
+</ArrayOfVolunteers>

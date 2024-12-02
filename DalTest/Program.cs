@@ -306,11 +306,11 @@ Press 0 to exit
         if (type == "Call")
         {
             Console.WriteLine(
-                "press 1 for shopping," +
-                "press 2 for cleaning," +
-                "press 3 for repairing," +
-                "press 4 for technologyHelp," +
-                "press 5 for talking");
+                "press 0 for shopping," +
+                "press 1 for cleaning," +
+                "press 2 for repairing," +
+                "press 3 for technologyHelp," +
+                "press 4 for talking");
 
             string input = Console.ReadLine();
             DO.TypeOfCall cType = Enum.Parse<DO.TypeOfCall>(input);
@@ -402,6 +402,7 @@ Press 0 to exit
     {
         if (type == "Assignment")
         {
+            Console.WriteLine("Write assignment id to update:");
             //Assignment? oldItem = s_dalAssignment?.Read(int.Parse(Console.ReadLine())); //stage 1
             Assignment? oldItem = s_dal.Assignment?.Read(int.Parse(Console.ReadLine())); //stage 2
 
@@ -431,7 +432,7 @@ Press 0 to exit
                 finishType = oldItem.EndTreatment;
 
             //s_dalAssignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 1
-            s_dal!.Assignment.Update(new(0, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
+            s_dal!.Assignment.Update(new(oldItem.Id, callId, volunteerId, openTime, closeTime, finishType)); //stage 2
 
         }
         if (type == "Call")
@@ -443,11 +444,11 @@ Press 0 to exit
             {
                 Console.WriteLine("Write new values for update:");
                 Console.WriteLine(
-                    "press 1 for shopping, " +
-                    "press 2 for cleaning, " +
-                    "press 3 for repairing, " +
-                    "press 4 for technologyHelp," +
-                    "press 5 for talking");
+                    "press 0 for shopping, " +
+                    "press 1 for cleaning, " +
+                    "press 2 for repairing, " +
+                    "press 3 for technologyHelp," +
+                    "press 4 for talking");
 
                 string? input = Console.ReadLine();
                 DO.TypeOfCall cType;
