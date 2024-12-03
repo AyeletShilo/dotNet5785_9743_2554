@@ -18,6 +18,7 @@ internal class Program
     //private static IVolunteer? s_dalVolunteer = new VolunteerImplementation();//stage 1
     //private static IAssignment? s_dalAssignment = new AssignmentImplementation();//stage 
     //private static IConfig? s_dalConfig = new ConfigImplementation();//stage 1
+
     //static readonly IDal s_dal = new DalList(); //stage 2
     static readonly IDal s_dal = new DalXml(); //stage 3
 

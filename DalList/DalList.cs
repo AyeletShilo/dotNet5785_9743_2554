@@ -1,13 +1,12 @@
 ﻿namespace Dal;
 using DalApi;
-sealed public class DalList : IDal
+sealed internal class DalList : IDal
 {
+    public static IDal Instance { get; } = new DalList();
+    private DalList() { }
     public IAssignment Assignment { get; } = new AssignmentImplementation();
-
     public ICall Call { get; } = new CallImplementation();
-
     public IVolunteer Volunteer { get; } = new VolunteerImplementation();
-
     public IConfig Config { get; } = new ConfigImplementation();
 
     public void ResetDB()
