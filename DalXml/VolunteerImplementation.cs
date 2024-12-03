@@ -59,7 +59,7 @@ internal class VolunteerImplementation : IVolunteer
         if (elemToDelete!=null)
             elemToDelete.Remove();
         else
-            throw new DalDoesNotExistException($"Object of type volunteer with ID={id} does not exists"); //?
+            throw new DalDoesNotExistException($"Object of type volunteer with ID={id} does not exists"); 
 
         XMLTools.SaveListToXMLElement(rootVolunteer,Config.s_volunteers_xml);
     }
@@ -122,14 +122,13 @@ internal class VolunteerImplementation : IVolunteer
         ?? throw new DO.DalDoesNotExistException($"Volunteer with ID={item.Id} does Not exist"))
                 .Remove();
 
-        
         volunteersRootElem.Add(new XElement(createVolunteerElement(item)));
 
         XMLTools.SaveListToXMLElement(volunteersRootElem, Config.s_volunteers_xml);
     }
 
     /// <summary>
-    /// Creates Xelement with new volunteer from the recive volunteer
+    /// Creates XElement with new volunteer from the receive volunteer
     /// </summary>
     /// <param name="item">Volunteer to add to the xml file</param>
     /// <returns> The XElement with the new volunteer</returns>
