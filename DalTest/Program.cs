@@ -20,7 +20,8 @@ internal class Program
     //private static IConfig? s_dalConfig = new ConfigImplementation();//stage 1
 
     //static readonly IDal s_dal = new DalList(); //stage 2
-    static readonly IDal s_dal = new DalXml(); //stage 3
+    //static readonly IDal s_dal = new DalXml(); //stage 3
+    static readonly IDal s_dal = Factory.Get; //stage 4
 
     static void Main(string[] args)
     {
@@ -66,7 +67,8 @@ Press 0 to exit"
                             break;
                         case choiceMain.init:
                             //Initialization.Do(s_dalAssignment, s_dalCall, s_dalVolunteer, s_dalConfig); //stage 1
-                            Initialization.Do(s_dal);//stage 2
+                            //Initialization.Do(s_dal);//stage 2
+                            Initialization.Do(); //stage 4
                             break;
                         case choiceMain.print:
                             printA();
