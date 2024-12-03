@@ -135,6 +135,7 @@ internal class VolunteerImplementation : IVolunteer
     private XElement createVolunteerElement(Volunteer item)
     {
         return new XElement("Volunteer", new XElement("Id", item.Id), new XElement("FullName", item.FullName),
+                                                        new XElement("PhoneNumber",item.PhoneNumber),
                                                         new XElement("Email", item.Email), new XElement("Job", item.Job),
                                                         new XElement("Active", item.Active), new XElement("Distance", item.Distance),
                                                         new XElement("VolAddress", item.VolAddress), new XElement("Latitude", item.Latitude),

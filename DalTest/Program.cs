@@ -69,6 +69,7 @@ Press 0 to exit"
                             //Initialization.Do(s_dalAssignment, s_dalCall, s_dalVolunteer, s_dalConfig); //stage 1
                             //Initialization.Do(s_dal);//stage 2
                             Initialization.Do(); //stage 4
+
                             break;
                         case choiceMain.print:
                             printA();

@@ -1,2 +1,183 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
+<ArrayOfCall xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Call>
+    <Id>1</Id>
+    <CallType>repairing</CallType>
+    <CallAddress>Jaffa 23, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7812</Latitude>
+    <Longitude>35.2202</Longitude>
+    <OpenTime>2024-11-10T21:46:50.1342117+02:00</OpenTime>
+    <Description>Certain repairs in the house - replacing a light bulb, plumbing work and minor renovations.</Description>
+    <MaxTime>2024-12-23T07:50:50.1359643+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>2</Id>
+    <CallType>technologyHelp</CallType>
+    <CallAddress>Ben Yehuda 12, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7818</Latitude>
+    <Longitude>35.2194</Longitude>
+    <OpenTime>2024-11-26T01:14:50.9601074+02:00</OpenTime>
+    <Description>Learning and helping with technology - connecting to social networks, installing the Internet, dealing with viruses, learning how to use it.</Description>
+    <MaxTime>2024-12-15T22:26:50.9601175+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>3</Id>
+    <CallType>talking</CallType>
+    <CallAddress>Herzl Boulevard 45, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7748</Latitude>
+    <Longitude>35.2002</Longitude>
+    <OpenTime>2024-11-30T15:27:51.806874+02:00</OpenTime>
+    <Description>An hour or more of conversation to relieve loneliness</Description>
+    <MaxTime xsi:nil="true" />
+  </Call>
+  <Call>
+    <Id>4</Id>
+    <CallType>talking</CallType>
+    <CallAddress>Hanevi'im 37, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7854</Latitude>
+    <Longitude>35.2217</Longitude>
+    <OpenTime>2024-11-20T23:29:51.949486+02:00</OpenTime>
+    <Description>An hour or more of conversation to relieve loneliness</Description>
+    <MaxTime xsi:nil="true" />
+  </Call>
+  <Call>
+    <Id>5</Id>
+    <CallType>talking</CallType>
+    <CallAddress>King David 10, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7755</Latitude>
+    <Longitude>35.2256</Longitude>
+    <OpenTime>2024-11-30T06:38:52.1438361+02:00</OpenTime>
+    <Description>An hour or more of conversation to relieve loneliness</Description>
+    <MaxTime>2024-12-29T03:11:52.1438453+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>6</Id>
+    <CallType>talking</CallType>
+    <CallAddress>Emek Refaim 28, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7619</Latitude>
+    <Longitude>35.2315</Longitude>
+    <OpenTime>2024-11-23T21:45:52.3311671+02:00</OpenTime>
+    <Description>An hour or more of conversation to relieve loneliness</Description>
+    <MaxTime xsi:nil="true" />
+  </Call>
+  <Call>
+    <Id>7</Id>
+    <CallType>cleaning</CallType>
+    <CallAddress>Azza 15, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7707</Latitude>
+    <Longitude>35.2139</Longitude>
+    <OpenTime>2024-11-06T12:57:52.5422168+02:00</OpenTime>
+    <Description>Floor washing, kitchen cleaning, dust removal, and toilet cleaning.</Description>
+    <MaxTime>2024-11-21T03:17:52.5422274+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>8</Id>
+    <CallType>cleaning</CallType>
+    <CallAddress>King George 32, Jerusalem, Israel</CallAddress>
+    <Latitude>31.781</Latitude>
+    <Longitude>35.2161</Longitude>
+    <OpenTime>2024-11-21T10:37:53.201555+02:00</OpenTime>
+    <Description>Floor washing, kitchen cleaning, dust removal, and toilet cleaning.</Description>
+    <MaxTime xsi:nil="true" />
+  </Call>
+  <Call>
+    <Id>9</Id>
+    <CallType>repairing</CallType>
+    <CallAddress>Rothschild Boulevard 5, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7752</Latitude>
+    <Longitude>35.2297</Longitude>
+    <OpenTime>2024-11-04T00:01:53.9860358+02:00</OpenTime>
+    <Description>Certain repairs in the house - replacing a light bulb, plumbing work and minor renovations.</Description>
+    <MaxTime xsi:nil="true" />
+  </Call>
+  <Call>
+    <Id>10</Id>
+    <CallType>technologyHelp</CallType>
+    <CallAddress>Shmuel Hanavi 14, Jerusalem, Israel</CallAddress>
+    <Latitude>31.8032</Latitude>
+    <Longitude>35.2128</Longitude>
+    <OpenTime>2024-11-05T20:45:54.8395221+02:00</OpenTime>
+    <Description>Learning and helping with technology - connecting to social networks, installing the Internet, dealing with viruses, learning how to use it.</Description>
+    <MaxTime>2024-12-09T19:03:54.8395293+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>11</Id>
+    <CallType>talking</CallType>
+    <CallAddress>Hillel 8, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7802</Latitude>
+    <Longitude>35.2187</Longitude>
+    <OpenTime>2024-11-03T21:16:55.6376759+02:00</OpenTime>
+    <Description>An hour or more of conversation to relieve loneliness</Description>
+    <MaxTime xsi:nil="true" />
+  </Call>
+  <Call>
+    <Id>12</Id>
+    <CallType>cleaning</CallType>
+    <CallAddress>Agron 18, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7767</Latitude>
+    <Longitude>35.2163</Longitude>
+    <OpenTime>2024-11-06T13:51:56.2960914+02:00</OpenTime>
+    <Description>Floor washing, kitchen cleaning, dust removal, and toilet cleaning.</Description>
+    <MaxTime>2024-12-02T12:06:56.2960999+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>13</Id>
+    <CallType>technologyHelp</CallType>
+    <CallAddress>Bezalel 9, Jerusalem, Israel</CallAddress>
+    <Latitude>31.777</Latitude>
+    <Longitude>35.2155</Longitude>
+    <OpenTime>2024-11-28T19:40:57.2181911+02:00</OpenTime>
+    <Description>Learning and helping with technology - connecting to social networks, installing the Internet, dealing with viruses, learning how to use it.</Description>
+    <MaxTime>2024-12-24T06:07:57.2181995+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>14</Id>
+    <CallType>repairing</CallType>
+    <CallAddress>Hagra 6, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7696</Latitude>
+    <Longitude>35.2105</Longitude>
+    <OpenTime>2024-11-12T16:36:58.3247298+02:00</OpenTime>
+    <Description>Certain repairs in the house - replacing a light bulb, plumbing work and minor renovations.</Description>
+    <MaxTime>2024-12-10T17:17:58.324738+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>15</Id>
+    <CallType>cleaning</CallType>
+    <CallAddress>Derech Hevron 50, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7516</Latitude>
+    <Longitude>35.2151</Longitude>
+    <OpenTime>2024-11-13T15:50:02.4149601+02:00</OpenTime>
+    <Description>Floor washing, kitchen cleaning, dust removal, and toilet cleaning.</Description>
+    <MaxTime>2024-12-20T23:12:06.2766944+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>16</Id>
+    <CallType>cleaning</CallType>
+    <CallAddress>Derech Beit Lehem 77, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7513</Latitude>
+    <Longitude>35.2147</Longitude>
+    <OpenTime>2024-11-24T08:06:31.3932062+02:00</OpenTime>
+    <Description>Floor washing, kitchen cleaning, dust removal, and toilet cleaning.</Description>
+    <MaxTime>2024-12-08T04:28:37.5782158+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>17</Id>
+    <CallType>cleaning</CallType>
+    <CallAddress>Hatzvi 3, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7671</Latitude>
+    <Longitude>35.2091</Longitude>
+    <OpenTime>2024-11-21T19:45:04.1837338+02:00</OpenTime>
+    <Description>Floor washing, kitchen cleaning, dust removal, and toilet cleaning.</Description>
+    <MaxTime>2024-12-29T22:35:08.2277573+02:00</MaxTime>
+  </Call>
+  <Call>
+    <Id>18</Id>
+    <CallType>shopping</CallType>
+    <CallAddress>Palmach 20, Jerusalem, Israel</CallAddress>
+    <Latitude>31.7715</Latitude>
+    <Longitude>35.2085</Longitude>
+    <OpenTime>2024-11-13T04:17:33.0626637+02:00</OpenTime>
+    <Description>Doing weekly shopping at the local supermarket.</Description>
+    <MaxTime xsi:nil="true" />
+  </Call>
+</ArrayOfCall>
