@@ -27,15 +27,15 @@ public enum Role
 /// </summary>
 public enum TypeOfCall
 {
-    shopping,
-    cleaning,
-    repairing,
-    technologyHelp,
-    talking
+    Shopping,
+    Cleaning,
+    Repairing,
+    TechnologyHelp,
+    Talking
 }
 
 /// <summary>
-/// <param name="EndTreatment">The manner in which the current call was handled by the current volunteer.
+/// Type of Assignment
 /// </summary>
 public enum AssignmentEnum
 {

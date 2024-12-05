@@ -13,3 +13,56 @@ public enum DisType
     Walking,
     Car
 }
+
+public enum CallType
+{
+    Shopping,
+    Cleaning,
+    Repairing,
+    TechnologyHelp,
+    Talking
+}
+
+public enum Status
+{
+    InTreatment,
+    InRiskTreatment
+}
+
+public enum CallInTreatment
+{
+    None,
+    Shopping,
+    Cleaning,
+    Repairing,
+    TechnologyHelp,
+    Talking
+}
+
+public enum EndTreatment
+
+{
+    TakenCare,
+    SelfCancel,
+    CancelAdmin,
+    CancelExpired
+}
+public enum CallStatus
+{
+    Opened,
+    InTreatment,
+    Closed,
+    Expired,
+    OpenInRisk
+}
+
+public enum CallListStatus
+{
+    Opened,
+    InTreatment,
+    Closed,
+    Expired,
+    OpenInRisk,
+    InTreatmentInRisk
+}
+   
