@@ -23,6 +23,7 @@ public enum CallType
     Talking
 }
 
+
 public enum Status
 {
     InTreatment,
@@ -64,5 +65,14 @@ public enum CallListStatus
     Expired,
     OpenInRisk,
     InTreatmentInRisk
+}
+
+public enum TimeUnit
+{
+    Minute,
+    hour,
+    day,
+    month,
+    year
 }
    
