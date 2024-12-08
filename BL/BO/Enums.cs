@@ -1,7 +1,9 @@
 ﻿
+using Helpers;
+
 namespace BO;
 
-public enum Job
+public enum Role
 {
     Manager,
     Donater
@@ -75,4 +77,50 @@ public enum TimeUnit
     month,
     year
 }
-   
+
+public enum VolunteerData
+{
+    Id,
+    PullName,
+    IsActive,
+    HandleCalls,
+    CancelCalls,
+    ExpiredCalls,
+    CallId,
+    InTreatment
+}
+
+public enum CallData
+{
+    Id,
+    CallId,
+    CallType,
+    OpenTime,
+    LeftTime,
+    LastVolunteer,
+    CompletionTime,
+    Status,
+    TotalAssignments
+}
+
+public enum CloseCallData
+{
+    Id,
+    CallType,
+    FullAddress,
+    OpenTime,
+    InterTime,
+    CloseTime,
+    EndTreatment
+}
+
+public enum OpenCallData
+{
+    Id,
+    CallType,
+    Description,
+    FullAddress,
+    OpenTime,
+    MaxCloseTime,
+    VolDistance
+}
