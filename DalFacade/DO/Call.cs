@@ -24,5 +24,5 @@ public record Call
    DateTime? MaxTime=null
 )
 {
-    public Call() : this(0, TypeOfCall.shopping, "", 0, 0, DateTime.MinValue) { }
+    public Call() : this(0, TypeOfCall.Shopping, "", 0, 0, DateTime.MinValue) { }
 }
