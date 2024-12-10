@@ -1,6 +1,8 @@
 ﻿using BlApi;
+using BO;
 using DalApi;
 using Helpers;
+using System.ComponentModel.DataAnnotations;
 //using BO;
 
 namespace BlImplementation;
@@ -35,38 +37,41 @@ internal class CallImplementation : ICall
 
     public BO.CallStatus[] HowManyCalls()
     {
-        //var result= _dal.Call.gr
+        var result= _dal.Call.
     }
 
     public BO.Call Read(int id)
     {
-        //CallManager.checkLogicId(id);
         Func<DO.Assignment, bool> func = item => item.CallId == id;
         IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func);
 
-        var doCall = _dal.Call.Read(id) ?? throw new NotExistException("The requested call does not exist."); ;
+        var doCall = _dal.Call.Read(id) ?? throw new NotExistException("The requested call does not exist.");
 
-        BO.Call boCall = new BO.Call
+        return new()
         {
             Id = id,
-            CallType= doCall.CallType,
+            CallType = doCall.CallType,
             Description = doCall.Description,
             CallAddress = doCall.CallAddress,
-            Latitude= doCall.Latitude,
-            Longitude= doCall.Longitude,
-            OpenTime= doCall.OpenTime,
-            MaxCloseTime= doCall.MaxTime,
+            Latitude = doCall.Latitude,
+            Longitude = doCall.Longitude,
+            OpenTime = doCall.OpenTime,
+            MaxCloseTime = doCall.MaxTime,
+            Status = CallManager.MakeStatus(dataAssignments, doCall.MaxTime),
 
-            Assignments = dataAssignments.Select(assign => new BO.CallAssignInList
+            CallAssignments = dataAssignments.Select(assign => new BO.CallAssignInList
             {
-                Id = assign.Id,
                 VolunteerId = assign.VolunteerId,
-                AssignmentTime = assign.AssignmentTime,
-                Status = assign.Status
+                VolunteerName = _dal.Volunteer.Read(id).FullName,
+                InterTime = assign.InterTime,
+                EndTime = assign.EndTime,
+                EndTreatment = (BO.EndTreatment)assign.EndTreatment,
+
             }).ToList()
+
         };
 
-    
+
 
         throw new NotImplementedException();
     }
