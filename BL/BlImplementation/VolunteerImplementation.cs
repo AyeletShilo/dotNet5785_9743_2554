@@ -52,8 +52,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public BO.Role GetMyJob(int id)
     {
-        var idVolunteer = Read(id);
-        return idVolunteer.Job;
+        return Read(id).Job;
     }
 
     public BO.Volunteer? Read(int id)
