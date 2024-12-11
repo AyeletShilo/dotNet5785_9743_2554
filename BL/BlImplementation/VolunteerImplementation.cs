@@ -9,7 +9,8 @@ using DalApi;
 internal class VolunteerImplementation : BlApi.IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    ///
+
+   
     public void Create(BO.Volunteer boVolunteer)
     {
         VolunteerManager.CheckLogic(boVolunteer);
@@ -90,7 +91,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             return volunteerInLists.OrderBy(v => v.Id);
         else
         {
-            string sortParameter = sort.ToString();
+            //string sortParameter = sort.ToString();
             return volunteerInLists.OrderBy(v => sort); //?
         }
 
