@@ -1,20 +1,24 @@
-﻿ namespace BlImplementation;
+﻿namespace BlImplementation;
 using BlApi;
 //using BO;
 using System.Collections.Generic;
 using Helpers;
+using DalApi;
 
 
-internal class VolunteerImplementation : IVolunteer
+internal class VolunteerImplementation : BlApi.IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
+
+   
     public void Create(BO.Volunteer boVolunteer)
     {
         VolunteerManager.CheckLogic(boVolunteer);
         VolunteerManager.CheckFormat(boVolunteer);
+
         DO.Volunteer doVolunteer =
           new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)(boVolunteer.Job), boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
-          boVolunteer.Address, boVolunteer.Latitude, boVolunteer.Longitude, boVolunteer.MaxDis); 
+          boVolunteer.Address, boVolunteer.Latitude, boVolunteer.Longitude, boVolunteer.MaxDis);
         try
         {
             _dal.Volunteer.Create(doVolunteer);
@@ -27,18 +31,33 @@ internal class VolunteerImplementation : IVolunteer
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        var idVolunteer = Read(id);
+        try
+        {
+            if (idVolunteer.HandleCalls != 0 || idVolunteer.InCall != null)
+                throw new BO.BLCannotBeDeletedException($"Volunteer with ID={id}cannot be deleted");
+
+            _dal.Volunteer.Delete(id);
+        }
+        catch (BO.BLCannotBeDeletedException ex)
+        {
+            throw new BO.BLCannotBeDeletedException($"Volunteer with ID={id} cannot be deleted", ex);
+        }
+        catch (BO.BLCannotBeDeletedException ex)
+        {
+            throw new BO.BLCannotBeDeletedException($"Volunteer with ID={id} does Not exist", ex);
+        }
+
     }
 
     public BO.Role GetMyJob(int id)
     {
-
+        return Read(id).Job;
     }
 
     public BO.Volunteer? Read(int id)
     {
-        var doVolunteer = _dal.Volunteer.Read(id) ??
-throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
+        var doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BLCannotBeDeletedException($"Volunteer with ID={id} does Not exist");
         return new()
         {
             Id = id,
@@ -51,7 +70,8 @@ throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
             Job = doVolunteer.Job,
             IsActive = doVolunteer.IsActive,
             MaxDis = doVolunteer.MaxDistance,
-            Distance = doVolunteer.Distance
+            Distance = doVolunteer.Distance,
+            InCall = VolunteerManager.VolCall(id, doVolunteer.Address)
         };
 
     }
@@ -70,30 +90,44 @@ throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
             return volunteerInLists.OrderBy(v => v.Id);
         else
         {
-            string sortParameter = sort.ToString();
-            return volunteerInLists.OrderBy(v => v.(BO.VolunteerData)sort);
+            //string sortParameter = sort.ToString();
+            return volunteerInLists.OrderBy(v => sort); //?
         }
 
     }
 
     public void Update(int id, BO.Volunteer volToUpdate)
     {
-        if(id== volToUpdate.Id || Read(volToUpdate.Id).Job == BO.Role.Manager)
+        BO.Volunteer isManager = Read(volToUpdate.Id);
+        try
         {
-            
-           VolunteerManager.CheckLogic(volToUpdate);
-           VolunteerManager.CheckFormat(volToUpdate);
-            
-            DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)(volToUpdate.Job), volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
-         volToUpdate.Address, volToUpdate.Latitude, volToUpdate.Longitude, volToUpdate.MaxDis);
-            try
+            if (id == volToUpdate.Id || isManager.Job == BO.Role.Manager)
             {
-                _dal.Volunteer.Update(doVolunteer);
+
+                VolunteerManager.CheckLogic(volToUpdate);
+                VolunteerManager.CheckFormat(volToUpdate);
+
+                var oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
+                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && isManager.Job != BO.Role.Manager)
+                    throw new BO.CantUpdateException("Danater cant update this");
+
+                DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)(volToUpdate.Job), volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
+             volToUpdate.Address, volToUpdate.Latitude, volToUpdate.Longitude, volToUpdate.MaxDis);
+                try
+                {
+                    _dal.Volunteer.Update(doVolunteer);
+                }
+                catch (DO.BlDoesNotExistException ex)
+                {
+                    throw new BO.BlDoesNotExistException($"Volunteer with ID={volToUpdate.Id} does Not exists", ex);
+                }
             }
-            catch (DO.BlDoesNotExistException ex)
-            {
-                throw new BO.BlDoesNotExistException($"Volunteer with ID={volToUpdate.Id} does Not exists", ex);
-            }
+            else
+                throw new BO.CantUpdateException("Danater cant update this");
+        }
+        catch (BO.CantUpdateException ex)
+        {
+            throw new BO.CantUpdateException("Danater cant update this", ex);
         }
     }
 }
