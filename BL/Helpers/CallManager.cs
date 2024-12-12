@@ -16,22 +16,87 @@ internal static class CallManager
         var endTime = from item in dataAssignments
                       select item.EndTime;
 
-        if (dataAssignments == null)
+        if (endTreatment.LastOrDefault() != DO.AssignmentEnum.TakenCare)
         {
-            if (MaxCloseTime < ClockManager.Now)
-                return CallStatus.Opened;
-            else if ((ClockManager.Now - MaxCloseTime) < IConfig.RiskRange())
+            if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
                 return CallStatus.OpenInRisk;
+            else if (MaxCloseTime > ClockManager.Now)
+                return CallStatus.Opened;
         }
-
 
         else if (endTime != null)
             return CallStatus.Closed;
-        else if (endTime.ClockManager.Now) //to vz
 
+        else if (endTime.Last() < ClockManager.Now) //to vz
+            return CallStatus.Expired;
+        return CallStatus.InTreatment;
     }
 
-    public static string GetPropertyName(BO.CallData sortOrFilter)
+    internal static CallListStatus MakeStatus(DO.Assignment CurrentAssignment, DO.Call currentCall)
+    {
+        if (CurrentAssignment.EndTime != null)
+            return CallListStatus.Closed;
+
+        if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.TakenCare)
+        {
+            if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
+                return CallListStatus.InTreatmentInRisk;
+            return CallListStatus.InTreatment;
+        }
+
+        if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.CancelAdmin || CurrentAssignment.EndTreatment == DO.AssignmentEnum.SelfCancel)
+        {
+            if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
+                return CallListStatus.OpenInRisk;
+            return CallListStatus.Opened;
+        }
+
+        return CallListStatus.Expired;
+    }
+
+    internal static void checkFormat(BO.Call callToCheck)
+    {
+        bool IdIisNum = int.TryParse(callToCheck.Id, out int Id);
+    }
+
+    internal static void CheckLogic(BO.Call toCheck) //where T: BO.Volunteer, BO.Call
+    {
+        bool isId = checkId(toCheck.Id);
+
+        bool isAddress = checkAddress(toCheck.CallAddress);
+
+        bool correntMaxTime = toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime;
+
+        if (isId == false || isAddress == false || correntMaxTime == false)
+            throw new BO.IntegrityOfValuesException("Error in value integrity");
+    }
+
+    private static bool checkId(int id)
+    {
+        int sum = 0;
+        string idString = id.ToString();
+        for (int i = 0; i < 8; i++)
+        {
+            int digit = idString[i] - '0'; // המרת התו למספר
+            int multiplier = (i % 2 == 0) ? 1 : 2; // זוגי/אי-זוגי
+            int product = digit * multiplier;
+            sum += (product > 9) ? product - 9 : product; // סכום הספרות
+        }
+        if (idString[8] != (10 - (sum % 10)) % 10)
+            return false;
+        return true;
+    }
+    private static bool checkAddress(string address)
+    {
+        if (address == null) return true;
+
+        //??
+        //עדכון קווי אורך רוחב
+        return true;
+    }
+
+
+    internal static string GetPropertyName(BO.CallData sortOrFilter)
     {
         return sortOrFilter switch
         {
@@ -47,7 +112,7 @@ internal static class CallManager
         };
     }
 
-    public static string GetPropertyName(BO.CloseCallData sortOrFilter)
+    internal static string GetPropertyName(BO.CloseCallData sortOrFilter)
     {
         return sortOrFilter switch
         {
@@ -61,7 +126,7 @@ internal static class CallManager
         };
     }
 
-    public static string GetPropertyName(BO.CallType sortOrFilter)
+    internal static string GetPropertyName(BO.CallType sortOrFilter)
     {
         return sortOrFilter switch
         {
@@ -73,7 +138,7 @@ internal static class CallManager
         };
     }
 
-    public static string GetPropertyName(BO.OpenCallData sortOrFilter)
+    internal static string GetPropertyName(BO.OpenCallData sortOrFilter)
     {
         return sortOrFilter switch
         {
@@ -87,7 +152,7 @@ internal static class CallManager
         };
     }
 
-    public static IEnumerable<BO.CallInList> ToCallInList(IEnumerable<DO.Call> Oldcalls, IEnumerable<DO.Assignment> OldAssignment)
+    internal static IEnumerable<BO.CallInList> ToCallInList(IEnumerable<DO.Call> Oldcalls, IEnumerable<DO.Assignment> OldAssignment)
     {
         IEnumerable<DO.Volunteer> OldVolunteer = s_dal.Volunteer.ReadAll(null);
         List<BO.CallInList>? callInLists = new List<BO.CallInList>();
@@ -103,7 +168,7 @@ internal static class CallManager
                     CallId = item.Id,
                     CallType = (BO.CallType)item.CallType,
                     OpenTime = item.OpenTime,
-                    LeftTime = item.MaxTime - ClockManager.Now,
+                    LeftTime = (TimeSpan)(item.MaxTime - ClockManager.Now),
                     LastVolunteer = null,
                     CompletionTime = null,
                     Status = BO.CallListStatus.Opened,
@@ -119,7 +184,7 @@ internal static class CallManager
                     CallId = item.Id,
                     CallType = (BO.CallType)item.CallType,
                     OpenTime = item.OpenTime,
-                    LeftTime = item.MaxTime - ClockManager.Now,
+                    LeftTime = (TimeSpan)(item.MaxTime - ClockManager.Now),
                     LastVolunteer = (OldVolunteer.FirstOrDefault(v => (v.Id == CallAssignment.VolunteerId)) ?? throw BLException).FullName,
                     CompletionTime = (CallAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? CallAssignment.EndTime - item.OpenTime : null,
                     Status = MakeStatus(CallAssignment, item),
@@ -131,31 +196,9 @@ internal static class CallManager
         return callInLists.AsEnumerable();
     }
 
-    public static CallListStatus MakeStatus(DO.Assignment CurrentAssignment, DO.Call currentCall)
+    internal static BO.ClosedCallInList ToCloseCall(DO.Call item, BO.CallAssignInList CallAssignment)
     {
-        if (CurrentAssignment.EndTime != null)
-            return CallListStatus.Closed;
 
-        if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.TakenCare)
-        {
-            if ((currentCall.MaxTime - ClockManager.Now) < IConfig.RiskRange)
-                return CallListStatus.InTreatmentInRisk;
-            return CallListStatus.InTreatment;
-        }
-
-        if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.CancelAdmin || CurrentAssignment.EndTreatment == DO.AssignmentEnum.SelfCancel)
-        {
-            if ((currentCall.MaxTime - ClockManager.Now) < IConfig.RiskRange)
-                return CallListStatus.OpenInRisk;
-            return CallListStatus.Opened;
-        }
-
-        return CallListStatus.Expired;
-    }
-
-    public static BO.ClosedCallInList ToCloseCall(DO.Call item, BO.CallAssignInList CallAssignment)
-    {
-        
         return new()
         {
             Id = item.Id,
@@ -164,14 +207,14 @@ internal static class CallManager
             OpenTime = item.OpenTime,
             InterTime = CallAssignment.InterTime,
             CloseTime = CallAssignment.EndTime,
-            EndTreatment =CallAssignment.EndTreatment
+            EndTreatment = (BO.EndTreatment)CallAssignment.EndTreatment
         };
     }
 
-    public static BO.OpenCallInList ToOpenCall(DO.Call item, BO.CallAssignInList CallAssignment)
+    internal static BO.OpenCallInList ToOpenCall(DO.Call item, BO.CallAssignInList CallAssignment)
     {
         Func<DO.Volunteer, bool> predicate = volunteer => volunteer.Id == CallAssignment.VolunteerId;
-        string VolAddress =s_dal.Volunteer.Read(predicate).VolAddress;
+        string VolAddress = s_dal.Volunteer.Read(predicate).VolAddress;
         return new()
         {
             Id = item.Id,
@@ -179,14 +222,9 @@ internal static class CallManager
             Description = item.Description,
             FullAddress = item.CallAddress,
             OpenTime = item.OpenTime,
-            MaxCloseTime=item.MaxTime,
-            VolDistance=Tools.CalculateDis(VolAddress,item.CallAddress)
-            
+            MaxCloseTime = item.MaxTime,
+            VolDistance = Tools.CalculateDis(VolAddress, item.CallAddress)
+
         };
     }
-
 }
-
-
-
-

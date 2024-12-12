@@ -97,7 +97,7 @@ internal static class VolunteerManager
     }
 
 
-    public static string GetPropertyName(BO.VolunteerData sortOrFilter)
+    internal static string GetPropertyName(BO.VolunteerData sortOrFilter)
     {
         return sortOrFilter switch
         {
@@ -112,7 +112,7 @@ internal static class VolunteerManager
         };
     }
 
-    public static IEnumerable<BO.VolunteerInList> ToVolunteerInList(IEnumerable<DO.Volunteer> OldVolunteer)
+    internal static IEnumerable<BO.VolunteerInList> ToVolunteerInList(IEnumerable<DO.Volunteer> OldVolunteer)
     {
         IEnumerable<DO.Assignment> OldAssignments = s_dal.Assignment.ReadAll(null);
         List<BO.VolunteerInList> volunteerInLists = new List<BO.VolunteerInList>();

@@ -19,42 +19,42 @@ internal class Tools
 
     }
 
-    internal static void CheckLogic<T>(this T toCheck) //where T: BO.Volunteer, BO.Call
-    {
-        if (toCheck is Call || toCheck is Volunteer)
-        {
-            bool isId = checkId(toCheck.Id);
+    //internal static void CheckLogic<T>(this T toCheck) //where T: BO.Volunteer, BO.Call
+    //{
+    //    if (toCheck is Call || toCheck is Volunteer)
+    //    {
+    //        bool isId = checkId(toCheck.Id);
 
-            bool IsAddress = checkAddress(toCheck.Address);
+    //        bool IsAddress = checkAddress(toCheck.Address);
 
-            if (isId == false || IsAddress == false)
-                throw new BO.IntegrityOfValuesException("Error in value integrity");
-        }
-    }
+    //        if (isId == false || IsAddress == false)
+    //            throw new BO.IntegrityOfValuesException("Error in value integrity");
+    //    }
+    //}
 
-    private static bool checkId(int id)
-    {
-        int sum = 0;
-        string idString = id.ToString();
-        for (int i = 0; i < 8; i++)
-        {
-            int digit = idString[i] - '0'; // המרת התו למספר
-            int multiplier = (i % 2 == 0) ? 1 : 2; // זוגי/אי-זוגי
-            int product = digit * multiplier;
-            sum += (product > 9) ? product - 9 : product; // סכום הספרות
-        }
-        if (idString[8] != (10 - (sum % 10)) % 10)
-            return false;
-        return true;
-    }
-    private static bool checkAddress(string address)
-    {
-        if (address == null) return true;
+    //private static bool checkId(int id)
+    //{
+    //    int sum = 0;
+    //    string idString = id.ToString();
+    //    for (int i = 0; i < 8; i++)
+    //    {
+    //        int digit = idString[i] - '0'; // המרת התו למספר
+    //        int multiplier = (i % 2 == 0) ? 1 : 2; // זוגי/אי-זוגי
+    //        int product = digit * multiplier;
+    //        sum += (product > 9) ? product - 9 : product; // סכום הספרות
+    //    }
+    //    if (idString[8] != (10 - (sum % 10)) % 10)
+    //        return false;
+    //    return true;
+    //}
+    //private static bool checkAddress(string address)
+    //{
+    //    if (address == null) return true;
 
-        //??
-        //עדכון קווי אורך רוחב
-        return true;
-    }
+    //    //??
+    //    //עדכון קווי אורך רוחב
+    //    return true;
+    //}
 
     public static double CalculateDis(string volAddress, string CallAddress)
     {
