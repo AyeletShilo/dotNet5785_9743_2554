@@ -6,7 +6,7 @@ namespace BO;
 public class VolunteerInList
 {
     public int Id { get; init; }
-    public required string PullName { get; set; }
+    public string PullName { get; set; }
     public bool IsActive {  get; set; }
     public int HandleCalls {  get; set; }
     public int CancelCalls {  get; set; }

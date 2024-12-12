@@ -99,7 +99,24 @@ internal class CallImplementation : ICall
 
     public IEnumerable<BO.CallInList> ReadAll(BO.CallData? filter = null, BO.CallData? sort = null, object? value = null)
     {
-        throw new NotImplementedException();
+        IEnumerable<DO.Call> Oldcalls = _dal.Call.ReadAll(null);
+        IEnumerable<DO.Assignment> OldAssignment = _dal.Assignment.ReadAll(null);
+        IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(Oldcalls, OldAssignment);
+
+        if (filter != null)
+        {
+            string filterProperty = CallManager.GetPropertyName(filter.Value);
+            calls = calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(value) ?? false);
+        }
+        if (sort == null)
+            return calls.OrderBy(c => c.CallId);
+        else
+        {
+            string sortProperty = CallManager.GetPropertyName(sort.Value);
+            calls = calls.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
+            return calls;
+        }
+
     }
 
     public void Update(BO.Call callToUpdate)

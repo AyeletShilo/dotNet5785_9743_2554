@@ -78,25 +78,27 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerData? sort = null)
     {
-        IEnumerable<BO.VolunteerInList> volunteerInLists;
-        if (isActive == null)
-            volunteerInLists = (IEnumerable<BO.VolunteerInList>)_dal.Volunteer.ReadAll(null);
-        else
+        IEnumerable<DO.Volunteer> OldVolunteer = _dal.Volunteer.ReadAll(null);
+        IEnumerable<BO.VolunteerInList> volunteerInLists = VolunteerManager.ToVolunteerInList(OldVolunteer);
+
+        if (isActive != null)
         {
-            Func<DO.Volunteer, bool>? predicate = volunteer => volunteer.Active == true;
-            volunteerInLists = (IEnumerable<BO.VolunteerInList>)_dal.Volunteer.ReadAll(predicate);
+            //Func<DO.Volunteer, bool>? predicate = volunteer => volunteer.Active == true;
+            volunteerInLists = volunteerInLists.Where(volunteer => volunteer.IsActive == true);
         }
         if (sort == null)
             return volunteerInLists.OrderBy(v => v.Id);
         else
         {
             //string sortParameter = sort.ToString();
-            return volunteerInLists.OrderBy(v => sort); //?
-        }
+            //return volunteerInLists.OrderBy(v => v.sort); 
+            string sortProperty = VolunteerManager.GetPropertyName(sort.Value);
+            volunteerInLists = volunteerInLists.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
+            return volunteerInLists;
 
-    }
 
-    public void Update(int id, BO.Volunteer volToUpdate)
+
+            public void Update(int id, BO.Volunteer volToUpdate)
     {
         BO.Volunteer isManager = Read(volToUpdate.Id);
         try

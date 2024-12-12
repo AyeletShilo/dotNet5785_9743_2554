@@ -9,9 +9,9 @@ public class CallInList
     public int CallId { get; init; }
     public CallType CallType { get; set; }
     public DateTime OpenTime { get; set; }
-    public TimeSpan LeftTime { get; set; }
-    public required string LastVolunteer { get; set; }
-    public TimeSpan CompletionTime { get; set; }
+    public TimeSpan? LeftTime { get; set; }
+    public required string? LastVolunteer { get; set; }
+    public TimeSpan? CompletionTime { get; set; }
     public CallListStatus Status { get; set; }
     public int TotalAssignments { get; set; }
     public override string ToString() => this.ToStringProperty();
