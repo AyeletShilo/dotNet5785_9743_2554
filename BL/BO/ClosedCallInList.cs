@@ -11,6 +11,6 @@ public class ClosedCallInList
     public DateTime OpenTime { get; set; }
     public DateTime InterTime {  get; set; }
     public DateTime? CloseTime { get; set; }
-    public EndTreatment EndTreatment { get; set; }
+    public EndTreatment? EndTreatment { get; set; }
     public override string ToString() => this.ToStringProperty();
 }

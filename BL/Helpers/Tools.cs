@@ -56,6 +56,12 @@ internal class Tools
         return true;
     }
 
+    public static double CalculateDis(string volAddress, string CallAddress)
+    {
 
+
+
+        return 3.4;
+    }
 
 }

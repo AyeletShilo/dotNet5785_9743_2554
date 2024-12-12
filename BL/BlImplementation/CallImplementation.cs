@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BlImplementation;
 
-internal class CallImplementation : ICall
+internal class CallImplementation : BlApi.ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     public void CallToTreatment(int id, int assignmentId)
@@ -17,7 +17,13 @@ internal class CallImplementation : ICall
 
     public void Create(BO.Call callToAdd)
     {
-        throw new NotImplementedException();
+        CallManager.CheckLogic(callToAdd);
+        CallManager.CheckFormat(callToAdd);
+
+        DO.Call doCall = new(callToAdd.Id, (DO.TypeOfCall)callToAdd.CallType, callToAdd.CallAddress, callToAdd.Latitude,
+            callToAdd.Longitude, callToAdd.OpenTime, callToAdd.Description, callToAdd.MaxCloseTime);
+
+        _dal.Call.Create(doCall);
     }
 
     public void Delete(int id) //לבדוק את החריגות
@@ -44,12 +50,61 @@ internal class CallImplementation : ICall
 
     public IEnumerable<BO.ClosedCallInList> GetClosedCalls(int id, BO.CallType? filter = null, BO.CloseCallData? sort = null)
     {
-        throw new NotImplementedException();
+        
+      IEnumerable<DO.Call> OldCalls = _dal.Call.ReadAll(null);
+      List<BO.ClosedCallInList>? Calls = new List<BO.ClosedCallInList>();
+        foreach (DO.Call item in OldCalls)
+        {
+            if (Read(item.Id).Status == CallStatus.Closed)
+            {
+                BO.CallAssignInList CallAssignment =Read(item.Id).CallAssignments.Last();
+                Calls.Add(CallManager.ToCloseCall(item, CallAssignment));
+            }
+        }
+                    
+        IEnumerable<BO.ClosedCallInList>? closeCall = Calls.Where(call => call.Id == id);
+        if (filter != null)
+        {
+            string filterProperty = CallManager.GetPropertyName(filter.Value);
+            closeCall = closeCall.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(filter) ?? false);
+        }
+        if (sort == null)
+            return closeCall.OrderBy(c => c.Id);
+        else
+        {
+            string sortProperty = CallManager.GetPropertyName(sort.Value);
+            closeCall = closeCall.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
+            return closeCall;
+        }
     }
 
     public IEnumerable<BO.OpenCallInList> GetOpenedCalls(int id, BO.CallType? filter = null, BO.OpenCallData? sort = null)
     {
-        throw new NotImplementedException();
+        IEnumerable<DO.Call> OldCalls = _dal.Call.ReadAll(null);
+        List<BO.OpenCallInList>? Calls = new List<BO.OpenCallInList>();
+        foreach (DO.Call item in OldCalls)
+        {
+            if (Read(item.Id).Status == CallStatus.OpenInRisk || Read(item.Id).Status == CallStatus.Opened)
+            {
+                BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.Last();
+                Calls.Add(CallManager.ToOpenCall(item, CallAssignment));
+            }
+        }
+
+        IEnumerable<BO.OpenCallInList>? OpenCalls = Calls;
+        if (filter != null)
+        {
+            string filterProperty = CallManager.GetPropertyName(filter.Value);
+            OpenCalls = Calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(filter) ?? false);
+        }
+        if (sort == null)
+            return OpenCalls.OrderBy(c => c.Id);
+        else
+        {
+            string sortProperty = CallManager.GetPropertyName(sort.Value);
+            OpenCalls = OpenCalls.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
+            return OpenCalls;
+        }
     }
 
     public BO.CallStatus[] HowManyCalls()
@@ -121,38 +176,20 @@ internal class CallImplementation : ICall
 
     public void Update(BO.Call callToUpdate)
     {
-        BO.Call isManager = Read(callToUpdate.Id);
-        try
-        {
-            if (id == callToUpdate.Id || isManager.Job == BO.Role.Manager)
+
+            CallManager.CheckLogic(callToUpdate);
+            CallManager.CheckFormat(callToUpdate);
+
+        DO.Call doCall = new(callToUpdate.Id, (DO.TypeOfCall)callToUpdate.CallType, callToUpdate.CallAddress, callToUpdate.Latitude,
+            callToUpdate.Longitude, callToUpdate.OpenTime, callToUpdate.Description, callToUpdate.MaxCloseTime);
+            try
             {
-
-                VolunteerManager.CheckLogic(volToUpdate);
-                VolunteerManager.CheckFormat(volToUpdate);
-
-                var oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
-                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && isManager.Job != BO.Role.Manager)
-                    throw new BO.CantUpdateException("Danater cant update this");
-
-                DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)(volToUpdate.Job), volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
-             volToUpdate.Address, volToUpdate.Latitude, volToUpdate.Longitude, volToUpdate.MaxDis);
-                try
-                {
-                    _dal.Volunteer.Update(doVolunteer);
-                }
-                catch (DO.BlDoesNotExistException ex)
-                {
-                    throw new BO.BlDoesNotExistException($"Volunteer with ID={volToUpdate.Id} does Not exists", ex);
-                }
+                _dal.Call.Update(doCall);
             }
-            else
-                throw new BO.CantUpdateException("Danater cant update this");
-        }
-        catch (BO.CantUpdateException ex)
-        {
-            throw new BO.CantUpdateException("Danater cant update this", ex);
-        }
-
+            catch (DO.DalDoesNotExistException ex)
+            {
+                throw new BO.BlDoesNotExistException($"Call with ID={callToUpdate.Id} does Not exists");
+            }
     }
 
     public void UpdateCancelTreatment(int id, int assignmentId)
