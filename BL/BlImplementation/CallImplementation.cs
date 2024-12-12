@@ -12,7 +12,28 @@ internal class CallImplementation : BlApi.ICall
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     public void CallToTreatment(int id, int assignmentId)
     {
-        throw new NotImplementedException();
+        try
+        {
+
+            BO.Call call = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists");
+            Func<DO.Assignment, bool>? predicate = assignment => (assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin);
+            var assignments = _dal.Assignment.ReadAll(predicate);
+            if (assignments is not null)
+                throw new BO.BlDoesAlreadyExistException($"Assigment with ID={callId} already exists");
+            if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
+                _dal.Assignment.Create(new(?, callId, id, ClockManager.Now, null, null)); //איך אני מביאה את המספר מזהה רץ?
+            else
+                throw new BO.BlDoesAlreadyExistException($"Assigment with ID={callId} already exists");
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            throw ex;
+        }
+        catch (BO.BlDoesAlreadyExistException ex1)
+        {
+            throw ex1;
+        }
+
     }
 
     /// <summary>
@@ -212,11 +233,63 @@ internal class CallImplementation : BlApi.ICall
 
     public void UpdateCancelTreatment(int id, int assignmentId)
     {
-        throw new NotImplementedException();
+
+        try
+        {
+            DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists");
+            DO.Volunteer volunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"volunteer with ID={id} does not exists");
+            if ((id == assignment.VolunteerId || volunteer.Job == DO.Role.Manager) && assignment.EndTime is null)
+            {
+                DO.Assignment UpdateAssignment;
+                if (id == assignment.VolunteerId)
+                {
+                    UpdateAssignment = new(assignmentId, assignment.CallId, id,
+                        assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.SelfCancel);
+                }
+                else
+                {
+                    UpdateAssignment = new(assignmentId, assignment.CallId, id,
+                       assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.CancelAdmin);
+                }
+                _dal.Assignment.Update(UpdateAssignment);
+            }
+            else
+                throw BO.CantUpdateException("cant update this");
+        }
+        catch (BO.BlDoesNotExistException ex1)
+        {
+            throw ex1;
+        }
+        catch (BO.CantUpdateException ex2)
+        {
+            throw ex2;
+        }
+
     }
 
     public void UpdateEndTreatment(int id, int assignmentId)
     {
-        throw new NotImplementedException();
+
+        try
+        {
+            DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists");
+            if (id == assignment.VolunteerId && assignment.EndTreatment is null)
+            {
+                DO.Assignment UpdateAssignment = new(assignmentId, assignment.CallId, id,
+                    assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.TakenCare);
+                _dal.Assignment.Update(UpdateAssignment);
+            }
+            else
+                throw BO.CantUpdateException("Danater cant update this");
+        }
+        catch (BO.BlDoesNotExistException ex1)
+        {
+            throw ex1;
+        }
+        catch (BO.CantUpdateException ex2)
+        {
+            throw ex2;
+        }
     }
+
 }
