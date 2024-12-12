@@ -10,7 +10,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
-   
+
     public void Create(BO.Volunteer boVolunteer)
     {
         VolunteerManager.CheckLogic(boVolunteer);
@@ -95,10 +95,11 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             string sortProperty = VolunteerManager.GetPropertyName(sort.Value);
             volunteerInLists = volunteerInLists.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
             return volunteerInLists;
+        }
+    }
 
 
-
-            public void Update(int id, BO.Volunteer volToUpdate)
+    public void Update(int id, BO.Volunteer volToUpdate)
     {
         BO.Volunteer isManager = Read(volToUpdate.Id);
         try
@@ -133,3 +134,4 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         }
     }
 }
+        
