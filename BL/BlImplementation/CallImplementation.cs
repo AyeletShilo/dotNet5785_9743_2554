@@ -10,7 +10,7 @@ namespace BlImplementation;
 internal class CallImplementation : BlApi.ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    public void CallToTreatment(int id, int assignmentId)
+    public void CallToTreatment(int id, int callId)
     {
         try
         {
