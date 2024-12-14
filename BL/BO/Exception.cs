@@ -2,12 +2,47 @@
 
 
 [Serializable]
-public class BlDoesNotExisException :Exception
+public class BlDoesNotExistException :Exception
 {
-    public BlDoesNotExisException(string? message) : base(message) { }
-    public BlDoesNotExisException(string message, Exception innerException) 
+    public BlDoesNotExistException(string? message) : base(message) { }
+    public BlDoesNotExistException(string message, Exception innerException) 
         : base(message, innerException) { }
 }
-internal class Exception
+
+[Serializable]
+public class BlDoesAlreadyExistException : Exception
 {
+    public BlDoesAlreadyExistException(string? message) : base(message) { }
+    public BlDoesAlreadyExistException(string message, Exception innerException)
+        : base(message, innerException) { }
 }
+
+#region Bl Logic Exception
+
+[Serializable]
+public class BlIntegrityOfValuesException : Exception
+{
+    public BlIntegrityOfValuesException(string? message) : base(message) { }
+}
+
+[Serializable]
+public class BlNullPropertyException : Exception
+{
+    public BlNullPropertyException(string? message) : base(message) { }
+}
+
+[Serializable]
+public class BlCannotBeDeletedException : Exception
+{
+    public BlCannotBeDeletedException(string? message) : base(message) { }
+}
+
+[Serializable]
+public class BlCantUpdateException : Exception
+{
+    public BlCantUpdateException(string? message) : base(message) { }
+}
+
+
+
+#endregion

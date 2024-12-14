@@ -9,7 +9,7 @@ internal static class CallManager
 {
     private static IDal s_dal = Factory.Get; //stage 4
 
-    internal static CallStatus MakeStatus(int id, IEnumerable<DO.Assignment> dataAssignments, DateTime MaxCloseTime)
+    internal static CallStatus MakeStatus(IEnumerable<DO.Assignment> dataAssignments, DateTime? MaxCloseTime)
     {
         var endTreatment = from item in dataAssignments
                            select item.EndTreatment;
@@ -54,21 +54,21 @@ internal static class CallManager
         return CallListStatus.Expired;
     }
 
-    internal static void checkFormat(BO.Call callToCheck)
-    {
-        bool IdIisNum = int.TryParse(callToCheck.Id, out int Id);
-    }
+    //internal static void checkFormat(BO.Call callToCheck)
+    //{
+    //    bool IdIisNum = int.TryParse(callToCheck.Id, out int Id);
+    //}
 
-    internal static void CheckLogic(BO.Call toCheck) //where T: BO.Volunteer, BO.Call
+    internal static void CheckLogic(BO.Call toCheck) 
     {
         bool isId = checkId(toCheck.Id);
 
         bool isAddress = checkAddress(toCheck.CallAddress);
 
-        bool correntMaxTime = toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime;
+        bool currentMaxTime = toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime;
 
-        if (isId == false || isAddress == false || correntMaxTime == false)
-            throw new BO.IntegrityOfValuesException("Error in value integrity");
+        if (isId == false || isAddress == false || currentMaxTime == false)
+            throw new BO.BlIntegrityOfValuesException("Error in value integrity");
     }
 
     private static bool checkId(int id)
@@ -152,13 +152,25 @@ internal static class CallManager
         };
     }
 
-    internal static IEnumerable<BO.CallInList> ToCallInList(IEnumerable<DO.Call> Oldcalls, IEnumerable<DO.Assignment> OldAssignment)
+    internal static string GetPropertyName(BO.CallStatus sortOrFilter)
     {
-        IEnumerable<DO.Volunteer> OldVolunteer = s_dal.Volunteer.ReadAll(null);
-        List<BO.CallInList>? callInLists = new List<BO.CallInList>();
-        foreach (DO.Call item in Oldcalls)
+        return sortOrFilter switch
         {
-            DO.Assignment? CallAssignment = OldAssignment.LastOrDefault(a => a.CallId == item.Id) ?? null;
+            BO.CallStatus.Opened => nameof(BO.CallStatus.Opened),
+            BO.CallStatus.InTreatment => nameof(BO.CallStatus.InTreatment),
+            BO.CallStatus.Expired => nameof(BO.CallStatus.Expired),
+            BO.CallStatus.Closed => nameof(BO.CallStatus.Closed),
+            BO.CallStatus.OpenInRisk => nameof(BO.CallStatus.OpenInRisk)
+        };
+    }
+
+    internal static IEnumerable<BO.CallInList> ToCallInList(IEnumerable<DO.Call> oldCalls, IEnumerable<DO.Assignment> oldAssignment)
+    {
+        IEnumerable<DO.Volunteer> oldVolunteer = s_dal.Volunteer.ReadAll(null);
+        List<BO.CallInList>? callInLists = new List<BO.CallInList>();
+        foreach (DO.Call item in oldCalls)
+        {
+            DO.Assignment? CallAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id); // ?? null;- הוא מיותר
 
             if (CallAssignment is null)
             {
@@ -178,17 +190,18 @@ internal static class CallManager
 
             else
             {
+                DO.Volunteer? first= oldVolunteer.FirstOrDefault(v => v.Id == CallAssignment.VolunteerId) ?? throw new BlNullPropertyException("Cannot use a null attribute value.");
                 callInLists.Add(new()
                 {
                     Id = CallAssignment.Id,
                     CallId = item.Id,
                     CallType = (BO.CallType)item.CallType,
                     OpenTime = item.OpenTime,
-                    LeftTime = (TimeSpan)(item.MaxTime - ClockManager.Now),
-                    LastVolunteer = (OldVolunteer.FirstOrDefault(v => (v.Id == CallAssignment.VolunteerId)) ?? throw BLException).FullName,
-                    CompletionTime = (CallAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? CallAssignment.EndTime - item.OpenTime : null,
+                    LeftTime = item.MaxTime - ClockManager.Now,
+                    LastVolunteer = first.FullName,
+                    CompletionTime = (CallAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? (CallAssignment.EndTime - item.OpenTime) : null,
                     Status = MakeStatus(CallAssignment, item),
-                    TotalAssignments = OldAssignment.Count(a => a.CallId == item.Id)
+                    TotalAssignments = oldAssignment.Count(a => a.CallId == item.Id)
                 });
             }
         };

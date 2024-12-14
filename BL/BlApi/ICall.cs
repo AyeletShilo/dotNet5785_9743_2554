@@ -14,6 +14,6 @@ public interface ICall
     IEnumerable<OpenCallInList> GetOpenedCalls(int id, CallType? filter = null, OpenCallData? sort = null);
     void UpdateEndTreatment(int id, int assignmentId);
     void UpdateCancelTreatment(int id, int assignmentId);
-    void CallToTreatment(int id, int assignmentId);
+    void CallToTreatment(int id, int callId);
 
 }

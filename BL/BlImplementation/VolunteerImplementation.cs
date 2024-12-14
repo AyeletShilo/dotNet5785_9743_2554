@@ -1,10 +1,6 @@
 ﻿namespace BlImplementation;
-using BlApi;
-//using BO;
 using System.Collections.Generic;
 using Helpers;
-using DalApi;
-
 
 internal class VolunteerImplementation : BlApi.IVolunteer
 {
@@ -13,65 +9,66 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public void Create(BO.Volunteer boVolunteer)
     {
-        VolunteerManager.CheckLogic(boVolunteer);
-        VolunteerManager.CheckFormat(boVolunteer);
+        VolunteerManager.CheckLogic(boVolunteer); //חריגה נזרקת
+        VolunteerManager.CheckFormat(boVolunteer); //חריגה נזרקת
 
         DO.Volunteer doVolunteer =
           new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)(boVolunteer.Job), boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
           boVolunteer.Address, boVolunteer.Latitude, boVolunteer.Longitude, boVolunteer.MaxDis);
         try
         {
-            _dal.Volunteer.Create(doVolunteer);
+            _dal.Volunteer.Create(doVolunteer); //חריגה תזרק משכבת הנתונים
         }
-        catch (DO.DalAlreadyExistsException ex)
+        catch (DO.DalAlreadyExistException ex)
         {
-            throw new BO.BlAlreadyExistsException($"Volunteer with ID={boVolunteer.Id} already exists", ex);
+            throw new BO.BlDoesAlreadyExistException($"Volunteer with ID={boVolunteer.Id} already exists", ex);
         }
     }
 
     public void Delete(int id)
     {
-        var idVolunteer = Read(id);
+        var idVolunteer = Read(id) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value."); //חריגה של NULL או של איבר שלא קיים? והאם זה ימנע מDELETET לשלוח חריגה?
         try
         {
             if (idVolunteer.HandleCalls != 0 || idVolunteer.InCall != null)
-                throw new BO.BLCannotBeDeletedException($"Volunteer with ID={id}cannot be deleted");
+                throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id}cannot be deleted"); //החריגה תזרק לשכבה מעל
 
-            _dal.Volunteer.Delete(id);
+            _dal.Volunteer.Delete(id); //חריגה תזרק משכבת הנתונים
         }
-        catch (BO.BLCannotBeDeletedException ex)
+        catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BLCannotBeDeletedException($"Volunteer with ID={id} cannot be deleted", ex);
+            throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist", ex);
         }
-        catch (BO.BLCannotBeDeletedException ex)
-        {
-            throw new BO.BLCannotBeDeletedException($"Volunteer with ID={id} does Not exist", ex);
-        }
+        //catch (BO.BlCannotBeDeletedException ex)
+        //{
+        //    throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id} does Not exist", ex);
+        //}
 
     }
 
     public BO.Role GetMyJob(int id)
     {
-        return Read(id).Job;
+        BO.Volunteer result = Read(id) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value.");
+        return result.Job;
     }
 
     public BO.Volunteer? Read(int id)
     {
-        var doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BLCannotBeDeletedException($"Volunteer with ID={id} does Not exist");
+        DO.Volunteer doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id} does Not exist");
         return new()
         {
             Id = id,
-            FullName = doVolunteer.Name,
+            FullName = doVolunteer.FullName,
             PhoneNumber = doVolunteer.PhoneNumber,
             Email = doVolunteer.Email,
-            Address = doVolunteer.Address,
+            Address = doVolunteer.VolAddress,
             Latitude = doVolunteer.Latitude,
             Longitude = doVolunteer.Longitude,
-            Job = doVolunteer.Job,
-            IsActive = doVolunteer.IsActive,
+            Job = (BO.Role)doVolunteer.Job,
+            IsActive = doVolunteer.Active,
             MaxDis = doVolunteer.MaxDistance,
-            Distance = doVolunteer.Distance,
-            InCall = VolunteerManager.VolCall(id, doVolunteer.Address)
+            Distance = (BO.DisType)doVolunteer.Distance,
+            InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress) //הכתובת של המתנדב יכולה להיהות NULL??
         };
 
     }
@@ -101,37 +98,32 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public void Update(int id, BO.Volunteer volToUpdate)
     {
-        BO.Volunteer isManager = Read(volToUpdate.Id);
+        BO.Volunteer isManager = Read(volToUpdate.Id) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value."); //חריגה לשכבה מעל
         try
         {
             if (id == volToUpdate.Id || isManager.Job == BO.Role.Manager)
             {
 
-                VolunteerManager.CheckLogic(volToUpdate);
-                VolunteerManager.CheckFormat(volToUpdate);
+                VolunteerManager.CheckLogic(volToUpdate); //תיזרק חריגה
+                VolunteerManager.CheckFormat(volToUpdate); //תיזרק חריגה
 
-                var oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
+                DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
                 if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && isManager.Job != BO.Role.Manager)
-                    throw new BO.CantUpdateException("Danater cant update this");
+                    throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 
-                DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)(volToUpdate.Job), volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
+                DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
              volToUpdate.Address, volToUpdate.Latitude, volToUpdate.Longitude, volToUpdate.MaxDis);
-                try
-                {
-                    _dal.Volunteer.Update(doVolunteer);
-                }
-                catch (DO.BlDoesNotExistException ex)
-                {
-                    throw new BO.BlDoesNotExistException($"Volunteer with ID={volToUpdate.Id} does Not exists", ex);
-                }
+
+                _dal.Volunteer.Update(doVolunteer);//שאלה על החריגה של הNULL
             }
+
             else
-                throw new BO.CantUpdateException("Danater cant update this");
+                throw new BO.BlCantUpdateException("You are not allowed to update this");
         }
-        catch (BO.CantUpdateException ex)
+        catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.CantUpdateException("Danater cant update this", ex);
+            throw new BO.BlDoesNotExistException($"Volunteer with ID={volToUpdate.Id} does Not exists", ex);
         }
     }
 }
-        
+

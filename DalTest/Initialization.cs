@@ -120,33 +120,33 @@ public static class Initialization
         int i = 0;
         foreach (var address in addresses)
         {
-            TypeOfCall callType = TypeOfCall.shopping;
+            TypeOfCall callType;// = TypeOfCall.Shopping;
             string? description = null;
             int rType = s_rand.Next(5);
             switch (rType)
             {
                 case 0:
-                    callType = TypeOfCall.repairing;
+                    callType = TypeOfCall.Repairing;
                     description = "Certain repairs in the house - replacing a light bulb, plumbing work and minor renovations.";
                     break;
                 case 1:
-                    callType = TypeOfCall.cleaning;
+                    callType = TypeOfCall.Cleaning;
                     description = "Floor washing, kitchen cleaning, dust removal, and toilet cleaning.";
                     break;
                 case 2:
-                    callType = TypeOfCall.technologyHelp;
+                    callType = TypeOfCall.TechnologyHelp;
                     description = "Learning and helping with technology - connecting to social networks, installing the Internet, dealing with viruses, learning how to use it.";
                     break;
                 case 3:
-                    callType = TypeOfCall.talking;
+                    callType = TypeOfCall.Talking;
                     description = "An hour or more of conversation to relieve loneliness";
                     break;
                 case 4:
-                    callType = TypeOfCall.shopping;
+                    callType = TypeOfCall.Shopping;
                     description = "Doing weekly shopping at the local supermarket.";
                     break;
                 default:
-                    callType = TypeOfCall.shopping;
+                    callType = TypeOfCall.Shopping;
                     break;
             }
             double latitude = latitudes[i];

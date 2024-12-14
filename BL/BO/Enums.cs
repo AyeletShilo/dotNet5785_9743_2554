@@ -81,7 +81,7 @@ public enum TimeUnit
 public enum VolunteerData
 {
     Id,
-    PullName,
+    FullName,
     IsActive,
     HandleCalls,
     CancelCalls,

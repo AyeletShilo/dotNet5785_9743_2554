@@ -25,7 +25,7 @@ internal static class VolunteerManager
         bool isId = volToCheck.Id > 9999999 && volToCheck.Id < 1000000000;
 
         if (isEmail == false || PhoneIisNum == false || PhoneIsCorrect == false || isDis == false || isId == false)
-            throw new BO.IntegrityOfValuesException("Error in value integrity");
+            throw new BO.BlIntegrityOfValuesException("Error in value integrity");
 
     }
 
@@ -49,7 +49,7 @@ internal static class VolunteerManager
         bool IsAddress = checkAddress(volToCheck.Address);
 
         if (isId == false || IsAddress == false)
-            throw new BO.IntegrityOfValuesException("Error in value integrity");
+            throw new BO.BlIntegrityOfValuesException("Error in value integrity");
     }
 
     private static bool checkId(int id)
@@ -78,9 +78,9 @@ internal static class VolunteerManager
 
     internal static BO.CallInProgress VolCall(int id, string address)
     {
-        DO.Call CurrentCall = s_dal.Call.Read(id);
+        DO.Call CurrentCall = s_dal.Call.Read(id) ?? throw new BO.BlNullPropertyException($"Call with ID: {id} does not exist");
         Func<DO.Assignment, bool> func = item => item.CallId == CurrentCall.Id;
-        DO.Assignment CurrentAss = s_dal.Assignment.Read(func);
+        DO.Assignment CurrentAss = s_dal.Assignment.Read(func) ?? throw new BO.BlNullPropertyException($"Assignment does not exist");
         return new()
         {
             Id = id,
@@ -102,7 +102,7 @@ internal static class VolunteerManager
         return sortOrFilter switch
         {
             BO.VolunteerData.Id => nameof(BO.VolunteerInList.Id),
-            BO.VolunteerData.PullName => nameof(BO.VolunteerInList.PullName),
+            BO.VolunteerData.FullName => nameof(BO.VolunteerInList.PullName),
             BO.VolunteerData.IsActive => nameof(BO.VolunteerInList.IsActive),
             BO.VolunteerData.HandleCalls => nameof(BO.VolunteerInList.HandleCalls),
             BO.VolunteerData.CancelCalls => nameof(BO.VolunteerInList.CancelCalls),
@@ -114,29 +114,23 @@ internal static class VolunteerManager
 
     internal static IEnumerable<BO.VolunteerInList> ToVolunteerInList(IEnumerable<DO.Volunteer> OldVolunteer)
     {
-        IEnumerable<DO.Assignment> OldAssignments = s_dal.Assignment.ReadAll(null);
+        IEnumerable<DO.Assignment> oldAssignments = s_dal.Assignment.ReadAll(null);
         List<BO.VolunteerInList> volunteerInLists = new List<BO.VolunteerInList>();
         foreach (DO.Volunteer item in OldVolunteer)
         {
-            DO.Assignment? VolunteerAssignment = OldAssignments.FirstOrDefault(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTime != null)) ?? null;
+            DO.Assignment? VolunteerAssignment = oldAssignments.FirstOrDefault(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTime != null));
             volunteerInLists.Add(new()
             {
                 Id = item.Id,
                 PullName = item.FullName,
                 IsActive = item.Active,
-                HandleCalls = OldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.CancelExpired)),
-                CancelCalls = OldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.TakenCare)),
-                ExpiredCalls = OldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.SelfCancel || assignment.EndTreatment == DO.AssignmentEnum.CancelAdmin)),
+                HandleCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.CancelExpired)),
+                CancelCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.TakenCare)),
+                ExpiredCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.SelfCancel || assignment.EndTreatment == DO.AssignmentEnum.CancelAdmin)),
                 CallId = VolunteerAssignment != null ? VolunteerAssignment.CallId : null,
                 InTreatment = VolunteerAssignment != null ? (BO.CallInTreatment)s_dal.Call.Read(VolunteerAssignment.CallId)!.CallType : BO.CallInTreatment.None
             });
         };
-
         return volunteerInLists.AsEnumerable();
     }
-
-
 }
-
-
-

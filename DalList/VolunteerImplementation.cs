@@ -1,5 +1,4 @@
-﻿
-namespace Dal;
+﻿namespace Dal;
 using DalApi;
 using DO;
 using System.Collections.Generic;
@@ -33,7 +32,7 @@ internal class VolunteerImplementation : IVolunteer
 
     public Volunteer? Read(Func<Volunteer, bool> filter) //stage 2
     {
-        Volunteer? item = DataSource.Volunteers?.FirstOrDefault(filter); 
+        Volunteer? item = DataSource.Volunteers?.FirstOrDefault(filter);
         return item;
     }
 

@@ -10,7 +10,6 @@ internal class CallImplementation : ICall
 {
     public void Create(Call item)
     {
-
         int NewId = Config.nextCallId;
         Call newItem = new(NewId, item.CallType, item.CallAddress, item.Latitude, item.Longitude, item.OpenTime, item.Description, item.MaxTime);
         DataSource.Calls?.Add(newItem);
