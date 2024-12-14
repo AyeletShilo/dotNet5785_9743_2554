@@ -133,26 +133,26 @@ internal static class VolunteerManager
         };
         return volunteerInLists.AsEnumerable();
     }
-    public static double CalculateDis(string? volAddress, string CallAddress)
+    public static double CalculateDis(string? volAddress, string callAddress)
     {
-        if (volAddress is null || CallAddress is null) return 0.0;
-        Func<DO.Volunteer, bool> VOlPredicate = volunteer => volunteer.VolAddress == volAddress;
-        Func<DO.Call, bool> CallPredicate = call => call.CallAddress == CallAddress;
-        double VOlLatitude = (double)(s_dal.Volunteer.Read(VOlPredicate)).Latitude;
-        double VolLongitude = (double)s_dal.Volunteer.Read(VOlPredicate).Longitude;
-        double CallLatitude = (double)s_dal.Call.Read(CallPredicate).Latitude;
-        double CallLongitude = (double)s_dal.Call.Read(CallPredicate).Longitude;
+        if (volAddress is null || callAddress is null) return 0.0;
+        Func<DO.Volunteer, bool> volPredicate = volunteer => volunteer.VolAddress == volAddress;
+        Func<DO.Call, bool> callPredicate = call => call.CallAddress == callAddress;
+        double volLatitude = (double)(s_dal.Volunteer.Read(volPredicate)).Latitude;
+        double volLongitude = (double)s_dal.Volunteer.Read(volPredicate).Longitude;
+        double callLatitude = (double)s_dal.Call.Read(callPredicate).Latitude;
+        double callLongitude = (double)s_dal.Call.Read(callPredicate).Longitude;
 
         const double R = 6371; // רדיוס כדור הארץ בקילומטרים
 
         // המרת מעלות לרדיאנים
         double ToRadians(double angle) => Math.PI * angle / 180.0;
 
-        double phi1 = ToRadians(VOlLatitude);
-        double phi2 = ToRadians(CallLatitude);
+        double phi1 = ToRadians(volLatitude);
+        double phi2 = ToRadians(callLatitude);
 
-        double deltaLat = ToRadians(CallLatitude - VOlLatitude);
-        double deltaLon = ToRadians(CallLongitude - VolLongitude);
+        double deltaLat = ToRadians(callLatitude - volLatitude);
+        double deltaLon = ToRadians(callLongitude - volLongitude);
 
         // חישוב המרחק בקירוב לשטח מישורי
         double x = deltaLon * Math.Cos((phi1 + phi2) / 2);
