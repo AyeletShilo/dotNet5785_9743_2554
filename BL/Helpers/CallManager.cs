@@ -236,7 +236,7 @@ internal static class CallManager
             FullAddress = item.CallAddress,
             OpenTime = item.OpenTime,
             MaxCloseTime = item.MaxTime,
-            VolDistance = Tools.CalculateDis(VolAddress, item.CallAddress)
+            VolDistance = VolunteerManager.CalculateDis(VolAddress, item.CallAddress)
 
         };
     }

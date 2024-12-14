@@ -91,7 +91,7 @@ internal static class VolunteerManager
             OpenTime = CurrentCall.OpenTime,
             MaxCloseTime = CurrentCall.MaxTime,
             EntryTime = CurrentAss.InterTime,
-            VolDistance = Tools.CalculateDis(address, CurrentCall.CallAddress),
+            VolDistance = VolunteerManager.CalculateDis(address, CurrentCall.CallAddress),
             status = (CurrentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange ? Status.InTreatment : Status.InRiskTreatment
         };
     }
