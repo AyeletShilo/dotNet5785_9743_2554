@@ -133,4 +133,34 @@ internal static class VolunteerManager
         };
         return volunteerInLists.AsEnumerable();
     }
+    public static double CalculateDis(string? volAddress, string CallAddress)
+    {
+        if (volAddress is null || CallAddress is null) return 0.0;
+        Func<DO.Volunteer, bool> VOlPredicate = volunteer => volunteer.VolAddress == volAddress;
+        Func<DO.Call, bool> CallPredicate = call => call.CallAddress == CallAddress;
+        double VOlLatitude = (double)(s_dal.Volunteer.Read(VOlPredicate)).Latitude;
+        double VolLongitude = (double)s_dal.Volunteer.Read(VOlPredicate).Longitude;
+        double CallLatitude = (double)s_dal.Call.Read(CallPredicate).Latitude;
+        double CallLongitude = (double)s_dal.Call.Read(CallPredicate).Longitude;
+
+        const double R = 6371; // רדיוס כדור הארץ בקילומטרים
+
+        // המרת מעלות לרדיאנים
+        double ToRadians(double angle) => Math.PI * angle / 180.0;
+
+        double phi1 = ToRadians(VOlLatitude);
+        double phi2 = ToRadians(CallLatitude);
+
+        double deltaLat = ToRadians(CallLatitude - VOlLatitude);
+        double deltaLon = ToRadians(CallLongitude - VolLongitude);
+
+        // חישוב המרחק בקירוב לשטח מישורי
+        double x = deltaLon * Math.Cos((phi1 + phi2) / 2);
+        double y = deltaLat;
+
+        double distance = R * Math.Sqrt(x * x + y * y); // נוסחת פיתגורס
+        return distance;
+    }
+
+
 }
