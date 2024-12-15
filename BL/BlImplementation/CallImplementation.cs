@@ -9,28 +9,16 @@ internal class CallImplementation : ICall
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     public void CallToTreatment(int id, int callId)
     {
-        try
-        {
-
-            BO.Call call = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists");
-            Func<DO.Assignment, bool>? predicate = assignment => (assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin);
-            var assignments = _dal.Assignment.ReadAll(predicate);
-            if (assignments is not null)
-                throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists");
-            if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
-                _dal.Assignment.Create(new(0, callId, id, ClockManager.Now, null, null)); //איך אני מביאה את המספר מזהה רץ? תשובה: זה מחשב לבד ביצירה של הקצאה, לכן אפשר לשים סתם int.
-            else
-                throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists"); //מה הולך פה עם החריגות? מה זה החריגה הזאת?
-        }
-        //catch (DO.DalDoesNotExistException ex)
-        //{
-        //    throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists", ex);
-        //}
-        catch (BO.BlDoesAlreadyExistException ex)
-        {
-            throw ex;
-        }
-
+        BO.Call call = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists");
+        Func<DO.Assignment, bool>? predicate = assignment => (assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel
+                                                             && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin);
+        var assignments = _dal.Assignment.ReadAll(predicate);
+        if (assignments is not null)
+            throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists");
+        if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
+            _dal.Assignment.Create(new(0, callId, id, ClockManager.Now, null, null)); //איך אני מביאה את המספר מזהה רץ? תשובה: זה מחשב לבד ביצירה של הקצאה, לכן אפשר לשים סתם int.
+        else
+            throw new BO.BlCantHandleItException($"Unable to assign"); //מה הולך פה עם החריגות? מה זה החריגה הזאת?
     }
 
     /// <summary>
@@ -39,16 +27,8 @@ internal class CallImplementation : ICall
     /// <param name="callToAdd"></param>
     public void Create(BO.Call callToAdd)
     {
-        try
-        {
-            DO.Call doCall = CallManager.CheckLogic(callToAdd);
-            _dal.Call.Create(doCall);
-        }
-        catch (BO.BlIntegrityOfValuesException ex) //שאלה אם צריך לתפוס פה את החריגה
-        {
-            throw ex;
-        }
-
+        DO.Call doCall = CallManager.CheckLogic(callToAdd); //זורק חריגה
+        _dal.Call.Create(doCall);
     }
 
     /// <summary>
@@ -62,8 +42,8 @@ internal class CallImplementation : ICall
     {
         try
         {
-            //BO.Call toDelete = Read(id); // אם לא קיים כזה ID לאן תזרק החריגה?
-            if (Read(id).Status == BO.CallStatus.Opened)
+            BO.Call toDelete = Read(id) ?? throw new BO.BlDoesNotExistException($"Call with ID={id} does Not exist"); // אם לא קיים כזה ID לאן תזרק החריגה?
+            if (toDelete.Status == BO.CallStatus.Opened)
             {
                 _dal.Call.Delete(id);
                 return;
@@ -74,11 +54,6 @@ internal class CallImplementation : ICall
         {
             throw new BO.BlDoesNotExistException($"Call with ID={id} does Not exist", ex);
         }
-        //catch (BO.BlCannotBeDeletedException ex) //חריגה אם אי אפשר למחוק את סוג הסטטוס הזה- תתפס בשכבה הבאה
-        //{
-        //    throw ex;
-        //}
-
     }
 
     /// <summary>
@@ -114,21 +89,22 @@ internal class CallImplementation : ICall
             string filterProperty = CallManager.GetPropertyName(filter.Value);
             closeCall = closeCall.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(filter) ?? false);
         }
-        if (sort == null)
-            return closeCall.OrderBy(c => c.Id);
-        else
+        if (sort != null)
         {
-            string sortProperty = CallManager.GetPropertyName(sort.Value);
+            string sortProperty = sort.Value.ToString();
+            //string sortProperty = CallManager.GetPropertyName(sort.Value);
             closeCall = closeCall.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
             return closeCall;
         }
+        else
+            return closeCall.OrderBy(c => c.Id);
     }
 
     public IEnumerable<BO.OpenCallInList> GetOpenedCalls(int id, BO.CallType? filter = null, BO.OpenCallData? sort = null)
     {
         IEnumerable<DO.Call> OldCalls = _dal.Call.ReadAll(null);
-        List<BO.OpenCallInList>? Calls = new List<BO.OpenCallInList>();
-        foreach (DO.Call item in OldCalls)
+        List<BO.OpenCallInList>? Calls = new List<BO.OpenCallInList>(); //להחליף את הפור איצ?
+        foreach (DO.Call item in OldCalls) //להחליף פור איצ
         {
             if (Read(item.Id).Status == BO.CallStatus.OpenInRisk || Read(item.Id).Status == BO.CallStatus.Opened)
             {
@@ -137,27 +113,26 @@ internal class CallImplementation : ICall
             }
         }
 
-        IEnumerable<BO.OpenCallInList>? OpenCalls = Calls;
+        IEnumerable<BO.OpenCallInList>? OpenCalls = Calls.Where(call => call.Id == id);
         if (filter != null)
         {
             string filterProperty = CallManager.GetPropertyName(filter.Value);
             OpenCalls = Calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(filter) ?? false);
         }
-        if (sort == null)
-            return OpenCalls.OrderBy(c => c.Id);
-        else
+        if (sort != null)
         {
             string sortProperty = CallManager.GetPropertyName(sort.Value);
             OpenCalls = OpenCalls.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
             return OpenCalls;
         }
+        else
+            return OpenCalls.OrderBy(c => c.Id);
     }
 
     #region HowManyCalls
     public int[] HowManyCalls()
     {
-        IEnumerable<BO.CallInList> calls = ReadAll() ?? throw new BO.BlDoesNotExistException("The requested call does not exist.");
-
+        IEnumerable<BO.CallInList> calls = ReadAll(); //?? throw new BO.BlDoesNotExistException("The requested call does not exist."); לא צריך את זה
         int[] counts = (from item in calls
                         group item by item.Status into groupedCalls
                         orderby groupedCalls.Key
@@ -166,7 +141,7 @@ internal class CallImplementation : ICall
     }
     #endregion
 
-    public BO.Call Read(int id) //add try and catch
+    public BO.Call Read(int id)
     {
         Func<DO.Assignment, bool> func = item => item.CallId == id;
         IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func);
@@ -196,14 +171,12 @@ internal class CallImplementation : ICall
             }).ToList()
 
         };
-
-        throw new NotImplementedException();
     }
 
     public IEnumerable<BO.CallInList> ReadAll(BO.CallData? filter = null, BO.CallData? sort = null, object? value = null)
     {
-        IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null); 
-        IEnumerable<DO.Assignment> OldAssignment = _dal.Assignment.ReadAll(null); 
+        IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
+        IEnumerable<DO.Assignment> OldAssignment = _dal.Assignment.ReadAll(null);
         IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(oldCalls, OldAssignment);
 
         if (filter != null)
@@ -211,20 +184,19 @@ internal class CallImplementation : ICall
             string filterProperty = CallManager.GetPropertyName(filter.Value);
             calls = calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(value) ?? false);
         }
-        if (sort == null)
-            return calls.OrderBy(c => c.CallId);
-        else
+        if (sort != null)
         {
             string sortProperty = CallManager.GetPropertyName(sort.Value);
             calls = calls.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
             return calls;
         }
+        else
+            return calls.OrderBy(c => c.CallId);
 
     }
 
     public void Update(BO.Call callToUpdate)
     {
-
         try
         {
             DO.Call doCall = CallManager.CheckLogic(callToUpdate); //לסדר חריגות
@@ -232,13 +204,12 @@ internal class CallImplementation : ICall
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"Call with ID={callToUpdate.Id} does Not exists");
+            throw new BO.BlDoesNotExistException($"Call with ID={callToUpdate.Id} does Not exists", ex);
         }
     }
 
     public void UpdateCancelTreatment(int id, int assignmentId)
     {
-
         try
         {
             DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists");
@@ -263,13 +234,8 @@ internal class CallImplementation : ICall
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"Assignment or Volunteer with ID: {assignmentId} does not exists", ex); //מה לכתוב בחלק הראשון??
+            throw new BO.BlDoesNotExistException($"Assignment /*or Volunteer*/ with ID: {assignmentId} does not exists", ex); //מה לכתוב בחלק הראשון??
         }
-        //catch (BO.BlCantUpdateException ex2)
-        //{
-        //    throw ex2;
-        //}
-
     }
 
     public void UpdateEndTreatment(int id, int assignmentId)
@@ -290,10 +256,6 @@ internal class CallImplementation : ICall
         {
             throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists", ex);
         }
-        //catch (BO.CantUpdateException ex2)
-        //{
-        //    throw ex2;
-        //}
     }
 
 }

@@ -34,9 +34,9 @@ Press 0 to exit"
                     case choiceMain.volunteer:
                         VolunteerSubMenu();
                         break;
-                    case choiceMain.admin:
-                        AdminSubMenu();
-                        break;
+                    //case choiceMain.admin:
+                    //    AdminSubMenu();
+                    //    break;
                     default:
                         stop = true;
                         break;
@@ -112,7 +112,7 @@ Press 0 to exit"
                         break;
                     case CallChoice.getClosedCalls:
                         Console.WriteLine("ID for calls:\n");
-                        int callsid = int.Parse(Console.ReadLine()!);
+                        int callSid = int.Parse(Console.ReadLine()!);
 
                         Console.WriteLine("Call type for calls:\n");
                         string? type = Console.ReadLine();
@@ -122,7 +122,7 @@ Press 0 to exit"
                         string? sort = Console.ReadLine();
                         BO.CloseCallData? callSort = sort != null ? Enum.Parse<BO.CloseCallData>(sort) : null;
 
-                        IEnumerable<BO.ClosedCallInList> closedCall=s_bl.Call.GetClosedCalls(callsid, callType,callSort);
+                        IEnumerable<BO.ClosedCallInList> closedCall=s_bl.Call.GetClosedCalls(callSid, callType,callSort);
                         foreach (BO.ClosedCallInList call in closedCall)
                             Console.WriteLine(call + "\n");
 
@@ -137,9 +137,9 @@ Press 0 to exit"
 
                         Console.WriteLine("value to sort calls:\n");
                         string? openSort = Console.ReadLine();
-                        BO.OpenCallData? opencallSort = openSort != null ? Enum.Parse<BO.OpenCallData>(openSort) : null;
+                        BO.OpenCallData? openCallSort = openSort != null ? Enum.Parse<BO.OpenCallData>(openSort) : null;
 
-                        IEnumerable<BO.OpenCallInList> OpenCalls = s_bl.Call.GetOpenedCalls(callId, openCallType, opencallSort);
+                        IEnumerable<BO.OpenCallInList> OpenCalls = s_bl.Call.GetOpenedCalls(callId, openCallType, openCallSort);
                         foreach (BO.OpenCallInList call in OpenCalls)
                             Console.WriteLine(call + "\n");
                           
@@ -191,18 +191,17 @@ Press 0 to exit"
                         }
                         catch(BO.BlDoesAlreadyExistException ex1)
                         {
-                            throw ex1;
+                            Console.WriteLine("BO.BlDoesAlreadyExistException \n" + ex1);
                         }
                         catch(BO.BlDoesNotExistException ex2)
                         {
-                            throw ex2;
+                            Console.WriteLine("BO.BlDoesNotExistException \n" + ex2);
                         }
-
                         break;
                     case CallChoice.updateCancelTreatment:
                         try
                         {
-                            Console.WriteLine("ID for calll assignment:\n");
+                            Console.WriteLine("ID for call assignment:\n");
                             int assignmentId = int.Parse(Console.ReadLine()!);
                             Console.WriteLine("ID for volunteer:\n");
                             int VolId = int.Parse(Console.ReadLine()!);
@@ -210,17 +209,19 @@ Press 0 to exit"
                         }
                         catch (BO.BlCantUpdateException ex1)
                         {
-                            throw ex1;
+                            Console.WriteLine("BO.BlCantUpdateException");
+                            Console.WriteLine(ex1 + "\n");
                         }
                         catch (BO.BlDoesNotExistException ex2)
                         {
-                            throw ex2;
+                            Console.WriteLine("BO.BlDoesNotExistException");
+                            Console.WriteLine(ex2 + "\n");
                         }
                         break;
                     case CallChoice.updateEndTreatment:
                         try
                         {
-                            Console.WriteLine("ID for calll assignment:\n");
+                            Console.WriteLine("ID for call assignment:\n");
                             int assignmentId = int.Parse(Console.ReadLine()!);
                             Console.WriteLine("ID for volunteer:\n");
                             int VolId = int.Parse(Console.ReadLine()!);
@@ -228,11 +229,11 @@ Press 0 to exit"
                         }
                         catch (BO.BlCantUpdateException ex1)
                         {
-                            throw ex1;
+                            Console.WriteLine("BO.BlCantUpdateException \n" + ex1);
                         }
                         catch (BO.BlDoesNotExistException ex2)
                         {
-                            throw ex2;
+                            Console.WriteLine("BO.BlDoesNotExistException \n" + ex2);
                         }
                         break;
                     default:
@@ -242,7 +243,7 @@ Press 0 to exit"
         }
     }
 
-    private BO.Call CreateCall()
+    private static BO.Call CreateCall()
     {
 
         Console.WriteLine(
@@ -264,9 +265,9 @@ Press 0 to exit"
         double latitude = default;
         double longitude = default;
 
-        DateTime openTime = Helpers.ClockManager.now;
+        DateTime openTime = s_bl.Admin.GetClock();
 
-        Console.WriteLine("new maxtime:");
+        Console.WriteLine("new max time:");
         string? newMaxTime = Console.ReadLine();
         DateTime? maxTime = newMaxTime is not null ? DateTime.Parse(newMaxTime) : null;
        
@@ -285,7 +286,7 @@ Press 0 to exit"
 Press 1 to print all calls,
 Press 2 to print an existing call,
 Press 3 to update an existing call,
-Ptess 4 to delete an existing call,
+Press 4 to delete an existing call,
 Press 5 to create new call,
 Press 0 to exit"
         );
@@ -318,7 +319,7 @@ Press 0 to exit"
                         }
                         catch (BO.BlDoesNotExistException ex)
                         {
-                            throw ex;
+                            Console.WriteLine("BO.BlDoesNotExistException \n" + ex);
                         }
 
                         break;
@@ -331,17 +332,17 @@ Press 0 to exit"
                             BO.Volunteer volunteer = CreateVolunteer();
                             s_bl.Volunteer.Update(id, volunteer);
                         }
-                        catch(BlNullPropertyException ex1)
+                        catch(BO.BlNullPropertyException ex1)
                         {
-                            throw ex1;
+                            Console.WriteLine("BlNullPropertyException: \n" + ex1);
                         }
-                        catch(BlIntegrityOfValuesException ex2)
+                        catch(BO.BlIntegrityOfValuesException ex2)
                         {
-                            throw ex2;
+                            Console.WriteLine("BO.BlIntegrityOfValuesException: \n" + ex2);
                         }
-                        catch(DalDoesNotExistException ex3)
+                        catch(BO.BlDoesNotExistException ex3)
                         {
-                            throw ex3;
+                            Console.WriteLine("BO.BlDoesNotExistException \n" + ex3);
                         }
                         break;
                     case VolunteerChoice.delete:
@@ -354,11 +355,11 @@ Press 0 to exit"
                         }
                         catch (BO.BlDoesNotExistException ex1)
                         {
-                            throw ex1;
+                            Console.WriteLine("BO.BlDoesNotExistException \n" + ex1);
                         }
-                        catch(BlCannotBeDeletedException ex2)
+                        catch(BO.BlCannotBeDeletedException ex2)
                         {
-                            throw ex2;
+                            Console.WriteLine("BlCannotBeDeletedException \n" + ex2);
                         }
                         break;
                     case VolunteerChoice.create:
@@ -368,9 +369,9 @@ Press 0 to exit"
                             BO.Volunteer volunteer = CreateVolunteer();
                             s_bl.Volunteer.Create(volunteer);
                         }
-                        catch (BlIntegrityOfValuesException ex1)
+                        catch (BO.BlIntegrityOfValuesException ex2)
                         {
-                            throw ex1;
+                            Console.WriteLine("BO.BlIntegrityOfValuesException: \n" + ex2);
                         }
                         break;
                     default:

@@ -44,5 +44,11 @@ public class BlCantUpdateException : Exception
 }
 
 
+[Serializable]
+public class BlCantHandleItException : Exception
+{
+    public BlCantHandleItException(string? message) : base(message) { }
+}
+
 
 #endregion

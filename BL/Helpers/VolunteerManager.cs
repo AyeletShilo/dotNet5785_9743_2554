@@ -14,38 +14,59 @@ internal static class VolunteerManager
     internal static void CheckFormat(BO.Volunteer volToCheck)
     {
 
-        bool isEmail = checkEmail(volToCheck.Email);
+        //bool isEmail = checkEmail(volToCheck.Email);
+        bool? isEmail = checkEmail(volToCheck.Email) ?? throw new BO.BlIntegrityOfValuesException("Error in email format");
 
-        bool PhoneIisNum = int.TryParse(volToCheck.PhoneNumber, out int number);
+        //bool PhoneIisNum = int.TryParse(volToCheck.PhoneNumber, out int number);
+        if (!int.TryParse(volToCheck.PhoneNumber, out int number))
+            throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
 
-        bool PhoneIsCorrect = volToCheck.PhoneNumber.Length != 10 && volToCheck.PhoneNumber[0] == '0' && volToCheck.PhoneNumber[1] == '5';
+        //bool PhoneIsCorrect = volToCheck.PhoneNumber.Length == 10 && volToCheck.PhoneNumber[0] == '0' && volToCheck.PhoneNumber[1] == '5';
+        if (volToCheck.PhoneNumber.Length == 10 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
+            throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
 
-        bool isDis = volToCheck.MaxDis > 0 || volToCheck.MaxDis == null;
+        //bool isDis = volToCheck.MaxDis > 0 || volToCheck.MaxDis == null;
+        if (volToCheck.MaxDis < 0/* || volToCheck.MaxDis == null*/)
+            throw new BO.BlIntegrityOfValuesException("Error in Max Distance format");
 
-        bool isId = volToCheck.Id > 9999999 && volToCheck.Id < 1000000000;
+        // bool isId = volToCheck.Id > 9999999 && volToCheck.Id < 1000000000;
+        if (volToCheck.Id < 10000000 || volToCheck.Id > 999999999)
+            throw new BO.BlIntegrityOfValuesException("Error in ID format");
 
-        if (isEmail == false || PhoneIisNum == false || PhoneIsCorrect == false || isDis == false || isId == false)
-            throw new BO.BlIntegrityOfValuesException("Error in value integrity");
+        //if (/*isEmail == false ||*/ PhoneIisNum == false || PhoneIsCorrect == false /*|| isDis == false || isId == false*/)
+        //    throw new BO.BlIntegrityOfValuesException("Error in value format");
 
     }
 
-    private static bool checkEmail(string email)
+    private static bool? checkEmail(string email)
     {
         if (email.Contains("@gmail.com") == false && email.Contains("@walla.co.il") == false && email.Contains("@g.jct.ac.il") == false)
-            return false;
+            return null;
         if (email[0] == '.' || email[email.Length - 1] == '.')
-            return false;
+            return null;
         if (email.Contains("..") == true || email.Contains(" ") == true)
-            return false;
+            return null;
 
         return true;
     }
 
+    //private static bool checkEmail(string email)
+    //{
+    //    if (email.Contains("@gmail.com") == false && email.Contains("@walla.co.il") == false && email.Contains("@g.jct.ac.il") == false)
+    //        return false;
+    //    if (email[0] == '.' || email[email.Length - 1] == '.')
+    //        return false;
+    //    if (email.Contains("..") == true || email.Contains(" ") == true)
+    //        return false;
+    //    return true;
+    //}
+
     internal static void CheckLogic(BO.Volunteer volToCheck)
     {
-
-        if (checkId(volToCheck.Id)==false)
-            throw new BO.BlIntegrityOfValuesException("Error in value integrity");
+        if (checkId(volToCheck.Id) == false)
+            throw new BO.BlIntegrityOfValuesException("Error in ID integrity");
+        if (volToCheck.Address != null)
+            CallManager.GetCoordinates(volToCheck.Address);
     }
 
     private static bool checkId(int id)
@@ -63,7 +84,7 @@ internal static class VolunteerManager
             return false;
         return true;
     }
-    
+
 
     internal static BO.CallInProgress VolCall(int id, string address)
     {
@@ -127,7 +148,7 @@ internal static class VolunteerManager
         if (volAddress is null || callAddress is null) return 0.0;
         Func<DO.Volunteer, bool> volPredicate = volunteer => volunteer.VolAddress == volAddress;
         Func<DO.Call, bool> callPredicate = call => call.CallAddress == callAddress;
-        double volLatitude = (double)(s_dal.Volunteer.Read(volPredicate)).Latitude;
+        double volLatitude = (double)s_dal.Volunteer.Read(volPredicate).Latitude;
         double volLongitude = (double)s_dal.Volunteer.Read(volPredicate).Longitude;
         double callLatitude = (double)s_dal.Call.Read(callPredicate).Latitude;
         double callLongitude = (double)s_dal.Call.Read(callPredicate).Longitude;

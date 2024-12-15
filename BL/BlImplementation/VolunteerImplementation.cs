@@ -10,14 +10,15 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     public void Create(BO.Volunteer boVolunteer)
     {
         try 
-        { 
-        VolunteerManager.CheckLogic(boVolunteer); //חריגה נזרקת
-        VolunteerManager.CheckFormat(boVolunteer); //חריגה נזרקת
-        double[] AddressCordinate = CallManager.GetCoordinates(boVolunteer.Address); //לסדר חריגות
+        {
+            VolunteerManager.CheckFormat(boVolunteer); //חריגה נזרקת
+            VolunteerManager.CheckLogic(boVolunteer); //חריגה נזרקת
+
+        double[] AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address); //לסדר חריגות
 
         DO.Volunteer doVolunteer =
-          new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)(boVolunteer.Job), boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
-          boVolunteer.Address, AddressCordinate[0], AddressCordinate[1], boVolunteer.MaxDis);
+          new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
+          boVolunteer.Address, AddressCoordinate[0], AddressCoordinate[1], boVolunteer.MaxDis);
         
         
             _dal.Volunteer.Create(doVolunteer); //חריגה תזרק משכבת הנתונים
@@ -30,7 +31,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public void Delete(int id)
     {
-        var idVolunteer = Read(id) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value."); //חריגה של NULL או של איבר שלא קיים? והאם זה ימנע מDELETET לשלוח חריגה?
+        var idVolunteer = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); //חריגה של NULL או של איבר שלא קיים? והאם זה ימנע מDELETET לשלוח חריגה?
         try
         {
             if (idVolunteer.HandleCalls != 0 || idVolunteer.InCall != null)
@@ -42,16 +43,11 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         {
             throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist", ex);
         }
-        //catch (BO.BlCannotBeDeletedException ex)
-        //{
-        //    throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id} does Not exist", ex);
-        //}
-
     }
 
     public BO.Role GetMyJob(int id)
     {
-        BO.Volunteer result = Read(id) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value.");
+        BO.Volunteer result = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist");
         return result.Job;
     }
 
@@ -101,14 +97,14 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public void Update(int id, BO.Volunteer volToUpdate)
     {
-        BO.Volunteer isManager = Read(volToUpdate.Id) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value."); //חריגה לשכבה מעל
+        BO.Volunteer isManager = Read(volToUpdate.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); //חריגה לשכבה מעל
         try
         {
             if (id == volToUpdate.Id || isManager.Job == BO.Role.Manager)
             {
-
-                VolunteerManager.CheckLogic(volToUpdate); //תיזרק חריגה
                 VolunteerManager.CheckFormat(volToUpdate); //תיזרק חריגה
+                VolunteerManager.CheckLogic(volToUpdate); //תיזרק חריגה
+                
                 double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address); //לסדר חריגות
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
@@ -130,4 +126,3 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         }
     }
 }
-

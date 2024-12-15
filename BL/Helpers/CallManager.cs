@@ -61,12 +61,12 @@ internal static class CallManager
         bool currentMaxTime = toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime;
 
         if (currentMaxTime == false)
-            throw new BO.BlIntegrityOfValuesException("Error in value integrity");
+            throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
 
-        double[] AddressCordinate = CallManager.GetCoordinates(toCheck.CallAddress); //לסדר חריגות פה
+        double[] AddressCoordinate = CallManager.GetCoordinates(toCheck.CallAddress); //לסדר חריגות פה
 
-        DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, AddressCordinate[0],
-            AddressCordinate[1], toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
+        DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, AddressCoordinate[0],
+            AddressCoordinate[1], toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
 
         return DoCall;
     }
@@ -82,9 +82,7 @@ internal static class CallManager
     {
         // Checking if the address is null or empty
         if (string.IsNullOrWhiteSpace(address))
-        {
-            throw new ArgumentException("Address cannot be empty or null.", nameof(address));
-        }
+            throw new BO.BlNullPropertyException("Address cannot be empty or null." + nameof(address));
 
         // Constructing the URL for the geocoding service with the provided address
         string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
@@ -93,16 +91,14 @@ internal static class CallManager
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
         request.Method = "GET";
 
-        try
-        {
+        //try
+        //{
             // Sending the request and getting the response synchronously
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             {
                 // Checking if the response status is OK
                 if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    throw new Exception($"Error in request: {response.StatusCode}");
-                }
+                    throw new BO.BlIntegrityOfValuesException($"Error in request: {response.StatusCode}");
 
                 // Reading the response body as a string
                 using (StreamReader reader = new StreamReader(response.GetResponseStream()))
@@ -115,25 +111,23 @@ internal static class CallManager
 
                     // If no results are found, throwing an exception
                     if (results == null || results.Length == 0)
-                    {
-                        throw new Exception("No coordinates found for the given address.");
-                    }
+                        throw new BO.BlIntegrityOfValuesException($"Wrong Address. No coordinates found for the given address.");
 
                     // Returning the latitude and longitude as an array
                     return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
                 }
-            }
+            //}
         }
-        catch (WebException ex)
-        {
-            // Handling web exceptions (e.g., network issues)
-            throw new Exception("Error sending web request: " + ex.Message);
-        }
-        catch (Exception ex)
-        {
-            // Handling general exceptions
-            throw new Exception("General error: " + ex.Message);
-        }
+        //catch (WebException ex)
+        //{
+        //    // Handling web exceptions (e.g., network issues)
+        //    throw new Exception("Error sending web request: " + ex.Message);
+        //}
+        //catch (Exception ex)
+        //{
+        //    // Handling general exceptions
+        //    throw new Exception("General error: " + ex.Message);
+        //}
     }
 
     /// <summary>
@@ -146,6 +140,7 @@ internal static class CallManager
         // Longitude as string in the JSON response
         public string Lon { get; set; }
     }
+
     internal static string GetPropertyName(BO.CallData sortOrFilter)
     {
         return sortOrFilter switch
@@ -159,7 +154,7 @@ internal static class CallManager
             BO.CallData.CompletionTime => nameof(BO.CallInList.CompletionTime),
             BO.CallData.Status => nameof(BO.CallInList.Status),
             BO.CallData.TotalAssignments => nameof(BO.CallInList.TotalAssignments),
-            _=>nameof(BO.CallInList.Id)
+            _ => nameof(BO.CallInList.Id)
         };
     }
 
@@ -174,7 +169,7 @@ internal static class CallManager
             BO.CloseCallData.InterTime => nameof(BO.CloseCallData.InterTime),
             BO.CloseCallData.CloseTime => nameof(BO.CloseCallData.CloseTime),
             BO.CloseCallData.EndTreatment => nameof(BO.CloseCallData.EndTreatment),
-            _=> nameof(BO.CloseCallData.Id)
+            _ => nameof(BO.CloseCallData.Id)
         };
     }
 
@@ -189,7 +184,7 @@ internal static class CallManager
             BO.OpenCallData.OpenTime => nameof(BO.OpenCallData.OpenTime),
             BO.OpenCallData.MaxCloseTime => nameof(BO.OpenCallData.MaxCloseTime),
             BO.OpenCallData.VolDistance => nameof(BO.OpenCallData.VolDistance),
-            _=> nameof(BO.OpenCallData.Id)
+            _ => nameof(BO.OpenCallData.Id)
         };
     }
 
@@ -202,11 +197,11 @@ internal static class CallManager
             BO.CallType.Repairing => nameof(BO.CallType.Repairing),
             BO.CallType.TechnologyHelp => nameof(BO.CallType.TechnologyHelp),
             BO.CallType.Talking => nameof(BO.CallType.Talking),
-            _=>nameof(BO.CallType.Shopping)
+            _ => nameof(BO.CallType.Shopping)
         };
     }
 
-   
+
 
     //internal static string GetPropertyName(BO.CallListStatus sortOrFilter)
     //{
@@ -228,7 +223,7 @@ internal static class CallManager
         List<BO.CallInList>? callInLists = new List<BO.CallInList>();
         foreach (DO.Call item in oldCalls)
         {
-            DO.Assignment? CallAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id); // ?? null;- הוא מיותר
+            DO.Assignment? CallAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
 
             if (CallAssignment is null)
             {
@@ -248,7 +243,7 @@ internal static class CallManager
 
             else
             {
-                DO.Volunteer? first = oldVolunteer.FirstOrDefault(v => v.Id == CallAssignment.VolunteerId) ?? throw new BlNullPropertyException("Cannot use a null attribute value.");
+                DO.Volunteer? first = oldVolunteer.FirstOrDefault(v => v.Id == CallAssignment.VolunteerId) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value.");
                 callInLists.Add(new()
                 {
                     Id = CallAssignment.Id,
@@ -285,6 +280,7 @@ internal static class CallManager
     internal static BO.OpenCallInList ToOpenCall(DO.Call item, BO.CallAssignInList CallAssignment)
     {
         Func<DO.Volunteer, bool> predicate = volunteer => volunteer.Id == CallAssignment.VolunteerId;
+        //DO.Volunteer vol= s_dal.Volunteer.Read(predicate)??throw new BO. //מה המתודה עושה???
         string volAddress = s_dal.Volunteer.Read(predicate).VolAddress;
         return new()
         {
