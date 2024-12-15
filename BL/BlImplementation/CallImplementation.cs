@@ -153,23 +153,17 @@ internal class CallImplementation : ICall
         }
     }
 
-    public BO.CallStatus[] HowManyCalls()
+    #region HowManyCalls
+    public int[] HowManyCalls()
     {
-        throw new NotImplementedException();
+        IEnumerable<BO.CallInList> calls = ReadAll() ?? throw new BO.BlDoesNotExistException("The requested call does not exist.");
+
+        int[] counts = (from item in calls
+                        group item by item.Status into groupedCalls
+                        orderby groupedCalls.Key
+                        select groupedCalls.Count()).ToArray();
+        return counts;
     }
-
-    #region HowManyCalls //TODO
-    //public BO.CallStatus[] HowManyCalls()
-    //{
-    //    IEnumerable<DO.Call> calls = _dal.Call.ReadAll() ?? throw new NoCallstException("The requested call does not exist.");
-
-    //    var v = from item in calls
-    //            group item by CallManager.GetPropertyName(item.Status) into groupedCalls
-    //            select
-
-
-    //            .ToDictionary(group => group.Key, group => group.Count());
-    //}
     #endregion
 
     public BO.Call Read(int id) //add try and catch
@@ -208,9 +202,9 @@ internal class CallImplementation : ICall
 
     public IEnumerable<BO.CallInList> ReadAll(BO.CallData? filter = null, BO.CallData? sort = null, object? value = null)
     {
-        IEnumerable<DO.Call> Oldcalls = _dal.Call.ReadAll(null);
-        IEnumerable<DO.Assignment> OldAssignment = _dal.Assignment.ReadAll(null);
-        IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(Oldcalls, OldAssignment);
+        IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null); 
+        IEnumerable<DO.Assignment> OldAssignment = _dal.Assignment.ReadAll(null); 
+        IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(oldCalls, OldAssignment);
 
         if (filter != null)
         {
