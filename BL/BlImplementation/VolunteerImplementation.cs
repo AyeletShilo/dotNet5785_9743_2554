@@ -9,14 +9,17 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public void Create(BO.Volunteer boVolunteer)
     {
+        try 
+        { 
         VolunteerManager.CheckLogic(boVolunteer); //חריגה נזרקת
         VolunteerManager.CheckFormat(boVolunteer); //חריגה נזרקת
+        double[] AddressCordinate = CallManager.GetCoordinates(boVolunteer.Address); //לסדר חריגות
 
         DO.Volunteer doVolunteer =
           new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)(boVolunteer.Job), boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
-          boVolunteer.Address, boVolunteer.Latitude, boVolunteer.Longitude, boVolunteer.MaxDis);
-        try
-        {
+          boVolunteer.Address, AddressCordinate[0], AddressCordinate[1], boVolunteer.MaxDis);
+        
+        
             _dal.Volunteer.Create(doVolunteer); //חריגה תזרק משכבת הנתונים
         }
         catch (DO.DalAlreadyExistException ex)
@@ -106,13 +109,14 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
                 VolunteerManager.CheckLogic(volToUpdate); //תיזרק חריגה
                 VolunteerManager.CheckFormat(volToUpdate); //תיזרק חריגה
+                double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address); //לסדר חריגות
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
                 if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && isManager.Job != BO.Role.Manager)
                     throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 
                 DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
-             volToUpdate.Address, volToUpdate.Latitude, volToUpdate.Longitude, volToUpdate.MaxDis);
+             volToUpdate.Address, AddressCordinate[0], AddressCordinate[1], volToUpdate.MaxDis);
 
                 _dal.Volunteer.Update(doVolunteer);//שאלה על החריגה של הNULL
             }

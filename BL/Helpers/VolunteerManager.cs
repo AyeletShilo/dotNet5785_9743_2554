@@ -44,11 +44,7 @@ internal static class VolunteerManager
     internal static void CheckLogic(BO.Volunteer volToCheck)
     {
 
-        bool isId = checkId(volToCheck.Id);
-
-        bool IsAddress = checkAddress(volToCheck.Address);
-
-        if (isId == false || IsAddress == false)
+        if (checkId(volToCheck.Id)==false)
             throw new BO.BlIntegrityOfValuesException("Error in value integrity");
     }
 
@@ -67,14 +63,7 @@ internal static class VolunteerManager
             return false;
         return true;
     }
-    private static bool checkAddress(string address)
-    {
-        if (address == null) return true;
-
-        //??
-        //עדכון קווי אורך רוחב
-        return true;
-    }
+    
 
     internal static BO.CallInProgress VolCall(int id, string address)
     {
