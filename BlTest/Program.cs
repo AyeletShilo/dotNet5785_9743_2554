@@ -3,6 +3,7 @@ using DalApi;
 using DalTest;
 using DO;
 using Helpers;
+using System;
 
 internal class Program
 {
@@ -11,6 +12,7 @@ internal class Program
 
     enum CallChoice { exit, create, update, delete, getClosedCalls, getOpenedCalls, read, readAll, howManyCalls, callToTreatment, updateCancelTreatment, updateEndTreatment };
     enum VolunteerChoice { exit, readAll, read, update, delete, create};
+    enum Adminchoice { exit, readClock, updateClock, readRiskRange, updateRiskRange, reset, initialization };
     private static void Main(string[] args)
     {
         bool stop = false;
@@ -166,7 +168,7 @@ Press 0 to exit"
 
                         Console.WriteLine("object to sort calls:\n");
                         string? objectSort = Console.ReadLine();
-                        object? objectCallsSort = objectSort != null ? object.Parse(objectSort) : null; //?
+                        object? objectCallsSort = objectSort != null ? ParseObject(objectSort) : null; //?
 
                         Console.WriteLine("value to sort calls:\n");
                         string? Sort = Console.ReadLine();
@@ -273,7 +275,7 @@ Press 0 to exit"
        
         BO.CallStatus callStatus = BO.CallStatus.Opened;
 
-        BO.Call newCall= new { Id=0, CallType= cType, Description= description, CallAddress= address, Latitude=latitude, Longitude=longitude, OpenTime=openTime, MaxCloseTime=maxTime, Status = callStatus, CallAssignments = (List<BO.CallAssignInList>?)null };
+        BO.Call newCall = new BO.Call{ Id = 0, CallType = cType, Description = description, CallAddress = address, Latitude = latitude, Longitude = longitude, OpenTime = openTime, MaxCloseTime = maxTime, Status = callStatus, CallAssignments = null };
         return newCall;
     }
 
@@ -419,7 +421,7 @@ Press 0 to exit"
            "Press 2 for car distance\n");
         BO.DisType distance = Enum.Parse<BO.DisType>(Console.ReadLine()!);
 
-        BO.Volunteer newVol = new
+        BO.Volunteer newVol = new BO.Volunteer
         {
             Id = 0,
             FullName = name,
@@ -440,7 +442,103 @@ Press 0 to exit"
         return newVol;
        
     }
-         
+
+
+    private static void AdminSubMenu()
+    {
+        bool stopA = false;
+        while (stopA != true)
+        {
+            Console.WriteLine(@"
+Press 1 to print clock,
+Press 2 to change clock
+Press 3 to print risk range,
+Ptess 4 to change risk range,
+Press 5 for reset,
+Press 6 to preform an initialization,
+Press 0 to exit"
+        );
+            string inputA = Console.ReadLine();
+
+            if (Enum.TryParse(typeof(Adminchoice), inputA, true, out object? result) && result is Adminchoice c)
+                switch (c)
+                {
+                    case Adminchoice.readClock:
+
+                        Console.WriteLine("System clock: " + s_bl.Admin.GetClock());
+                        break;
+                    case Adminchoice.updateClock:
+
+                        Console.WriteLine("A unit of time for advancing the clock:\n");
+                        BO.TimeUnit timeUnit = Enum.Parse<BO.TimeUnit>(Console.ReadLine()!);
+                        s_bl.Admin.ForwardClock(timeUnit);
+                        break;
+                    case Adminchoice.readRiskRange:
+
+                        Console.WriteLine("Risk range: " + s_bl.Admin.GetMaxRange());
+                        break;
+                    case Adminchoice.updateRiskRange:
+                        Console.WriteLine("New risk range:\n");
+                        TimeSpan riskRange = TimeSpan.Parse(Console.ReadLine()!);
+                        s_bl.Admin.SetMaxRange(riskRange); //?
+                        break;
+                    case Adminchoice.reset:
+
+                        s_bl.Admin.ResetDB();
+                        break;
+                    case Adminchoice.initialization:
+                        s_bl.Admin.InitializeDB();
+                        break;
+                    default:
+                        stopA = true;
+                        break;
+                }
+        }
+    }
+
+    private static object? ParseObject(string objectSort)
+    {
+        
+        object? objectCallsSort = null;
+        if (int.TryParse(objectSort, out int intResult))
+        {
+            objectCallsSort = intResult;
+        }
+        else if (double.TryParse(objectSort, out double doubleResult))
+        {
+            objectCallsSort = doubleResult;
+        }
+        else if (!string.IsNullOrWhiteSpace(objectSort))
+        {
+            objectCallsSort = objectSort;
+        }
+        else if (DateTime.TryParse(objectSort, out DateTime dateTimeResult))
+        {
+            objectCallsSort = dateTimeResult;
+        }
+        else if (!string.IsNullOrWhiteSpace(objectSort))
+        {
+            try
+            {
+                // נסה להמיר ל-Enum
+                objectCallsSort = Enum.Parse<BO.CallType>(objectSort, true);
+            }
+            catch (ArgumentException)
+            {
+                try
+                {
+                    // נסה להמיר ל-Enum
+                    objectCallsSort = Enum.Parse<BO.CallStatus>(objectSort, true);
+                }
+                catch (ArgumentException)
+                {
+                    objectCallsSort = objectSort; // שמירה כמחרוזת אם לא הצליח להמיר
+                }
+            }
+        }
+
+        return objectCallsSort;
+    }
 }
 
 

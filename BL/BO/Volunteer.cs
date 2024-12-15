@@ -1,5 +1,6 @@
 ﻿
 using DO;
+using Helpers;
 
 namespace BO;
 
@@ -21,6 +22,5 @@ public class Volunteer
     public int ExpiredCalls { get; set; }
     public BO.CallInProgress? InCall { get; set; }
     public override string ToString() => this.ToStringProperty();
-
 }
   
