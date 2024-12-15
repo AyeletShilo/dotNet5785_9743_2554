@@ -19,8 +19,7 @@ public class Volunteer
     public int HandleCalls {  get; set; }
     public int CancelCalls { get; set; }
     public int ExpiredCalls { get; set; }
-
-    public BO.CallInProgress? InCall;
+    public BO.CallInProgress? InCall { get; set; }
     public override string ToString() => this.ToStringProperty();
 
 }

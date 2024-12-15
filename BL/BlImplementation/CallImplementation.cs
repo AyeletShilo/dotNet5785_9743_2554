@@ -20,7 +20,7 @@ internal class CallImplementation : ICall
             if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
                 _dal.Assignment.Create(new(0, callId, id, ClockManager.Now, null, null)); //איך אני מביאה את המספר מזהה רץ? תשובה: זה מחשב לבד ביצירה של הקצאה, לכן אפשר לשים סתם int.
             else
-                throw new BO.BlDoesAlreadyExistException($"Assignment with ID={callId} already exists"); //מה הולך פה עם החריגות? מה זה החריגה הזאת?
+                throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists"); //מה הולך פה עם החריגות? מה זה החריגה הזאת?
         }
         //catch (DO.DalDoesNotExistException ex)
         //{
@@ -291,7 +291,7 @@ internal class CallImplementation : ICall
         try
         {
             DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists");
-            if (id == assignment.VolunteerId && assignment.EndTreatment is null)
+            if (id == assignment.VolunteerId && assignment.EndTreatment is null) //? עוד בדיקות?
             {
                 DO.Assignment UpdateAssignment = new(assignmentId, assignment.CallId, id,
                     assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.TakenCare);

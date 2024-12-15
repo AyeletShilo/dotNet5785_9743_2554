@@ -54,7 +54,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public BO.Volunteer? Read(int id)
     {
-        DO.Volunteer doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id} does Not exist");
+        DO.Volunteer doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
         return new()
         {
             Id = id,
@@ -81,7 +81,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         if (isActive != null)
         {
             //Func<DO.Volunteer, bool>? predicate = volunteer => volunteer.Active == true;
-            volunteerInLists = volunteerInLists.Where(volunteer => volunteer.IsActive == true);
+            volunteerInLists = volunteerInLists.Where(volunteer => volunteer.IsActive == isActive);
         }
         if (sort == null)
             return volunteerInLists.OrderBy(v => v.Id);

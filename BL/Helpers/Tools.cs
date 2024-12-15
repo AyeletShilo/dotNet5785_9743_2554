@@ -4,10 +4,12 @@ using System.Reflection;
 using BO;
 namespace Helpers;
 
-internal class Tools
+internal static class Tools
 {
+    
     public static string ToStringProperty<T>(this T t)
     {
+        
         string str = "";
         foreach (PropertyInfo item in t.GetType().GetProperties())
         {
