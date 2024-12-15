@@ -13,10 +13,11 @@ internal class AdminImplementation : IAdmin
     ClockManager.UpdateClock(unit switch
     {
         TimeUnit.Minute => ClockManager.Now.AddMinutes(1),
-        TimeUnit.hour => ClockManager.Now.AddHours(1),
-        TimeUnit.day => ClockManager.Now.AddDays(1),
-        TimeUnit.month => ClockManager.Now.AddMonths(1),
-        TimeUnit.year => ClockManager.Now.AddYears(1),
+        TimeUnit.Hour => ClockManager.Now.AddHours(1),
+        TimeUnit.Day => ClockManager.Now.AddDays(1),
+        TimeUnit.Month => ClockManager.Now.AddMonths(1),
+        TimeUnit.Year => ClockManager.Now.AddYears(1),
+        _=>ClockManager.Now
     });
 
     //public void ForwardClock(TimeUnit unit)

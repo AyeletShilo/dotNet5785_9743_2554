@@ -72,10 +72,10 @@ public enum CallListStatus
 public enum TimeUnit
 {
     Minute,
-    hour,
-    day,
-    month,
-    year
+    Hour,
+    Day,
+    Month,
+    Year
 }
 
 public enum VolunteerData
