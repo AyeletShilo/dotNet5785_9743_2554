@@ -182,7 +182,8 @@ internal static class CallManager
             BO.CallData.LastVolunteer => nameof(BO.CallInList.LastVolunteer),
             BO.CallData.CompletionTime => nameof(BO.CallInList.CompletionTime),
             BO.CallData.Status => nameof(BO.CallInList.Status),
-            BO.CallData.TotalAssignments => nameof(BO.CallInList.TotalAssignments)
+            BO.CallData.TotalAssignments => nameof(BO.CallInList.TotalAssignments),
+            _=>nameof(BO.CallInList.Id)
         };
     }
 
@@ -197,18 +198,7 @@ internal static class CallManager
             BO.CloseCallData.InterTime => nameof(BO.CloseCallData.InterTime),
             BO.CloseCallData.CloseTime => nameof(BO.CloseCallData.CloseTime),
             BO.CloseCallData.EndTreatment => nameof(BO.CloseCallData.EndTreatment),
-        };
-    }
-
-    internal static string GetPropertyName(BO.CallType sortOrFilter)
-    {
-        return sortOrFilter switch
-        {
-            BO.CallType.Shopping => nameof(BO.CallType.Shopping),
-            BO.CallType.Cleaning => nameof(BO.CallType.Cleaning),
-            BO.CallType.Repairing => nameof(BO.CallType.Repairing),
-            BO.CallType.TechnologyHelp => nameof(BO.CallType.TechnologyHelp),
-            BO.CallType.Talking => nameof(BO.CallType.Talking),
+            _=> nameof(BO.CloseCallData.Id)
         };
     }
 
@@ -223,20 +213,38 @@ internal static class CallManager
             BO.OpenCallData.OpenTime => nameof(BO.OpenCallData.OpenTime),
             BO.OpenCallData.MaxCloseTime => nameof(BO.OpenCallData.MaxCloseTime),
             BO.OpenCallData.VolDistance => nameof(BO.OpenCallData.VolDistance),
+            _=> nameof(BO.OpenCallData.Id)
         };
     }
 
-    internal static string GetPropertyName(BO.CallStatus sortOrFilter)
+    internal static string GetPropertyName(BO.CallType sortOrFilter)
     {
         return sortOrFilter switch
         {
-            BO.CallStatus.Opened => nameof(BO.CallStatus.Opened),
-            BO.CallStatus.InTreatment => nameof(BO.CallStatus.InTreatment),
-            BO.CallStatus.Expired => nameof(BO.CallStatus.Expired),
-            BO.CallStatus.Closed => nameof(BO.CallStatus.Closed),
-            BO.CallStatus.OpenInRisk => nameof(BO.CallStatus.OpenInRisk)
+            BO.CallType.Shopping => nameof(BO.CallType.Shopping),
+            BO.CallType.Cleaning => nameof(BO.CallType.Cleaning),
+            BO.CallType.Repairing => nameof(BO.CallType.Repairing),
+            BO.CallType.TechnologyHelp => nameof(BO.CallType.TechnologyHelp),
+            BO.CallType.Talking => nameof(BO.CallType.Talking),
+            _=>nameof(BO.CallType.Shopping)
         };
     }
+
+   
+
+    //internal static string GetPropertyName(BO.CallListStatus sortOrFilter)
+    //{
+    //    return sortOrFilter switch
+    //    {
+    //        BO.CallListStatus.Opened => nameof(BO.CallListStatus.Opened),
+    //        BO.CallListStatus.InTreatment => nameof(BO.CallListStatus.InTreatment),
+    //        BO.CallListStatus.Expired => nameof(BO.CallListStatus.Expired),
+    //        BO.CallListStatus.Closed => nameof(BO.CallListStatus.Closed),
+    //        BO.CallListStatus.OpenInRisk => nameof(BO.CallListStatus.OpenInRisk),
+    //        BO.CallListStatus.InTreatmentInRisk=> nameof(BO.CallListStatus.InTreatmentInRisk),
+    //        _=> nameof(BO.CallListStatus.Opened)
+    //    };
+    //}
 
     internal static IEnumerable<BO.CallInList> ToCallInList(IEnumerable<DO.Call> oldCalls, IEnumerable<DO.Assignment> oldAssignment)
     {
@@ -301,7 +309,7 @@ internal static class CallManager
     internal static BO.OpenCallInList ToOpenCall(DO.Call item, BO.CallAssignInList CallAssignment)
     {
         Func<DO.Volunteer, bool> predicate = volunteer => volunteer.Id == CallAssignment.VolunteerId;
-        string VolAddress = s_dal.Volunteer.Read(predicate).VolAddress;
+        string volAddress = s_dal.Volunteer.Read(predicate).VolAddress;
         return new()
         {
             Id = item.Id,
@@ -310,7 +318,7 @@ internal static class CallManager
             FullAddress = item.CallAddress,
             OpenTime = item.OpenTime,
             MaxCloseTime = item.MaxTime,
-            VolDistance = VolunteerManager.CalculateDis(VolAddress, item.CallAddress)
+            VolDistance = VolunteerManager.CalculateDis(volAddress, item.CallAddress)
 
         };
     }
