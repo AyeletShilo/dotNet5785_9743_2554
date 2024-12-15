@@ -273,7 +273,7 @@ Press 0 to exit"
        
         BO.CallStatus callStatus = BO.CallStatus.Opened;
 
-        BO.Call newCall= new { Id=0, CallType= cType, Description= description, CallAddress= address, Latitude=latitude, Longitude=longitude, OpenTime=openTime, MaxCloseTime=maxTime, Status = callStatus, CallAssignments = null };
+        BO.Call newCall= new { Id=0, CallType= cType, Description= description, CallAddress= address, Latitude=latitude, Longitude=longitude, OpenTime=openTime, MaxCloseTime=maxTime, Status = callStatus, CallAssignments = (List<BO.CallAssignInList>?)null };
         return newCall;
     }
 
