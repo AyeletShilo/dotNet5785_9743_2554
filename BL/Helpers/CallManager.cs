@@ -56,45 +56,21 @@ internal static class CallManager
         return CallListStatus.Expired;
     }
 
-    //internal static void checkFormat(BO.Call callToCheck)
-    //{
-    //    bool IdIisNum = int.TryParse(callToCheck.Id, out int Id);
-    //}
-
-    internal static void CheckLogic(BO.Call toCheck)
+    internal static DO.Call CheckLogic(BO.Call toCheck)
     {
-        bool isId = checkId(toCheck.Id);
-
-        bool isAddress = checkAddress(toCheck.CallAddress);
-
         bool currentMaxTime = toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime;
 
-        if (isId == false || isAddress == false || currentMaxTime == false)
+        if (currentMaxTime == false)
             throw new BO.BlIntegrityOfValuesException("Error in value integrity");
+
+        double[] AddressCordinate = CallManager.GetCoordinates(toCheck.CallAddress); //לסדר חריגות פה
+
+        DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, AddressCordinate[0],
+            AddressCordinate[1], toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
+
+        return DoCall;
     }
 
-    private static bool checkId(int id)
-    {
-        int sum = 0;
-        string idString = id.ToString();
-        for (int i = 0; i < 8; i++)
-        {
-            int digit = idString[i] - '0'; // המרת התו למספר
-            int multiplier = (i % 2 == 0) ? 1 : 2; // זוגי/אי-זוגי
-            int product = digit * multiplier;
-            sum += (product > 9) ? product - 9 : product; // סכום הספרות
-        }
-        if (idString[8] != (10 - (sum % 10)) % 10)
-            return false;
-        return true;
-    }
-    //private static bool checkAddress(string address)
-    //{
-    //    if (address == null) return true;
-
-
-    //    return true;
-    //}
 
     /// <summary>
     /// This method takes an address as input and returns an array with the latitude and longitude.

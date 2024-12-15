@@ -41,18 +41,14 @@ internal class CallImplementation : ICall
     {
         try
         {
-            CallManager.CheckLogic(callToAdd); ///חריגה נזרקת
-            //CallManager.CheckFormat(callToAdd);
-
-            DO.Call doCall = new(callToAdd.Id, (DO.TypeOfCall)callToAdd.CallType, callToAdd.CallAddress, (double)callToAdd.Latitude,
-                (double)callToAdd.Longitude, callToAdd.OpenTime, callToAdd.Description, callToAdd.MaxCloseTime);
-
+            DO.Call doCall = CallManager.CheckLogic(callToAdd);
             _dal.Call.Create(doCall);
         }
         catch (BO.BlIntegrityOfValuesException ex) //שאלה אם צריך לתפוס פה את החריגה
         {
             throw ex;
         }
+
     }
 
     /// <summary>
@@ -235,13 +231,9 @@ internal class CallImplementation : ICall
     public void Update(BO.Call callToUpdate)
     {
 
-        CallManager.CheckLogic(callToUpdate); //תזרק חריגה
-        //CallManager.CheckFormat(callToUpdate);
-
-        DO.Call doCall = new(callToUpdate.Id, (DO.TypeOfCall)callToUpdate.CallType, callToUpdate.CallAddress, (double)callToUpdate.Latitude,
-            (double)callToUpdate.Longitude, callToUpdate.OpenTime, callToUpdate.Description, callToUpdate.MaxCloseTime);
         try
         {
+            DO.Call doCall = CallManager.CheckLogic(callToUpdate); //לסדר חריגות
             _dal.Call.Update(doCall); // חריגה מהמחיקה שבעדכון שבDO
         }
         catch (DO.DalDoesNotExistException ex)
