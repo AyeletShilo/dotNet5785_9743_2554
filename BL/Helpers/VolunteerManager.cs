@@ -1,6 +1,4 @@
-﻿
-
-using BO;
+﻿using BO;
 using DalApi;
 
 
@@ -22,7 +20,7 @@ internal static class VolunteerManager
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
 
         //bool PhoneIsCorrect = volToCheck.PhoneNumber.Length == 10 && volToCheck.PhoneNumber[0] == '0' && volToCheck.PhoneNumber[1] == '5';
-        if (volToCheck.PhoneNumber.Length == 10 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
+        if (volToCheck.PhoneNumber.Length != 9 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
 
         //bool isDis = volToCheck.MaxDis > 0 || volToCheck.MaxDis == null;
@@ -80,30 +78,34 @@ internal static class VolunteerManager
             int product = digit * multiplier;
             sum += (product > 9) ? product - 9 : product; // סכום הספרות
         }
-        if (idString[8] != (10 - (sum % 10)) % 10)
+        if ((id % 10 != ((10 - (sum % 10)) % 10)))
             return false;
         return true;
     }
 
 
-    internal static BO.CallInProgress VolCall(int id, string address)
+    internal static BO.CallInProgress? VolCall(int id, string address)
     {
-        DO.Call CurrentCall = s_dal.Call.Read(id) ?? throw new BO.BlNullPropertyException($"Call with ID: {id} does not exist");
-        Func<DO.Assignment, bool> func = item => item.CallId == CurrentCall.Id;
-        DO.Assignment CurrentAss = s_dal.Assignment.Read(func) ?? throw new BO.BlNullPropertyException($"Assignment does not exist");
-        return new()
+        Func<DO.Assignment, bool> func = item => item.VolunteerId == id;
+        DO.Assignment? CurrentAss = s_dal.Assignment.Read(func);
+        if (CurrentAss is not null)/*?? throw new BO.BlNullPropertyException($"Assignment does not exist");*/
         {
-            Id = id,
-            CallId = CurrentCall.Id,
-            CallType = (BO.CallType)CurrentCall.CallType,
-            Description = CurrentCall.Description,
-            FullAddress = CurrentCall.CallAddress,
-            OpenTime = CurrentCall.OpenTime,
-            MaxCloseTime = CurrentCall.MaxTime,
-            EntryTime = CurrentAss.InterTime,
-            VolDistance = VolunteerManager.CalculateDis(address, CurrentCall.CallAddress),
-            status = (CurrentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange ? Status.InTreatment : Status.InRiskTreatment
-        };
+            DO.Call CurrentCall = s_dal.Call.Read(CurrentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {CurrentAss.CallId} does not exist");
+            return new()
+            {
+                Id = id,
+                CallId = CurrentCall.Id,
+                CallType = (BO.CallType)CurrentCall.CallType,
+                Description = CurrentCall.Description,
+                FullAddress = CurrentCall.CallAddress,
+                OpenTime = CurrentCall.OpenTime,
+                MaxCloseTime = CurrentCall.MaxTime,
+                EntryTime = CurrentAss.InterTime,
+                VolDistance = VolunteerManager.CalculateDis(address, CurrentCall.CallAddress),
+                status = (CurrentCall.MaxTime is null || (CurrentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
+            };
+        }
+        return null;
     }
 
 
@@ -134,9 +136,9 @@ internal static class VolunteerManager
                 Id = item.Id,
                 PullName = item.FullName,
                 IsActive = item.Active,
-                HandleCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.CancelExpired)),
-                CancelCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.TakenCare)),
-                ExpiredCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.SelfCancel || assignment.EndTreatment == DO.AssignmentEnum.CancelAdmin)),
+                HandleCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.TakenCare)),
+                ExpiredCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.CancelExpired)),
+                CancelCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.SelfCancel || assignment.EndTreatment == DO.AssignmentEnum.CancelAdmin)),
                 CallId = VolunteerAssignment != null ? VolunteerAssignment.CallId : null,
                 InTreatment = VolunteerAssignment != null ? (BO.CallInTreatment)s_dal.Call.Read(VolunteerAssignment.CallId)!.CallType : BO.CallInTreatment.None
             });
@@ -174,3 +176,5 @@ internal static class VolunteerManager
 
 
 }
+
+

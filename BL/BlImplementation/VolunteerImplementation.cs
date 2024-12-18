@@ -9,23 +9,27 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public void Create(BO.Volunteer boVolunteer)
     {
-        try 
+        try
         {
             VolunteerManager.CheckFormat(boVolunteer); //חריגה נזרקת
             VolunteerManager.CheckLogic(boVolunteer); //חריגה נזרקת
 
-        double[] AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address); //לסדר חריגות
+            double[] AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address); //לסדר חריגות
 
-        DO.Volunteer doVolunteer =
-          new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
-          boVolunteer.Address, AddressCoordinate[0], AddressCoordinate[1], boVolunteer.MaxDis);
-        
-        
+            DO.Volunteer doVolunteer =
+              new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
+              boVolunteer.Address, AddressCoordinate[0], AddressCoordinate[1], boVolunteer.MaxDis);
+
+
             _dal.Volunteer.Create(doVolunteer); //חריגה תזרק משכבת הנתונים
         }
         catch (DO.DalAlreadyExistException ex)
         {
             throw new BO.BlDoesAlreadyExistException($"Volunteer with ID={boVolunteer.Id} already exists", ex);
+        }
+        catch (BO.BlIntegrityOfValuesException ex1)
+        {
+            throw ex1;
         }
     }
 
@@ -54,6 +58,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     public BO.Volunteer? Read(int id)
     {
         DO.Volunteer doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
+        Func<DO.Assignment, bool>? predicate = assignment => assignment.VolunteerId == id;
+        IEnumerable<DO.Assignment> VolAssigments = _dal.Assignment.ReadAll(predicate);
         return new()
         {
             Id = id,
@@ -67,9 +73,11 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             IsActive = doVolunteer.Active,
             MaxDis = doVolunteer.MaxDistance,
             Distance = (BO.DisType)doVolunteer.Distance,
+            HandleCalls = VolAssigments.Count(a => a.EndTreatment == DO.AssignmentEnum.TakenCare),
+            CancelCalls = VolAssigments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelAdmin || a.EndTreatment == DO.AssignmentEnum.SelfCancel)),
+            ExpiredCalls = VolAssigments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelExpired)),
             InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress) //הכתובת של המתנדב יכולה להיהות NULL??
         };
-
     }
 
     public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerData? sort = null)
@@ -97,14 +105,14 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
     public void Update(int id, BO.Volunteer volToUpdate)
     {
-        BO.Volunteer isManager = Read(volToUpdate.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); //חריגה לשכבה מעל
+        BO.Volunteer isManager = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); //חריגה לשכבה מעל
         try
         {
             if (id == volToUpdate.Id || isManager.Job == BO.Role.Manager)
             {
                 VolunteerManager.CheckFormat(volToUpdate); //תיזרק חריגה
                 VolunteerManager.CheckLogic(volToUpdate); //תיזרק חריגה
-                
+
                 double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address); //לסדר חריגות
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
