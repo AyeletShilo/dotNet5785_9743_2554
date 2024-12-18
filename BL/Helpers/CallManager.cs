@@ -58,7 +58,7 @@ internal static class CallManager
 
     internal static DO.Call CheckLogic(BO.Call toCheck)
     {
-        bool currentMaxTime = toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime;
+        bool currentMaxTime = (toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) ||toCheck.MaxCloseTime==null;
 
         if (currentMaxTime == false)
             throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
@@ -146,7 +146,7 @@ internal static class CallManager
         return sortOrFilter switch
         {
             BO.CallData.Id => nameof(BO.CallInList.Id),
-            BO.CallData.CallId => nameof(BO.CallInList.CallId),
+            //BO.CallData.CallId => nameof(BO.CallInList.CallId),
             BO.CallData.CallType => nameof(BO.CallInList.CallType),
             BO.CallData.OpenTime => nameof(BO.CallInList.OpenTime),
             BO.CallData.LeftTime => nameof(BO.CallInList.LeftTime),
@@ -164,7 +164,7 @@ internal static class CallManager
         {
             BO.CloseCallData.Id => nameof(BO.CloseCallData.Id),
             BO.CloseCallData.CallType => nameof(BO.CloseCallData.CallType),
-            BO.CloseCallData.FullAddress => nameof(BO.CloseCallData.FullAddress),
+            BO.CloseCallData.CallAddress => nameof(BO.CloseCallData.CallAddress),
             BO.CloseCallData.OpenTime => nameof(BO.CloseCallData.OpenTime),
             BO.CloseCallData.InterTime => nameof(BO.CloseCallData.InterTime),
             BO.CloseCallData.CloseTime => nameof(BO.CloseCallData.CloseTime),
@@ -180,7 +180,7 @@ internal static class CallManager
             BO.OpenCallData.Id => nameof(BO.OpenCallData.Id),
             BO.OpenCallData.CallType => nameof(BO.OpenCallData.CallType),
             BO.OpenCallData.Description => nameof(BO.OpenCallData.Description),
-            BO.OpenCallData.FullAddress => nameof(BO.OpenCallData.FullAddress),
+            BO.OpenCallData.CallAddress => nameof(BO.OpenCallData.CallAddress),
             BO.OpenCallData.OpenTime => nameof(BO.OpenCallData.OpenTime),
             BO.OpenCallData.MaxCloseTime => nameof(BO.OpenCallData.MaxCloseTime),
             BO.OpenCallData.VolDistance => nameof(BO.OpenCallData.VolDistance),
@@ -262,6 +262,7 @@ internal static class CallManager
         return callInLists.AsEnumerable();
     }
 
+    
     internal static BO.ClosedCallInList ToCloseCall(DO.Call item, BO.CallAssignInList CallAssignment)
     {
 

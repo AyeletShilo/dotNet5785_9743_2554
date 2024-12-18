@@ -10,9 +10,9 @@ internal class Program
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     enum choiceMain { exit, call, volunteer, admin };
 
-    enum CallChoice { exit, create, update, delete, getClosedCalls, getOpenedCalls, read, readAll, howManyCalls, callToTreatment, updateCancelTreatment, updateEndTreatment };
+    enum CallChoice { exit, create, update, delete, getClosedCalls, getOpenedCalls, read, readAll, howManyCalls, callToTreatment, updateCancelTreatment, updateEndTreatment, allCloseCalls };
     enum VolunteerChoice { exit, readAll, read, update, delete, create};
-    enum Adminchoice { exit, readClock, updateClock, readRiskRange, updateRiskRange, reset, initialization };
+    enum AdminChoice { exit, readClock, updateClock, readRiskRange, updateRiskRange, reset, initialization };
     private static void Main(string[] args)
     {
         bool stop = false;
@@ -36,9 +36,9 @@ Press 0 to exit"
                     case choiceMain.volunteer:
                         VolunteerSubMenu();
                         break;
-                    //case choiceMain.admin:
-                    //    AdminSubMenu();
-                    //    break;
+                    case choiceMain.admin:
+                        AdminSubMenu();
+                        break;
                     default:
                         stop = true;
                         break;
@@ -63,6 +63,7 @@ Press 8 to print calls amounts,
 Press 9 to choose a call for treatment,
 press 10 to update call to canceld call,
 Press 11 to update call to closed call,
+Press 12 to all close calls,
 Press 0 to exit"
         );
             string inputB = Console.ReadLine();
@@ -85,7 +86,7 @@ Press 0 to exit"
                     case CallChoice.update:
                         try
                         {
-                            BO.Call UpdateCall = CreateCall();
+                            BO.Call UpdateCall = CreateCallToUpdate();
                             s_bl.Call.Update(UpdateCall);
                         }
                         catch (BO.BlDoesNotExistException ex1)
@@ -106,6 +107,10 @@ Press 0 to exit"
                             int id = int.Parse(Console.ReadLine()!);
                             s_bl.Call.Delete(id);
                         }
+                        catch(BO.BlCannotBeDeletedException ex)
+                        {
+                            Console.WriteLine("BO.BlCannotBeDeletedException \n" +ex);
+                        }
                         catch (BO.BlDoesNotExistException ex1)
                         {
                             Console.WriteLine("BlDoesNotExistException");
@@ -113,16 +118,16 @@ Press 0 to exit"
                         }
                         break;
                     case CallChoice.getClosedCalls:
-                        Console.WriteLine("ID for calls:\n");
+                        Console.WriteLine("ID for calls:");
                         int callSid = int.Parse(Console.ReadLine()!);
 
-                        Console.WriteLine("Call type for calls:\n");
+                        Console.WriteLine("Call type for calls:");
                         string? type = Console.ReadLine();
-                        BO.CallType? callType= type!=null? Enum.Parse<BO.CallType>(type) : null;
+                        BO.CallType? callType= type!= "" ? Enum.Parse<BO.CallType>(type) : null;
 
-                        Console.WriteLine("value to sort calls:\n");
+                        Console.WriteLine("value to sort calls:");
                         string? sort = Console.ReadLine();
-                        BO.CloseCallData? callSort = sort != null ? Enum.Parse<BO.CloseCallData>(sort) : null;
+                        BO.CloseCallData? callSort = sort != "" ? Enum.Parse<BO.CloseCallData>(sort) : null;
 
                         IEnumerable<BO.ClosedCallInList> closedCall=s_bl.Call.GetClosedCalls(callSid, callType,callSort);
                         foreach (BO.ClosedCallInList call in closedCall)
@@ -130,16 +135,16 @@ Press 0 to exit"
 
                         break;
                     case CallChoice.getOpenedCalls:
-                        Console.WriteLine("ID for calls:\n");
+                        Console.WriteLine("ID for calls:");
                         int callId = int.Parse(Console.ReadLine()!);
 
-                        Console.WriteLine("Call type for calls:\n");
+                        Console.WriteLine("Call type for calls:");
                         string? openType = Console.ReadLine();
-                        BO.CallType? openCallType = openType != null ? Enum.Parse<BO.CallType>(openType) : null;
+                        BO.CallType? openCallType = openType != "" ? Enum.Parse<BO.CallType>(openType) : null;
 
-                        Console.WriteLine("value to sort calls:\n");
+                        Console.WriteLine("value to sort calls:");
                         string? openSort = Console.ReadLine();
-                        BO.OpenCallData? openCallSort = openSort != null ? Enum.Parse<BO.OpenCallData>(openSort) : null;
+                        BO.OpenCallData? openCallSort = openSort != "" ? Enum.Parse<BO.OpenCallData>(openSort) : null;
 
                         IEnumerable<BO.OpenCallInList> OpenCalls = s_bl.Call.GetOpenedCalls(callId, openCallType, openCallSort);
                         foreach (BO.OpenCallInList call in OpenCalls)
@@ -149,7 +154,7 @@ Press 0 to exit"
                     case CallChoice.read:
                         try
                         {
-                            Console.WriteLine("ID for print:\n");
+                            Console.WriteLine("ID for print:");
                             int id = int.Parse(Console.ReadLine()!);
                             Console.WriteLine(s_bl.Call.Read(id) + "\n");
                             
@@ -162,17 +167,17 @@ Press 0 to exit"
                         break;
                     case CallChoice.readAll:
                       
-                        Console.WriteLine("Call type for calls:\n");
+                        Console.WriteLine("Call type for calls:");
                         string? filter = Console.ReadLine();
-                        BO.CallData? callFilter = filter != null ? Enum.Parse<BO.CallData>(filter) : null;
+                        BO.CallData? callFilter = filter != "" ? Enum.Parse<BO.CallData>(filter) : null;
 
-                        Console.WriteLine("object to sort calls:\n");
+                        Console.WriteLine("object to sort calls:");
                         string? objectSort = Console.ReadLine();
-                        object? objectCallsSort = objectSort != null ? ParseObject(objectSort) : null; //?
+                        object? objectCallsSort = objectSort != "" ? ParseObject(objectSort) : null; //?
 
-                        Console.WriteLine("value to sort calls:\n");
+                        Console.WriteLine("value to sort calls:");
                         string? Sort = Console.ReadLine();
-                        BO.CallData? callsSort = Sort != null ? Enum.Parse<BO.CallData>(Sort) : null;
+                        BO.CallData? callsSort = Sort != "" ? Enum.Parse<BO.CallData>(Sort) : null;
 
                         IEnumerable<BO.CallInList> Calls = s_bl.Call.ReadAll(callFilter, callsSort, objectCallsSort);
                         foreach (BO.CallInList call in Calls)
@@ -185,7 +190,7 @@ Press 0 to exit"
                     case CallChoice.callToTreatment:
                         try
                         {
-                            Console.WriteLine("ID for calll treatment:\n");
+                            Console.WriteLine("ID for call treatment:\n");
                             int CallId = int.Parse(Console.ReadLine()!);
                             Console.WriteLine("ID for volunteer:\n");
                             int VolId = int.Parse(Console.ReadLine()!);
@@ -238,6 +243,21 @@ Press 0 to exit"
                             Console.WriteLine("BO.BlDoesNotExistException \n" + ex2);
                         }
                         break;
+                    case CallChoice.allCloseCalls:
+                        try
+                        {
+                            for (int i = 0; i <= 48; i++)
+                            {
+                                IEnumerable<BO.ClosedCallInList> allClosedCall = s_bl.Call.GetClosedCalls(i, null, null);
+                                foreach (BO.ClosedCallInList call in allClosedCall)
+                                    Console.WriteLine(call + "\n");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
+                        break ;
                     default:
                         stopC = true;
                         break;
@@ -247,6 +267,44 @@ Press 0 to exit"
 
     private static BO.Call CreateCall()
     {
+     
+        Console.WriteLine(
+"press 0 for shopping," +
+"press 1 for cleaning," +
+"press 2 for repairing," +
+"press 3 for technologyHelp," +
+"press 4 for talking");
+
+      
+        string input = Console.ReadLine()!;
+        BO.CallType cType = Enum.Parse<BO.CallType>(input);
+
+        Console.WriteLine("new description:");
+        string? description = Console.ReadLine();
+
+        Console.WriteLine("new address:");
+        string? address = Console.ReadLine()!;
+        //if(ad)
+
+        double latitude = default;
+        double longitude = default;
+
+        DateTime openTime = s_bl.Admin.GetClock();
+
+        Console.WriteLine("new max time:");
+        string? newMaxTime = Console.ReadLine();
+        DateTime? maxTime = newMaxTime==" " ? DateTime.Parse(newMaxTime) : null;
+       
+        BO.CallStatus callStatus = BO.CallStatus.Opened;
+
+        BO.Call newCall = new BO.Call{ Id = 0, CallType = cType, Description = description, CallAddress = address, Latitude = latitude, Longitude = longitude, OpenTime = openTime, MaxCloseTime = maxTime, Status = callStatus, CallAssignments = null };
+        return newCall;
+    }
+
+    private static BO.Call CreateCallToUpdate()
+    {
+        Console.WriteLine("Enter CallId");
+        int id = int.Parse(Console.ReadLine());
 
         Console.WriteLine(
 "press 0 for shopping," +
@@ -271,11 +329,11 @@ Press 0 to exit"
 
         Console.WriteLine("new max time:");
         string? newMaxTime = Console.ReadLine();
-        DateTime? maxTime = newMaxTime is not null ? DateTime.Parse(newMaxTime) : null;
-       
+        DateTime? maxTime = newMaxTime != "" ? DateTime.Parse(newMaxTime) : null;
+
         BO.CallStatus callStatus = BO.CallStatus.Opened;
 
-        BO.Call newCall = new BO.Call{ Id = 0, CallType = cType, Description = description, CallAddress = address, Latitude = latitude, Longitude = longitude, OpenTime = openTime, MaxCloseTime = maxTime, Status = callStatus, CallAssignments = null };
+        BO.Call newCall = new BO.Call { Id = id, CallType = cType, Description = description, CallAddress = address, Latitude = latitude, Longitude = longitude, OpenTime = openTime, MaxCloseTime = maxTime, Status = callStatus, CallAssignments = null };
         return newCall;
     }
 
@@ -285,11 +343,11 @@ Press 0 to exit"
         while (stopV != true)
         {
             Console.WriteLine(@"
-Press 1 to print all calls,
-Press 2 to print an existing call,
-Press 3 to update an existing call,
-Press 4 to delete an existing call,
-Press 5 to create new call,
+Press 1 to print all volunteers,
+Press 2 to print an existing volunteers,
+Press 3 to update an existing volunteers,
+Press 4 to delete an existing volunteers,
+Press 5 to create new volunteers,
 Press 0 to exit"
         );
             string inputV = Console.ReadLine();
@@ -300,12 +358,18 @@ Press 0 to exit"
                     case VolunteerChoice.readAll:
 
                         Console.WriteLine("Press 1 for active volunteers," +
-                            "Press 0 for inactive volunteers\n");
+                            "Press 0 for inactive volunteers");
                         string? active = Console.ReadLine();
-                        bool? isActive = active is not null ? bool.Parse(active) : null;
-                        Console.WriteLine("Value for sort:\n");
+                        bool? isActive;
+                        if (active == "1")
+                            isActive = true;
+                        else if (active == "0")
+                            isActive = false;
+                        else
+                            isActive = null;
+                        Console.WriteLine("Value for sort:");
                         string? isSort = Console.ReadLine();
-                        BO.VolunteerData? sort = isSort is not null ? Enum.Parse<BO.VolunteerData>(isSort) : null;
+                        BO.VolunteerData? sort = isSort !="" ? Enum.Parse<BO.VolunteerData>(isSort) : null;
 
                         IEnumerable<BO.VolunteerInList> volunteerList = s_bl.Volunteer.ReadAll(isActive, sort);
                         foreach (BO.VolunteerInList vol in volunteerList)
@@ -314,7 +378,7 @@ Press 0 to exit"
                     case VolunteerChoice.read:
                         try
                         {
-                            Console.WriteLine("ID for call:\n");
+                            Console.WriteLine("ID for volunteer:");
                             int id = int.Parse(Console.ReadLine()!);
                             BO.Volunteer volunteer = s_bl.Volunteer.Read(id);
                             Console.WriteLine(volunteer + "\n");
@@ -329,7 +393,7 @@ Press 0 to exit"
 
                         try
                         {
-                            Console.WriteLine("ID for volunteer:\n");
+                            Console.WriteLine("ID for volunteer who wants to update:\n");
                             int id = int.Parse(Console.ReadLine()!);
                             BO.Volunteer volunteer = CreateVolunteer();
                             s_bl.Volunteer.Update(id, volunteer);
@@ -385,7 +449,8 @@ Press 0 to exit"
 
     private static BO.Volunteer CreateVolunteer()
     {
-
+        Console.WriteLine("volunteer ID");
+        int id= int.Parse(Console.ReadLine()!);
         Console.WriteLine("Volunteer name:\n");
         string name = Console.ReadLine()!;
 
@@ -409,11 +474,18 @@ Press 0 to exit"
         Console.WriteLine("" +
             "Press 0 for inactive volunteer," +
             "Press 1 for active volunteer");
-        bool isActive = bool.Parse(Console.ReadLine()!);
+        string? active = Console.ReadLine();
+        bool isActive;
+        if (active == "1")
+            isActive = true;
+        else if (active == "0")
+            isActive = false;
+        else
+            throw new BO.BlIntegrityOfValuesException("The value is not property");
 
         Console.WriteLine("Volunteer max distance:");
         string? isMaxDis = Console.ReadLine();
-        double? maxDis = isMaxDis is not null ? double.Parse(isMaxDis) : null;
+        double? maxDis = isMaxDis != "" ? double.Parse(isMaxDis) : null;
 
         Console.WriteLine(
            "Press 0 for air distance," +
@@ -423,7 +495,7 @@ Press 0 to exit"
 
         BO.Volunteer newVol = new BO.Volunteer
         {
-            Id = 0,
+            Id = id,
             FullName = name,
             PhoneNumber = phoneNumber,
             Email = email,
@@ -453,40 +525,40 @@ Press 0 to exit"
 Press 1 to print clock,
 Press 2 to change clock
 Press 3 to print risk range,
-Ptess 4 to change risk range,
+Press 4 to change risk range,
 Press 5 for reset,
 Press 6 to preform an initialization,
 Press 0 to exit"
         );
             string inputA = Console.ReadLine();
 
-            if (Enum.TryParse(typeof(Adminchoice), inputA, true, out object? result) && result is Adminchoice c)
+            if (Enum.TryParse(typeof(AdminChoice), inputA, true, out object? result) && result is AdminChoice c)
                 switch (c)
                 {
-                    case Adminchoice.readClock:
+                    case AdminChoice.readClock:
 
                         Console.WriteLine("System clock: " + s_bl.Admin.GetClock());
                         break;
-                    case Adminchoice.updateClock:
+                    case AdminChoice.updateClock:
 
                         Console.WriteLine("A unit of time for advancing the clock:\n");
                         BO.TimeUnit timeUnit = Enum.Parse<BO.TimeUnit>(Console.ReadLine()!);
                         s_bl.Admin.ForwardClock(timeUnit);
                         break;
-                    case Adminchoice.readRiskRange:
+                    case AdminChoice.readRiskRange:
 
                         Console.WriteLine("Risk range: " + s_bl.Admin.GetMaxRange());
                         break;
-                    case Adminchoice.updateRiskRange:
+                    case AdminChoice.updateRiskRange:
                         Console.WriteLine("New risk range:\n");
                         TimeSpan riskRange = TimeSpan.Parse(Console.ReadLine()!);
                         s_bl.Admin.SetMaxRange(riskRange); //?
                         break;
-                    case Adminchoice.reset:
+                    case AdminChoice.reset:
 
                         s_bl.Admin.ResetDB();
                         break;
-                    case Adminchoice.initialization:
+                    case AdminChoice.initialization:
                         s_bl.Admin.InitializeDB();
                         break;
                     default:

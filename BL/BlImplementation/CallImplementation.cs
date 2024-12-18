@@ -68,20 +68,20 @@ internal class CallImplementation : ICall
 
         IEnumerable<DO.Call> OldCalls = _dal.Call.ReadAll(null);
         List<BO.ClosedCallInList>? Calls = new List<BO.ClosedCallInList>();
-        //foreach (DO.Call item in OldCalls)
-        //{
-        //    if (Read(item.Id).Status == BO.CallStatus.Closed)
-        //    {
-        //        BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.Last();
-        //        Calls.Add(CallManager.ToCloseCall(item, CallAssignment));
-        //    }
-        //}
-        Calls.AddRange(from item in OldCalls
-                       let callDetails = Read(item.Id)
-                       where callDetails.Status == BO.CallStatus.Closed && callDetails.CallAssignments?.Any() == true
-                       let lastAssignment = callDetails.CallAssignments.Last()
-                       select CallManager.ToCloseCall(item, lastAssignment)
-                       );
+        foreach (DO.Call item in OldCalls)
+        {
+            if (Read(item.Id).Status == BO.CallStatus.Closed)
+            {
+                BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.Last();
+                Calls.Add(CallManager.ToCloseCall(item, CallAssignment));
+            }
+        }
+        //Calls.AddRange(from item in OldCalls
+        //               let callDetails = Read(item.Id)
+        //               where callDetails.Status == BO.CallStatus.Closed && callDetails.CallAssignments?.Any() == true
+        //               let lastAssignment = callDetails.CallAssignments.Last()
+        //               select CallManager.ToCloseCall(item, lastAssignment)
+        //               );
 
         IEnumerable<BO.ClosedCallInList>? closeCall = Calls.Where(call => call.Id == id);
         if (filter != null)
@@ -108,8 +108,9 @@ internal class CallImplementation : ICall
         {
             if (Read(item.Id).Status == BO.CallStatus.OpenInRisk || Read(item.Id).Status == BO.CallStatus.Opened)
             {
-                BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.Last();
-                Calls.Add(CallManager.ToOpenCall(item, CallAssignment));
+                BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.LastOrDefault();
+                if (CallAssignment != null)
+                    Calls.Add(CallManager.ToOpenCall(item, CallAssignment));
             }
         }
 
@@ -141,12 +142,31 @@ internal class CallImplementation : ICall
     }
     #endregion
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="BO.BlDoesNotExistException"></exception>
     public BO.Call Read(int id)
     {
-        Func<DO.Assignment, bool> func = item => item.CallId == id;
-        IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func);
-
         var doCall = _dal.Call.Read(id) ?? throw new BO.BlDoesNotExistException($"Call with ID={id} does Not exist");
+
+        Func<DO.Assignment, bool> func = item => item.CallId == id;
+        IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func); //read all assignment of this Call.
+        var callAssignments = new List<BO.CallAssignInList>();
+        if (dataAssignments != null)
+        {
+            callAssignments = dataAssignments.Select(assign => new BO.CallAssignInList
+            {
+                VolunteerId = assign.VolunteerId,
+                VolunteerName = _dal.Volunteer.Read(assign.VolunteerId).FullName ?? throw new BO.BlNullPropertyException("volunteer?"),
+                InterTime = assign.InterTime,
+                EndTime = assign.EndTime.HasValue ? assign.EndTime : null,
+                EndTreatment = /*(BO.EndTreatment)*/assign.EndTreatment.HasValue ? (BO.EndTreatment)assign.EndTreatment : BO.EndTreatment.None,
+
+            }).ToList();
+        }
 
         return new()
         {
@@ -159,16 +179,7 @@ internal class CallImplementation : ICall
             OpenTime = doCall.OpenTime,
             MaxCloseTime = doCall.MaxTime,
             Status = CallManager.MakeStatus(dataAssignments, doCall.MaxTime),
-
-            CallAssignments = dataAssignments.Select(assign => new BO.CallAssignInList
-            {
-                VolunteerId = assign.VolunteerId,
-                VolunteerName = _dal.Volunteer.Read(id).FullName,
-                InterTime = assign.InterTime,
-                EndTime = assign.EndTime,
-                EndTreatment = (BO.EndTreatment)assign.EndTreatment,
-
-            }).ToList()
+            CallAssignments = callAssignments
 
         };
     }

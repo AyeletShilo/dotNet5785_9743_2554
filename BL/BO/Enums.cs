@@ -45,6 +45,7 @@ public enum CallInTreatment
 public enum EndTreatment
 
 {
+    None,
     TakenCare,
     SelfCancel,
     CancelAdmin,
@@ -107,7 +108,7 @@ public enum CloseCallData
 {
     Id,
     CallType,
-    FullAddress,
+    CallAddress,
     OpenTime,
     InterTime,
     CloseTime,
@@ -119,7 +120,7 @@ public enum OpenCallData
     Id,
     CallType,
     Description,
-    FullAddress,
+    CallAddress,
     OpenTime,
     MaxCloseTime,
     VolDistance
