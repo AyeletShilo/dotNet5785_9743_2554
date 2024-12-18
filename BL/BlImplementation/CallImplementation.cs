@@ -43,7 +43,9 @@ internal class CallImplementation : ICall
         try
         {
             BO.Call toDelete = Read(id) ?? throw new BO.BlDoesNotExistException($"Call with ID={id} does Not exist"); // אם לא קיים כזה ID לאן תזרק החריגה?
-            if (toDelete.Status == BO.CallStatus.Opened)
+            Func<DO.Assignment, bool>? predicate = assignment => (assignment.CallId == id);
+            var assignments = _dal.Assignment.ReadAll(predicate).ToList();
+            if (toDelete.Status == BO.CallStatus.Opened || toDelete.Status == BO.CallStatus.OpenInRisk && assignments is null) //check assignment
             {
                 _dal.Call.Delete(id);
                 return;
@@ -132,7 +134,7 @@ internal class CallImplementation : ICall
             return OpenCalls.OrderBy(c => c.Id);
     }
 
-    #region HowManyCalls
+    //#region HowManyCalls
     public int[] HowManyCalls()
     {
         IEnumerable<BO.CallInList> calls = ReadAll(); //?? throw new BO.BlDoesNotExistException("The requested call does not exist."); לא צריך את זה
@@ -142,7 +144,7 @@ internal class CallImplementation : ICall
                         select groupedCalls.Count()).ToArray();
         return counts;
     }
-    #endregion
+    //#endregion
 
     /// <summary>
     /// Requests the data layer (Read) to obtain details about the read and its list of assignments (if any)

@@ -22,7 +22,7 @@ internal static class CallManager
         {
             if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
                 return CallStatus.OpenInRisk;
-            else if (MaxCloseTime > ClockManager.Now)
+            else if (MaxCloseTime > ClockManager.Now  || MaxCloseTime is null)
                 return CallStatus.Opened;
         }
 
@@ -31,6 +31,7 @@ internal static class CallManager
 
         else if (endTime.Last() < ClockManager.Now) //to vz
             return CallStatus.Expired;
+
         return CallStatus.InTreatment;
     }
 
