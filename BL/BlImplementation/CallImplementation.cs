@@ -63,14 +63,16 @@ internal class CallImplementation : ICall
     /// <param name="filter">ENUM value of the call type by which the list will be filtered.</param>
     /// <param name="sort">ENUM value of a field in the ClosedCallList, by which the list is sorted</param>
     /// <returns></returns>
-    public IEnumerable<BO.ClosedCallInList> GetClosedCalls(int id, BO.CallType? filter = null, BO.CloseCallData? sort = null)
+    public IEnumerable<BO.ClosedCallInList> GetClosedCalls(int volId, BO.CallType? filter = null, BO.CloseCallData? sort = null) ///צריך לבדוק ולדאוג שמוציאים רק את הקריאות שמתאימות לתז של המתנדב
     {
 
-        IEnumerable<DO.Call> OldCalls = _dal.Call.ReadAll(null);
+        IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(c=>c.Id==volId);
         List<BO.ClosedCallInList>? Calls = new List<BO.ClosedCallInList>();
-        foreach (DO.Call item in OldCalls)
+        foreach (DO.Call item in oldCalls)
         {
-            if (Read(item.Id).Status == BO.CallStatus.Closed)
+            var statusToCheck = Read(item.Id).Status;
+            Console.WriteLine(statusToCheck); ///addition
+            if (statusToCheck/*Read(item.Id).Status*/ == BO.CallStatus.Closed)
             {
                 BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.Last();
                 Calls.Add(CallManager.ToCloseCall(item, CallAssignment));
@@ -83,7 +85,7 @@ internal class CallImplementation : ICall
         //               select CallManager.ToCloseCall(item, lastAssignment)
         //               );
 
-        IEnumerable<BO.ClosedCallInList>? closeCall = Calls.Where(call => call.Id == id);
+        IEnumerable<BO.ClosedCallInList>? closeCall = Calls.Where(call => call.Id ==volId);
         if (filter != null)
         {
             string filterProperty = CallManager.GetPropertyName(filter.Value);
@@ -143,16 +145,17 @@ internal class CallImplementation : ICall
     #endregion
 
     /// <summary>
-    /// 
+    /// Requests the data layer (Read) to obtain details about the read and its list of assignments (if any)
+    /// From the details received, creates an object of BO call.
     /// </summary>
-    /// <param name="id"></param>
-    /// <returns></returns>
+    /// <param name=callId">Receives a call ID</param>
+    /// <returns>BO Call</returns>
     /// <exception cref="BO.BlDoesNotExistException"></exception>
-    public BO.Call Read(int id)
+    public BO.Call Read(int callId)
     {
-        var doCall = _dal.Call.Read(id) ?? throw new BO.BlDoesNotExistException($"Call with ID={id} does Not exist");
+        var doCall = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist");
 
-        Func<DO.Assignment, bool> func = item => item.CallId == id;
+        Func<DO.Assignment, bool> func = item => item.CallId == callId;
         IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func); //read all assignment of this Call.
         var callAssignments = new List<BO.CallAssignInList>();
         if (dataAssignments != null)
@@ -168,9 +171,12 @@ internal class CallImplementation : ICall
             }).ToList();
         }
 
+        //foreach (var assign in callAssignments)
+        //{ Console.WriteLine(assign.VolunteerId + " " + assign.VolunteerName + " " + assign.EndTime + " " + assign.EndTreatment); }
+
         return new()
         {
-            Id = id,
+            Id = callId,
             CallType = (BO.CallType)doCall.CallType,
             Description = doCall.Description,
             CallAddress = doCall.CallAddress,
@@ -187,8 +193,8 @@ internal class CallImplementation : ICall
     public IEnumerable<BO.CallInList> ReadAll(BO.CallData? filter = null, BO.CallData? sort = null, object? value = null)
     {
         IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
-        IEnumerable<DO.Assignment> OldAssignment = _dal.Assignment.ReadAll(null);
-        IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(oldCalls, OldAssignment);
+        IEnumerable<DO.Assignment> oldAssignment = _dal.Assignment.ReadAll(null);
+        IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(oldCalls, oldAssignment);
 
         if (filter != null)
         {

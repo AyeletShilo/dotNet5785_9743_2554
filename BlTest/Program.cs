@@ -118,7 +118,7 @@ Press 0 to exit"
                         }
                         break;
                     case CallChoice.getClosedCalls:
-                        Console.WriteLine("ID for calls:");
+                        Console.WriteLine("ID Of volunteer who asked for calls:");
                         int callSid = int.Parse(Console.ReadLine()!);
 
                         Console.WriteLine("Call type for calls:");
@@ -612,5 +612,3 @@ Press 0 to exit"
         return objectCallsSort;
     }
 }
-
-

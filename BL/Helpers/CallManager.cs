@@ -239,6 +239,7 @@ internal static class CallManager
                     Status = BO.CallListStatus.Opened,
                     TotalAssignments = 0
                 });
+                //Console.WriteLine("Assignment Is NULL"); ///addition
             }
 
             else
@@ -256,7 +257,9 @@ internal static class CallManager
                     Status = MakeStatus(CallAssignment, item),
                     TotalAssignments = oldAssignment.Count(a => a.CallId == item.Id)
                 });
+                //Console.WriteLine(oldAssignment.Count(a => a.CallId == item.Id)); ////addition
             }
+            
         };
 
         return callInLists.AsEnumerable();

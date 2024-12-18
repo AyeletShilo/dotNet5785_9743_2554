@@ -10,10 +10,10 @@ public interface ICall
     void Update(Call callToUpdate);
     void Delete(int id);
     int[] HowManyCalls();
-    IEnumerable<ClosedCallInList> GetClosedCalls(int id, CallType? filter = null, CloseCallData? sort = null);
-    IEnumerable<OpenCallInList> GetOpenedCalls(int id, CallType? filter = null, OpenCallData? sort = null);
-    void UpdateEndTreatment(int id, int assignmentId);
-    void UpdateCancelTreatment(int id, int assignmentId);
-    void CallToTreatment(int id, int callId);
+    IEnumerable<ClosedCallInList> GetClosedCalls(int volId, CallType? filter = null, CloseCallData? sort = null);
+    IEnumerable<OpenCallInList> GetOpenedCalls(int volId, CallType? filter = null, OpenCallData? sort = null);
+    void UpdateEndTreatment(int volId, int assignmentId);
+    void UpdateCancelTreatment(int volId, int assignmentId);
+    void CallToTreatment(int volId, int callId);
 
 }
