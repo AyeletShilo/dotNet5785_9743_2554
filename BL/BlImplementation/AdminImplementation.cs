@@ -21,7 +21,7 @@ internal class AdminImplementation : IAdmin
         TimeUnit.Day => ClockManager.Now.AddDays(1),
         TimeUnit.Month => ClockManager.Now.AddMonths(1),
         TimeUnit.Year => ClockManager.Now.AddYears(1),
-        _=>ClockManager.Now
+        _ => ClockManager.Now
     });
 
     /// <summary>
@@ -43,12 +43,19 @@ internal class AdminImplementation : IAdmin
     }
 
     /// <summary>
-    /// Preform initiaizetion to data base
+    /// Preform initialization to data base
     /// </summary>
     public void InitializeDB()
     {
-        DalTest.Initialization.Do();
-        ClockManager.UpdateClock(ClockManager.Now);
+        try
+        {
+            DalTest.Initialization.Do();
+            ClockManager.UpdateClock(ClockManager.Now);
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
     }
 
     /// <summary>
@@ -56,8 +63,15 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     public void ResetDB()
     {
-        _dal.ResetDB();
-        ClockManager.UpdateClock(ClockManager.Now);
+        try
+        {
+            _dal.ResetDB();
+            ClockManager.UpdateClock(ClockManager.Now);
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
     }
 
     /// <summary>
@@ -66,6 +80,6 @@ internal class AdminImplementation : IAdmin
     /// <param name="maxRange">new risk range</param>
     public void SetMaxRange(TimeSpan maxRange)
     {
-        _dal.Config.RiskRange= maxRange;
+        _dal.Config.RiskRange = maxRange;
     }
 }

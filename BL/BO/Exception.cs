@@ -2,10 +2,10 @@
 
 
 [Serializable]
-public class BlDoesNotExistException :Exception
+public class BlDoesNotExistException : Exception
 {
     public BlDoesNotExistException(string? message) : base(message) { }
-    public BlDoesNotExistException(string message, Exception innerException) 
+    public BlDoesNotExistException(string message, Exception innerException)
         : base(message, innerException) { }
 }
 
@@ -16,6 +16,16 @@ public class BlDoesAlreadyExistException : Exception
     public BlDoesAlreadyExistException(string message, Exception innerException)
         : base(message, innerException) { }
 }
+
+
+[Serializable]
+public class BlXMLFileLoadCreateException : Exception
+{
+    public BlXMLFileLoadCreateException(string? message) : base(message) { }
+    public BlXMLFileLoadCreateException(string message, Exception innerException)
+        : base(message, innerException) { }
+}
+
 
 #region Bl Logic Exception
 

@@ -14,9 +14,9 @@ internal static class CallManager
     internal static CallStatus MakeStatus(/*IEnumerable<DO.Assignment>*/ DO.Assignment dataAssignments, DateTime? MaxCloseTime)
     {
         var endTreatment = dataAssignments/*.Last()*/.EndTreatment;
-            //from item in dataAssignments                           select item.EndTreatment;
+        //from item in dataAssignments                           select item.EndTreatment;
         DateTime? endTime = dataAssignments/*.Last()*/.EndTime;
-            //from item in dataAssignments                      select item.EndTime;
+        //from item in dataAssignments                      select item.EndTime;
 
         if (endTreatment == DO.AssignmentEnum.CancelExpired) //to vz
             return CallStatus.Expired;
@@ -24,13 +24,13 @@ internal static class CallManager
         else if (endTime != null/*<= ClockManager.Now*/) // לבדוק את התנאי של הסוף  זמן
             return CallStatus.Closed;
 
-        if (endTreatment/*.LastOrDefault()*/ == null && dataAssignments !=null)
+        if (endTreatment/*.LastOrDefault()*/ == null && dataAssignments != null)
             return CallStatus.InTreatment;
-       
+
         if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
             return CallStatus.OpenInRisk;
-            //else if (MaxCloseTime > ClockManager.Now || MaxCloseTime is null)
-       return CallStatus.Opened;
+        //else if (MaxCloseTime > ClockManager.Now || MaxCloseTime is null)
+        return CallStatus.Opened;
     }
 
     internal static CallListStatus MakeStatus(DO.Assignment currentAssignment, DO.Call currentCall)
@@ -58,7 +58,7 @@ internal static class CallManager
 
     internal static DO.Call CheckLogic(BO.Call toCheck)
     {
-        bool currentMaxTime = (toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) ||toCheck.MaxCloseTime==null;
+        bool currentMaxTime = (toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
 
         if (currentMaxTime == false)
             throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
@@ -93,29 +93,29 @@ internal static class CallManager
 
         //try
         //{
-            // Sending the request and getting the response synchronously
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+        // Sending the request and getting the response synchronously
+        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+        {
+            // Checking if the response status is OK
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new BO.BlIntegrityOfValuesException($"Error in request: {response.StatusCode}");
+
+            // Reading the response body as a string
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
             {
-                // Checking if the response status is OK
-                if (response.StatusCode != HttpStatusCode.OK)
-                    throw new BO.BlIntegrityOfValuesException($"Error in request: {response.StatusCode}");
+                string jsonResponse = reader.ReadToEnd();
 
-                // Reading the response body as a string
-                using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-                {
-                    string jsonResponse = reader.ReadToEnd();
+                // Deserializing the JSON response to extract location data
+                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
 
-                    // Deserializing the JSON response to extract location data
-                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                    var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
+                // If no results are found, throwing an exception
+                if (results == null || results.Length == 0)
+                    throw new BO.BlIntegrityOfValuesException($"Wrong Address. No coordinates found for the given address.");
 
-                    // If no results are found, throwing an exception
-                    if (results == null || results.Length == 0)
-                        throw new BO.BlIntegrityOfValuesException($"Wrong Address. No coordinates found for the given address.");
-
-                    // Returning the latitude and longitude as an array
-                    return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
-                }
+                // Returning the latitude and longitude as an array
+                return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
+            }
             //}
         }
         //catch (WebException ex)
@@ -219,53 +219,55 @@ internal static class CallManager
 
     internal static IEnumerable<BO.CallInList> ToCallInList(IEnumerable<DO.Call> oldCalls, IEnumerable<DO.Assignment> oldAssignment)
     {
-        IEnumerable<DO.Volunteer> oldVolunteer = s_dal.Volunteer.ReadAll(null);
-        List<BO.CallInList>? callInLists = new List<BO.CallInList>();
-        foreach (DO.Call item in oldCalls)
+        try
         {
-            DO.Assignment? CallAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
-
-            if (CallAssignment is null)
+            IEnumerable<DO.Volunteer> oldVolunteer = s_dal.Volunteer.ReadAll(null); //can throw Ex
+            List<BO.CallInList>? callInLists = new List<BO.CallInList>();
+            foreach (DO.Call item in oldCalls)
             {
-                callInLists.Add(new()
-                {
-                    Id = null,
-                    CallId = item.Id,
-                    CallType = (BO.CallType)item.CallType,
-                    OpenTime = item.OpenTime,
-                    LeftTime = (TimeSpan)(item.MaxTime - ClockManager.Now),
-                    LastVolunteer = null,
-                    CompletionTime = null,
-                    Status = BO.CallListStatus.Opened,
-                    TotalAssignments = 0
-                });
-                //Console.WriteLine("Assignment Is NULL"); ///addition
-            }
+                DO.Assignment? CallAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
 
-            else
-            {
-                DO.Volunteer? first = oldVolunteer.FirstOrDefault(v => v.Id == CallAssignment.VolunteerId) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value.");
-                callInLists.Add(new()
+                if (CallAssignment is null)
                 {
-                    Id = CallAssignment.Id,
-                    CallId = item.Id,
-                    CallType = (BO.CallType)item.CallType,
-                    OpenTime = item.OpenTime,
-                    LeftTime = item.MaxTime - ClockManager.Now,
-                    LastVolunteer = first.FullName,
-                    CompletionTime = (CallAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? (CallAssignment.EndTime - item.OpenTime) : null,
-                    Status = MakeStatus(CallAssignment, item),
-                    TotalAssignments = oldAssignment.Count(a => a.CallId == item.Id)
-                });
-                //Console.WriteLine(oldAssignment.Count(a => a.CallId == item.Id)); ////addition
-            }
-            
-        };
+                    callInLists.Add(new()
+                    {
+                        Id = null,
+                        CallId = item.Id,
+                        CallType = (BO.CallType)item.CallType,
+                        OpenTime = item.OpenTime,
+                        LeftTime = (TimeSpan)(item.MaxTime - ClockManager.Now),
+                        LastVolunteer = null,
+                        CompletionTime = null,
+                        Status = BO.CallListStatus.Opened,
+                        TotalAssignments = 0
+                    });
+                }
 
-        return callInLists.AsEnumerable();
+                else
+                {
+                    DO.Volunteer? first = oldVolunteer.FirstOrDefault(v => v.Id == CallAssignment.VolunteerId) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value.");
+                    callInLists.Add(new()
+                    {
+                        Id = CallAssignment.Id,
+                        CallId = item.Id,
+                        CallType = (BO.CallType)item.CallType,
+                        OpenTime = item.OpenTime,
+                        LeftTime = item.MaxTime - ClockManager.Now,
+                        LastVolunteer = first.FullName,
+                        CompletionTime = (CallAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? (CallAssignment.EndTime - item.OpenTime) : null,
+                        Status = MakeStatus(CallAssignment, item),
+                        TotalAssignments = oldAssignment.Count(a => a.CallId == item.Id)
+                    });
+                }
+            };
+            return callInLists.AsEnumerable();
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
     }
 
-    
     internal static BO.ClosedCallInList ToCloseCall(BO.Call item, BO.CallAssignInList callAssignment)
     {
         return new()
@@ -282,9 +284,7 @@ internal static class CallManager
 
     internal static BO.OpenCallInList ToOpenCall(DO.Call item, int volId /*BO.CallAssignInList callAssignment*/)
     {
-        //Func<DO.Volunteer, bool> predicate = volunteer => volunteer.Id == callAssignment.VolunteerId;
-        ////DO.Volunteer vol= s_dal.Volunteer.Read(predicate)??throw new BO. //מה המתודה עושה???
-        string volAddress = s_dal.Volunteer.Read(v=> v.Id==volId).VolAddress; //לטפל אם זה NULL
+        string volAddress = s_dal.Volunteer.Read(v => v.Id == volId).VolAddress; //?? NULL
         return new()
         {
             Id = item.Id,
@@ -294,8 +294,6 @@ internal static class CallManager
             OpenTime = item.OpenTime,
             MaxCloseTime = item.MaxTime,
             VolDistance = VolunteerManager.CalculateDis(volAddress, item.CallAddress)
-           
-
         };
     }
 }

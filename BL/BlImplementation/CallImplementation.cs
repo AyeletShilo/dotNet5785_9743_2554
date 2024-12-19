@@ -23,7 +23,7 @@ internal class CallImplementation : BlApi.ICall
         if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
             _dal.Assignment.Create(new(0, callId, id, ClockManager.Now, null, null));
         else
-            throw new BO.BlCantHandleItException($"Unable to assign"); 
+            throw new BO.BlCantHandleItException($"Unable to assign");
     }
 
     /// <summary>
@@ -32,8 +32,15 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="callToAdd"></param>
     public void Create(BO.Call callToAdd)
     {
-        DO.Call doCall = CallManager.CheckLogic(callToAdd); 
-        _dal.Call.Create(doCall);
+        try
+        {
+            DO.Call doCall = CallManager.CheckLogic(callToAdd); //can throw Ex
+            _dal.Call.Create(doCall); //can throw Ex
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
     }
 
     /// <summary>
@@ -43,14 +50,14 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.CannotBeDeletedException"></exception>
     /// <exception cref="BO.BlDoesNotExisException"></exception>
     /// <exception cref="BO.BLCannotBeDeletedException"></exception>
-    public void Delete(int callId) 
+    public void Delete(int callId)
     {
         try
         {
-            BO.Call toDelete = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist"); 
+            BO.Call toDelete = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist");
             if ((toDelete.Status == BO.CallStatus.Opened || toDelete.Status == BO.CallStatus.OpenInRisk) && toDelete.CallAssignments is null)
             {
-                _dal.Call.Delete(callId);
+                _dal.Call.Delete(callId); //can throw Ex
                 return;
             }
             throw new BO.BlCannotBeDeletedException($"Call with ID={callId} cannot be deleted");
@@ -58,6 +65,10 @@ internal class CallImplementation : BlApi.ICall
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist", ex);
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
     }
 
@@ -70,62 +81,69 @@ internal class CallImplementation : BlApi.ICall
     /// <returns></returns>
     public IEnumerable<BO.ClosedCallInList> GetClosedCalls(int volId, BO.CallType? filter = null, BO.CloseCallData? sort = null) ///צריך לבדוק ולדאוג שמוציאים רק את הקריאות שמתאימות לתז של המתנדב
     {
-        #region draft
-        //List<BO.ClosedCallInList>? calls = new List<BO.ClosedCallInList>();
+        try
+        {
+            #region draft
+            //List<BO.ClosedCallInList>? calls = new List<BO.ClosedCallInList>();
 
-        //foreach (DO.Assignment assignment in assignmentForVol)
-        //{
-        //    var re = Read(assignment.CallId);
-        //    if (re.Status == BO.CallStatus.Closed)
-        //    {
-        //        BO.CallAssignInList callAssignment = re.CallAssignments.Last();
-        //        calls.Add(CallManager.ToCloseCall(_dal.Call.Read(c => c.Id == assignment.CallId), callAssignment));
+            //foreach (DO.Assignment assignment in assignmentForVol)
+            //{
+            //    var re = Read(assignment.CallId);
+            //    if (re.Status == BO.CallStatus.Closed)
+            //    {
+            //        BO.CallAssignInList callAssignment = re.CallAssignments.Last();
+            //        calls.Add(CallManager.ToCloseCall(_dal.Call.Read(c => c.Id == assignment.CallId), callAssignment));
 
-        //    }
-        //}
+            //    }
+            //}
 
-        //IEnumerable<DO.Call> oldCalls =/* _dal.Call.*/ReadAll().Where(c=>c.Id==);
-        //List<BO.ClosedCallInList>? calls = new List<BO.ClosedCallInList>();
-        //foreach (DO.Call item in oldCalls)
-        //{
-        //    var statusToCheck = Read(item.Id).Status;
-        //    Console.WriteLine(statusToCheck); ///addition
-        //    if (statusToCheck/*Read(item.Id).Status*/ == BO.CallStatus.Closed)
-        //    {
-        //        BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.Last();
-        //        calls.Add(CallManager.ToCloseCall(item, CallAssignment));
-        //    }
-        //}
-        //calls.AddRange(from item in OldCalls
-        //               let callDetails = Read(item.Id)
-        //               where callDetails.Status == BO.CallStatus.Closed && callDetails.CallAssignments?.Any() == true
-        //               let lastAssignment = callDetails.CallAssignments.Last()
-        //               select CallManager.ToCloseCall(item, lastAssignment)
-        //               );
+            //IEnumerable<DO.Call> oldCalls =/* _dal.Call.*/ReadAll().Where(c=>c.Id==);
+            //List<BO.ClosedCallInList>? calls = new List<BO.ClosedCallInList>();
+            //foreach (DO.Call item in oldCalls)
+            //{
+            //    var statusToCheck = Read(item.Id).Status;
+            //    Console.WriteLine(statusToCheck); ///addition
+            //    if (statusToCheck/*Read(item.Id).Status*/ == BO.CallStatus.Closed)
+            //    {
+            //        BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.Last();
+            //        calls.Add(CallManager.ToCloseCall(item, CallAssignment));
+            //    }
+            //}
+            //calls.AddRange(from item in OldCalls
+            //               let callDetails = Read(item.Id)
+            //               where callDetails.Status == BO.CallStatus.Closed && callDetails.CallAssignments?.Any() == true
+            //               let lastAssignment = callDetails.CallAssignments.Last()
+            //               select CallManager.ToCloseCall(item, lastAssignment)
+            //               );
 
-        //IEnumerable<BO.ClosedCallInList>? closeCall = calls.Select(c => c);
-        #endregion
-        IEnumerable<DO.Assignment> assignmentForVol = _dal.Assignment.ReadAll(a => a.VolunteerId == volId);
-        IEnumerable<BO.ClosedCallInList> closeCalls = from assin in assignmentForVol
-                                                      let tmpCall = Read(assin.CallId)
-                                                      where tmpCall.Status == BO.CallStatus.Closed
-                                                      let callAssin = tmpCall.CallAssignments.LastOrDefault()
-                                                      select CallManager.ToCloseCall(tmpCall, callAssin);
-        
-        closeCalls = null == filter ? closeCalls : closeCalls.Where(call => (BO.CallType)filter == call.CallType);
+            //IEnumerable<BO.ClosedCallInList>? closeCall = calls.Select(c => c);
+            #endregion
+            IEnumerable<DO.Assignment> assignmentForVol = _dal.Assignment.ReadAll(a => a.VolunteerId == volId);
+            IEnumerable<BO.ClosedCallInList> closeCalls = from assin in assignmentForVol
+                                                          let tmpCall = Read(assin.CallId)
+                                                          where tmpCall.Status == BO.CallStatus.Closed
+                                                          let callAssin = tmpCall.CallAssignments.LastOrDefault()
+                                                          select CallManager.ToCloseCall(tmpCall, callAssin); //can throw Ex
 
-        closeCalls = null == sort ? closeCalls.OrderBy(c => c.Id)
-            : closeCalls.OrderBy<BO.ClosedCallInList, object>(call => (sort switch
-            {
-                BO.CloseCallData.Id => call.Id,
-                BO.CloseCallData.CallType => call.CallType,
-                BO.CloseCallData.CallAddress => call.FullAddress,
-                BO.CloseCallData.InterTime => call.InterTime,
-                BO.CloseCallData.OpenTime => call.OpenTime,
-                BO.CloseCallData.CloseTime => call.CloseTime,
-                BO.CloseCallData.EndTreatment => call.EndTreatment,
-            }));
-        return closeCalls;
+            closeCalls = null == filter ? closeCalls : closeCalls.Where(call => (BO.CallType)filter == call.CallType);
+
+            closeCalls = null == sort ? closeCalls.OrderBy(c => c.Id)
+                : closeCalls.OrderBy<BO.ClosedCallInList, object>(call => (sort switch
+                {
+                    BO.CloseCallData.Id => call.Id,
+                    BO.CloseCallData.CallType => call.CallType,
+                    BO.CloseCallData.CallAddress => call.FullAddress,
+                    BO.CloseCallData.InterTime => call.InterTime,
+                    BO.CloseCallData.OpenTime => call.OpenTime,
+                    BO.CloseCallData.CloseTime => call.CloseTime,
+                    BO.CloseCallData.EndTreatment => call.EndTreatment,
+                }));
+            return closeCalls;
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
     }
 
     /// <summary>
@@ -141,9 +159,9 @@ internal class CallImplementation : BlApi.ICall
         var openCalls = from item in oldCalls
                         let tmpCall = Read(item.Id)
                         where tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened
-                        select CallManager.ToOpenCall(item, volId);
+                        select CallManager.ToOpenCall(item, volId); //can throw Ex
 
-        
+
         openCalls = null == filter ? openCalls : openCalls.Where(call => (BO.CallType)filter == call.CallType);
 
         openCalls = null == sort ? openCalls.OrderBy(c => c.Id)
@@ -170,7 +188,8 @@ internal class CallImplementation : BlApi.ICall
         IEnumerable<BO.CallInList> calls = ReadAll();
         var groupedCalls = from item in calls
                            group item by item.Status into g
-                           select new { Status = (int)g.Key, Count = g.Count() };//calls.GroupBy(call => call.Status).Select(g => new { Status = (int)g.Key, Count = g.Count() });
+                           select new { Status = (int)g.Key, Count = g.Count() };
+
         int[] statusCounts = new int[6];
         foreach (var group in groupedCalls)
         {
@@ -235,45 +254,52 @@ internal class CallImplementation : BlApi.ICall
     /// <returns></returns>
     public IEnumerable<BO.CallInList> ReadAll(BO.CallData? filter = null, BO.CallData? sort = null, object? value = null)
     {
-        IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
-        IEnumerable<DO.Assignment> oldAssignment = _dal.Assignment.ReadAll(null);
-        IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(oldCalls, oldAssignment);
+        try
+        {
+            IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null); //can throw Ex
+            IEnumerable<DO.Assignment> oldAssignment = _dal.Assignment.ReadAll(null); //can throw Ex
+            IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(oldCalls, oldAssignment);
 
-        //if (filter != null)
-        //{
-        //    string filterProperty = CallManager.GetPropertyName(filter.Value);
-        //    calls = calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(value) ?? false).ToList(); //?///
-        //}
-        calls = null == filter ? calls
-                            : calls.Where(call => filter switch
-                            {
-                                BO.CallData.Id => (int)value == call.Id,
-                                BO.CallData.CallId => (int)value == call.CallId,
-                                BO.CallData.CallType => (BO.CallType)value == call.CallType,
-                                BO.CallData.OpenTime => (DateTime)value == call.OpenTime,
-                                BO.CallData.LeftTime => (TimeSpan)value == call.LeftTime,
-                                BO.CallData.LastVolunteer => value.ToString() == call.LastVolunteer,
-                                BO.CallData.CompletionTime => (TimeSpan)value == call.CompletionTime,
-                                BO.CallData.Status => (BO.CallListStatus)value  == call.Status,
-                                BO.CallData.TotalAssignments => (int)value == call.TotalAssignments,
-                                _ => true
-                            });
+            //if (filter != null)
+            //{
+            //    string filterProperty = CallManager.GetPropertyName(filter.Value);
+            //    calls = calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(value) ?? false).ToList(); //?///
+            //}
+            calls = null == filter ? calls
+                                : calls.Where(call => filter switch
+                                {
+                                    BO.CallData.Id => (int)value == call.Id,
+                                    BO.CallData.CallId => (int)value == call.CallId,
+                                    BO.CallData.CallType => (BO.CallType)value == call.CallType,
+                                    BO.CallData.OpenTime => (DateTime)value == call.OpenTime,
+                                    BO.CallData.LeftTime => (TimeSpan)value == call.LeftTime,
+                                    BO.CallData.LastVolunteer => value.ToString() == call.LastVolunteer,
+                                    BO.CallData.CompletionTime => (TimeSpan)value == call.CompletionTime,
+                                    BO.CallData.Status => (BO.CallListStatus)value == call.Status,
+                                    BO.CallData.TotalAssignments => (int)value == call.TotalAssignments,
+                                    _ => true
+                                });
 
-        //string sortProperty = CallManager.GetPropertyName(sort.Value);
-        calls = null == sort ? calls.OrderBy(c => c.CallId)
-            : calls.OrderBy<BO.CallInList, object> (call => (sort switch
-            {
-                BO.CallData.Id => call.Id,
-                BO.CallData.CallId => call.CallId,
-                BO.CallData.CallType => call.CallType,
-                BO.CallData.OpenTime => call.OpenTime,
-                BO.CallData.LeftTime => call.LeftTime,
-                BO.CallData.LastVolunteer => call.LastVolunteer,
-                BO.CallData.CompletionTime => call.CompletionTime,
-                BO.CallData.Status => call.Status,
-                BO.CallData.TotalAssignments => call.TotalAssignments,
-            }));
-        return calls;
+            //string sortProperty = CallManager.GetPropertyName(sort.Value);
+            calls = null == sort ? calls.OrderBy(c => c.CallId)
+                : calls.OrderBy<BO.CallInList, object>(call => (sort switch
+                {
+                    BO.CallData.Id => call.Id,
+                    BO.CallData.CallId => call.CallId,
+                    BO.CallData.CallType => call.CallType,
+                    BO.CallData.OpenTime => call.OpenTime,
+                    BO.CallData.LeftTime => call.LeftTime,
+                    BO.CallData.LastVolunteer => call.LastVolunteer,
+                    BO.CallData.CompletionTime => call.CompletionTime,
+                    BO.CallData.Status => call.Status,
+                    BO.CallData.TotalAssignments => call.TotalAssignments,
+                }));
+            return calls;
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
     }
 
     /// <summary>
@@ -285,12 +311,16 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-            DO.Call doCall = CallManager.CheckLogic(callToUpdate); //לסדר חריגות
-            _dal.Call.Update(doCall); // חריגה מהמחיקה שבעדכון שבDO
+            DO.Call doCall = CallManager.CheckLogic(callToUpdate); //can throw Ex
+            _dal.Call.Update(doCall); //can throw Ex
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID={callToUpdate.Id} does Not exists", ex);
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
     }
 
@@ -305,7 +335,7 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-            DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists");
+            DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
             DO.Volunteer volunteer = _dal.Volunteer.Read(volId) ?? throw new BO.BlDoesNotExistException($"volunteer with ID={volId} does not exists");
             if ((volId == assignment.VolunteerId || volunteer.Job == DO.Role.Manager) && assignment.EndTime is null)
             {
@@ -320,14 +350,18 @@ internal class CallImplementation : BlApi.ICall
                     UpdateAssignment = new(assignmentId, assignment.CallId, volId,
                        assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.CancelAdmin);
                 }
-                _dal.Assignment.Update(UpdateAssignment); //חריגה מהמתודה של DO
+                _dal.Assignment.Update(UpdateAssignment); //can throw Ex
             }
             else
-                throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled"); // תזרק לשכבה הבאה
+                throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled"); 
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Assignment /*or Volunteer*/ with ID: {assignmentId} does not exists", ex); //מה לכתוב בחלק הראשון??
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
     }
 
@@ -342,19 +376,23 @@ internal class CallImplementation : BlApi.ICall
     {
         try
         {
-            DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists");
-            if (volId == assignment.VolunteerId && assignment.EndTreatment is null) //? עוד בדיקות?
+            DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
+            if (volId == assignment.VolunteerId && assignment.EndTreatment is null) //more checks?
             {
                 DO.Assignment UpdateAssignment = new(assignmentId, assignment.CallId, volId,
                     assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.TakenCare);
-                _dal.Assignment.Update(UpdateAssignment); //חריגה מDO
+                _dal.Assignment.Update(UpdateAssignment); //can throw Ex
             }
             else
-                throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed"); //תזרק לשכבה הבאה
+                throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed"); 
         }
         catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists", ex);
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
     }
 }
