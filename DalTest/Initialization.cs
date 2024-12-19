@@ -1,11 +1,9 @@
-﻿
-namespace DalTest;
+﻿namespace DalTest;
 
 using DalApi;
 using DO;
-using Microsoft.VisualBasic;
 using System;
-using System.Xml.Linq;
+
 
 public static class Initialization
 {
@@ -17,76 +15,69 @@ public static class Initialization
     private static IDal? s_dal;//stage 2
 
     private static readonly Random s_rand = new();
-
     private static void createAssignment() ///לטפל בזמני כניסה ויציאה
     {
         //List<Call>? existingCall = s_dalCall?.ReadAll(); //stage1
         //List<Volunteer>? existingVol = s_dalVolunteer?.ReadAll(); //stage1
-        IEnumerable<Call>? existingCall = s_dal.Call?.ReadAll(); //stage2
-        IEnumerable<Volunteer>? existingVol = s_dal.Volunteer?.ReadAll(); //stage2
-        int counter = 0;
 
-        foreach (Call item in existingCall)
+        IEnumerable<Call>? calls = s_dal.Call?.ReadAll(); //stage2
+        IEnumerable<Volunteer>? volunteers = s_dal.Volunteer?.ReadAll(); //stage2
+
+
+        var callsList = calls.ToList();
+        var volunteersList = volunteers.ToList();
+
+        for (int i = 1; i < 5; i++)
         {
-            int callId = item.Id;
-            Random rand = new Random();
-            //int randomV = rand.Next(existingVol.Count); //stage1
-            //int volunteerId = existingVol[randomV].Id; //stage1
-
-            counter = rand.Next(1, 50);
-            int count = 0;
-            Volunteer selected = default;
-
-
-            foreach (var vol in existingVol)
+            callsList = callsList.OrderBy(x => s_rand.Next()).ToList();
+            foreach (var call in callsList)
             {
-                count++;
-                if (rand.Next(count) == 0)
+                var v = s_dal.Assignment.Read(a => a.CallId == call.Id);
+                if (v != null && (v.EndTreatment == null || v.EndTreatment == AssignmentEnum.CancelExpired || v.EndTreatment == AssignmentEnum.TakenCare))// אם קיימת הקצאה פתוחה, דילוג על יצירת הקצאה נוספת עבור הקריאה הנוכחית
+                    continue;
+                if (i == 4)
+                    if (s_rand.NextDouble() < 0.99)
+                        continue;
+                    else if (s_rand.NextDouble() < (0.95 / i))
+                        continue;
+
+                var callId = call.Id;
+                Volunteer volunteer = volunteersList[s_rand.Next(volunteersList.Count)];
+                var volunteerId = volunteer.Id;
+
+                int range = (DateTime.Now - call.OpenTime).Days;
+                DateTime entry = call.OpenTime.AddDays(s_rand.Next(range)).AddHours(s_rand.Next(0, 24)).AddMinutes(s_rand.Next(0, 60));
+                DateTime? stop = null;
+                AssignmentEnum? stopEnum = null;
+
+
+                int maxDays = (DateTime.Now - entry).Days;
+                if (s_rand.NextDouble() < 0.7)
                 {
-                    selected = vol;
+                    if (call.MaxTime != null)
+                    {
+                        stop = entry.AddDays(s_rand.Next(maxDays)).AddHours(s_rand.Next(0, 24)).AddMinutes(s_rand.Next(0, 60));
+                        if (stop <= call.MaxTime)
+                        {
+                            stopEnum = GetReason(s_rand.Next(6));
+                        }
+                        else
+                            stopEnum = AssignmentEnum.CancelExpired;
+                    }
+                    else
+                    {
+                        if (s_rand.NextDouble() < 0.8)
+                        {
+                            stop = entry.AddDays(s_rand.Next(maxDays)).AddHours(s_rand.Next(0, 24)).AddMinutes(s_rand.Next(0, 60));
+                            stopEnum = GetReason(s_rand.Next(6));
+                        }
+                    }
+
                 }
+                Assignment newA = new(0, callId, volunteerId, entry, stop, stopEnum);
+                //s_dalAssignment.Create(newA); //stage1
+                s_dal.Assignment.Create(newA); //stage2
             }
-            int volunteerId = selected.Id;
-
-            DateTime start = item.OpenTime;
-            DateTime? end = item.MaxTime;
-            int time = 1;
-            if (end is null)
-                end = new DateTime(2026, 01, 01);
-            else
-                time = (end - start).Value.Days;
-
-            DateTime entry = start.AddDays(rand.Next(time));
-
-            DateTime? stop = null;
-            AssignmentEnum? stopEnum;
-            if (counter > 23)
-            {
-                if (counter > 41)
-                {
-                    int timeToStop = (end - entry).Value.Days;
-                    stop = entry.AddDays(rand.Next(timeToStop));
-                    stopEnum = AssignmentEnum.TakenCare;
-                }
-                else if (counter > 33)
-                    stopEnum = AssignmentEnum.SelfCancel;
-                else
-                    stopEnum = AssignmentEnum.CancelAdmin;
-            }
-            else if (counter > 10)
-            {
-                stop = entry.AddDays(rand.Next(30, 100));
-                stopEnum = AssignmentEnum.CancelExpired;
-            }
-            else
-            {
-                stop = null;
-                stopEnum = null;
-            }
-
-            Assignment newA = new(0, callId, volunteerId, entry, stop, stopEnum);
-            //s_dalAssignment.Create(newA); //stage1
-            s_dal.Assignment.Create(newA); //stage2
         }
     }
     private static void createCall()
@@ -108,7 +99,6 @@ public static class Initialization
             31.7645, 31.7653, 31.7669, 31.7758, 31.7630, 31.7720, 31.7705, 31.7621, 31.7587,
             31.7734, 31.7813, 31.7857, 31.7775, 31.7811, 31.7840, 31.7777, 31.7749, 31.7904,
             31.7911, 31.7945, 31.7698, 31.7732, 31.7696, 31.7520, 31.7643   };
-
         double[] longitudes =
         {
             35.2202, 35.2194, 35.2002, 35.2217, 35.2256, 35.2315, 35.2139, 35.2161, 35.2297,
@@ -293,11 +283,10 @@ public static class Initialization
 
         return openingTime;
     }
-
     private static DateTime GenerateEndingTime()
     {
         DateTime currentTime = DateTime.Now;
-        double daysAgo = s_rand.Next(-15, 30);
+        double daysAgo = s_rand.Next(-30, 35);
         double hoursAgo = s_rand.Next(-23, 24);
         double minutesAgo = s_rand.Next(-59, 60);
 
@@ -305,5 +294,17 @@ public static class Initialization
 
         return openingTime;
     }
-
+    private static DO.AssignmentEnum GetReason(int num)
+    {
+        return num switch
+        {
+            0 => AssignmentEnum.TakenCare,
+            1 => AssignmentEnum.TakenCare,
+            2 => AssignmentEnum.TakenCare,
+            3 => AssignmentEnum.SelfCancel,
+            4 => AssignmentEnum.SelfCancel,
+            5 => AssignmentEnum.CancelAdmin,
+            _ => AssignmentEnum.TakenCare
+        };
+    }
 }

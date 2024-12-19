@@ -8,7 +8,7 @@ internal class AssignmentImplementation : IAssignment
 {
     public void Create(Assignment item)
     {
-        int NewId = Config.nextAssignmentId; 
+        int NewId = Config.nextAssignmentId;
         Assignment newItem = new(NewId, item.CallId, item.VolunteerId, item.InterTime, item.EndTime, item.EndTreatment);
         DataSource.Assignments?.Add(newItem);
     }
@@ -33,7 +33,7 @@ internal class AssignmentImplementation : IAssignment
 
     public Assignment? Read(Func<Assignment, bool> filter) //stage 2
     {
-        Assignment? item = DataSource.Assignments?.FirstOrDefault(filter);
+        Assignment? item = DataSource.Assignments?.LastOrDefault(filter);
         return item;
     }
 
