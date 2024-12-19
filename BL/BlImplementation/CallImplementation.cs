@@ -194,7 +194,7 @@ internal class CallImplementation : ICall
         Func<DO.Assignment, bool> func = item => item.CallId == callId;
         IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func); //read all assignment of this Call.
         var callAssignments = new List<BO.CallAssignInList>();
-        if (dataAssignments != null)
+        if (dataAssignments.Count() != 0)
         {
             callAssignments = dataAssignments.Select(assign => new BO.CallAssignInList
             {
@@ -209,7 +209,7 @@ internal class CallImplementation : ICall
 
         //foreach (var assign in callAssignments)
         //{ Console.WriteLine(assign.VolunteerId + " " + assign.VolunteerName + " " + assign.EndTime + " " + assign.EndTreatment); }
-
+        //DO.Assignment? LastAssignment = dataAssignments is null ?  : null;
         return new()
         {
             Id = callId,
@@ -220,7 +220,7 @@ internal class CallImplementation : ICall
             Longitude = doCall.Longitude,
             OpenTime = doCall.OpenTime,
             MaxCloseTime = doCall.MaxTime,
-            Status = CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime), //הNULL מנוהל
+            Status = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime): BO.CallStatus.Opened, //הNULL מנוהל
             CallAssignments = callAssignments
 
         };

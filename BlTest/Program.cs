@@ -183,8 +183,10 @@ Press 0 to exit"
                             Console.WriteLine(call + "\n");
                         break;
                     case CallChoice.howManyCalls:
-                        //IEnumerable<IGrouping<int open,int inTreatment,int closed,int expired,int openInRisk>> howMany
-                           
+                        var Callsamount = s_bl.Call.HowManyCalls();
+                        int counter = 0;
+                        foreach (var item in Callsamount)
+                            Console.WriteLine($"{(BO.CallStatus)counter++}: {item}");
                         break;
                     case CallChoice.callToTreatment:
                         try

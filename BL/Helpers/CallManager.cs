@@ -18,43 +18,42 @@ internal static class CallManager
         DateTime? endTime = dataAssignments/*.Last()*/.EndTime;
             //from item in dataAssignments                      select item.EndTime;
 
-        if (endTreatment/*.LastOrDefault()*/ != DO.AssignmentEnum.TakenCare) //לבדוק!!!
-        {
-            if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
-                return CallStatus.OpenInRisk;
-            else if (MaxCloseTime > ClockManager.Now)
-                return CallStatus.Opened;
-        }
-
-        else if (endTreatment == DO.AssignmentEnum.CancelExpired) //to vz
+        if (endTreatment == DO.AssignmentEnum.CancelExpired) //to vz
             return CallStatus.Expired;
 
         else if (endTime != null/*<= ClockManager.Now*/) // לבדוק את התנאי של הסוף  זמן
             return CallStatus.Closed;
 
-        return CallStatus.InTreatment;
+        if (endTreatment/*.LastOrDefault()*/ == null && dataAssignments !=null)
+            return CallStatus.InTreatment;
+       
+        if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
+            return CallStatus.OpenInRisk;
+            //else if (MaxCloseTime > ClockManager.Now || MaxCloseTime is null)
+       return CallStatus.Opened;
     }
 
     internal static CallListStatus MakeStatus(DO.Assignment CurrentAssignment, DO.Call currentCall)
     {
-        if (CurrentAssignment.EndTime != null)
-            return CallListStatus.Closed;
+        //if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.CancelExpired)
+        //    return CallListStatus.Expired;
 
-        if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.TakenCare)
+        if (CurrentAssignment.EndTreatment/*.LastOrDefault()*/ == null && CurrentAssignment != null)
         {
             if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
                 return CallListStatus.InTreatmentInRisk;
             return CallListStatus.InTreatment;
         }
 
-        if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.CancelAdmin || CurrentAssignment.EndTreatment == DO.AssignmentEnum.SelfCancel)
-        {
-            if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
-                return CallListStatus.OpenInRisk;
-            return CallListStatus.Opened;
-        }
+        //if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.CancelAdmin || CurrentAssignment.EndTreatment == DO.AssignmentEnum.SelfCancel)
+        //{
+        //    if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
+        //        return CallListStatus.OpenInRisk;
+        //    return CallListStatus.Opened;
+        //}
 
-        return CallListStatus.Expired;
+        //return CallListStatus.Closed;
+        return (BO.CallListStatus)MakeStatus(CurrentAssignment, currentCall.MaxTime);
     }
 
     internal static DO.Call CheckLogic(BO.Call toCheck)

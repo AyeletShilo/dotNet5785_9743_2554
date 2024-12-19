@@ -3,385 +3,393 @@
   <Assignment>
     <Id>1</Id>
     <CallId>1</CallId>
-    <VolunteerId>385816764</VolunteerId>
-    <InterTime>2024-12-04T11:15:29.0026459+02:00</InterTime>
-    <EndTime>2025-01-20T11:15:29.0026459+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>362344087</VolunteerId>
+    <InterTime>2024-11-20T16:50:11.2953014+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>2</Id>
     <CallId>2</CallId>
-    <VolunteerId>385816764</VolunteerId>
-    <InterTime>2024-11-23T14:16:29.0355898+02:00</InterTime>
-    <EndTime>2025-02-06T14:16:29.0355898+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>256664772</VolunteerId>
+    <InterTime>2024-12-24T14:58:11.3024623+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
     <Id>3</Id>
     <CallId>3</CallId>
-    <VolunteerId>393463161</VolunteerId>
-    <InterTime>2024-12-21T08:32:29.0865614+02:00</InterTime>
-    <EndTime>2025-02-23T08:32:29.0865614+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>278993522</VolunteerId>
+    <InterTime>2024-11-27T09:23:11.3266878+02:00</InterTime>
+    <EndTime>2025-09-11T09:23:11.3266878+03:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>4</Id>
     <CallId>4</CallId>
-    <VolunteerId>296841786</VolunteerId>
-    <InterTime>2024-11-24T14:25:29.1291374+02:00</InterTime>
-    <EndTime>2024-12-17T14:25:29.1291374+02:00</EndTime>
-    <EndTreatment>CancelAdmin</EndTreatment>
+    <VolunteerId>303105647</VolunteerId>
+    <InterTime>2024-12-02T23:29:11.3453249+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
     <Id>5</Id>
     <CallId>5</CallId>
-    <VolunteerId>263956302</VolunteerId>
-    <InterTime>2024-12-11T09:42:29.1617789+02:00</InterTime>
-    <EndTime>2025-01-13T09:42:29.1617789+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>258351667</VolunteerId>
+    <InterTime>2024-12-23T09:00:11.3638956+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>SelfCancel</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>6</Id>
     <CallId>6</CallId>
-    <VolunteerId>333513711</VolunteerId>
-    <InterTime>2024-12-02T06:29:29.199971+02:00</InterTime>
-    <EndTime>2024-12-08T06:29:29.199971+02:00</EndTime>
-    <EndTreatment>CancelAdmin</EndTreatment>
+    <VolunteerId>362344087</VolunteerId>
+    <InterTime>2024-12-18T12:42:11.3791969+02:00</InterTime>
+    <EndTime>2025-07-19T12:42:11.3791969+03:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>7</Id>
     <CallId>7</CallId>
-    <VolunteerId>220771851</VolunteerId>
-    <InterTime>2024-12-06T02:05:29.2230439+02:00</InterTime>
-    <EndTime>2025-01-18T02:05:29.2230439+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>327103339</VolunteerId>
+    <InterTime>2024-12-28T12:11:11.3954347+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>SelfCancel</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>8</Id>
     <CallId>8</CallId>
-    <VolunteerId>296841786</VolunteerId>
-    <InterTime>2024-11-30T02:37:29.2482402+02:00</InterTime>
-    <EndTime>2024-12-06T02:37:29.2482402+02:00</EndTime>
-    <EndTreatment>CancelAdmin</EndTreatment>
+    <VolunteerId>248918666</VolunteerId>
+    <InterTime>2024-12-17T06:35:11.4116718+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>SelfCancel</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>9</Id>
     <CallId>9</CallId>
-    <VolunteerId>333513711</VolunteerId>
-    <InterTime>2024-12-17T10:19:29.2790835+02:00</InterTime>
-    <EndTime>2024-12-17T10:19:29.2790835+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
+    <VolunteerId>283252658</VolunteerId>
+    <InterTime>2025-01-14T11:59:11.4300905+02:00</InterTime>
+    <EndTime>2025-03-26T11:59:11.4300905+02:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>10</Id>
     <CallId>10</CallId>
-    <VolunteerId>375331568</VolunteerId>
-    <InterTime>2024-12-19T15:11:29.3044185+02:00</InterTime>
-    <EndTime>2025-01-29T15:11:29.3044185+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>283252658</VolunteerId>
+    <InterTime>2025-01-08T15:40:11.4501257+02:00</InterTime>
+    <EndTime>2025-01-08T15:40:11.4501257+02:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>11</Id>
     <CallId>11</CallId>
-    <VolunteerId>360322160</VolunteerId>
-    <InterTime>2024-12-14T05:18:29.3330316+02:00</InterTime>
-    <EndTime>2024-12-15T05:18:29.3330316+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
+    <VolunteerId>348061888</VolunteerId>
+    <InterTime>2024-12-11T06:36:11.4706182+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>12</Id>
     <CallId>12</CallId>
-    <VolunteerId>263956302</VolunteerId>
-    <InterTime>2024-12-09T23:07:29.3669117+02:00</InterTime>
-    <EndTime>2025-02-21T23:07:29.3669117+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>283252658</VolunteerId>
+    <InterTime>2024-12-22T15:30:11.4911017+02:00</InterTime>
+    <EndTime>2024-12-22T15:30:11.4911017+02:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>13</Id>
     <CallId>13</CallId>
-    <VolunteerId>293939989</VolunteerId>
-    <InterTime>2024-12-15T15:06:29.3966068+02:00</InterTime>
-    <EndTime>2024-12-17T15:06:29.3966068+02:00</EndTime>
-    <EndTreatment>TakenCare</EndTreatment>
+    <VolunteerId>258351667</VolunteerId>
+    <InterTime>2024-12-07T19:39:11.509829+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>SelfCancel</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>14</Id>
     <CallId>14</CallId>
-    <VolunteerId>344203757</VolunteerId>
-    <InterTime>2024-12-22T00:57:29.4187136+02:00</InterTime>
-    <EndTime>2024-12-22T00:57:29.4187136+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
+    <VolunteerId>248918666</VolunteerId>
+    <InterTime>2024-11-29T17:44:11.5262696+02:00</InterTime>
+    <EndTime>2025-01-26T17:44:11.5262696+02:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>15</Id>
     <CallId>15</CallId>
-    <VolunteerId>296841786</VolunteerId>
-    <InterTime>2024-12-05T16:15:29.4447198+02:00</InterTime>
-    <EndTime>2025-01-09T16:15:29.4447198+02:00</EndTime>
+    <VolunteerId>303105647</VolunteerId>
+    <InterTime>2024-12-11T23:36:11.5423526+02:00</InterTime>
+    <EndTime>2025-01-13T23:36:11.5423526+02:00</EndTime>
     <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>16</Id>
     <CallId>16</CallId>
-    <VolunteerId>238635660</VolunteerId>
-    <InterTime>2024-12-06T07:48:29.4682816+02:00</InterTime>
+    <VolunteerId>303105647</VolunteerId>
+    <InterTime>2024-12-06T13:10:11.5616313+02:00</InterTime>
     <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>17</Id>
     <CallId>17</CallId>
-    <VolunteerId>293939989</VolunteerId>
-    <InterTime>2024-12-30T10:06:29.4970149+02:00</InterTime>
-    <EndTime>2025-01-10T10:06:29.4970149+02:00</EndTime>
-    <EndTreatment>TakenCare</EndTreatment>
+    <VolunteerId>312781933</VolunteerId>
+    <InterTime>2024-12-11T18:03:11.5784144+02:00</InterTime>
+    <EndTime>2025-01-17T18:03:11.5784144+02:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>18</Id>
     <CallId>18</CallId>
-    <VolunteerId>360322160</VolunteerId>
-    <InterTime>2024-12-18T15:18:29.5270397+02:00</InterTime>
-    <EndTime>2025-02-26T15:18:29.5270397+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>298695198</VolunteerId>
+    <InterTime>2024-11-25T03:27:11.593209+02:00</InterTime>
+    <EndTime>2025-05-01T03:27:11.593209+03:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>19</Id>
     <CallId>19</CallId>
-    <VolunteerId>310790563</VolunteerId>
-    <InterTime>2024-12-08T06:29:29.5550912+02:00</InterTime>
-    <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <VolunteerId>231036492</VolunteerId>
+    <InterTime>2024-12-16T23:52:11.6060395+02:00</InterTime>
+    <EndTime>2025-01-09T23:52:11.6060395+02:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>20</Id>
     <CallId>20</CallId>
-    <VolunteerId>344203757</VolunteerId>
-    <InterTime>2024-11-25T06:15:29.5931316+02:00</InterTime>
-    <EndTime>2025-12-02T06:15:29.5931316+02:00</EndTime>
-    <EndTreatment>TakenCare</EndTreatment>
+    <VolunteerId>327103339</VolunteerId>
+    <InterTime>2024-12-17T21:50:11.620041+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>21</Id>
     <CallId>21</CallId>
-    <VolunteerId>220771851</VolunteerId>
-    <InterTime>2024-12-19T15:22:29.6159226+02:00</InterTime>
-    <EndTime>2024-12-23T15:22:29.6159226+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
+    <VolunteerId>372831149</VolunteerId>
+    <InterTime>2024-12-14T08:07:11.6350591+02:00</InterTime>
+    <EndTime>2025-01-21T08:07:11.6350591+02:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>22</Id>
     <CallId>22</CallId>
-    <VolunteerId>293939989</VolunteerId>
-    <InterTime>2024-12-10T20:30:29.6375394+02:00</InterTime>
-    <EndTime>2024-12-10T20:30:29.6375394+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
-  </Assignment>
-  <Assignment>
-    <Id>23</Id>
-    <CallId>23</CallId>
-    <VolunteerId>293939989</VolunteerId>
-    <InterTime>2024-11-19T22:14:29.6654935+02:00</InterTime>
+    <VolunteerId>303105647</VolunteerId>
+    <InterTime>2024-12-19T06:02:11.6495586+02:00</InterTime>
     <EndTime xsi:nil="true" />
     <EndTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
+    <Id>23</Id>
+    <CallId>23</CallId>
+    <VolunteerId>274964873</VolunteerId>
+    <InterTime>2024-12-24T21:55:11.667321+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
+  </Assignment>
+  <Assignment>
     <Id>24</Id>
     <CallId>24</CallId>
-    <VolunteerId>284197217</VolunteerId>
-    <InterTime>2024-11-29T20:47:29.69223+02:00</InterTime>
-    <EndTime>2025-01-10T20:47:29.69223+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>372831149</VolunteerId>
+    <InterTime>2024-12-19T21:48:11.6838719+02:00</InterTime>
+    <EndTime>2024-12-21T21:48:11.6838719+02:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>25</Id>
     <CallId>25</CallId>
-    <VolunteerId>238635660</VolunteerId>
-    <InterTime>2024-11-24T14:41:29.7154768+02:00</InterTime>
-    <EndTime>2025-02-23T14:41:29.7154768+02:00</EndTime>
+    <VolunteerId>372831149</VolunteerId>
+    <InterTime>2024-12-03T01:53:11.7011445+02:00</InterTime>
+    <EndTime>2025-01-28T01:53:11.7011445+02:00</EndTime>
     <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>26</Id>
     <CallId>26</CallId>
-    <VolunteerId>344203757</VolunteerId>
-    <InterTime>2024-11-26T19:16:29.7389379+02:00</InterTime>
-    <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <VolunteerId>274964873</VolunteerId>
+    <InterTime>2024-12-12T12:17:11.7211258+02:00</InterTime>
+    <EndTime>2025-01-15T12:17:11.7211258+02:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>27</Id>
     <CallId>27</CallId>
-    <VolunteerId>220771851</VolunteerId>
-    <InterTime>2024-11-28T03:43:29.7641706+02:00</InterTime>
+    <VolunteerId>372831149</VolunteerId>
+    <InterTime>2024-12-26T01:34:11.7410674+02:00</InterTime>
     <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <EndTreatment>SelfCancel</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>28</Id>
     <CallId>28</CallId>
-    <VolunteerId>263956302</VolunteerId>
-    <InterTime>2024-12-18T04:34:29.8019291+02:00</InterTime>
-    <EndTime>2024-12-24T04:34:29.8019291+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
+    <VolunteerId>298695198</VolunteerId>
+    <InterTime>2024-12-14T09:28:11.7573803+02:00</InterTime>
+    <EndTime>2025-07-26T09:28:11.7573803+03:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>29</Id>
     <CallId>29</CallId>
-    <VolunteerId>385816764</VolunteerId>
-    <InterTime>2025-01-06T19:01:29.8342789+02:00</InterTime>
-    <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <VolunteerId>348061888</VolunteerId>
+    <InterTime>2024-12-25T03:52:11.7749993+02:00</InterTime>
+    <EndTime>2024-12-31T03:52:11.7749993+02:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>30</Id>
     <CallId>30</CallId>
-    <VolunteerId>238635660</VolunteerId>
-    <InterTime>2024-12-11T18:59:29.8557831+02:00</InterTime>
-    <EndTime>2024-12-12T18:59:29.8557831+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
+    <VolunteerId>243326782</VolunteerId>
+    <InterTime>2024-12-16T22:27:11.792472+02:00</InterTime>
+    <EndTime>2025-02-02T22:27:11.792472+02:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>31</Id>
     <CallId>31</CallId>
-    <VolunteerId>293939989</VolunteerId>
-    <InterTime>2024-12-11T12:44:29.8794628+02:00</InterTime>
-    <EndTime>2025-03-01T12:44:29.8794628+02:00</EndTime>
+    <VolunteerId>303105647</VolunteerId>
+    <InterTime>2024-12-17T00:34:11.810505+02:00</InterTime>
+    <EndTime xsi:nil="true" />
     <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>32</Id>
     <CallId>32</CallId>
-    <VolunteerId>263956302</VolunteerId>
-    <InterTime>2024-12-04T21:07:29.9017526+02:00</InterTime>
-    <EndTime>2025-03-10T21:07:29.9017526+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>298695198</VolunteerId>
+    <InterTime>2024-12-14T14:30:11.8295449+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>33</Id>
     <CallId>33</CallId>
-    <VolunteerId>333513711</VolunteerId>
-    <InterTime>2024-12-01T03:01:29.9255252+02:00</InterTime>
-    <EndTime>2025-06-02T03:01:29.9255252+03:00</EndTime>
+    <VolunteerId>248918666</VolunteerId>
+    <InterTime>2024-11-23T16:12:11.84721+02:00</InterTime>
+    <EndTime xsi:nil="true" />
     <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>34</Id>
     <CallId>34</CallId>
-    <VolunteerId>393463161</VolunteerId>
-    <InterTime>2024-12-11T15:06:29.9539965+02:00</InterTime>
-    <EndTime>2025-02-20T15:06:29.9539965+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>362344087</VolunteerId>
+    <InterTime>2024-11-22T19:14:11.8622136+02:00</InterTime>
+    <EndTime>2025-12-17T19:14:11.8622136+02:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>35</Id>
     <CallId>35</CallId>
-    <VolunteerId>238635660</VolunteerId>
-    <InterTime>2024-11-26T01:30:29.9902191+02:00</InterTime>
+    <VolunteerId>283252658</VolunteerId>
+    <InterTime>2024-12-21T20:49:11.8806693+02:00</InterTime>
     <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <EndTreatment>SelfCancel</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>36</Id>
     <CallId>36</CallId>
-    <VolunteerId>296841786</VolunteerId>
-    <InterTime>2024-11-28T17:08:30.0203223+02:00</InterTime>
-    <EndTime>2025-02-04T17:08:30.0203223+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
-  </Assignment>
-  <Assignment>
-    <Id>37</Id>
-    <CallId>37</CallId>
-    <VolunteerId>293939989</VolunteerId>
-    <InterTime>2024-12-01T02:11:30.0478983+02:00</InterTime>
+    <VolunteerId>362344087</VolunteerId>
+    <InterTime>2024-11-20T04:59:11.9018963+02:00</InterTime>
     <EndTime xsi:nil="true" />
     <EndTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
+    <Id>37</Id>
+    <CallId>37</CallId>
+    <VolunteerId>327103339</VolunteerId>
+    <InterTime>2024-12-11T18:50:11.9310455+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
+  </Assignment>
+  <Assignment>
     <Id>38</Id>
     <CallId>38</CallId>
-    <VolunteerId>296841786</VolunteerId>
-    <InterTime>2024-11-30T14:47:30.0764523+02:00</InterTime>
-    <EndTime>2025-12-10T14:47:30.0764523+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
+    <VolunteerId>256664772</VolunteerId>
+    <InterTime>2024-12-24T05:35:11.9520134+02:00</InterTime>
+    <EndTime>2025-04-02T05:35:11.9520134+03:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>39</Id>
     <CallId>39</CallId>
-    <VolunteerId>296841786</VolunteerId>
-    <InterTime>2024-12-17T23:12:30.0991382+02:00</InterTime>
-    <EndTime>2024-12-23T23:12:30.0991382+02:00</EndTime>
-    <EndTreatment>SelfCancel</EndTreatment>
+    <VolunteerId>312781933</VolunteerId>
+    <InterTime>2024-12-08T15:45:11.9670079+02:00</InterTime>
+    <EndTime>2024-12-08T15:45:11.9670079+02:00</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>40</Id>
     <CallId>40</CallId>
-    <VolunteerId>344203757</VolunteerId>
-    <InterTime>2025-01-05T16:16:30.1275417+02:00</InterTime>
-    <EndTime>2025-02-22T16:16:30.1275417+02:00</EndTime>
-    <EndTreatment>CancelExpired</EndTreatment>
+    <VolunteerId>303105647</VolunteerId>
+    <InterTime>2024-12-11T18:18:11.9806761+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>SelfCancel</EndTreatment>
+  </Assignment>
+  <Assignment>
+    <Id>41</Id>
+    <CallId>41</CallId>
+    <VolunteerId>283252658</VolunteerId>
+    <InterTime>2024-11-25T02:02:12.0002019+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment xsi:nil="true" />
   </Assignment>
   <Assignment>
     <Id>42</Id>
     <CallId>42</CallId>
-    <VolunteerId>263956302</VolunteerId>
-    <InterTime>2024-12-04T20:30:30.1758893+02:00</InterTime>
-    <EndTime>2024-12-04T20:30:30.1758893+02:00</EndTime>
+    <VolunteerId>327103339</VolunteerId>
+    <InterTime>2024-11-24T11:10:12.0163395+02:00</InterTime>
+    <EndTime xsi:nil="true" />
     <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>43</Id>
     <CallId>43</CallId>
-    <VolunteerId>344203757</VolunteerId>
-    <InterTime>2024-12-09T03:28:30.2070649+02:00</InterTime>
+    <VolunteerId>332291459</VolunteerId>
+    <InterTime>2024-12-12T17:05:12.0362151+02:00</InterTime>
     <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>44</Id>
     <CallId>44</CallId>
-    <VolunteerId>358235281</VolunteerId>
-    <InterTime>2024-12-05T07:52:30.2366372+02:00</InterTime>
+    <VolunteerId>303105647</VolunteerId>
+    <InterTime>2024-12-18T07:48:12.051949+02:00</InterTime>
     <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>45</Id>
     <CallId>45</CallId>
-    <VolunteerId>293939989</VolunteerId>
-    <InterTime>2024-12-12T07:20:30.263748+02:00</InterTime>
-    <EndTime>2024-12-17T07:20:30.263748+02:00</EndTime>
-    <EndTreatment>CancelAdmin</EndTreatment>
+    <VolunteerId>243326782</VolunteerId>
+    <InterTime>2024-12-01T12:58:12.072284+02:00</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment>SelfCancel</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>46</Id>
     <CallId>46</CallId>
-    <VolunteerId>293939989</VolunteerId>
-    <InterTime>2024-12-16T07:33:30.2930337+02:00</InterTime>
-    <EndTime>2024-12-22T07:33:30.2930337+02:00</EndTime>
-    <EndTreatment>TakenCare</EndTreatment>
+    <VolunteerId>312781933</VolunteerId>
+    <InterTime>2024-12-18T10:22:12.0932014+02:00</InterTime>
+    <EndTime>2025-03-19T10:22:12.0932014+02:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>47</Id>
     <CallId>47</CallId>
-    <VolunteerId>360322160</VolunteerId>
-    <InterTime>2024-12-06T23:20:30.3167642+02:00</InterTime>
+    <VolunteerId>362344087</VolunteerId>
+    <InterTime>2024-12-07T06:52:12.1111967+02:00</InterTime>
     <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <EndTreatment>CancelAdmin</EndTreatment>
   </Assignment>
   <Assignment>
     <Id>48</Id>
     <CallId>48</CallId>
-    <VolunteerId>393463161</VolunteerId>
-    <InterTime>2024-11-30T01:13:30.3438557+02:00</InterTime>
-    <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
+    <VolunteerId>274964873</VolunteerId>
+    <InterTime>2024-12-06T23:18:12.1343244+02:00</InterTime>
+    <EndTime>2025-03-06T23:18:12.1343244+02:00</EndTime>
+    <EndTreatment>CancelExpired</EndTreatment>
   </Assignment>
   <Assignment>
-    <Id>41</Id>
-    <CallId>41</CallId>
-    <VolunteerId>393463161</VolunteerId>
-    <InterTime>2024-12-09T18:55:30.1535531+02:00</InterTime>
-    <EndTime>2024-12-18T20:26:28</EndTime>
-    <EndTreatment>TakenCare</EndTreatment>
+    <Id>49</Id>
+    <CallId>49</CallId>
+    <VolunteerId>362344087</VolunteerId>
+    <InterTime>2024-12-19T16:18:11</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment xsi:nil="true" />
   </Assignment>
 </ArrayOfAssignment>
