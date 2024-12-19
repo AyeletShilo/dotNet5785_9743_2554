@@ -26,11 +26,12 @@ internal static class CallManager
                 return CallStatus.Opened;
         }
 
-        else if (endTime<= ClockManager.Now)
+        else if (endTreatment == DO.AssignmentEnum.CancelExpired) //to vz
+            return CallStatus.Expired;
+
+        else if (endTime != null/*<= ClockManager.Now*/) // לבדוק את התנאי של הסוף  זמן
             return CallStatus.Closed;
 
-        else if (endTime/*.Last()*/ < ClockManager.Now) //to vz
-            return CallStatus.Expired;
         return CallStatus.InTreatment;
     }
 

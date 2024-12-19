@@ -18,7 +18,7 @@ public static class Initialization
 
     private static readonly Random s_rand = new();
 
-    private static void createAssignment()
+    private static void createAssignment() ///לטפל בזמני כניסה ויציאה
     {
         //List<Call>? existingCall = s_dalCall?.ReadAll(); //stage1
         //List<Volunteer>? existingVol = s_dalVolunteer?.ReadAll(); //stage1
@@ -37,11 +37,11 @@ public static class Initialization
             int count = 0;
             Volunteer selected = default;
 
-            
+
             foreach (var vol in existingVol)
             {
                 count++;
-                if (rand.Next(count) == 0) 
+                if (rand.Next(count) == 0)
                 {
                     selected = vol;
                 }
@@ -52,21 +52,22 @@ public static class Initialization
             DateTime? end = item.MaxTime;
             int time = 1;
             if (end is null)
-                end = new DateTime(2026,01,01);
+                end = new DateTime(2026, 01, 01);
             else
                 time = (end - start).Value.Days;
-            
+
             DateTime entry = start.AddDays(rand.Next(time));
 
-
-            DateTime? stop;
+            DateTime? stop = null;
             AssignmentEnum? stopEnum;
             if (counter > 23)
             {
-                int timeToStop = (end - entry).Value.Days;
-                stop = entry.AddDays(rand.Next(timeToStop));
                 if (counter > 41)
+                {
+                    int timeToStop = (end - entry).Value.Days;
+                    stop = entry.AddDays(rand.Next(timeToStop));
                     stopEnum = AssignmentEnum.TakenCare;
+                }
                 else if (counter > 33)
                     stopEnum = AssignmentEnum.SelfCancel;
                 else
@@ -74,7 +75,7 @@ public static class Initialization
             }
             else if (counter > 10)
             {
-                stop = entry.AddDays(rand.Next(30,100));
+                stop = entry.AddDays(rand.Next(30, 100));
                 stopEnum = AssignmentEnum.CancelExpired;
             }
             else
@@ -153,7 +154,7 @@ public static class Initialization
             double longitude = longitudes[i++];
             DateTime openTime = GenerateOpeningTime();
             //DateTime? MaxTime = null;
-            rType=s_rand.Next(0, 2);
+            rType = s_rand.Next(0, 2);
 
             DateTime? maxTime;
             do
@@ -161,7 +162,7 @@ public static class Initialization
             while (maxTime < openTime);
 
 
-           // s_dalCall!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage1
+            // s_dalCall!.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage1
             s_dal!.Call.Create(new(rType, callType, address, latitude, longitude, openTime, description, maxTime)); //stage2
         }
     }
@@ -195,7 +196,7 @@ public static class Initialization
             while (s_dal!.Volunteer!.Read(id) != null);  //stage2
 
             int toSwitch = s_rand.Next(3);
-            string email = Emails[i]+ emailsEnds[toSwitch];
+            string email = Emails[i] + emailsEnds[toSwitch];
             toSwitch = s_rand.Next(1, 5);
             string phonPre = "";
             switch (toSwitch)
@@ -253,7 +254,7 @@ public static class Initialization
         //s_dalCall = dalCall ?? throw new NullReferenceException("DAL object can not be null!"); //stage1
         //s_dalConfig = dalConfig ?? throw new NullReferenceException("DAL object can not be null!"); //stage1
         //s_dalVolunteer = dalVolunteer ?? throw new NullReferenceException("DAL object can not be null!"); //stage1
-       //s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
+        //s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
         s_dal = DalApi.Factory.Get; //stage 4
 
 
@@ -264,7 +265,7 @@ public static class Initialization
         //s_dalVolunteer.DeleteAll(); //stage1
 
         s_dal.ResetDB(); //stage2
-                                  
+
         Console.WriteLine("Initializing lists ...");
         createCall();
         createVolunteer();
@@ -285,7 +286,7 @@ public static class Initialization
     {
         DateTime currentTime = DateTime.Now;
         double daysAgo = s_rand.Next(0, 30);
-        double hoursAgo = s_rand.Next(0, 24);  
+        double hoursAgo = s_rand.Next(0, 24);
         double minutesAgo = s_rand.Next(0, 60);
 
         DateTime openingTime = currentTime.AddDays(-daysAgo).AddHours(-hoursAgo).AddMinutes(-minutesAgo);
