@@ -33,12 +33,12 @@ internal static class CallManager
        return CallStatus.Opened;
     }
 
-    internal static CallListStatus MakeStatus(DO.Assignment CurrentAssignment, DO.Call currentCall)
+    internal static CallListStatus MakeStatus(DO.Assignment currentAssignment, DO.Call currentCall)
     {
         //if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.CancelExpired)
         //    return CallListStatus.Expired;
 
-        if (CurrentAssignment.EndTreatment/*.LastOrDefault()*/ == null && CurrentAssignment != null)
+        if (currentAssignment.EndTreatment/*.LastOrDefault()*/ == null && currentAssignment != null)
         {
             if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
                 return CallListStatus.InTreatmentInRisk;
@@ -53,7 +53,7 @@ internal static class CallManager
         //}
 
         //return CallListStatus.Closed;
-        return (BO.CallListStatus)MakeStatus(CurrentAssignment, currentCall.MaxTime);
+        return (BO.CallListStatus)MakeStatus(currentAssignment, currentCall.MaxTime);
     }
 
     internal static DO.Call CheckLogic(BO.Call toCheck)
@@ -141,22 +141,22 @@ internal static class CallManager
         public string Lon { get; set; }
     }
 
-    internal static string GetPropertyName(BO.CallData sortOrFilter)
-    {
-        return sortOrFilter switch
-        {
-            BO.CallData.Id => nameof(BO.CallInList.Id),
-            //BO.CallData.CallId => nameof(BO.CallInList.CallId),
-            BO.CallData.CallType => nameof(BO.CallInList.CallType),
-            BO.CallData.OpenTime => nameof(BO.CallInList.OpenTime),
-            BO.CallData.LeftTime => nameof(BO.CallInList.LeftTime),
-            BO.CallData.LastVolunteer => nameof(BO.CallInList.LastVolunteer),
-            BO.CallData.CompletionTime => nameof(BO.CallInList.CompletionTime),
-            BO.CallData.Status => nameof(BO.CallInList.Status),
-            BO.CallData.TotalAssignments => nameof(BO.CallInList.TotalAssignments),
-            _ => nameof(BO.CallInList.Id)
-        };
-    }
+    //internal static string GetPropertyName(BO.CallData sortOrFilter)
+    //{
+    //    return sortOrFilter switch
+    //    {
+    //        BO.CallData.Id => nameof(BO.CallInList.Id),
+    //        //BO.CallData.CallId => nameof(BO.CallInList.CallId),
+    //        BO.CallData.CallType => nameof(BO.CallInList.CallType),
+    //        BO.CallData.OpenTime => nameof(BO.CallInList.OpenTime),
+    //        BO.CallData.LeftTime => nameof(BO.CallInList.LeftTime),
+    //        BO.CallData.LastVolunteer => nameof(BO.CallInList.LastVolunteer),
+    //        BO.CallData.CompletionTime => nameof(BO.CallInList.CompletionTime),
+    //        BO.CallData.Status => nameof(BO.CallInList.Status),
+    //        BO.CallData.TotalAssignments => nameof(BO.CallInList.TotalAssignments),
+    //        _ => nameof(BO.CallInList.Id)
+    //    };
+    //}
 
     //internal static string GetPropertyName(BO.CloseCallData sortOrFilter)
     //{
@@ -173,33 +173,33 @@ internal static class CallManager
     //    };
     //}
 
-    internal static string GetPropertyName(BO.OpenCallData sortOrFilter)
-    {
-        return sortOrFilter switch
-        {
-            BO.OpenCallData.Id => nameof(BO.OpenCallData.Id),
-            BO.OpenCallData.CallType => nameof(BO.OpenCallData.CallType),
-            BO.OpenCallData.Description => nameof(BO.OpenCallData.Description),
-            BO.OpenCallData.CallAddress => nameof(BO.OpenCallData.CallAddress),
-            BO.OpenCallData.OpenTime => nameof(BO.OpenCallData.OpenTime),
-            BO.OpenCallData.MaxCloseTime => nameof(BO.OpenCallData.MaxCloseTime),
-            BO.OpenCallData.VolDistance => nameof(BO.OpenCallData.VolDistance),
-            _ => nameof(BO.OpenCallData.Id)
-        };
-    }
+    //internal static string GetPropertyName(BO.OpenCallData sortOrFilter)
+    //{
+    //    return sortOrFilter switch
+    //    {
+    //        BO.OpenCallData.Id => nameof(BO.OpenCallData.Id),
+    //        BO.OpenCallData.CallType => nameof(BO.OpenCallData.CallType),
+    //        BO.OpenCallData.Description => nameof(BO.OpenCallData.Description),
+    //        BO.OpenCallData.CallAddress => nameof(BO.OpenCallData.CallAddress),
+    //        BO.OpenCallData.OpenTime => nameof(BO.OpenCallData.OpenTime),
+    //        BO.OpenCallData.MaxCloseTime => nameof(BO.OpenCallData.MaxCloseTime),
+    //        BO.OpenCallData.VolDistance => nameof(BO.OpenCallData.VolDistance),
+    //        _ => nameof(BO.OpenCallData.Id)
+    //    };
+    //}
 
-    internal static string GetPropertyName(BO.CallType sortOrFilter)
-    {
-        return sortOrFilter switch
-        {
-            BO.CallType.Shopping => nameof(BO.CallType.Shopping),
-            BO.CallType.Cleaning => nameof(BO.CallType.Cleaning),
-            BO.CallType.Repairing => nameof(BO.CallType.Repairing),
-            BO.CallType.TechnologyHelp => nameof(BO.CallType.TechnologyHelp),
-            BO.CallType.Talking => nameof(BO.CallType.Talking),
-            _ => nameof(BO.CallType.Shopping)
-        };
-    }
+    //internal static string GetPropertyName(BO.CallType sortOrFilter)
+    //{
+    //    return sortOrFilter switch
+    //    {
+    //        BO.CallType.Shopping => nameof(BO.CallType.Shopping),
+    //        BO.CallType.Cleaning => nameof(BO.CallType.Cleaning),
+    //        BO.CallType.Repairing => nameof(BO.CallType.Repairing),
+    //        BO.CallType.TechnologyHelp => nameof(BO.CallType.TechnologyHelp),
+    //        BO.CallType.Talking => nameof(BO.CallType.Talking),
+    //        _ => nameof(BO.CallType.Shopping)
+    //    };
+    //}
 
 
 

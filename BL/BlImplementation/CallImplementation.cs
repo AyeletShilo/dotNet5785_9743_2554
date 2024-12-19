@@ -1,10 +1,15 @@
 ﻿using BlApi;
+using BO;
+using DalApi;
+using DO;
 using Helpers;
+using System.Globalization;
+using System.Linq;
 
 
 namespace BlImplementation;
 
-internal class CallImplementation : ICall
+internal class CallImplementation : BlApi.ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
     public void CallToTreatment(int id, int callId)
@@ -16,9 +21,9 @@ internal class CallImplementation : ICall
         if (assignments.Count() != 0)
             throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists");
         if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
-            _dal.Assignment.Create(new(0, callId, id, ClockManager.Now, null, null)); //איך אני מביאה את המספר מזהה רץ? תשובה: זה מחשב לבד ביצירה של הקצאה, לכן אפשר לשים סתם int.
+            _dal.Assignment.Create(new(0, callId, id, ClockManager.Now, null, null));
         else
-            throw new BO.BlCantHandleItException($"Unable to assign"); //מה הולך פה עם החריגות? מה זה החריגה הזאת?
+            throw new BO.BlCantHandleItException($"Unable to assign"); 
     }
 
     /// <summary>
@@ -27,7 +32,7 @@ internal class CallImplementation : ICall
     /// <param name="callToAdd"></param>
     public void Create(BO.Call callToAdd)
     {
-        DO.Call doCall = CallManager.CheckLogic(callToAdd); //זורק חריגה
+        DO.Call doCall = CallManager.CheckLogic(callToAdd); 
         _dal.Call.Create(doCall);
     }
 
@@ -38,19 +43,19 @@ internal class CallImplementation : ICall
     /// <exception cref="BO.CannotBeDeletedException"></exception>
     /// <exception cref="BO.BlDoesNotExisException"></exception>
     /// <exception cref="BO.BLCannotBeDeletedException"></exception>
-    public void Delete(int callId) //לבדוק את החריגות
+    public void Delete(int callId) 
     {
         try
         {
-            BO.Call toDelete = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist"); // אם לא קיים כזה ID לאן תזרק החריגה?
-            if ((toDelete.Status == BO.CallStatus.Opened || toDelete.Status==BO.CallStatus.OpenInRisk) && toDelete.CallAssignments is null)
+            BO.Call toDelete = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist"); 
+            if ((toDelete.Status == BO.CallStatus.Opened || toDelete.Status == BO.CallStatus.OpenInRisk) && toDelete.CallAssignments is null)
             {
                 _dal.Call.Delete(callId);
                 return;
             }
             throw new BO.BlCannotBeDeletedException($"Call with ID={callId} cannot be deleted");
         }
-        catch (DO.DalDoesNotExistException ex) //חריגה ממתודת מחיקה של DO
+        catch (DO.DalDoesNotExistException ex)
         {
             throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist", ex);
         }
@@ -102,24 +107,25 @@ internal class CallImplementation : ICall
         #endregion
         IEnumerable<DO.Assignment> assignmentForVol = _dal.Assignment.ReadAll(a => a.VolunteerId == volId);
         IEnumerable<BO.ClosedCallInList> closeCalls = from assin in assignmentForVol
-                                                     let tmpCall = Read(assin.CallId)
-                                                     where tmpCall.Status == BO.CallStatus.Closed
-                                                     let callAssin = tmpCall.CallAssignments.LastOrDefault()
-                                                     select CallManager.ToCloseCall(tmpCall, callAssin);
-        if (filter != null)
-        {
-            string filterProperty = CallManager.GetPropertyName(filter.Value);
-            closeCalls = closeCalls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(filter) ?? false);
-        }
-        if (sort != null)
-        {
-            string sortProperty = sort.Value.ToString();
-            //string sortProperty = CallManager.GetPropertyName(sort.Value);
-            closeCalls = closeCalls.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
-            return closeCalls;
-        }
-        else
-            return closeCalls.OrderBy(c => c.Id);
+                                                      let tmpCall = Read(assin.CallId)
+                                                      where tmpCall.Status == BO.CallStatus.Closed
+                                                      let callAssin = tmpCall.CallAssignments.LastOrDefault()
+                                                      select CallManager.ToCloseCall(tmpCall, callAssin);
+        
+        closeCalls = null == filter ? closeCalls : closeCalls.Where(call => (BO.CallType)filter == call.CallType);
+
+        closeCalls = null == sort ? closeCalls.OrderBy(c => c.Id)
+            : closeCalls.OrderBy<BO.ClosedCallInList, object>(call => (sort switch
+            {
+                BO.CloseCallData.Id => call.Id,
+                BO.CloseCallData.CallType => call.CallType,
+                BO.CloseCallData.CallAddress => call.FullAddress,
+                BO.CloseCallData.InterTime => call.InterTime,
+                BO.CloseCallData.OpenTime => call.OpenTime,
+                BO.CloseCallData.CloseTime => call.CloseTime,
+                BO.CloseCallData.EndTreatment => call.EndTreatment,
+            }));
+        return closeCalls;
     }
 
     /// <summary>
@@ -131,54 +137,48 @@ internal class CallImplementation : ICall
     /// <returns></returns>
     public IEnumerable<BO.OpenCallInList> GetOpenedCalls(int volId, BO.CallType? filter = null, BO.OpenCallData? sort = null)
     {
-        #region draft
-        //List<BO.OpenCallInList>? calls = new List<BO.OpenCallInList>(); //להחליף את הפור איצ?
-        //foreach (DO.Call item in oldCalls) //להחליף פור איצ
-        //{
-        //    if (Read(item.Id).Status == BO.CallStatus.OpenInRisk || Read(item.Id).Status == BO.CallStatus.Opened)
-        //    {
-        //        BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.LastOrDefault();
-        //        if (CallAssignment != null)
-        //           calls.Add(CallManager.ToOpenCall(item, CallAssignment));
-        //    }
-        //}
-
-
-        //IEnumerable<BO.OpenCallInList> ? openCalls = calls.Select(c => c);
-        #endregion
-
         IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
         var openCalls = from item in oldCalls
                         let tmpCall = Read(item.Id)
                         where tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened
                         select CallManager.ToOpenCall(item, volId);
 
-        if (filter != null)
-        {
-            string filterProperty = CallManager.GetPropertyName(filter.Value);
-            openCalls = openCalls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(filter) ?? false);
-        }
-        if (sort != null)
-        {
-            string sortProperty = CallManager.GetPropertyName(sort.Value);
-            openCalls = openCalls.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
-            return openCalls;
-        }
-        else
-            return openCalls.OrderBy(c => c.Id);
+        
+        openCalls = null == filter ? openCalls : openCalls.Where(call => (BO.CallType)filter == call.CallType);
+
+        openCalls = null == sort ? openCalls.OrderBy(c => c.Id)
+            : openCalls.OrderBy<BO.OpenCallInList, object>(call => (sort switch
+            {
+                BO.OpenCallData.Id => call.Id,
+                BO.OpenCallData.CallType => call.CallType,
+                BO.OpenCallData.Description => call.Description,
+                BO.OpenCallData.CallAddress => call.FullAddress,
+                BO.OpenCallData.OpenTime => call.OpenTime,
+                BO.OpenCallData.MaxCloseTime => call.MaxCloseTime,
+                BO.OpenCallData.VolDistance => call.VolDistance,
+            }));
+        return openCalls;
+
     }
 
-    #region HowManyCalls
+    /// <summary>
+    /// Returns an array of quantities according to the call status.
+    /// </summary>
+    /// <returns>array of quantities </returns>
     public int[] HowManyCalls()
     {
-        IEnumerable<BO.CallInList> calls = ReadAll(); //?? throw new BO.BlDoesNotExistException("The requested call does not exist."); לא צריך את זה
-        int[] counts = (from item in calls
-                        group item by item.Status into groupedCalls
-                        orderby groupedCalls.Key
-                        select groupedCalls.Count()).ToArray();
-        return counts;
+        IEnumerable<BO.CallInList> calls = ReadAll();
+        var groupedCalls = from item in calls
+                           group item by item.Status into g
+                           select new { Status = (int)g.Key, Count = g.Count() };//calls.GroupBy(call => call.Status).Select(g => new { Status = (int)g.Key, Count = g.Count() });
+        int[] statusCounts = new int[6];
+        foreach (var group in groupedCalls)
+        {
+            statusCounts[group.Status] = group.Count;
+        }
+        return statusCounts;
     }
-    #endregion
+
 
     /// <summary>
     /// Requests the data layer (Read) to obtain details about the read and its list of assignments (if any)
@@ -220,34 +220,67 @@ internal class CallImplementation : ICall
             Longitude = doCall.Longitude,
             OpenTime = doCall.OpenTime,
             MaxCloseTime = doCall.MaxTime,
-            Status = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime): BO.CallStatus.Opened, //הNULL מנוהל
+            Status = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime) : BO.CallStatus.Opened, //הNULL מנוהל
             CallAssignments = callAssignments
 
         };
     }
 
+    /// <summary>
+    /// Returns a list of calls filtered and sorted according to the parameters received.
+    /// </summary>
+    /// <param name="filter">Parameter for filtering the list</param>
+    /// <param name="sort">Parameter for sorting the list</param>
+    /// <param name="value">Value for filtering the list</param>
+    /// <returns></returns>
     public IEnumerable<BO.CallInList> ReadAll(BO.CallData? filter = null, BO.CallData? sort = null, object? value = null)
     {
         IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
         IEnumerable<DO.Assignment> oldAssignment = _dal.Assignment.ReadAll(null);
         IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(oldCalls, oldAssignment);
 
-        if (filter != null)
-        {
-            string filterProperty = CallManager.GetPropertyName(filter.Value);
-            calls = calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(value) ?? false);
-        }
-        if (sort != null)
-        {
-            string sortProperty = CallManager.GetPropertyName(sort.Value);
-            calls = calls.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
-            return calls;
-        }
-        else
-            return calls.OrderBy(c => c.CallId);
+        //if (filter != null)
+        //{
+        //    string filterProperty = CallManager.GetPropertyName(filter.Value);
+        //    calls = calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(value) ?? false).ToList(); //?///
+        //}
+        calls = null == filter ? calls
+                            : calls.Where(call => filter switch
+                            {
+                                BO.CallData.Id => (int)value == call.Id,
+                                BO.CallData.CallId => (int)value == call.CallId,
+                                BO.CallData.CallType => (BO.CallType)value == call.CallType,
+                                BO.CallData.OpenTime => (DateTime)value == call.OpenTime,
+                                BO.CallData.LeftTime => (TimeSpan)value == call.LeftTime,
+                                BO.CallData.LastVolunteer => value.ToString() == call.LastVolunteer,
+                                BO.CallData.CompletionTime => (TimeSpan)value == call.CompletionTime,
+                                BO.CallData.Status => (BO.CallListStatus)value  == call.Status,
+                                BO.CallData.TotalAssignments => (int)value == call.TotalAssignments,
+                                _ => true
+                            });
 
+        //string sortProperty = CallManager.GetPropertyName(sort.Value);
+        calls = null == sort ? calls.OrderBy(c => c.CallId)
+            : calls.OrderBy<BO.CallInList, object> (call => (sort switch
+            {
+                BO.CallData.Id => call.Id,
+                BO.CallData.CallId => call.CallId,
+                BO.CallData.CallType => call.CallType,
+                BO.CallData.OpenTime => call.OpenTime,
+                BO.CallData.LeftTime => call.LeftTime,
+                BO.CallData.LastVolunteer => call.LastVolunteer,
+                BO.CallData.CompletionTime => call.CompletionTime,
+                BO.CallData.Status => call.Status,
+                BO.CallData.TotalAssignments => call.TotalAssignments,
+            }));
+        return calls;
     }
 
+    /// <summary>
+    /// Updating an existing call
+    /// </summary>
+    /// <param name="callToUpdate">Updated values ​​of the call</param>
+    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the call you want to update does not exist in the database.</exception>
     public void Update(BO.Call callToUpdate)
     {
         try
@@ -261,6 +294,13 @@ internal class CallImplementation : ICall
         }
     }
 
+    /// <summary>
+    /// Unassigns a call in database
+    /// </summary>
+    /// <param name="volId">The volunteer who wants to update the call</param>
+    /// <param name="assignmentId">The allocation number of the requested call</param>
+    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the call you want to update does not exist in the database.</exception>
+    /// <exception cref="BO.BlCantUpdateException">Throws an exception when the call you want to update is not updatable.</exception>
     public void UpdateCancelTreatment(int volId, int assignmentId)
     {
         try
@@ -291,6 +331,13 @@ internal class CallImplementation : ICall
         }
     }
 
+    /// <summary>
+    /// Updates the assignment of a call to closed status
+    /// </summary>
+    /// <param name="volId">The volunteer who wants to update the call</param>
+    /// <param name="assignmentId">The allocation number of the requested call</param>
+    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the call you want to update does not exist in the database</exception>
+    /// <exception cref="BO.BlCantUpdateException">Throws an exception when the call you want to update is not updatable</exception>
     public void UpdateEndTreatment(int volId, int assignmentId)
     {
         try

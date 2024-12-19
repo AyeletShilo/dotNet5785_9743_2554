@@ -6,22 +6,26 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
-
+    /// <summary>
+    /// Creates a new volunteer in the database
+    /// </summary>
+    /// <param name="boVolunteer">Values ​​for new call</param>
+    /// <exception cref="BO.BlDoesAlreadyExistException">Throws an exception when the call you want to create already exists in the database.</exception>
     public void Create(BO.Volunteer boVolunteer)
     {
         try
         {
-            VolunteerManager.CheckFormat(boVolunteer); //חריגה נזרקת
-            VolunteerManager.CheckLogic(boVolunteer); //חריגה נזרקת
+            VolunteerManager.CheckFormat(boVolunteer); 
+            VolunteerManager.CheckLogic(boVolunteer); 
 
-            double[] AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address); //לסדר חריגות
+            double[] AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address); 
 
             DO.Volunteer doVolunteer =
               new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
               boVolunteer.Address, AddressCoordinate[0], AddressCoordinate[1], boVolunteer.MaxDis);
 
 
-            _dal.Volunteer.Create(doVolunteer); //חריגה תזרק משכבת הנתונים
+            _dal.Volunteer.Create(doVolunteer); 
         }
         catch (DO.DalAlreadyExistException ex)
         {
@@ -33,15 +37,21 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         }
     }
 
+    /// <summary>
+    /// Delete volunteer from database
+    /// </summary>
+    /// <param name="id">The ID number of the volunteer how want to delete</param>
+    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the call you want to delete does not exist in the database</exception>
+    /// <exception cref="BO.BlCannotBeDeletedException">An exception is thrown when the volunteer cannot be deleted.</exception>
     public void Delete(int id)
     {
-        var idVolunteer = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); //חריגה של NULL או של איבר שלא קיים? והאם זה ימנע מDELETET לשלוח חריגה?
+        var idVolunteer = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); 
         try
         {
             if (idVolunteer.HandleCalls != 0 || idVolunteer.InCall != null)
-                throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id}cannot be deleted"); //החריגה תזרק לשכבה מעל
+                throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id}cannot be deleted"); 
 
-            _dal.Volunteer.Delete(id); //חריגה תזרק משכבת הנתונים
+            _dal.Volunteer.Delete(id); 
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -49,12 +59,24 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         }
     }
 
+    /// <summary>
+    /// returns volunteer gob accordding his Id
+    /// </summary>
+    /// <param name="id">volunteer Id</param>
+    /// <returns>volunteer gob</returns>
+    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the volunteer you want does not exist in the database</exception>
     public BO.Role GetMyJob(int id)
     {
         BO.Volunteer result = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist");
         return result.Job;
     }
 
+    /// <summary>
+    /// Return call values ​​from the database 
+    /// </summary>
+    /// <param name="id">call ID</param>
+    /// <returns>call values ​​from the database </returns>
+    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the volunteer you want does not exist in the database</exception>
     public BO.Volunteer? Read(int id)
     {
         DO.Volunteer doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist");
@@ -80,6 +102,12 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         };
     }
 
+    /// <summary>
+    /// Returns a list of volunteers filtered and sorted according to the parameters received.
+    /// </summary>
+    /// <param name="isActive">Parameter for filtering the list</param>
+    /// <param name="sort">Parameter for sorting the list</param>
+    /// <returns>list of volunteers</returns>
     public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerData? sort = null)
     {
         IEnumerable<DO.Volunteer> OldVolunteer = _dal.Volunteer.ReadAll(null);
@@ -102,13 +130,19 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         }
     }
 
-
+    /// <summary>
+    /// Updating an existing volunteer
+    /// </summary>
+    /// <param name="id">volunteer Id</param>
+    /// <param name="volToUpdate">Updated values ​​of the volunteer</param>
+    /// <exception cref="BO.BlCantUpdateException">Throws an exception when the vilunteer how want to update not allowed to do this </exception>
+    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the vilunteer you want to update does not exist in the database</exception>
     public void Update(int id, BO.Volunteer volToUpdate)
     {
-        BO.Volunteer isManager = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); //חריגה לשכבה מעל
+        //BO.Volunteer isManager = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); //חריגה לשכבה מעל
         try
         {
-            if (id == volToUpdate.Id || isManager.Job == BO.Role.Manager)
+            if (id == volToUpdate.Id || GetMyJob(id) == BO.Role.Manager)
             {
                 VolunteerManager.CheckFormat(volToUpdate); //תיזרק חריגה
                 VolunteerManager.CheckLogic(volToUpdate); //תיזרק חריגה
@@ -116,7 +150,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address); //לסדר חריגות
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
-                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && isManager.Job != BO.Role.Manager)
+                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id) != BO.Role.Manager)
                     throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 
                 DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,

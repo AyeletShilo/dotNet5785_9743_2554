@@ -11,7 +11,7 @@ internal class Program
     enum choiceMain { exit, call, volunteer, admin };
 
     enum CallChoice { exit, create, update, delete, getClosedCalls, getOpenedCalls, read, readAll, howManyCalls, callToTreatment, updateCancelTreatment, updateEndTreatment, allCloseCalls };
-    enum VolunteerChoice { exit, readAll, read, update, delete, create};
+    enum VolunteerChoice { exit, readAll, read, update, delete, create,ReturnJob};
     enum AdminChoice { exit, readClock, updateClock, readRiskRange, updateRiskRange, reset, initialization };
     private static void Main(string[] args)
     {
@@ -183,9 +183,9 @@ Press 0 to exit"
                             Console.WriteLine(call + "\n");
                         break;
                     case CallChoice.howManyCalls:
-                        var Callsamount = s_bl.Call.HowManyCalls();
+                        var CallsAmount = s_bl.Call.HowManyCalls();
                         int counter = 0;
-                        foreach (var item in Callsamount)
+                        foreach (var item in CallsAmount)
                             Console.WriteLine($"{(BO.CallStatus)counter++}: {item}");
                         break;
                     case CallChoice.callToTreatment:
@@ -334,6 +334,7 @@ Press 2 to print an existing volunteers,
 Press 3 to update an existing volunteers,
 Press 4 to delete an existing volunteers,
 Press 5 to create new volunteers,
+Press 6 to return volunteer job,
 Press 0 to exit"
         );
             string inputV = Console.ReadLine();
@@ -425,6 +426,11 @@ Press 0 to exit"
                         {
                             Console.WriteLine("BO.BlIntegrityOfValuesException: \n" + ex2);
                         }
+                        break;
+                    case VolunteerChoice.ReturnJob:
+                        Console.WriteLine("ID for volunteer: ");
+                        int VolId= int.Parse(Console.ReadLine()!);
+                        Console.WriteLine(s_bl.Volunteer.GetMyJob(VolId));
                         break;
                     default:
                         stopV = true;
@@ -556,7 +562,7 @@ Press 0 to exit"
 
     private static object? ParseObject(string objectSort)
     {
-        
+
         object? objectCallsSort = null;
         if (int.TryParse(objectSort, out int intResult))
         {
@@ -565,10 +571,6 @@ Press 0 to exit"
         else if (double.TryParse(objectSort, out double doubleResult))
         {
             objectCallsSort = doubleResult;
-        }
-        else if (!string.IsNullOrWhiteSpace(objectSort))
-        {
-            objectCallsSort = objectSort;
         }
         else if (DateTime.TryParse(objectSort, out DateTime dateTimeResult))
         {

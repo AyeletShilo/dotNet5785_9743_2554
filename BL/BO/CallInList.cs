@@ -10,7 +10,7 @@ public class CallInList
     public CallType CallType { get; set; }
     public DateTime OpenTime { get; set; }
     public TimeSpan? LeftTime { get; set; }
-    public required string? LastVolunteer { get; set; }
+    public string? LastVolunteer { get; set; }
     public TimeSpan? CompletionTime { get; set; }
     public CallListStatus Status { get; set; }
     public int TotalAssignments { get; set; }

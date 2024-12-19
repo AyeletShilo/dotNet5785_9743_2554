@@ -9,6 +9,10 @@ internal class AdminImplementation : IAdmin
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
 
+    /// <summary>
+    /// Update the clock in one unit
+    /// </summary>
+    /// <param name="unit">unit to advance </param>
     public void ForwardClock(TimeUnit unit) =>
     ClockManager.UpdateClock(unit switch
     {
@@ -20,42 +24,46 @@ internal class AdminImplementation : IAdmin
         _=>ClockManager.Now
     });
 
-    //public void ForwardClock(TimeUnit unit)
-    //{
-    //    unit switch
-    //    {
-    //        TimeUnit.Minute => ClockManager.UpdateClock(ClockManager.Now.AddMinutes(1)),
-    //        TimeUnit.hour => ClockManager.UpdateClock(ClockManager.Now.AddHours(1)),
-    //        TimeUnit.day => ClockManager.UpdateClock(ClockManager.Now.AddDays(1)),
-    //        TimeUnit.month => ClockManager.UpdateClock(ClockManager.Now.AddMonths(1)),
-    //        TimeUnit.year => ClockManager.UpdateClock(ClockManager.Now.AddYears(1)),
-    //        _ => throw new NotInCurrentFormat(nameof(unit), $"Unsupported TimeUnit: {unit}")
-    //    };
-       
-    //}
-
+    /// <summary>
+    /// Return System clock
+    /// </summary>
+    /// <returns> System clock</returns>
     public DateTime GetClock()
     {
         return ClockManager.Now;
     }
 
+    /// <summary>
+    /// Return system risk range
+    /// </summary>
+    /// <returns>system risk range</returns>
     public TimeSpan GetMaxRange()
     {
         return _dal.Config.RiskRange;
     }
 
+    /// <summary>
+    /// Preform initiaizetion to data base
+    /// </summary>
     public void InitializeDB()
     {
         DalTest.Initialization.Do();
         ClockManager.UpdateClock(ClockManager.Now);
     }
 
+    /// <summary>
+    /// Reset data base
+    /// </summary>
     public void ResetDB()
     {
         _dal.ResetDB();
         ClockManager.UpdateClock(ClockManager.Now);
     }
 
+    /// <summary>
+    /// Update system risk range
+    /// </summary>
+    /// <param name="maxRange">new risk range</param>
     public void SetMaxRange(TimeSpan maxRange)
     {
         _dal.Config.RiskRange= maxRange;
