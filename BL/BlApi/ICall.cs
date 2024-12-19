@@ -6,9 +6,9 @@ public interface ICall
 {
     void Create(Call callToAdd);
     IEnumerable<CallInList> ReadAll(CallData? filter = null, CallData? sort = null, Object? value = null);
-    Call Read(int id);
+    Call Read(int callId);
     void Update(Call callToUpdate);
-    void Delete(int id);
+    void Delete(int callId);
     int[] HowManyCalls();
     IEnumerable<ClosedCallInList> GetClosedCalls(int volId, CallType? filter = null, CloseCallData? sort = null);
     IEnumerable<OpenCallInList> GetOpenedCalls(int volId, CallType? filter = null, OpenCallData? sort = null);

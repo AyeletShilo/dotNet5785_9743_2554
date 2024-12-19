@@ -11,27 +11,26 @@ internal static class CallManager
 {
     private static IDal s_dal = Factory.Get; //stage 4
 
-    internal static CallStatus MakeStatus(IEnumerable<DO.Assignment> dataAssignments, DateTime? MaxCloseTime)
+    internal static CallStatus MakeStatus(/*IEnumerable<DO.Assignment>*/ DO.Assignment dataAssignments, DateTime? MaxCloseTime)
     {
-        var endTreatment = from item in dataAssignments
-                           select item.EndTreatment;
-        var endTime = from item in dataAssignments
-                      select item.EndTime;
+        var endTreatment = dataAssignments/*.Last()*/.EndTreatment;
+            //from item in dataAssignments                           select item.EndTreatment;
+        DateTime? endTime = dataAssignments/*.Last()*/.EndTime;
+            //from item in dataAssignments                      select item.EndTime;
 
-        if (endTreatment.LastOrDefault() != DO.AssignmentEnum.TakenCare)
+        if (endTreatment/*.LastOrDefault()*/ != DO.AssignmentEnum.TakenCare) //לבדוק!!!
         {
             if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
                 return CallStatus.OpenInRisk;
-            else if (MaxCloseTime > ClockManager.Now  || MaxCloseTime is null)
+            else if (MaxCloseTime > ClockManager.Now)
                 return CallStatus.Opened;
         }
 
-        else if (endTime != null)
+        else if (endTime<= ClockManager.Now)
             return CallStatus.Closed;
 
-        else if (endTime.Last() < ClockManager.Now) //to vz
+        else if (endTime/*.Last()*/ < ClockManager.Now) //to vz
             return CallStatus.Expired;
-
         return CallStatus.InTreatment;
     }
 
@@ -159,20 +158,20 @@ internal static class CallManager
         };
     }
 
-    internal static string GetPropertyName(BO.CloseCallData sortOrFilter)
-    {
-        return sortOrFilter switch
-        {
-            BO.CloseCallData.Id => nameof(BO.CloseCallData.Id),
-            BO.CloseCallData.CallType => nameof(BO.CloseCallData.CallType),
-            BO.CloseCallData.CallAddress => nameof(BO.CloseCallData.CallAddress),
-            BO.CloseCallData.OpenTime => nameof(BO.CloseCallData.OpenTime),
-            BO.CloseCallData.InterTime => nameof(BO.CloseCallData.InterTime),
-            BO.CloseCallData.CloseTime => nameof(BO.CloseCallData.CloseTime),
-            BO.CloseCallData.EndTreatment => nameof(BO.CloseCallData.EndTreatment),
-            _ => nameof(BO.CloseCallData.Id)
-        };
-    }
+    //internal static string GetPropertyName(BO.CloseCallData sortOrFilter)
+    //{
+    //    return sortOrFilter switch
+    //    {
+    //        BO.CloseCallData.Id => nameof(BO.CloseCallData.Id),
+    //        BO.CloseCallData.CallType => nameof(BO.CloseCallData.CallType),
+    //        BO.CloseCallData.CallAddress => nameof(BO.CloseCallData.CallAddress),
+    //        BO.CloseCallData.OpenTime => nameof(BO.CloseCallData.OpenTime),
+    //        BO.CloseCallData.InterTime => nameof(BO.CloseCallData.InterTime),
+    //        BO.CloseCallData.CloseTime => nameof(BO.CloseCallData.CloseTime),
+    //        BO.CloseCallData.EndTreatment => nameof(BO.CloseCallData.EndTreatment),
+    //        _ => nameof(BO.CloseCallData.Id)
+    //    };
+    //}
 
     internal static string GetPropertyName(BO.OpenCallData sortOrFilter)
     {
@@ -267,26 +266,25 @@ internal static class CallManager
     }
 
     
-    internal static BO.ClosedCallInList ToCloseCall(DO.Call item, BO.CallAssignInList CallAssignment)
+    internal static BO.ClosedCallInList ToCloseCall(BO.Call item, BO.CallAssignInList callAssignment)
     {
-
         return new()
         {
             Id = item.Id,
             CallType = (BO.CallType)item.CallType,
             FullAddress = item.CallAddress,
             OpenTime = item.OpenTime,
-            InterTime = CallAssignment.InterTime,
-            CloseTime = CallAssignment.EndTime,
-            EndTreatment = (BO.EndTreatment)CallAssignment.EndTreatment
+            InterTime = callAssignment.InterTime,
+            CloseTime = callAssignment.EndTime,
+            EndTreatment = (BO.EndTreatment)callAssignment.EndTreatment
         };
     }
 
-    internal static BO.OpenCallInList ToOpenCall(DO.Call item, BO.CallAssignInList CallAssignment)
+    internal static BO.OpenCallInList ToOpenCall(DO.Call item, int volId /*BO.CallAssignInList callAssignment*/)
     {
-        Func<DO.Volunteer, bool> predicate = volunteer => volunteer.Id == CallAssignment.VolunteerId;
-        //DO.Volunteer vol= s_dal.Volunteer.Read(predicate)??throw new BO. //מה המתודה עושה???
-        string volAddress = s_dal.Volunteer.Read(predicate).VolAddress;
+        //Func<DO.Volunteer, bool> predicate = volunteer => volunteer.Id == callAssignment.VolunteerId;
+        ////DO.Volunteer vol= s_dal.Volunteer.Read(predicate)??throw new BO. //מה המתודה עושה???
+        string volAddress = s_dal.Volunteer.Read(v=> v.Id==volId).VolAddress; //לטפל אם זה NULL
         return new()
         {
             Id = item.Id,
@@ -296,6 +294,7 @@ internal static class CallManager
             OpenTime = item.OpenTime,
             MaxCloseTime = item.MaxTime,
             VolDistance = VolunteerManager.CalculateDis(volAddress, item.CallAddress)
+           
 
         };
     }

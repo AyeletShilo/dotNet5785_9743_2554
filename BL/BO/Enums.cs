@@ -45,12 +45,13 @@ public enum CallInTreatment
 public enum EndTreatment
 
 {
-    None,
     TakenCare,
     SelfCancel,
     CancelAdmin,
-    CancelExpired
+    CancelExpired,
+    None
 }
+
 public enum CallStatus
 {
     Opened,

@@ -55,15 +55,14 @@ Press 0 to exit"
 Press 1 to create new Call,
 Press 2 to update an existing Call,
 Press 3 to delete an existing Call,
-Ptess 4 to print closed calls,
+Press 4 to print closed calls,
 Press 5 to print opened calls,
 Press 6 to print existing call,
 Press 7 to print all calls,
 Press 8 to print calls amounts,
 Press 9 to choose a call for treatment,
-press 10 to update call to canceld call,
+press 10 to update call to cancel call,
 Press 11 to update call to closed call,
-Press 12 to all close calls,
 Press 0 to exit"
         );
             string inputB = Console.ReadLine();
@@ -184,12 +183,8 @@ Press 0 to exit"
                             Console.WriteLine(call + "\n");
                         break;
                     case CallChoice.howManyCalls:
-                        var callsAmount = s_bl.Call.HowManyCalls();
-                        int counter = 0;
-                        foreach (int item in callsAmount)
-                        {
-                            Console.WriteLine($"{(BO.CallListStatus)counter++}: {item}");
-                        }
+                        //IEnumerable<IGrouping<int open,int inTreatment,int closed,int expired,int openInRisk>> howMany
+                           
                         break;
                     case CallChoice.callToTreatment:
                         try
@@ -247,21 +242,6 @@ Press 0 to exit"
                             Console.WriteLine("BO.BlDoesNotExistException \n" + ex2);
                         }
                         break;
-                    case CallChoice.allCloseCalls:
-                        try
-                        {
-                            for (int i = 0; i <= 48; i++)
-                            {
-                                IEnumerable<BO.ClosedCallInList> allClosedCall = s_bl.Call.GetClosedCalls(i, null, null);
-                                foreach (BO.ClosedCallInList call in allClosedCall)
-                                    Console.WriteLine(call + "\n");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                        break ;
                     default:
                         stopC = true;
                         break;
