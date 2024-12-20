@@ -15,29 +15,15 @@ internal static class VolunteerManager
     /// <exception cref="BO.BlIntegrityOfValuesException">Throws an exception if there is a problem with the format of one of the values.</exception>
     internal static void CheckFormat(BO.Volunteer volToCheck)
     {
-
-        //bool isEmail = checkEmail(volToCheck.Email);
         bool? isEmail = checkEmail(volToCheck.Email) ?? throw new BO.BlIntegrityOfValuesException("Error in email format");
-
-        //bool PhoneIisNum = int.TryParse(volToCheck.PhoneNumber, out int number);
         if (!int.TryParse(volToCheck.PhoneNumber, out int number))
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
-
-        //bool PhoneIsCorrect = volToCheck.PhoneNumber.Length == 10 && volToCheck.PhoneNumber[0] == '0' && volToCheck.PhoneNumber[1] == '5';
         if (volToCheck.PhoneNumber.Length != 9 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
-
-        //bool isDis = volToCheck.MaxDis > 0 || volToCheck.MaxDis == null;
         if (volToCheck.MaxDis < 0/* || volToCheck.MaxDis == null*/)
             throw new BO.BlIntegrityOfValuesException("Error in Max Distance format");
-
-        // bool isId = volToCheck.Id > 9999999 && volToCheck.Id < 1000000000;
         if (volToCheck.Id < 10000000 || volToCheck.Id > 999999999)
             throw new BO.BlIntegrityOfValuesException("Error in ID format");
-
-        //if (/*isEmail == false ||*/ PhoneIisNum == false || PhoneIsCorrect == false /*|| isDis == false || isId == false*/)
-        //    throw new BO.BlIntegrityOfValuesException("Error in value format");
-
     }
 
     /// <summary>

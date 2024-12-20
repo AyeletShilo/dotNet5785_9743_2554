@@ -49,7 +49,6 @@ public enum EndTreatment
     SelfCancel,
     CancelAdmin,
     CancelExpired,
-    None
 }
 
 public enum CallStatus

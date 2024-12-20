@@ -1,7 +1,6 @@
-﻿
+﻿using BlImplementation;
 using BO;
 using DalApi;
-using DO;
 using System.Net;
 using System.Text.Json;
 
@@ -10,6 +9,7 @@ namespace Helpers;
 internal static class CallManager
 {
     private static IDal s_dal = Factory.Get; //stage 4
+    private static readonly BlApi.ICall callImplementation = new CallImplementation();
 
     /// <summary>
     /// Computes and returns call status
@@ -19,13 +19,13 @@ internal static class CallManager
     /// <returns>call status</returns>
     internal static CallStatus MakeStatus(DO.Assignment dataAssignments, DateTime? MaxCloseTime)
     {
-        var endTreatment = dataAssignments.EndTreatment;                          
+        var endTreatment = dataAssignments.EndTreatment;
         DateTime? endTime = dataAssignments.EndTime;
 
-        if (endTreatment == DO.AssignmentEnum.CancelExpired) 
+        if (endTreatment == DO.AssignmentEnum.CancelExpired)
             return CallStatus.Expired;
 
-        else if (endTime != null && endTreatment != DO.AssignmentEnum.CancelAdmin && endTreatment != DO.AssignmentEnum.SelfCancel) 
+        else if (endTime != null && endTreatment != DO.AssignmentEnum.CancelAdmin && endTreatment != DO.AssignmentEnum.SelfCancel)
             return CallStatus.Closed;
 
         if (endTreatment == null && dataAssignments != null)
@@ -33,7 +33,7 @@ internal static class CallManager
 
         if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
             return CallStatus.OpenInRisk;
- 
+
         return CallStatus.Opened;
     }
 
@@ -45,7 +45,7 @@ internal static class CallManager
     /// <returns>call status</returns>
     internal static CallListStatus MakeStatus(DO.Assignment currentAssignment, DO.Call currentCall)
     {
-        
+
         if (currentAssignment.EndTreatment == null && currentAssignment != null)
         {
             if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
@@ -58,7 +58,7 @@ internal static class CallManager
     /// <summary>
     /// Checks whether the call values ​​are logically correct
     /// </summary>
-    /// <param name="toCheck">cakk to check</param>
+    /// <param name="toCheck">call to check</param>
     /// <returns>the corresponding call values ​​for the database</returns>
     /// <exception cref="BO.BlIntegrityOfValuesException">Throws an exception if one of the values ​​is logically incorrect</exception>
     internal static DO.Call CheckLogic(BO.Call toCheck)
@@ -76,14 +76,13 @@ internal static class CallManager
         return DoCall;
     }
 
-
     /// <summary>
     /// This method takes an address as input and returns an array with the latitude and longitude.
     /// The request is synchronous, meaning it waits for the response before continuing.
     /// </summary>
     /// <param name="address">The address to be geocoded</param>
     /// <returns>A double array containing the latitude and longitude</returns>
-    public static double[] GetCoordinates(string address)
+    internal static double[] GetCoordinates(string address)
     {
         // Checking if the address is null or empty
         if (string.IsNullOrWhiteSpace(address))
@@ -119,7 +118,7 @@ internal static class CallManager
                 // Returning the latitude and longitude as an array
                 return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
             }
-           
+
         }
     }
 
@@ -134,7 +133,6 @@ internal static class CallManager
         public string Lon { get; set; }
     }
 
-
     /// <summary>
     /// Converts a list of calls from the database to the data entity form-Call in list
     /// </summary>
@@ -142,18 +140,19 @@ internal static class CallManager
     /// <param name="oldAssignment">list of all the assignment from database</param>
     /// <returns>List of Call in list</returns>
     /// <exception cref="BO.BlNullPropertyException">Thrown exception when  there is assignment for call without volunteer<</exception>
-    /// <exception cref="BO.BlXMLFileLoadCreateException">Thrown exception when there is problemto load the xml file</exception>
+    /// <exception cref="BO.BlXMLFileLoadCreateException">Thrown exception when there is problem to load the xml file</exception>
     internal static IEnumerable<BO.CallInList> ToCallInList(IEnumerable<DO.Call> oldCalls, IEnumerable<DO.Assignment> oldAssignment)
     {
         try
         {
             IEnumerable<DO.Volunteer> oldVolunteer = s_dal.Volunteer.ReadAll(null); //can throw Ex
             List<BO.CallInList>? callInLists = new List<BO.CallInList>();
+            //var callInLists = oldCalls.Select(item =>
             foreach (DO.Call item in oldCalls)
             {
-                DO.Assignment? CallAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
+                DO.Assignment? callAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
 
-                if (CallAssignment is null)
+                if (callAssignment is null)
                 {
                     callInLists.Add(new()
                     {
@@ -161,7 +160,7 @@ internal static class CallManager
                         CallId = item.Id,
                         CallType = (BO.CallType)item.CallType,
                         OpenTime = item.OpenTime,
-                        LeftTime = (TimeSpan)(item.MaxTime - ClockManager.Now),
+                        LeftTime = (TimeSpan)(item.MaxTime - ClockManager.Now) != null ? (TimeSpan)(item.MaxTime - ClockManager.Now) : null,
                         LastVolunteer = null,
                         CompletionTime = null,
                         Status = BO.CallListStatus.Opened,
@@ -171,17 +170,17 @@ internal static class CallManager
 
                 else
                 {
-                    DO.Volunteer? first = oldVolunteer.FirstOrDefault(v => v.Id == CallAssignment.VolunteerId) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value.");
+                    DO.Volunteer? first = oldVolunteer.FirstOrDefault(v => v.Id == callAssignment.VolunteerId) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value.");
                     callInLists.Add(new()
                     {
-                        Id = CallAssignment.Id,
+                        Id = callAssignment.Id,
                         CallId = item.Id,
                         CallType = (BO.CallType)item.CallType,
                         OpenTime = item.OpenTime,
                         LeftTime = item.MaxTime - ClockManager.Now,
                         LastVolunteer = first.FullName,
-                        CompletionTime = (CallAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? (CallAssignment.EndTime - item.OpenTime) : null,
-                        Status = MakeStatus(CallAssignment, item),
+                        CompletionTime = (callAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? (callAssignment.EndTime - item.OpenTime) : null,
+                        Status = MakeStatus(callAssignment, item),
                         TotalAssignments = oldAssignment.Count(a => a.CallId == item.Id)
                     });
                 }
@@ -198,7 +197,7 @@ internal static class CallManager
     /// Converts a call from the database to the data entity form-close call in list
     /// </summary>
     /// <param name="item">The call to convert</param>
-    /// <param name="callAssignment">The assigment of the call</param>
+    /// <param name="callAssignment">The assignment of the call</param>
     /// <returns>close call in list</returns>
     internal static BO.ClosedCallInList ToCloseCall(BO.Call item, BO.CallAssignInList callAssignment)
     {
@@ -222,7 +221,7 @@ internal static class CallManager
     /// <returns> open call in list</returns>
     internal static BO.OpenCallInList ToOpenCall(DO.Call item, int volId)
     {
-        string volAddress = s_dal.Volunteer.Read(v => v.Id == volId).VolAddress; 
+        string volAddress = s_dal.Volunteer.Read(v => v.Id == volId).VolAddress;
         return new()
         {
             Id = item.Id,
@@ -233,5 +232,45 @@ internal static class CallManager
             MaxCloseTime = item.MaxTime,
             VolDistance = VolunteerManager.CalculateDis(volAddress, item.CallAddress)
         };
+    }
+
+    /// <summary>
+    /// Goes through all calls whose maximum completion time has passed and whose 
+    /// processing has not yet finished - and closes them with a completion type of "Expired":
+    /// </summary>
+    /// <param name="newClock">the time of the update</param>
+    internal static void updateExpiredCalls(DateTime newClock)
+    {
+        var calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock);
+        Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
+        IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate);
+
+        if (callsToUp.Any())
+        {
+            foreach (var call in callsToUp)
+            {
+                if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
+                {
+                    s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
+                    #region Are we need to update BO.Call??
+                    //call.CallAssignments.Add(new BO.CallAssignInList
+                    //{
+                    //    VolunteerId = 0,
+                    //    VolunteerName = null,
+                    //    InterTime = newClock,
+                    //    EndTime = newClock,
+                    //    EndTreatment = EndTreatment.CancelExpired
+                    //});
+                    #endregion
+                }
+                else//if(call.CallAssignments.Last().EndTime==null)
+                {
+                    DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Control Null
+                    s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
+                    //call.CallAssignments.Last().EndTime = newClock;
+                    //call.CallAssignments.Last().EndTreatment = EndTreatment.CancelExpired;
+                }
+            }
+        }
     }
 }

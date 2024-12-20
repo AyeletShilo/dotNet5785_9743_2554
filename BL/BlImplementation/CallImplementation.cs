@@ -93,7 +93,7 @@ internal class CallImplementation : BlApi.ICall
             closeCalls = null == filter ? closeCalls : closeCalls.Where(call => (BO.CallType)filter == call.CallType);
 
             closeCalls = null == sort ? closeCalls.OrderBy(c => c.Id)
-                : closeCalls.OrderBy<BO.ClosedCallInList, object>(call => (sort switch
+                : closeCalls.OrderBy<BO.ClosedCallInList, object>(call => sort switch
                 {
                     BO.CloseCallData.Id => call.Id,
                     BO.CloseCallData.CallType => call.CallType,
@@ -102,7 +102,7 @@ internal class CallImplementation : BlApi.ICall
                     BO.CloseCallData.OpenTime => call.OpenTime,
                     BO.CloseCallData.CloseTime => call.CloseTime,
                     BO.CloseCallData.EndTreatment => call.EndTreatment,
-                }));
+                });
             return closeCalls;
         }
         catch (DO.DalXMLFileLoadCreateException ex)
@@ -120,6 +120,7 @@ internal class CallImplementation : BlApi.ICall
     /// <returns></returns>
     public IEnumerable<BO.OpenCallInList> GetOpenedCalls(int volId, BO.CallType? filter = null, BO.OpenCallData? sort = null)
     {
+        var vol= _dal.Volunteer.Read(volId)?? throw new BO.BlDoesNotExistException($"There is no volunteer with ID:{volId}");
         IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
         var openCalls = from item in oldCalls
                         let tmpCall = Read(item.Id)
@@ -127,7 +128,9 @@ internal class CallImplementation : BlApi.ICall
                         select CallManager.ToOpenCall(item, volId); //can throw Ex
 
 
-        openCalls = null == filter ? openCalls : openCalls.Where(call => (BO.CallType)filter == call.CallType);
+        openCalls = null == filter ? openCalls : from call in openCalls
+                                                 where (BO.CallType)filter == call.CallType
+                                                 select call;
 
         openCalls = null == sort ? openCalls.OrderBy(c => c.Id)
             : openCalls.OrderBy<BO.OpenCallInList, object>(call => (sort switch
@@ -156,10 +159,11 @@ internal class CallImplementation : BlApi.ICall
                            select new { Status = (int)g.Key, Count = g.Count() };
 
         int[] statusCounts = new int[6];
-        foreach (var group in groupedCalls)
-        {
-            statusCounts[group.Status] = group.Count;
-        }
+        groupedCalls.Select(g => statusCounts[g.Status] = g.Count);
+        //foreach (var group in groupedCalls)
+        //{
+        //    statusCounts[group.Status] = group.Count;
+        //}
         return statusCounts;
     }
 
@@ -183,17 +187,15 @@ internal class CallImplementation : BlApi.ICall
             callAssignments = dataAssignments.Select(assign => new BO.CallAssignInList
             {
                 VolunteerId = assign.VolunteerId,
-                VolunteerName = _dal.Volunteer.Read(assign.VolunteerId).FullName ?? throw new BO.BlNullPropertyException("volunteer?"),
+                VolunteerName = (assign.VolunteerId != 0) ? _dal.Volunteer.Read(assign.VolunteerId).FullName : null,
                 InterTime = assign.InterTime,
                 EndTime = assign.EndTime.HasValue ? assign.EndTime : null,
-                EndTreatment = assign.EndTreatment.HasValue ? (BO.EndTreatment)assign.EndTreatment :null, /*BO.EndTreatment.None,*/
+                EndTreatment = assign.EndTreatment.HasValue ? (BO.EndTreatment)assign.EndTreatment : null, /*BO.EndTreatment.None,*/
 
             }).ToList();
         }
 
-        //foreach (var assign in callAssignments)
-        //{ Console.WriteLine(assign.VolunteerId + " " + assign.VolunteerName + " " + assign.EndTime + " " + assign.EndTreatment); }
-        //DO.Assignment? LastAssignment = dataAssignments is null ?  : null;
+        var myStatus = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime) : BO.CallStatus.Opened;//הNULL מנוהל
         return new()
         {
             Id = callId,
@@ -206,7 +208,6 @@ internal class CallImplementation : BlApi.ICall
             MaxCloseTime = doCall.MaxTime,
             Status = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime) : BO.CallStatus.Opened, //הNULL מנוהל
             CallAssignments = callAssignments
-
         };
     }
 

@@ -1,5 +1,6 @@
 ﻿using BlImplementation;
 using BO;
+using DO;
 namespace Helpers;
 
 /// <summary>
@@ -28,18 +29,10 @@ internal static class ClockManager //stage 4
 
     private static void updateClock(DateTime newClock) // prepared for stage 7 as DRY to eliminate needless repetition
     {
+
         var oldClock = _dal.Config.Clock; //stage 4
         _dal.Config.Clock = newClock; //stage 4
-
-        //TO_DO:
-        //Add calls here to any logic method that should be called periodically,
-        //after each clock update
-        //for example, Periodic students' updates:
-        //Go through all students to update properties that are affected by the clock update
-        //(students becomes not active after 5 years etc.)
-        
-        //StudentManager.PeriodicStudentsUpdates(oldClock, newClock); //stage 4
-        //etc ...
+        CallManager.updateExpiredCalls(newClock);
 
         //Calling all the observers of clock update
         ClockUpdatedObservers?.Invoke(); //prepared for stage 5

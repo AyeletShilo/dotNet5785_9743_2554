@@ -36,10 +36,13 @@ public static class Initialization
                 if (v != null && (v.EndTreatment == null || v.EndTreatment == AssignmentEnum.CancelExpired || v.EndTreatment == AssignmentEnum.TakenCare))// אם קיימת הקצאה פתוחה, דילוג על יצירת הקצאה נוספת עבור הקריאה הנוכחית
                     continue;
                 if (i == 4)
+                {
                     if (s_rand.NextDouble() < 0.99)
                         continue;
-                    else if (s_rand.NextDouble() < (0.95 / i))
-                        continue;
+                }
+
+                else if (s_rand.NextDouble() < (0.95 / i))
+                    continue;
 
                 var callId = call.Id;
                 Volunteer volunteer = volunteersList[s_rand.Next(volunteersList.Count)];

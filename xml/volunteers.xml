@@ -1,75 +1,75 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteers>
   <Volunteer>
-    <Id>362344087</Id>
+    <Id>274321405</Id>
     <FullName>Amit Nakesh</FullName>
-    <PhoneNumber>0506850748</PhoneNumber>
+    <PhoneNumber>0509364404</PhoneNumber>
     <Email>amit234@walla.co.il</Email>
     <Job>Manager</Job>
     <Active>false</Active>
-    <Distance>Car</Distance>
+    <Distance>Air</Distance>
     <VolAddress>Ha-Narkis 3,Jerusalem, Israel</VolAddress>
     <Latitude>31.7771</Latitude>
     <Longitude>35.2255</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>327103339</Id>
+    <Id>282305020</Id>
     <FullName>Nir Kuda</FullName>
-    <PhoneNumber>0582477985</PhoneNumber>
-    <Email>nirkush@g.jct.ac.il</Email>
+    <PhoneNumber>0501039870</PhoneNumber>
+    <Email>nirkush@gmail.com</Email>
     <Job>Donater</Job>
-    <Active>true</Active>
-    <Distance>Walking</Distance>
+    <Active>false</Active>
+    <Distance>Air</Distance>
     <VolAddress>Jaffa 210,Jerusalem, Israel</VolAddress>
     <Latitude>31.7814</Latitude>
     <Longitude>35.2277</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>243326782</Id>
+    <Id>237419338</Id>
     <FullName>Beni Mus</FullName>
-    <PhoneNumber>0536040394</PhoneNumber>
-    <Email>cbh@gmail.com</Email>
-    <Job>Donater</Job>
+    <PhoneNumber>0538101646</PhoneNumber>
+    <Email>cbh@walla.co.il</Email>
+    <Job>Manager</Job>
     <Active>false</Active>
-    <Distance>Air</Distance>
+    <Distance>Walking</Distance>
     <VolAddress>Brazil 101,Jerusalem, Israel</VolAddress>
     <Latitude>31.7859</Latitude>
     <Longitude>35.209</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>303105647</Id>
+    <Id>248650410</Id>
     <FullName>Beti Bam</FullName>
-    <PhoneNumber>0587891398</PhoneNumber>
+    <PhoneNumber>0582445445</PhoneNumber>
     <Email>bamb@g.jct.ac.il</Email>
-    <Job>Donater</Job>
-    <Active>false</Active>
-    <Distance>Air</Distance>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Car</Distance>
     <VolAddress>Nechama 32,Jerusalem, Israel</VolAddress>
     <Latitude>31.779</Latitude>
     <Longitude>35.2201</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>312781933</Id>
+    <Id>294036082</Id>
     <FullName>Avi Ron</FullName>
-    <PhoneNumber>0583485799</PhoneNumber>
-    <Email>54avi@gmail.com</Email>
+    <PhoneNumber>0583816352</PhoneNumber>
+    <Email>54avi@walla.co.il</Email>
     <Job>Donater</Job>
-    <Active>false</Active>
-    <Distance>Air</Distance>
+    <Active>true</Active>
+    <Distance>Car</Distance>
     <VolAddress>Bayit Va-Gan 46,Jerusalem, Israel</VolAddress>
     <Latitude>31.7798</Latitude>
     <Longitude>35.228</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>278993522</Id>
+    <Id>258804822</Id>
     <FullName>Gila Zahav</FullName>
-    <PhoneNumber>0538189048</PhoneNumber>
-    <Email>gila43@walla.co.il</Email>
+    <PhoneNumber>0532353099</PhoneNumber>
+    <Email>gila43@gmail.com</Email>
     <Job>Donater</Job>
     <Active>false</Active>
     <Distance>Car</Distance>
@@ -79,11 +79,11 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>231036492</Id>
+    <Id>348543364</Id>
     <FullName>Ram Kol</FullName>
-    <PhoneNumber>0533814259</PhoneNumber>
+    <PhoneNumber>0529063784</PhoneNumber>
     <Email>rkol@gmail.com</Email>
-    <Job>Manager</Job>
+    <Job>Donater</Job>
     <Active>true</Active>
     <Distance>Car</Distance>
     <VolAddress>Bar-Lev 119,Jerusalem, Israel</VolAddress>
@@ -92,36 +92,36 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>274964873</Id>
+    <Id>230771677</Id>
     <FullName>Chani Chaim</FullName>
-    <PhoneNumber>0529926550</PhoneNumber>
+    <PhoneNumber>0581918970</PhoneNumber>
     <Email>chch@gmail.com</Email>
     <Job>Manager</Job>
     <Active>false</Active>
-    <Distance>Air</Distance>
+    <Distance>Car</Distance>
     <VolAddress>Najara 19,Jerusalem, Israel</VolAddress>
     <Latitude>31.7633</Latitude>
     <Longitude>35.2083</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>248918666</Id>
+    <Id>368857546</Id>
     <FullName>Poli Din</FullName>
-    <PhoneNumber>0581594092</PhoneNumber>
-    <Email>poli@gmail.com</Email>
-    <Job>Manager</Job>
+    <PhoneNumber>0503672876</PhoneNumber>
+    <Email>poli@walla.co.il</Email>
+    <Job>Donater</Job>
     <Active>true</Active>
-    <Distance>Walking</Distance>
+    <Distance>Car</Distance>
     <VolAddress>Agron 5,Jerusalem, Israel</VolAddress>
     <Latitude>31.7808</Latitude>
     <Longitude>35.2139</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>283252658</Id>
+    <Id>342684271</Id>
     <FullName>Maya Gido</FullName>
-    <PhoneNumber>0581798041</PhoneNumber>
-    <Email>mgido@gmail.com</Email>
+    <PhoneNumber>0539139764</PhoneNumber>
+    <Email>mgido@walla.co.il</Email>
     <Job>Donater</Job>
     <Active>false</Active>
     <Distance>Air</Distance>
@@ -131,12 +131,12 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>258351667</Id>
+    <Id>391733912</Id>
     <FullName>Ori Gami</FullName>
-    <PhoneNumber>0509888680</PhoneNumber>
-    <Email>ogami@g.jct.ac.il</Email>
-    <Job>Manager</Job>
-    <Active>false</Active>
+    <PhoneNumber>0585844550</PhoneNumber>
+    <Email>ogami@gmail.com</Email>
+    <Job>Donater</Job>
+    <Active>true</Active>
     <Distance>Walking</Distance>
     <VolAddress>Iben-Ezra 27,Jerusalem, Israel</VolAddress>
     <Latitude>31.7727</Latitude>
@@ -144,25 +144,25 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>372831149</Id>
+    <Id>306350323</Id>
     <FullName>Dina Barzily</FullName>
-    <PhoneNumber>0532861615</PhoneNumber>
-    <Email>barzilay@gmail.com</Email>
+    <PhoneNumber>0525417317</PhoneNumber>
+    <Email>barzilay@walla.co.il</Email>
     <Job>Manager</Job>
-    <Active>false</Active>
-    <Distance>Car</Distance>
+    <Active>true</Active>
+    <Distance>Air</Distance>
     <VolAddress>Rivka 118,Jerusalem, Israel</VolAddress>
     <Latitude>31.7731</Latitude>
     <Longitude>35.2123</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>256664772</Id>
+    <Id>340908995</Id>
     <FullName>Moise Simon</FullName>
-    <PhoneNumber>0531340422</PhoneNumber>
+    <PhoneNumber>0582552233</PhoneNumber>
     <Email>Simoni98@walla.co.il</Email>
     <Job>Manager</Job>
-    <Active>true</Active>
+    <Active>false</Active>
     <Distance>Car</Distance>
     <VolAddress>Daniel 41,Jerusalem, Israel</VolAddress>
     <Latitude>31.7756</Latitude>
@@ -170,10 +170,10 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>348061888</Id>
+    <Id>217622505</Id>
     <FullName>Ran Amitz</FullName>
-    <PhoneNumber>0523328958</PhoneNumber>
-    <Email>rAmitz@g.jct.ac.il</Email>
+    <PhoneNumber>0581727216</PhoneNumber>
+    <Email>rAmitz@gmail.com</Email>
     <Job>Manager</Job>
     <Active>false</Active>
     <Distance>Walking</Distance>
@@ -183,25 +183,25 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>332291459</Id>
+    <Id>309115566</Id>
     <FullName>Nurit Lady</FullName>
-    <PhoneNumber>0524936502</PhoneNumber>
-    <Email>perach@gmail.com</Email>
-    <Job>Manager</Job>
+    <PhoneNumber>0537614761</PhoneNumber>
+    <Email>perach@walla.co.il</Email>
+    <Job>Donater</Job>
     <Active>false</Active>
-    <Distance>Walking</Distance>
+    <Distance>Car</Distance>
     <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
     <Latitude>31.765</Latitude>
     <Longitude>35.2143</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>298695198</Id>
+    <Id>392177234</Id>
     <FullName>Jonathan Shapira</FullName>
-    <PhoneNumber>0582779126</PhoneNumber>
-    <Email>jShapira@g.jct.ac.il</Email>
-    <Job>Donater</Job>
-    <Active>true</Active>
+    <PhoneNumber>0589507528</PhoneNumber>
+    <Email>jShapira@walla.co.il</Email>
+    <Job>Manager</Job>
+    <Active>false</Active>
     <Distance>Car</Distance>
     <VolAddress>Shmuel Hanavi 20, Jerusalem, Israel</VolAddress>
     <Latitude>31.8017</Latitude>
