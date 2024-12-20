@@ -8,7 +8,11 @@ internal static class VolunteerManager
 {
     private static IDal s_dal = Factory.Get; //stage 4
 
-
+    /// <summary>
+    /// Checks that all values ​​are correctly formatted.
+    /// </summary>
+    /// <param name="volToCheck">The volunteer whose values ​​are being tested</param>
+    /// <exception cref="BO.BlIntegrityOfValuesException">Throws an exception if there is a problem with the format of one of the values.</exception>
     internal static void CheckFormat(BO.Volunteer volToCheck)
     {
 
@@ -36,6 +40,11 @@ internal static class VolunteerManager
 
     }
 
+    /// <summary>
+    /// Check that the email address received is correct
+    /// </summary>
+    /// <param name="email">The email address received</param>
+    /// <returns>A boolean variable that evaluates to true when the email is correct.</returns>
     private static bool? checkEmail(string email)
     {
         if (email.Contains("@gmail.com") == false && email.Contains("@walla.co.il") == false && email.Contains("@g.jct.ac.il") == false)
@@ -48,17 +57,12 @@ internal static class VolunteerManager
         return true;
     }
 
-    //private static bool checkEmail(string email)
-    //{
-    //    if (email.Contains("@gmail.com") == false && email.Contains("@walla.co.il") == false && email.Contains("@g.jct.ac.il") == false)
-    //        return false;
-    //    if (email[0] == '.' || email[email.Length - 1] == '.')
-    //        return false;
-    //    if (email.Contains("..") == true || email.Contains(" ") == true)
-    //        return false;
-    //    return true;
-    //}
 
+    /// <summary>
+    /// Checking that the volunteer's values ​​are logically correct
+    /// </summary>
+    /// <param name="volToCheck">The volunteer whose values ​​are being tested</param>
+    /// <exception cref="BO.BlIntegrityOfValuesException">>Throws an exception if there is a problem with the logic of one of the values</exception>
     internal static void CheckLogic(BO.Volunteer volToCheck)
     {
         if (checkId(volToCheck.Id) == false)
@@ -67,6 +71,11 @@ internal static class VolunteerManager
             CallManager.GetCoordinates(volToCheck.Address);
     }
 
+    /// <summary>
+    /// Check that the ID received is correct
+    /// </summary>
+    /// <param name="id">id for checking</param>
+    /// <returns>A boolean variable that evaluates to true when the ID is correct.</returns>
     private static bool checkId(int id)
     {
         int sum = 0;
@@ -83,7 +92,13 @@ internal static class VolunteerManager
         return true;
     }
 
-
+    // <summary>
+    /// Gets a volunteer from the database and returns the call he handle.
+    /// </summary>
+    /// <param name="id"> volunteer id</param>
+    /// <param name="address">volunteer Address</param>
+    /// <returns>returns the call the volunteer handle</returns>
+    /// <exception cref="BO.BlNullPropertyException">Throws an exception when the  call does not exist </exception>
     internal static BO.CallInProgress? VolCall(int id, string address)
     {
         Func<DO.Assignment, bool> func = item => item.VolunteerId == id;
@@ -109,21 +124,11 @@ internal static class VolunteerManager
     }
 
 
-    internal static string GetPropertyName(BO.VolunteerData sortOrFilter)
-    {
-        return sortOrFilter switch
-        {
-            BO.VolunteerData.Id => nameof(BO.VolunteerInList.Id),
-            BO.VolunteerData.FullName => nameof(BO.VolunteerInList.PullName),
-            BO.VolunteerData.IsActive => nameof(BO.VolunteerInList.IsActive),
-            BO.VolunteerData.HandleCalls => nameof(BO.VolunteerInList.HandleCalls),
-            BO.VolunteerData.CancelCalls => nameof(BO.VolunteerInList.CancelCalls),
-            BO.VolunteerData.ExpiredCalls => nameof(BO.VolunteerInList.ExpiredCalls),
-            BO.VolunteerData.CallId => nameof(BO.VolunteerInList.CallId),
-            BO.VolunteerData.InTreatment => nameof(BO.VolunteerInList.InTreatment)
-        };
-    }
-
+    /// <summary>
+    /// Gets a volunteer from the database and returns it as a data entity of type volunteer in list
+    /// </summary>
+    /// <param name="OldVolunteer">volunteer from the database</param>
+    /// <returns> returns it as a data entity of type volunteer in list</returns>
     internal static IEnumerable<BO.VolunteerInList> ToVolunteerInList(IEnumerable<DO.Volunteer> OldVolunteer)
     {
         IEnumerable<DO.Assignment> oldAssignments = s_dal.Assignment.ReadAll(null);
@@ -145,6 +150,13 @@ internal static class VolunteerManager
         };
         return volunteerInLists.AsEnumerable();
     }
+
+    /// <summary>
+    /// Calculates the distance between the 2 given addresses
+    /// </summary>
+    /// <param name="volAddress"> volunteer address</param>
+    /// <param name="callAddress"> call addresss</param>
+    /// <returns></returns>
     public static double CalculateDis(string? volAddress, string callAddress)
     {
         if (volAddress is null || callAddress is null) return 0.0;

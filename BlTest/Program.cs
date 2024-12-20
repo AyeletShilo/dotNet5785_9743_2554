@@ -186,7 +186,7 @@ Press 0 to exit"
                         var CallsAmount = s_bl.Call.HowManyCalls();
                         int counter = 0;
                         foreach (var item in CallsAmount)
-                            Console.WriteLine($"{(BO.CallStatus)counter++}: {item}");
+                            Console.WriteLine($"{(BO.CallListStatus)counter++}: {item}");
                         break;
                     case CallChoice.callToTreatment:
                         try
@@ -560,6 +560,11 @@ Press 0 to exit"
         }
     }
 
+    /// <summary>
+    /// Metods to convert fron string to unknown type-object type
+    /// </summary>
+    /// <param name="objectSort">string to convert</param>
+    /// <returns>The right type<>/returns>
     private static object? ParseObject(string objectSort)
     {
 
@@ -580,19 +585,17 @@ Press 0 to exit"
         {
             try
             {
-                // נסה להמיר ל-Enum
                 objectCallsSort = Enum.Parse<BO.CallType>(objectSort, true);
             }
             catch (ArgumentException)
             {
                 try
                 {
-                    // נסה להמיר ל-Enum
                     objectCallsSort = Enum.Parse<BO.CallStatus>(objectSort, true);
                 }
                 catch (ArgumentException)
                 {
-                    objectCallsSort = objectSort; // שמירה כמחרוזת אם לא הצליח להמיר
+                    objectCallsSort = objectSort; 
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿namespace BlImplementation;
 using System.Collections.Generic;
+using System.Linq;
 using Helpers;
 
 internal class VolunteerImplementation : BlApi.IVolunteer
@@ -104,7 +105,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 HandleCalls = volAssignments.Count(a => a.EndTreatment == DO.AssignmentEnum.TakenCare),
                 CancelCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelAdmin || a.EndTreatment == DO.AssignmentEnum.SelfCancel)),
                 ExpiredCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelExpired)),
-                InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress) //הכתובת של המתנדב יכולה להיהות NULL??
+                InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress) 
             };
         }
         catch (DO.DalXMLFileLoadCreateException ex)
@@ -130,14 +131,20 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             {
                 volunteerInLists = volunteerInLists.Where(volunteer => volunteer.IsActive == isActive);
             }
-            if (sort == null)
-                return volunteerInLists.OrderBy(v => v.Id);
-            else
-            {
-                string sortProperty = VolunteerManager.GetPropertyName(sort.Value);
-                volunteerInLists = volunteerInLists.OrderBy(c => c.GetType().GetProperty(sortProperty)?.GetValue(c));
-                return volunteerInLists;
-            }
+            
+            volunteerInLists = null == sort ? volunteerInLists.OrderBy(v => v.Id)
+                : volunteerInLists.OrderBy<BO.VolunteerInList, object>(v=> (sort switch
+                {
+                    BO.VolunteerData.Id => v.Id,
+                    BO.VolunteerData.FullName => v.PullName,
+                    BO.VolunteerData.IsActive => v.IsActive,
+                    BO.VolunteerData.HandleCalls => v.HandleCalls,
+                    BO.VolunteerData.CancelCalls => v.CancelCalls,
+                    BO.VolunteerData.ExpiredCalls => v.ExpiredCalls,
+                    BO.VolunteerData.CallId => v.CallId,
+                    BO.VolunteerData.InTreatment => v.InTreatment,
+                }));
+            return volunteerInLists;
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -154,7 +161,6 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the vilunteer you want to update does not exist in the database</exception>
     public void Update(int id, BO.Volunteer volToUpdate)
     {
-        //BO.Volunteer isManager = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist"); //חריגה לשכבה מעל
         try
         {
             if (id == volToUpdate.Id || GetMyJob(id) == BO.Role.Manager)
@@ -162,7 +168,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
                 VolunteerManager.CheckLogic(volToUpdate); //can throw Ex
 
-                double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address); //לסדר חריגות
+                double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address); 
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
                 if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id) != BO.Role.Manager)

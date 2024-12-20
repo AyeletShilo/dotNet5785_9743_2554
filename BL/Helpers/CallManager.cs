@@ -11,51 +11,56 @@ internal static class CallManager
 {
     private static IDal s_dal = Factory.Get; //stage 4
 
-    internal static CallStatus MakeStatus(/*IEnumerable<DO.Assignment>*/ DO.Assignment dataAssignments, DateTime? MaxCloseTime)
+    /// <summary>
+    /// Computes and returns call status
+    /// </summary>
+    /// <param name="dataAssignments">current assignment of the call</param>
+    /// <param name="MaxCloseTime">Maximum call completion time</param>
+    /// <returns>call status</returns>
+    internal static CallStatus MakeStatus(DO.Assignment dataAssignments, DateTime? MaxCloseTime)
     {
-        var endTreatment = dataAssignments/*.Last()*/.EndTreatment;
-        //from item in dataAssignments                           select item.EndTreatment;
-        DateTime? endTime = dataAssignments/*.Last()*/.EndTime;
-        //from item in dataAssignments                      select item.EndTime;
+        var endTreatment = dataAssignments.EndTreatment;                          
+        DateTime? endTime = dataAssignments.EndTime;
 
-        if (endTreatment == DO.AssignmentEnum.CancelExpired) //to vz
+        if (endTreatment == DO.AssignmentEnum.CancelExpired) 
             return CallStatus.Expired;
 
-        else if (endTime != null/*<= ClockManager.Now*/) // לבדוק את התנאי של הסוף  זמן
+        else if (endTime != null && endTreatment != DO.AssignmentEnum.CancelAdmin && endTreatment != DO.AssignmentEnum.SelfCancel) 
             return CallStatus.Closed;
 
-        if (endTreatment/*.LastOrDefault()*/ == null && dataAssignments != null)
+        if (endTreatment == null && dataAssignments != null)
             return CallStatus.InTreatment;
 
         if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
             return CallStatus.OpenInRisk;
-        //else if (MaxCloseTime > ClockManager.Now || MaxCloseTime is null)
+ 
         return CallStatus.Opened;
     }
 
+    /// <summary>
+    /// Computes and returns call status for call in list
+    /// </summary>
+    /// <param name="currentAssignment">current assignment of the call</param>
+    /// <param name="currentCall">The call</param>
+    /// <returns>call status</returns>
     internal static CallListStatus MakeStatus(DO.Assignment currentAssignment, DO.Call currentCall)
     {
-        //if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.CancelExpired)
-        //    return CallListStatus.Expired;
-
-        if (currentAssignment.EndTreatment/*.LastOrDefault()*/ == null && currentAssignment != null)
+        
+        if (currentAssignment.EndTreatment == null && currentAssignment != null)
         {
             if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
                 return CallListStatus.InTreatmentInRisk;
             return CallListStatus.InTreatment;
         }
-
-        //if (CurrentAssignment.EndTreatment == DO.AssignmentEnum.CancelAdmin || CurrentAssignment.EndTreatment == DO.AssignmentEnum.SelfCancel)
-        //{
-        //    if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
-        //        return CallListStatus.OpenInRisk;
-        //    return CallListStatus.Opened;
-        //}
-
-        //return CallListStatus.Closed;
         return (BO.CallListStatus)MakeStatus(currentAssignment, currentCall.MaxTime);
     }
 
+    /// <summary>
+    /// Checks whether the call values ​​are logically correct
+    /// </summary>
+    /// <param name="toCheck">cakk to check</param>
+    /// <returns>the corresponding call values ​​for the database</returns>
+    /// <exception cref="BO.BlIntegrityOfValuesException">Throws an exception if one of the values ​​is logically incorrect</exception>
     internal static DO.Call CheckLogic(BO.Call toCheck)
     {
         bool currentMaxTime = (toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
@@ -78,7 +83,7 @@ internal static class CallManager
     /// </summary>
     /// <param name="address">The address to be geocoded</param>
     /// <returns>A double array containing the latitude and longitude</returns>
-    public static double[] GetCoordinates(string address)//לטפל בחריגות!!!!!
+    public static double[] GetCoordinates(string address)
     {
         // Checking if the address is null or empty
         if (string.IsNullOrWhiteSpace(address))
@@ -91,8 +96,6 @@ internal static class CallManager
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
         request.Method = "GET";
 
-        //try
-        //{
         // Sending the request and getting the response synchronously
         using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
         {
@@ -116,18 +119,8 @@ internal static class CallManager
                 // Returning the latitude and longitude as an array
                 return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
             }
-            //}
+           
         }
-        //catch (WebException ex)
-        //{
-        //    // Handling web exceptions (e.g., network issues)
-        //    throw new Exception("Error sending web request: " + ex.Message);
-        //}
-        //catch (Exception ex)
-        //{
-        //    // Handling general exceptions
-        //    throw new Exception("General error: " + ex.Message);
-        //}
     }
 
     /// <summary>
@@ -141,82 +134,15 @@ internal static class CallManager
         public string Lon { get; set; }
     }
 
-    //internal static string GetPropertyName(BO.CallData sortOrFilter)
-    //{
-    //    return sortOrFilter switch
-    //    {
-    //        BO.CallData.Id => nameof(BO.CallInList.Id),
-    //        //BO.CallData.CallId => nameof(BO.CallInList.CallId),
-    //        BO.CallData.CallType => nameof(BO.CallInList.CallType),
-    //        BO.CallData.OpenTime => nameof(BO.CallInList.OpenTime),
-    //        BO.CallData.LeftTime => nameof(BO.CallInList.LeftTime),
-    //        BO.CallData.LastVolunteer => nameof(BO.CallInList.LastVolunteer),
-    //        BO.CallData.CompletionTime => nameof(BO.CallInList.CompletionTime),
-    //        BO.CallData.Status => nameof(BO.CallInList.Status),
-    //        BO.CallData.TotalAssignments => nameof(BO.CallInList.TotalAssignments),
-    //        _ => nameof(BO.CallInList.Id)
-    //    };
-    //}
 
-    //internal static string GetPropertyName(BO.CloseCallData sortOrFilter)
-    //{
-    //    return sortOrFilter switch
-    //    {
-    //        BO.CloseCallData.Id => nameof(BO.CloseCallData.Id),
-    //        BO.CloseCallData.CallType => nameof(BO.CloseCallData.CallType),
-    //        BO.CloseCallData.CallAddress => nameof(BO.CloseCallData.CallAddress),
-    //        BO.CloseCallData.OpenTime => nameof(BO.CloseCallData.OpenTime),
-    //        BO.CloseCallData.InterTime => nameof(BO.CloseCallData.InterTime),
-    //        BO.CloseCallData.CloseTime => nameof(BO.CloseCallData.CloseTime),
-    //        BO.CloseCallData.EndTreatment => nameof(BO.CloseCallData.EndTreatment),
-    //        _ => nameof(BO.CloseCallData.Id)
-    //    };
-    //}
-
-    //internal static string GetPropertyName(BO.OpenCallData sortOrFilter)
-    //{
-    //    return sortOrFilter switch
-    //    {
-    //        BO.OpenCallData.Id => nameof(BO.OpenCallData.Id),
-    //        BO.OpenCallData.CallType => nameof(BO.OpenCallData.CallType),
-    //        BO.OpenCallData.Description => nameof(BO.OpenCallData.Description),
-    //        BO.OpenCallData.CallAddress => nameof(BO.OpenCallData.CallAddress),
-    //        BO.OpenCallData.OpenTime => nameof(BO.OpenCallData.OpenTime),
-    //        BO.OpenCallData.MaxCloseTime => nameof(BO.OpenCallData.MaxCloseTime),
-    //        BO.OpenCallData.VolDistance => nameof(BO.OpenCallData.VolDistance),
-    //        _ => nameof(BO.OpenCallData.Id)
-    //    };
-    //}
-
-    //internal static string GetPropertyName(BO.CallType sortOrFilter)
-    //{
-    //    return sortOrFilter switch
-    //    {
-    //        BO.CallType.Shopping => nameof(BO.CallType.Shopping),
-    //        BO.CallType.Cleaning => nameof(BO.CallType.Cleaning),
-    //        BO.CallType.Repairing => nameof(BO.CallType.Repairing),
-    //        BO.CallType.TechnologyHelp => nameof(BO.CallType.TechnologyHelp),
-    //        BO.CallType.Talking => nameof(BO.CallType.Talking),
-    //        _ => nameof(BO.CallType.Shopping)
-    //    };
-    //}
-
-
-
-    //internal static string GetPropertyName(BO.CallListStatus sortOrFilter)
-    //{
-    //    return sortOrFilter switch
-    //    {
-    //        BO.CallListStatus.Opened => nameof(BO.CallListStatus.Opened),
-    //        BO.CallListStatus.InTreatment => nameof(BO.CallListStatus.InTreatment),
-    //        BO.CallListStatus.Expired => nameof(BO.CallListStatus.Expired),
-    //        BO.CallListStatus.Closed => nameof(BO.CallListStatus.Closed),
-    //        BO.CallListStatus.OpenInRisk => nameof(BO.CallListStatus.OpenInRisk),
-    //        BO.CallListStatus.InTreatmentInRisk=> nameof(BO.CallListStatus.InTreatmentInRisk),
-    //        _=> nameof(BO.CallListStatus.Opened)
-    //    };
-    //}
-
+    /// <summary>
+    /// Converts a list of calls from the database to the data entity form-Call in list
+    /// </summary>
+    /// <param name="oldCalls"> A list of calls from the database</param>
+    /// <param name="oldAssignment">list of all the assignment from database</param>
+    /// <returns>List of Call in list</returns>
+    /// <exception cref="BO.BlNullPropertyException">Thrown exception when  there is assignment for call without volunteer<</exception>
+    /// <exception cref="BO.BlXMLFileLoadCreateException">Thrown exception when there is problemto load the xml file</exception>
     internal static IEnumerable<BO.CallInList> ToCallInList(IEnumerable<DO.Call> oldCalls, IEnumerable<DO.Assignment> oldAssignment)
     {
         try
@@ -268,6 +194,12 @@ internal static class CallManager
         }
     }
 
+    /// <summary>
+    /// Converts a call from the database to the data entity form-close call in list
+    /// </summary>
+    /// <param name="item">The call to convert</param>
+    /// <param name="callAssignment">The assigment of the call</param>
+    /// <returns>close call in list</returns>
     internal static BO.ClosedCallInList ToCloseCall(BO.Call item, BO.CallAssignInList callAssignment)
     {
         return new()
@@ -282,9 +214,15 @@ internal static class CallManager
         };
     }
 
-    internal static BO.OpenCallInList ToOpenCall(DO.Call item, int volId /*BO.CallAssignInList callAssignment*/)
+    /// <summary>
+    /// Converts a call from the database to the data entity form-open call in list
+    /// </summary>
+    /// <param name="item">The call to convert<</param>
+    /// <param name="volId">The volunteer to whom the call was assigned</param>
+    /// <returns> open call in list</returns>
+    internal static BO.OpenCallInList ToOpenCall(DO.Call item, int volId)
     {
-        string volAddress = s_dal.Volunteer.Read(v => v.Id == volId).VolAddress; //?? NULL
+        string volAddress = s_dal.Volunteer.Read(v => v.Id == volId).VolAddress; 
         return new()
         {
             Id = item.Id,

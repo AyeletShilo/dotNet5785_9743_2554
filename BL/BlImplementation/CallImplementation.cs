@@ -79,45 +79,10 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="filter">ENUM value of the call type by which the list will be filtered.</param>
     /// <param name="sort">ENUM value of a field in the ClosedCallList, by which the list is sorted</param>
     /// <returns></returns>
-    public IEnumerable<BO.ClosedCallInList> GetClosedCalls(int volId, BO.CallType? filter = null, BO.CloseCallData? sort = null) ///צריך לבדוק ולדאוג שמוציאים רק את הקריאות שמתאימות לתז של המתנדב
+    public IEnumerable<BO.ClosedCallInList> GetClosedCalls(int volId, BO.CallType? filter = null, BO.CloseCallData? sort = null)
     {
         try
         {
-            #region draft
-            //List<BO.ClosedCallInList>? calls = new List<BO.ClosedCallInList>();
-
-            //foreach (DO.Assignment assignment in assignmentForVol)
-            //{
-            //    var re = Read(assignment.CallId);
-            //    if (re.Status == BO.CallStatus.Closed)
-            //    {
-            //        BO.CallAssignInList callAssignment = re.CallAssignments.Last();
-            //        calls.Add(CallManager.ToCloseCall(_dal.Call.Read(c => c.Id == assignment.CallId), callAssignment));
-
-            //    }
-            //}
-
-            //IEnumerable<DO.Call> oldCalls =/* _dal.Call.*/ReadAll().Where(c=>c.Id==);
-            //List<BO.ClosedCallInList>? calls = new List<BO.ClosedCallInList>();
-            //foreach (DO.Call item in oldCalls)
-            //{
-            //    var statusToCheck = Read(item.Id).Status;
-            //    Console.WriteLine(statusToCheck); ///addition
-            //    if (statusToCheck/*Read(item.Id).Status*/ == BO.CallStatus.Closed)
-            //    {
-            //        BO.CallAssignInList CallAssignment = Read(item.Id).CallAssignments.Last();
-            //        calls.Add(CallManager.ToCloseCall(item, CallAssignment));
-            //    }
-            //}
-            //calls.AddRange(from item in OldCalls
-            //               let callDetails = Read(item.Id)
-            //               where callDetails.Status == BO.CallStatus.Closed && callDetails.CallAssignments?.Any() == true
-            //               let lastAssignment = callDetails.CallAssignments.Last()
-            //               select CallManager.ToCloseCall(item, lastAssignment)
-            //               );
-
-            //IEnumerable<BO.ClosedCallInList>? closeCall = calls.Select(c => c);
-            #endregion
             IEnumerable<DO.Assignment> assignmentForVol = _dal.Assignment.ReadAll(a => a.VolunteerId == volId);
             IEnumerable<BO.ClosedCallInList> closeCalls = from assin in assignmentForVol
                                                           let tmpCall = Read(assin.CallId)
@@ -221,7 +186,7 @@ internal class CallImplementation : BlApi.ICall
                 VolunteerName = _dal.Volunteer.Read(assign.VolunteerId).FullName ?? throw new BO.BlNullPropertyException("volunteer?"),
                 InterTime = assign.InterTime,
                 EndTime = assign.EndTime.HasValue ? assign.EndTime : null,
-                EndTreatment = /*(BO.EndTreatment)*/assign.EndTreatment.HasValue ? (BO.EndTreatment)assign.EndTreatment : BO.EndTreatment.None,
+                EndTreatment = assign.EndTreatment.HasValue ? (BO.EndTreatment)assign.EndTreatment :null, /*BO.EndTreatment.None,*/
 
             }).ToList();
         }
@@ -260,11 +225,6 @@ internal class CallImplementation : BlApi.ICall
             IEnumerable<DO.Assignment> oldAssignment = _dal.Assignment.ReadAll(null); //can throw Ex
             IEnumerable<BO.CallInList> calls = CallManager.ToCallInList(oldCalls, oldAssignment);
 
-            //if (filter != null)
-            //{
-            //    string filterProperty = CallManager.GetPropertyName(filter.Value);
-            //    calls = calls.Where(c => c.GetType().GetProperty(filterProperty)?.GetValue(c)?.Equals(value) ?? false).ToList(); //?///
-            //}
             calls = null == filter ? calls
                                 : calls.Where(call => filter switch
                                 {
@@ -280,7 +240,7 @@ internal class CallImplementation : BlApi.ICall
                                     _ => true
                                 });
 
-            //string sortProperty = CallManager.GetPropertyName(sort.Value);
+
             calls = null == sort ? calls.OrderBy(c => c.CallId)
                 : calls.OrderBy<BO.CallInList, object>(call => (sort switch
                 {
@@ -353,11 +313,11 @@ internal class CallImplementation : BlApi.ICall
                 _dal.Assignment.Update(UpdateAssignment); //can throw Ex
             }
             else
-                throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled"); 
+                throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled");
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"Assignment /*or Volunteer*/ with ID: {assignmentId} does not exists", ex); //מה לכתוב בחלק הראשון??
+            throw new BO.BlDoesNotExistException($"item with ID: {assignmentId} does not exists", ex); 
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -377,14 +337,14 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
-            if (volId == assignment.VolunteerId && assignment.EndTreatment is null) //more checks?
+            if (volId == assignment.VolunteerId && assignment.EndTreatment is null) 
             {
                 DO.Assignment UpdateAssignment = new(assignmentId, assignment.CallId, volId,
                     assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.TakenCare);
                 _dal.Assignment.Update(UpdateAssignment); //can throw Ex
             }
             else
-                throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed"); 
+                throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed");
         }
         catch (DO.DalDoesNotExistException ex)
         {
