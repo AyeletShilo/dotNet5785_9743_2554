@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using BO;
+using DalApi;
 using Helpers;
 using System.Data;
 
@@ -14,14 +15,14 @@ internal class AdminImplementation : IAdmin
     /// </summary>
     /// <param name="unit">unit to advance </param>
     public void ForwardClock(TimeUnit unit) =>
-    ClockManager.UpdateClock(unit switch
+    AdminManager.UpdateClock(unit switch
     {
-        TimeUnit.Minute => ClockManager.Now.AddMinutes(1),
-        TimeUnit.Hour => ClockManager.Now.AddHours(1),
-        TimeUnit.Day => ClockManager.Now.AddDays(1),
-        TimeUnit.Month => ClockManager.Now.AddMonths(1),
-        TimeUnit.Year => ClockManager.Now.AddYears(1),
-        _ => ClockManager.Now
+        TimeUnit.Minute => AdminManager.Now.AddMinutes(1),
+        TimeUnit.Hour => AdminManager.Now.AddHours(1),
+        TimeUnit.Day => AdminManager.Now.AddDays(1),
+        TimeUnit.Month => AdminManager.Now.AddMonths(1),
+        TimeUnit.Year => AdminManager.Now.AddYears(1),
+        _ => AdminManager.Now
     });
 
     /// <summary>
@@ -30,17 +31,14 @@ internal class AdminImplementation : IAdmin
     /// <returns> System clock</returns>
     public DateTime GetClock()
     {
-        return ClockManager.Now;
+        return AdminManager.Now;
     }
 
     /// <summary>
     /// Return system risk range
     /// </summary>
     /// <returns>system risk range</returns>
-    public TimeSpan GetMaxRange()
-    {
-        return _dal.Config.RiskRange;
-    }
+    public TimeSpan GetMaxRange() => AdminManager.MaxRange;
 
     /// <summary>
     /// Preform initialization to data base
@@ -50,7 +48,8 @@ internal class AdminImplementation : IAdmin
         try
         {
             DalTest.Initialization.Do();
-            ClockManager.UpdateClock(ClockManager.Now);
+            AdminManager.UpdateClock(AdminManager.Now);
+            AdminManager.MaxRange = AdminManager.MaxRange;
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -66,7 +65,8 @@ internal class AdminImplementation : IAdmin
         try
         {
             _dal.ResetDB();
-            ClockManager.UpdateClock(ClockManager.Now);
+            AdminManager.UpdateClock(AdminManager.Now);
+            AdminManager.MaxRange = AdminManager.MaxRange;
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -78,8 +78,17 @@ internal class AdminImplementation : IAdmin
     /// Update system risk range
     /// </summary>
     /// <param name="maxRange">new risk range</param>
-    public void SetMaxRange(TimeSpan maxRange)
-    {
-        _dal.Config.RiskRange = maxRange;
-    }
+    public void SetMaxRange(TimeSpan riskRange) => _dal.Config.RiskRange = riskRange;
+
+    #region Stage 5
+    public void AddClockObserver(Action clockObserver) =>
+            AdminManager.ClockUpdatedObservers += clockObserver;
+    public void RemoveClockObserver(Action clockObserver) =>
+            AdminManager.ClockUpdatedObservers -= clockObserver;
+    public void AddConfigObserver(Action configObserver) =>
+            AdminManager.ConfigUpdatedObservers += configObserver;
+    public void RemoveConfigObserver(Action configObserver) =>
+            AdminManager.ConfigUpdatedObservers -= configObserver;
+    #endregion Stage 5
+
 }

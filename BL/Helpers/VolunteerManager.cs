@@ -7,6 +7,7 @@ namespace Helpers;
 internal static class VolunteerManager
 {
     private static IDal s_dal = Factory.Get; //stage 4
+    internal static ObserverManager Observers = new(); //stage 5 
 
     /// <summary>
     /// Checks that all values ​​are correctly formatted.
@@ -103,7 +104,7 @@ internal static class VolunteerManager
                 MaxCloseTime = CurrentCall.MaxTime,
                 EntryTime = CurrentAss.InterTime,
                 VolDistance = VolunteerManager.CalculateDis(address, CurrentCall.CallAddress),
-                status = (CurrentCall.MaxTime is null || (CurrentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
+                status = (CurrentCall.MaxTime is null || (CurrentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
             };
         }
         return null;

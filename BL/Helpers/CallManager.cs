@@ -9,6 +9,7 @@ namespace Helpers;
 internal static class CallManager
 {
     private static IDal s_dal = Factory.Get; //stage 4
+    internal static ObserverManager Observers = new(); //stage 5 
     private static readonly BlApi.ICall callImplementation = new CallImplementation();
 
     /// <summary>
@@ -31,7 +32,7 @@ internal static class CallManager
         if (endTreatment == null && dataAssignments != null)
             return CallStatus.InTreatment;
 
-        if ((MaxCloseTime - ClockManager.Now) < s_dal.Config.RiskRange)
+        if ((MaxCloseTime - AdminManager.Now) < s_dal.Config.RiskRange)
             return CallStatus.OpenInRisk;
 
         return CallStatus.Opened;
@@ -48,7 +49,7 @@ internal static class CallManager
 
         if (currentAssignment.EndTreatment == null && currentAssignment != null)
         {
-            if ((currentCall.MaxTime - ClockManager.Now) < s_dal.Config.RiskRange)
+            if ((currentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange)
                 return CallListStatus.InTreatmentInRisk;
             return CallListStatus.InTreatment;
         }
@@ -63,7 +64,7 @@ internal static class CallManager
     /// <exception cref="BO.BlIntegrityOfValuesException">Throws an exception if one of the values ​​is logically incorrect</exception>
     internal static DO.Call CheckLogic(BO.Call toCheck)
     {
-        bool currentMaxTime = (toCheck.MaxCloseTime > ClockManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
+        bool currentMaxTime = (toCheck.MaxCloseTime > AdminManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
 
         if (currentMaxTime == false)
             throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
@@ -160,7 +161,7 @@ internal static class CallManager
                         CallId = item.Id,
                         CallType = (BO.CallType)item.CallType,
                         OpenTime = item.OpenTime,
-                        LeftTime = item.MaxTime != null ? (TimeSpan)(item.MaxTime - ClockManager.Now) : null,
+                        LeftTime = item.MaxTime != null ? (TimeSpan)(item.MaxTime - AdminManager.Now) : null,
                         LastVolunteer = null,
                         CompletionTime = null,
                         Status = BO.CallListStatus.Opened,
@@ -176,7 +177,7 @@ internal static class CallManager
                         CallId = item.Id,
                         CallType = (BO.CallType)item.CallType,
                         OpenTime = item.OpenTime,
-                        LeftTime = item.MaxTime - ClockManager.Now,
+                        LeftTime = item.MaxTime - AdminManager.Now,
                         LastVolunteer = null,
                         CompletionTime = (callAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? (callAssignment.EndTime - item.OpenTime) : null,
                         Status = MakeStatus(callAssignment, item),
@@ -238,9 +239,10 @@ internal static class CallManager
     /// processing has not yet finished - and closes them with a completion type of "Expired":
     /// </summary>
     /// <param name="newClock">the time of the update</param>
-    internal static void updateExpiredCalls(DateTime newClock)
+    internal static void UpdateExpiredCalls(DateTime oldClock, DateTime newClock)
     {
         var calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock);
+        bool assignUpdated = false;  //stage 5
         Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
         IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate);
 
@@ -250,6 +252,7 @@ internal static class CallManager
             {
                 if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
                 {
+                    assignUpdated = true; //stage 5
                     s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
                     #region Are we need to update BO.Call??
                     //call.CallAssignments.Add(new BO.CallAssignInList
@@ -264,12 +267,19 @@ internal static class CallManager
                 }
                 else//if(call.CallAssignments.Last().EndTime==null)
                 {
-                    DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Control Null
+                    assignUpdated = true;
+                    DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Controled Null
                     s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
+                    Observers.NotifyItemUpdated(assignToUp.Id); //stage 5
                     //call.CallAssignments.Last().EndTime = newClock;
                     //call.CallAssignments.Last().EndTreatment = EndTreatment.CancelExpired;
                 }
             }
         }
+
+        bool timeChanged = oldClock != newClock; //stage 5
+        if (timeChanged || assignUpdated)
+            Observers.NotifyListUpdated(); //stage 5
     }
+
 }

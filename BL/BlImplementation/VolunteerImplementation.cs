@@ -1,4 +1,6 @@
 ﻿namespace BlImplementation;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Helpers;
@@ -27,6 +29,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
 
             _dal.Volunteer.Create(doVolunteer); //can throw Ex
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
         }
         catch (DO.DalAlreadyExistException ex)
         {
@@ -53,6 +56,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id}cannot be deleted");
 
             _dal.Volunteer.Delete(id); //can throw Ex
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -178,6 +182,9 @@ internal class VolunteerImplementation : BlApi.IVolunteer
              volToUpdate.Address, AddressCordinate[0], AddressCordinate[1], volToUpdate.MaxDis);
 
                 _dal.Volunteer.Update(doVolunteer);//can throw Ex
+                VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);  //stage 5
+                VolunteerManager.Observers.NotifyListUpdated();  //stage 5
+
             }
 
             else
@@ -193,4 +200,16 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
     }
+
+    #region Stage 5
+    public void AddObserver(Action listObserver) =>
+    VolunteerManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+    VolunteerManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+    VolunteerManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+    VolunteerManager.Observers.RemoveObserver(id, observer); //stage 5
+    #endregion Stage 5
+
 }

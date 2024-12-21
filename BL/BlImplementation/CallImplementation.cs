@@ -31,7 +31,10 @@ internal class CallImplementation : BlApi.ICall
         if (assignments.Count() != 0)
             throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists");
         if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
-            _dal.Assignment.Create(new(0, callId, volId, ClockManager.Now, null, null));
+        {
+            _dal.Assignment.Create(new(0, callId, volId, AdminManager.Now, null, null));
+            CallManager.Observers.NotifyListUpdated(); //stage 5
+        }
         else
             throw new BO.BlCantHandleItException($"Unable to assign");
     }
@@ -46,6 +49,8 @@ internal class CallImplementation : BlApi.ICall
         {
             DO.Call doCall = CallManager.CheckLogic(callToAdd); //can throw Ex
             _dal.Call.Create(doCall); //can throw Ex
+            CallManager.Observers.NotifyListUpdated();  //stage 5
+
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -68,6 +73,7 @@ internal class CallImplementation : BlApi.ICall
             if ((toDelete.Status == BO.CallStatus.Opened || toDelete.Status == BO.CallStatus.OpenInRisk) && toDelete.CallAssignments is null)
             {
                 _dal.Call.Delete(callId); //can throw Ex
+                CallManager.Observers.NotifyListUpdated();  //stage 5
                 return;
             }
             throw new BO.BlCannotBeDeletedException($"Call with ID={callId} cannot be deleted");
@@ -286,6 +292,8 @@ internal class CallImplementation : BlApi.ICall
         {
             DO.Call doCall = CallManager.CheckLogic(callToUpdate); //can throw Ex
             _dal.Call.Update(doCall); //can throw Ex
+            CallManager.Observers.NotifyItemUpdated(doCall.Id);  //stage 5
+            CallManager.Observers.NotifyListUpdated();  //stage 5
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -312,18 +320,20 @@ internal class CallImplementation : BlApi.ICall
             DO.Volunteer volunteer = _dal.Volunteer.Read(volId) ?? throw new BO.BlDoesNotExistException($"volunteer with ID={volId} does not exists");
             if ((volId == assignment.VolunteerId || volunteer.Job == DO.Role.Manager) && assignment.EndTime is null)
             {
-                DO.Assignment UpdateAssignment;
+                DO.Assignment updateAssignment;
                 if (volId == assignment.VolunteerId)
                 {
-                    UpdateAssignment = new(assignmentId, assignment.CallId, volId,
-                        assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.SelfCancel);
+                    updateAssignment = new(assignmentId, assignment.CallId, volId,
+                        assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.SelfCancel);
                 }
                 else
                 {
-                    UpdateAssignment = new(assignmentId, assignment.CallId, volId,
-                       assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.CancelAdmin);
+                    updateAssignment = new(assignmentId, assignment.CallId, volId,
+                       assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.CancelAdmin);
                 }
-                _dal.Assignment.Update(UpdateAssignment); //can throw Ex
+                _dal.Assignment.Update(updateAssignment); //can throw Ex
+                CallManager.Observers.NotifyItemUpdated(updateAssignment.Id);  //stage 5
+                CallManager.Observers.NotifyListUpdated();  //stage 5
             }
             else
                 throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled");
@@ -352,9 +362,11 @@ internal class CallImplementation : BlApi.ICall
             DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
             if (volId == assignment.VolunteerId && assignment.EndTreatment is null)
             {
-                DO.Assignment UpdateAssignment = new(assignmentId, assignment.CallId, volId,
-                    assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.TakenCare);
-                _dal.Assignment.Update(UpdateAssignment); //can throw Ex
+                DO.Assignment updateAssignment = new(assignmentId, assignment.CallId, volId,
+                    assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.TakenCare);
+                _dal.Assignment.Update(updateAssignment); //can throw Ex
+                CallManager.Observers.NotifyItemUpdated(updateAssignment.Id);  //stage 5
+                CallManager.Observers.NotifyListUpdated();  //stage 5
             }
             else
                 throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed");
@@ -368,4 +380,16 @@ internal class CallImplementation : BlApi.ICall
             throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
     }
+
+    #region Stage 5
+    public void AddObserver(Action listObserver) =>
+    CallManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+    CallManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+    CallManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+    CallManager.Observers.RemoveObserver(id, observer); //stage 5
+    #endregion Stage 5
+
 }

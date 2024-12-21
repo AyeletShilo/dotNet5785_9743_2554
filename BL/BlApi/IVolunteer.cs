@@ -2,7 +2,7 @@
 
 namespace BlApi;
 
-public interface IVolunteer
+public interface IVolunteer : IObservable //stage 5
 {
     void Create(Volunteer boVolunteer);
     IEnumerable<VolunteerInList> ReadAll(bool? isActive = null, VolunteerData? sort = null);

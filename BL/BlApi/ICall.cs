@@ -2,7 +2,7 @@
 
 namespace BlApi;
 
-public interface ICall
+public interface ICall : IObservable //stage 5
 {
     void Create(Call callToAdd);
     IEnumerable<CallInList> ReadAll(CallData? filter = null, CallData? sort = null, Object? value = null);
