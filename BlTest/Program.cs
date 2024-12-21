@@ -197,10 +197,10 @@ Press 0 to exit"
                     case CallChoice.callToTreatment:
                         try
                         {
-                            Console.WriteLine("ID for call treatment:\n");
-                            int CallId = int.Parse(Console.ReadLine()!);
-                            Console.WriteLine("ID for volunteer:\n");
+                            Console.WriteLine("ID for volunteer:");
                             int VolId = int.Parse(Console.ReadLine()!);
+                            Console.WriteLine("ID for call treatment:");
+                            int CallId = int.Parse(Console.ReadLine()!);
                             s_bl.Call.CallToTreatment(VolId, CallId);
                         }
                         catch (BO.BlDoesAlreadyExistException ex1)
@@ -215,9 +215,9 @@ Press 0 to exit"
                     case CallChoice.updateCancelTreatment:
                         try
                         {
-                            Console.WriteLine("ID for call assignment:\n");
+                            Console.WriteLine("ID for call assignment:");
                             int assignmentId = int.Parse(Console.ReadLine()!);
-                            Console.WriteLine("ID for volunteer:\n");
+                            Console.WriteLine("ID for volunteer:");
                             int VolId = int.Parse(Console.ReadLine()!);
                             s_bl.Call.UpdateCancelTreatment(VolId, assignmentId);
                         }
@@ -235,9 +235,9 @@ Press 0 to exit"
                     case CallChoice.updateEndTreatment:
                         try
                         {
-                            Console.WriteLine("ID for call assignment:\n");
+                            Console.WriteLine("ID for call assignment:");
                             int assignmentId = int.Parse(Console.ReadLine()!);
-                            Console.WriteLine("ID for volunteer:\n");
+                            Console.WriteLine("ID for volunteer:");
                             int VolId = int.Parse(Console.ReadLine()!);
                             s_bl.Call.UpdateEndTreatment(VolId, assignmentId);
                         }
@@ -536,7 +536,7 @@ Press 0 to exit"
                         break;
                     case AdminChoice.updateClock:
 
-                        Console.WriteLine("A unit of time for advancing the clock:\n");
+                        Console.WriteLine("A unit of time for advancing the clock:");
                         BO.TimeUnit timeUnit = Enum.Parse<BO.TimeUnit>(Console.ReadLine()!);
                         s_bl.Admin.ForwardClock(timeUnit);
                         break;

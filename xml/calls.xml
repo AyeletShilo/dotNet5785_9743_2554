@@ -480,4 +480,14 @@
     <Description>Doing weekly shopping at the local supermarket.</Description>
     <MaxTime>2025-01-13T07:58:39.9404414+02:00</MaxTime>
   </Call>
+  <Call>
+    <Id>49</Id>
+    <CallType>Cleaning</CallType>
+    <CallAddress>Al-Wad 30, Jerusalem, Israel</CallAddress>
+    <Latitude>31.804254</Latitude>
+    <Longitude>35.1137682</Longitude>
+    <OpenTime>2024-12-21T20:30:38</OpenTime>
+    <Description>dkdk</Description>
+    <MaxTime>2024-12-22T21:58:39.9404414+02:00</MaxTime>
+  </Call>
 </ArrayOfCall>

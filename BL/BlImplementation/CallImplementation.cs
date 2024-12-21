@@ -12,16 +12,26 @@ namespace BlImplementation;
 internal class CallImplementation : BlApi.ICall
 {
     private readonly DalApi.IDal _dal = DalApi.Factory.Get;
-    public void CallToTreatment(int id, int callId)
+
+    /// <summary>
+    /// Gets a volunteer number and a call, and if there is no open assignment of the call, 
+    /// it creates a new assignment of the requesting volunteer and the call
+    /// </summary>
+    /// <param name="volId"> ID of a volunteer requesting to assign a call</param>
+    /// <param name="callId"> Call requested for allocation.</param>
+    /// <exception cref="BO.BlDoesNotExistException"></exception>
+    /// <exception cref="BO.BlDoesAlreadyExistException"></exception>
+    /// <exception cref="BO.BlCantHandleItException"></exception>
+    public void CallToTreatment(int volId, int callId)
     {
         BO.Call call = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists");
-        Func<DO.Assignment, bool>? predicate = assignment => (assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel
-                                                             && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin);
+        Func<DO.Assignment, bool>? predicate = assignment => assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel
+                                                             && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin;
         var assignments = _dal.Assignment.ReadAll(predicate).ToList();
         if (assignments.Count() != 0)
             throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists");
         if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
-            _dal.Assignment.Create(new(0, callId, id, ClockManager.Now, null, null));
+            _dal.Assignment.Create(new(0, callId, volId, ClockManager.Now, null, null));
         else
             throw new BO.BlCantHandleItException($"Unable to assign");
     }
@@ -120,7 +130,7 @@ internal class CallImplementation : BlApi.ICall
     /// <returns></returns>
     public IEnumerable<BO.OpenCallInList> GetOpenedCalls(int volId, BO.CallType? filter = null, BO.OpenCallData? sort = null)
     {
-        var vol= _dal.Volunteer.Read(volId)?? throw new BO.BlDoesNotExistException($"There is no volunteer with ID:{volId}");
+        var vol = _dal.Volunteer.Read(volId) ?? throw new BO.BlDoesNotExistException($"There is no volunteer with ID:{volId}");
         IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
         var openCalls = from item in oldCalls
                         let tmpCall = Read(item.Id)
@@ -159,14 +169,16 @@ internal class CallImplementation : BlApi.ICall
                            select new { Status = (int)g.Key, Count = g.Count() };
 
         int[] statusCounts = new int[6];
-        groupedCalls.Select(g => statusCounts[g.Status] = g.Count);
+        groupedCalls.ToList().ForEach(g => statusCounts[g.Status] = g.Count);
+
+        #region foreach vers
         //foreach (var group in groupedCalls)
         //{
         //    statusCounts[group.Status] = group.Count;
         //}
+        #endregion
         return statusCounts;
     }
-
 
     /// <summary>
     /// Requests the data layer (Read) to obtain details about the read and its list of assignments (if any)
@@ -318,7 +330,7 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (DO.DalDoesNotExistException ex)
         {
-            throw new BO.BlDoesNotExistException($"item with ID: {assignmentId} does not exists", ex); 
+            throw new BO.BlDoesNotExistException($"item with ID: {assignmentId} does not exists", ex);
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -338,7 +350,7 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
-            if (volId == assignment.VolunteerId && assignment.EndTreatment is null) 
+            if (volId == assignment.VolunteerId && assignment.EndTreatment is null)
             {
                 DO.Assignment UpdateAssignment = new(assignmentId, assignment.CallId, volId,
                     assignment.InterTime, ClockManager.Now, DO.AssignmentEnum.TakenCare);

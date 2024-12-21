@@ -147,7 +147,7 @@ internal static class CallManager
         {
             IEnumerable<DO.Volunteer> oldVolunteer = s_dal.Volunteer.ReadAll(null); //can throw Ex
             List<BO.CallInList>? callInLists = new List<BO.CallInList>();
-            //var callInLists = oldCalls.Select(item =>
+
             foreach (DO.Call item in oldCalls)
             {
                 DO.Assignment? callAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
@@ -160,7 +160,7 @@ internal static class CallManager
                         CallId = item.Id,
                         CallType = (BO.CallType)item.CallType,
                         OpenTime = item.OpenTime,
-                        LeftTime = (TimeSpan)(item.MaxTime - ClockManager.Now) != null ? (TimeSpan)(item.MaxTime - ClockManager.Now) : null,
+                        LeftTime = item.MaxTime != null ? (TimeSpan)(item.MaxTime - ClockManager.Now) : null,
                         LastVolunteer = null,
                         CompletionTime = null,
                         Status = BO.CallListStatus.Opened,
@@ -170,7 +170,6 @@ internal static class CallManager
 
                 else
                 {
-                    DO.Volunteer? first = oldVolunteer.FirstOrDefault(v => v.Id == callAssignment.VolunteerId) ?? throw new BO.BlNullPropertyException("Cannot use a null attribute value.");
                     callInLists.Add(new()
                     {
                         Id = callAssignment.Id,
@@ -178,7 +177,7 @@ internal static class CallManager
                         CallType = (BO.CallType)item.CallType,
                         OpenTime = item.OpenTime,
                         LeftTime = item.MaxTime - ClockManager.Now,
-                        LastVolunteer = first.FullName,
+                        LastVolunteer = null,
                         CompletionTime = (callAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? (callAssignment.EndTime - item.OpenTime) : null,
                         Status = MakeStatus(callAssignment, item),
                         TotalAssignments = oldAssignment.Count(a => a.CallId == item.Id)
