@@ -30,7 +30,7 @@ namespace PL
             set { SetValue(CurrentDateProperty, value); }
         }
         public static readonly DependencyProperty CurrentDateProperty =
-            DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(MainWindow));
+            DependencyProperty.Register("CurrentDate", typeof(DateTime), typeof(MainWindow));
 
         private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
         {
@@ -58,10 +58,10 @@ namespace PL
             set { SetValue(RiskRangeProperty, value); }
         }
         public static readonly DependencyProperty RiskRangeProperty =
-            DependencyProperty.Register("CurrentTime", typeof(TimeSpan), typeof(MainWindow));
-        private void btnUpdateRiskRange_Click(TimeSpan riskRange, RoutedEventArgs e)
+            DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(MainWindow));
+        private void btnUpdateRiskRange_Click(/*TimeSpan riskRange,*/object sender, RoutedEventArgs e)
         {
-            s_bl.Admin.SetMaxRange(riskRange);
+            s_bl.Admin.SetMaxRange(/*riskRange*/(TimeSpan)sender);
         }
         private void clockObserver()
         {
@@ -80,7 +80,7 @@ namespace PL
             s_bl.Admin.AddClockObserver(clockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
         }
-        private void ScreenClosed(object sender, RoutedEventArgs e) //?
+        private void Window_Closed(object sender, /*Routed*/EventArgs e) //?
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
@@ -102,7 +102,7 @@ namespace PL
         }
         private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
         {
-            var result = MessageBox.Show("Do you want to do an initializetion?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            var result = MessageBox.Show("Do you want to do an initialization?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) return;
             CloseAllWindowsExceptMain();
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;

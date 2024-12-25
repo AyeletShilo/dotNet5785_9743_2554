@@ -6,10 +6,11 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" >
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
+        Closed="Window_Closed"
+        Loaded="ScreenLoaded">
 
-    <!--Window_Closed="ScreenClosed"-->
-    <!--Loaded="ScreenLoaded" -->
+
 
     <!--Config-->
     <Grid>
