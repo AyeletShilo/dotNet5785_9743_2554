@@ -59,9 +59,9 @@ namespace PL
         }
         public static readonly DependencyProperty RiskRangeProperty =
             DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(MainWindow));
-        private void btnUpdateRiskRange_Click(/*TimeSpan riskRange,*/object sender, RoutedEventArgs e)
+        private void btnUpdateRiskRange_Click(object sender, RoutedEventArgs e)
         {
-            s_bl.Admin.SetMaxRange(/*riskRange*/(TimeSpan)sender);
+            s_bl.Admin.SetMaxRange(RiskRange);
         }
         private void clockObserver()
         {

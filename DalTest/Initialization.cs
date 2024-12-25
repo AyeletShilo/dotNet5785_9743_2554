@@ -165,9 +165,9 @@ public static class Initialization
         string[] emailsEnds = { @"@gmail.com", @"@walla.co.il", @"@g.jct.ac.il" };
         int i = 0;
         string[] fullNames =
-            {"Amit Nakesh", "Nir Kuda", "Beni Mus", "Beti Bam","Avi Ron", "Gila Zahav", "Ram Kol", "Chani Chaim","Poli Din","Maya Gido","Ori Gami", "Dina Barzily", "Moise Simon", "Ran Amitz", "Nurit Lady", "Jonathan Shapira" };
+            {"Amit Nakesh", "Nir Kuda", "Beni Mus", "Beti Bam","Avi Ron", "Gila Zahav", "Ram Kol", "Chani Chaim","Poli Din","Maya Gido","Ori Gami", "Dina Barzily", "Moise Kattan", "Ran Amitz", "Nurit Lady", "Jonathan Shapira" };
         string[] Emails =
-        {"amit234", "nirkush", "cbh", "bamb" ,"54avi","gila43" , "rkol", "chch" , "poli", "mgido", "ogami", "barzilay", "Simoni98","rAmitz", "perach" ,"jShapira"};
+        {"amit234", "nirkush", "cbh", "bamb" ,"avi54","gila43" , "rkol", "chch" , "poli", "mgido", "ogami", "barzilay", "Kattani98","rAmitz", "perach" ,"jShapira"};
         string[] Addresses =
         {$"Ha-Narkis 3,{location}", $"Jaffa 210,{location}", $"Brazil 101,{location}", $"Nechama 32,{location}", $"Bayit Va-Gan 46,{location}", $"Ha-Pisga 90,{location}",
             $"Bar-Lev 119,{location}", $"Najara 19,{location}",$"Agron 5,{location}", $"Hilel 67,{location}",$"Iben-Ezra 27,{location}", $"Rivka 118,{location}",
