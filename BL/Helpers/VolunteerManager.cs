@@ -126,7 +126,7 @@ internal static class VolunteerManager
             volunteerInLists.Add(new()
             {
                 Id = item.Id,
-                PullName = item.FullName,
+                FullName = item.FullName,
                 IsActive = item.Active,
                 HandleCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.TakenCare)),
                 ExpiredCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.CancelExpired)),

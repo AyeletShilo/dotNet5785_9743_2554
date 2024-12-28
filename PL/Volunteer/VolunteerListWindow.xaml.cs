@@ -28,7 +28,32 @@ namespace PL.Volunteer
         }
 
         public static readonly DependencyProperty VolunteerListProperty =
-            DependencyProperty.Register("VolunteerList", typeof(BO.VolunteerData), typeof(VolunteerListWindow), new PropertyMetadata(null));
+            DependencyProperty.Register("VolunteerList", typeof(BO.CallInTreatment), typeof(VolunteerListWindow), new PropertyMetadata(null));
+
+        public BO.CallInTreatment CallType { get; set; } = BO.CallInTreatment.None;
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CallType = (BO.CallInTreatment)((ComboBox)sender).SelectedItem;
+
+            //queryVolunteerList();
+            VolunteerList = (CallType == BO.CallInTreatment.None)
+                ? s_bl?.Volunteer.ReadAll()!
+                : s_bl?.Volunteer.ReadAll(null, BO.VolunteerData.InTreatment, CallType)!;
+        }
+
+        private void queryVolunteerList()
+    => VolunteerList = (CallType == BO.CallInTreatment.None) ?
+        s_bl?.Volunteer.ReadAll()! : s_bl?.Volunteer.ReadAll(null, BO.VolunteerData.InTreatment, CallType)!;
+
+        private void volunteerListObserver()
+            => queryVolunteerList();
+ 
+private void Window_Loaded(object sender, RoutedEventArgs e)
+    => s_bl.Volunteer.AddObserver(volunteerListObserver);
+
+        private void Window_Closed(object sender, EventArgs e)
+            => s_bl.Volunteer.RemoveObserver(volunteerListObserver);
 
         public VolunteerListWindow()
         {

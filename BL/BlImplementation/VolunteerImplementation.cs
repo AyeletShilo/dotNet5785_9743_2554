@@ -109,7 +109,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 HandleCalls = volAssignments.Count(a => a.EndTreatment == DO.AssignmentEnum.TakenCare),
                 CancelCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelAdmin || a.EndTreatment == DO.AssignmentEnum.SelfCancel)),
                 ExpiredCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelExpired)),
-                InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress) 
+                InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress)
             };
         }
         catch (DO.DalXMLFileLoadCreateException ex)
@@ -124,23 +124,23 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <param name="isActive">Parameter for filtering the list</param>
     /// <param name="sort">Parameter for sorting the list</param>
     /// <returns>list of volunteers</returns>
-    public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerData? sort = null)
+    public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerData? sort = null, BO.CallInTreatment? filter = BO.CallInTreatment.None)
     {
         try
         {
-            IEnumerable<DO.Volunteer> OldVolunteer = _dal.Volunteer.ReadAll(null); //can throw Ex
-            IEnumerable<BO.VolunteerInList> volunteerInLists = VolunteerManager.ToVolunteerInList(OldVolunteer);
+            IEnumerable<DO.Volunteer> oldVolunteer = _dal.Volunteer.ReadAll(null); //can throw Ex
+            IEnumerable<BO.VolunteerInList> volunteerInList = VolunteerManager.ToVolunteerInList(oldVolunteer);
 
             if (isActive != null)
             {
-                volunteerInLists = volunteerInLists.Where(volunteer => volunteer.IsActive == isActive);
+                volunteerInList = volunteerInList.Where(volunteer => volunteer.IsActive == isActive);
             }
-            
-            volunteerInLists = null == sort ? volunteerInLists.OrderBy(v => v.Id)
-                : volunteerInLists.OrderBy<BO.VolunteerInList, object>(v=> (sort switch
+            volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter : v.InTreatment != null);
+            volunteerInList = null == sort ? volunteerInList.OrderBy(v => v.Id)
+                : volunteerInList.OrderBy<BO.VolunteerInList, object>(v => (sort switch
                 {
                     BO.VolunteerData.Id => v.Id,
-                    BO.VolunteerData.FullName => v.PullName,
+                    BO.VolunteerData.FullName => v.FullName,
                     BO.VolunteerData.IsActive => v.IsActive,
                     BO.VolunteerData.HandleCalls => v.HandleCalls,
                     BO.VolunteerData.CancelCalls => v.CancelCalls,
@@ -148,7 +148,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                     BO.VolunteerData.CallId => v.CallId,
                     BO.VolunteerData.InTreatment => v.InTreatment,
                 }));
-            return volunteerInLists;
+            return volunteerInList;
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -172,7 +172,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
                 VolunteerManager.CheckLogic(volToUpdate); //can throw Ex
 
-                double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address); 
+                double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address);
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
                 if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id) != BO.Role.Manager)

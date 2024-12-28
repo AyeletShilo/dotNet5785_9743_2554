@@ -21,8 +21,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Label" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Top" Grid.Column="0"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource VolunteerDataToPickUpKey}}"
- Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      SelectedValue="{Binding Path=CallType, Mode=TwoWay}"
+                      ItemsSource="{Binding Source={StaticResource FilterByCallKey}}"/>
 
         </Grid>
         <DataGrid Margin="5" Grid.Row="1" ItemsSource="{Binding Path=VolunteerList}"/>
