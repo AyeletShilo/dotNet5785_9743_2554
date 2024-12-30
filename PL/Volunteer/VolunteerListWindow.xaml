@@ -7,7 +7,9 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerListWindow" Height="640" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Closed="Window_Closed"
+        Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40*"/>
@@ -23,10 +25,37 @@
             <Label Content="Label" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Top" Grid.Column="0"/>
             <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       SelectedValue="{Binding Path=CallType, Mode=TwoWay}"
-                      ItemsSource="{Binding Source={StaticResource FilterByCallKey}}"/>
+                      ItemsSource="{Binding Source={StaticResource FilterByCallKey}}"
+                      SelectionChanged="ComboBox_SelectionChanged"/>
 
         </Grid>
-        <DataGrid Margin="5" Grid.Row="1" ItemsSource="{Binding Path=VolunteerList}"/>
+        <DataGrid Margin="5" Grid.Row="1" ItemsSource="{Binding Path=VolunteerList}" IsReadOnly ="True" AutoGenerateColumns="False"
+       	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="*" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Background" Value="LightBlue"/>
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Foreground" Value="YellowGreen"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding FullName}" Header="Name" Width="*" />
+                <DataGridTemplateColumn Header="Is Active" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsEnabled="False" IsChecked="{Binding Path=IsActive}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding HandleCalls}" Header="Handle Calls" Width="*"/>
+                <DataGridTextColumn Binding="{Binding CancelCalls}" Header="Cancel Calls" Width="*"/>
+                <DataGridTextColumn Binding="{Binding ExpiredCalls}" Header="Expired Calls" Width="*"/>
+                <DataGridTextColumn Binding="{Binding CallId}" Header="Call Id" Width="*"/>
+                <DataGridTextColumn Binding="{Binding InTreatment}" Header="Call Type" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
 
 

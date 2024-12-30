@@ -28,7 +28,7 @@ namespace PL.Volunteer
         }
 
         public static readonly DependencyProperty VolunteerListProperty =
-            DependencyProperty.Register("VolunteerList", typeof(BO.CallInTreatment), typeof(VolunteerListWindow), new PropertyMetadata(null));
+            DependencyProperty.Register("VolunteerList", typeof(IEnumerable <BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
 
         public BO.CallInTreatment CallType { get; set; } = BO.CallInTreatment.None;
 
@@ -58,6 +58,11 @@ private void Window_Loaded(object sender, RoutedEventArgs e)
         public VolunteerListWindow()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

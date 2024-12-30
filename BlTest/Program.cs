@@ -360,11 +360,15 @@ Press 0 to exit"
                             isActive = false;
                         else
                             isActive = null;
+
+                        Console.WriteLine("Value for sort1:");
+                        BO.CallInTreatment sort1 = Enum.Parse<BO.CallInTreatment>(Console.ReadLine());
+
                         Console.WriteLine("Value for sort:");
                         string? isSort = Console.ReadLine();
                         BO.VolunteerData? sort = isSort != "" ? Enum.Parse<BO.VolunteerData>(isSort) : null;
 
-                        IEnumerable<BO.VolunteerInList> volunteerList = s_bl.Volunteer.ReadAll(isActive, sort);
+                        IEnumerable<BO.VolunteerInList> volunteerList = s_bl.Volunteer.ReadAll(isActive, sort,sort1);
                         foreach (BO.VolunteerInList vol in volunteerList)
                             Console.WriteLine(vol + "\n");
                         break;

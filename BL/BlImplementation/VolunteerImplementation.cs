@@ -135,7 +135,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             {
                 volunteerInList = volunteerInList.Where(volunteer => volunteer.IsActive == isActive);
             }
-            volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter : v.InTreatment != null);
+            volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter :v.InTreatment != null);
             volunteerInList = null == sort ? volunteerInList.OrderBy(v => v.Id)
                 : volunteerInList.OrderBy<BO.VolunteerInList, object>(v => (sort switch
                 {
