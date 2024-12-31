@@ -9,3 +9,10 @@ internal class FilterByCall : IEnumerable //?
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
+internal class RoleOpt : IEnumerable //?
+{
+    static readonly IEnumerable<BO.Role> s_enums =
+        (Enum.GetValues(typeof(BO.Role)) as IEnumerable<BO.Role>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}

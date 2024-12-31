@@ -5,5 +5,8 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <local:FilterByCall x:Key="FilterByCallKey" />
+        <local:RoleOpt x:Key="RoleOptKey" />
+        <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey" />
+        <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
     </Application.Resources>
 </Application>

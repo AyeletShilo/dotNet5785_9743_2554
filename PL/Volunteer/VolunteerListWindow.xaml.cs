@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace PL.Volunteer
 {
@@ -28,18 +19,19 @@ namespace PL.Volunteer
         }
 
         public static readonly DependencyProperty VolunteerListProperty =
-            DependencyProperty.Register("VolunteerList", typeof(IEnumerable <BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
+            DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
 
         public BO.CallInTreatment CallType { get; set; } = BO.CallInTreatment.None;
+        public BO.VolunteerInList? SelectedVolunteer { get; set; }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallType = (BO.CallInTreatment)((ComboBox)sender).SelectedItem;
 
-            //queryVolunteerList();
-            VolunteerList = (CallType == BO.CallInTreatment.None)
-                ? s_bl?.Volunteer.ReadAll()!
-                : s_bl?.Volunteer.ReadAll(null, BO.VolunteerData.InTreatment, CallType)!;
+            queryVolunteerList();
+            //VolunteerList = (CallType == BO.CallInTreatment.None)
+            //    ? s_bl?.Volunteer.ReadAll()!
+            //    : s_bl?.Volunteer.ReadAll(null, BO.VolunteerData.InTreatment, CallType)!;
         }
 
         private void queryVolunteerList()
@@ -48,9 +40,9 @@ namespace PL.Volunteer
 
         private void volunteerListObserver()
             => queryVolunteerList();
- 
-private void Window_Loaded(object sender, RoutedEventArgs e)
-    => s_bl.Volunteer.AddObserver(volunteerListObserver);
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+            => s_bl.Volunteer.AddObserver(volunteerListObserver);
 
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(volunteerListObserver);
@@ -60,6 +52,17 @@ private void Window_Loaded(object sender, RoutedEventArgs e)
             InitializeComponent();
         }
 
+        private void lsvVolunteersList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedVolunteer != null)
+                new VolunteerWindow(SelectedVolunteer.Id).Show();
+        }
+
+        private void lsvVolunteersList_AddVolunteer(object sender, RoutedEventArgs e)
+        {
+                new VolunteerWindow().Show();
+        }
+        
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 

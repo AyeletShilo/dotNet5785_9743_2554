@@ -161,8 +161,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// </summary>
     /// <param name="id">volunteer Id</param>
     /// <param name="volToUpdate">Updated values ​​of the volunteer</param>
-    /// <exception cref="BO.BlCantUpdateException">Throws an exception when the vilunteer how want to update not allowed to do this </exception>
-    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the vilunteer you want to update does not exist in the database</exception>
+    /// <exception cref="BO.BlCantUpdateException">Throws an exception when the volunteer how want to update not allowed to do this </exception>
+    /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the volunteer you want to update does not exist in the database</exception>
     public void Update(int id, BO.Volunteer volToUpdate)
     {
         try

@@ -5,35 +5,84 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerWindow" Height="450" Width="800">
+        Title="VolunteerWindow" Height="450" Width="800"  
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="205*"/>
+            <RowDefinition Height="25*"/>
             <RowDefinition Height="12*"/>
         </Grid.RowDefinitions>
-        <Grid Margin="5,5,5,5">
+        <Grid Grid.Row="0" Margin="5,5,5,10">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="10*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="141*"/>
             </Grid.RowDefinitions>
+            <Label Content="ID:" Grid.Column="0" Grid.Row="0"/>
+            <Label Content="Full Name:" Grid.Column="0" Grid.Row="1" />
+            <Label Content="Phone Number:" Grid.Column="0" Grid.Row="2" />
+            <Label Content="Email:" Grid.Column="0" Grid.Row="3" />
+            <Label Content="Address:" Grid.Column="0" Grid.Row="4" />
+            <Label Content="Role:" Grid.Column="0" Grid.Row="5" />
+            <Label Content="Active?" Grid.Column="3" Grid.Row="0"/>
+            <Label Content="Max distance from call:" Grid.Column="3"  Grid.Row="1"/>
+            <Label Content="Total calls handled:" Grid.Column="3" Grid.Row="2" 
+                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+            <Label Content="Total calls canceled:" Grid.Column="3" Grid.Row="3"
+                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+            <Label Content="Total expired calls:" Grid.Column="3" Grid.Row="4" 
+                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+            <Label Content="Call in volunteer care:" Grid.Column="0" Grid.Row="6" 
+                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+
+            <TextBox Grid.Column="1" Grid.Row="0"
+                     Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
+            <TextBox Grid.Column="1" Grid.Row="1"
+                     Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+            <TextBox Grid.Column="1" Grid.Row="2" 
+                     Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+            <TextBox Grid.Column="1" Grid.Row="3" 
+                     Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+            <TextBox Grid.Column="1" Grid.Row="4"
+                     Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+            <ComboBox Grid.Column="1" Grid.Row="5" 
+                      SelectedValue="{Binding CurrentVolunteer.Job,  Mode=TwoWay, NotifyOnValidationError=true}" 
+                      SelectionChanged="ComboBox_SelectionChanged"
+                      ItemsSource="{Binding Source={StaticResource RoleOptKey}}"/>
+            <CheckBox Grid.Column="4" Grid.Row="0" Content="click for active" 
+                      IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}"/>
+            <TextBox Grid.Column="4" Grid.Row="1" 
+                     Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+            <TextBox Grid.Column="4" Grid.Row="2" 
+                     Text="{Binding CurrentVolunteer.HandleCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+            <TextBox Grid.Column="4" Grid.Row="3" 
+                     Text="{Binding CurrentVolunteer.CancelCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+            <TextBox Grid.Column="4" Grid.Row ="4"
+                     Text="{Binding CurrentVolunteer.ExpiredCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+            <DataGrid Grid.Column="1" Grid.ColumnSpan="5" Grid.Row="6"  SelectionChanged="DataGrid_SelectionChanged"
+                      ItemsSource="{Binding CurrentVolunteer.InCall}"/>
+
         </Grid>
-            
+        <Button Content="{Binding ButtonText}" Click="btnAddUpdate_Click" Grid.Row="1"/>
+
+
+
     </Grid>
 </Window>

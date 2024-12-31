@@ -5,8 +5,8 @@ namespace BO;
 
 public enum Role
 {
-    Manager,
-    Donater
+    Volunteer,
+    Manager
 }
 
 public enum DisType
