@@ -79,19 +79,6 @@
     <MaxDistance>2.134539350976979</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>261841498</Id>
-    <FullName>Chani Chaim</FullName>
-    <PhoneNumber>0535422309</PhoneNumber>
-    <Email>chch@walla.co.il</Email>
-    <Job>Volunteer</Job>
-    <Active>true</Active>
-    <Distance>Car</Distance>
-    <VolAddress>Najara 19,Jerusalem, Israel</VolAddress>
-    <Latitude>31.7633</Latitude>
-    <Longitude>35.2083</Longitude>
-    <MaxDistance />
-  </Volunteer>
-  <Volunteer>
     <Id>242622991</Id>
     <FullName>Poli Din</FullName>
     <PhoneNumber>0532961996</PhoneNumber>
@@ -103,19 +90,6 @@
     <Latitude>31.7808</Latitude>
     <Longitude>35.2139</Longitude>
     <MaxDistance>1.442716778682263</MaxDistance>
-  </Volunteer>
-  <Volunteer>
-    <Id>322714726</Id>
-    <FullName>Maya Gido</FullName>
-    <PhoneNumber>0588957732</PhoneNumber>
-    <Email>mgido@g.jct.ac.il</Email>
-    <Job>Volunteer</Job>
-    <Active>false</Active>
-    <Distance>Air</Distance>
-    <VolAddress>Hilel 67,Jerusalem, Israel</VolAddress>
-    <Latitude>31.7723</Latitude>
-    <Longitude>35.2134</Longitude>
-    <MaxDistance>1.431307588594906</MaxDistance>
   </Volunteer>
   <Volunteer>
     <Id>347333900</Id>
@@ -170,19 +144,6 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>288261159</Id>
-    <FullName>Nurit Lady</FullName>
-    <PhoneNumber>0506515649</PhoneNumber>
-    <Email>perach@walla.co.il</Email>
-    <Job>Volunteer</Job>
-    <Active>true</Active>
-    <Distance>Walking</Distance>
-    <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
-    <Latitude>31.765</Latitude>
-    <Longitude>35.2143</Longitude>
-    <MaxDistance>0.10188450777732061</MaxDistance>
-  </Volunteer>
-  <Volunteer>
     <Id>244326320</Id>
     <FullName>Jonathan Shapira</FullName>
     <PhoneNumber>0501676316</PhoneNumber>
@@ -207,5 +168,44 @@
     <Latitude>31.7682671</Latitude>
     <Longitude>35.1720837</Longitude>
     <MaxDistance>2.817249200826497</MaxDistance>
+  </Volunteer>
+  <Volunteer>
+    <Id>261841498</Id>
+    <FullName>Chani Chaim</FullName>
+    <PhoneNumber>0535422809</PhoneNumber>
+    <Email>chch@walla.co.il</Email>
+    <Job>Volunteer</Job>
+    <Active>true</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Najara 19,Jerusalem, Israel</VolAddress>
+    <Latitude>31.791511</Latitude>
+    <Longitude>35.1920268</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>288261159</Id>
+    <FullName>Nurit Lady</FullName>
+    <PhoneNumber>0506915749</PhoneNumber>
+    <Email>perach@walla.co.il</Email>
+    <Job>Volunteer</Job>
+    <Active>true</Active>
+    <Distance>Walking</Distance>
+    <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7394234</Latitude>
+    <Longitude>35.1827337</Longitude>
+    <MaxDistance>0.10188450777732061</MaxDistance>
+  </Volunteer>
+  <Volunteer>
+    <Id>322714726</Id>
+    <FullName>Maya Gido</FullName>
+    <PhoneNumber>0588957730</PhoneNumber>
+    <Email>mgido@g.jct.ac.il</Email>
+    <Job>Volunteer</Job>
+    <Active>false</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Hilel 67,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7793535</Latitude>
+    <Longitude>35.2209729</Longitude>
+    <MaxDistance>1.431397588594906</MaxDistance>
   </Volunteer>
 </ArrayOfVolunteers>

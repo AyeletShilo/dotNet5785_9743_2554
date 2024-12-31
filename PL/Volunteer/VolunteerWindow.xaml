@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerWindow" Height="450" Width="800"  
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Closed="Window_Closed"
+        Loaded="Window_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -70,17 +72,18 @@
                      Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
             <TextBox Grid.Column="4" Grid.Row="2" 
                      Text="{Binding CurrentVolunteer.HandleCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
             <TextBox Grid.Column="4" Grid.Row="3" 
                      Text="{Binding CurrentVolunteer.CancelCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
             <TextBox Grid.Column="4" Grid.Row ="4"
                      Text="{Binding CurrentVolunteer.ExpiredCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
+                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
             <DataGrid HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Height="101" Width="726" 
-          Grid.ColumnSpan="5" AutoGenerateColumns="True" ItemsSource="{Binding CurrentVolunteer.InCall}">
+          Grid.ColumnSpan="5" AutoGenerateColumns="True" ItemsSource="{Binding CurrentVolunteer.InCall}" Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  
+                      IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*" />
+                    <DataGridTextColumn Header="Id" Binding ="{Binding Id}" Width="*" />
                     <DataGridTextColumn Header="CallId" Binding="{Binding CallId}" Width="*" />
                     <DataGridTextColumn Header="CallType" Binding="{Binding CallType}" Width="*" />
                     <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />

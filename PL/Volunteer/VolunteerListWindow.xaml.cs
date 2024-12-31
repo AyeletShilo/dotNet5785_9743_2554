@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using BO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -66,6 +67,25 @@ namespace PL.Volunteer
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void Delete_Volunteer(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Do you sure you want to delete this volunteer?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes) return;
+            try
+            {
+                int id = SelectedVolunteer!.Id;
+                s_bl.Volunteer.Delete(id);
+            }
+            catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show("Volunteer not exist");
+            }
+            catch(BO.BlCannotBeDeletedException ex)
+            {
+                MessageBox.Show("this volunteer cannot be deleted");
+            }
         }
     }
 }

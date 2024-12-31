@@ -55,6 +55,13 @@
                 <DataGridTextColumn Binding="{Binding ExpiredCalls}" Header="Expired Calls" Width="*"/>
                 <DataGridTextColumn Binding="{Binding CallId}" Header="Call Id" Width="*"/>
                 <DataGridTextColumn Binding="{Binding InTreatment}" Header="Call Type" Width="*"/>
+                <DataGridTemplateColumn Header="Delete volunteer" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Delete_Volunteer" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"
