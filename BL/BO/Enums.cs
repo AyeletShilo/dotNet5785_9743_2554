@@ -34,12 +34,12 @@ public enum Status
 
 public enum CallInTreatment
 {
-    None,
     Shopping,
     Cleaning,
     Repairing,
     TechnologyHelp,
-    Talking
+    Talking,
+    None
 }
 
 public enum EndTreatment

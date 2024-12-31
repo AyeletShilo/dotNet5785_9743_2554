@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace PL.Volunteer
@@ -21,6 +22,8 @@ namespace PL.Volunteer
             DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
 
         public BO.Role RoleType { get; set; } = BO.Role.Volunteer;
+
+        public ObservableCollection<BO.CallInProgress> InCall { get; set; }
 
         public static readonly DependencyProperty ButtonTextProperty =
             DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));

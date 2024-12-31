@@ -106,14 +106,14 @@ namespace PL
             if (result != MessageBoxResult.Yes) return;
             CloseAllWindowsExceptMain();
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-            try
+           // try
             {
                 s_bl.Admin.InitializeDB();
             }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Try Again:)");
-            }
+            //catch(Exception ex)
+            //{
+            //    MessageBox.Show("Try Again:)");
+            //}
             Mouse.OverrideCursor = null;
         }
 

@@ -33,7 +33,7 @@ public static class Initialization
             foreach (var call in callsList)
             {
                 var v = s_dal.Assignment.Read(a => a.CallId == call.Id);
-                if (v != null && (v.EndTreatment == null || v.EndTreatment == AssignmentEnum.CancelExpired || v.EndTreatment == AssignmentEnum.TakenCare))// אם קיימת הקצאה פתוחה, דילוג על יצירת הקצאה נוספת עבור הקריאה הנוכחית
+                if (v != null && (v.EndTreatment == null || v.EndTreatment == AssignmentEnum.CancelExpired || v.EndTreatment == AssignmentEnum.TakenCare))
                     continue;
                 if (i == 4)
                 {
@@ -45,7 +45,17 @@ public static class Initialization
                     continue;
 
                 var callId = call.Id;
-                Volunteer volunteer = volunteersList[s_rand.Next(volunteersList.Count)];
+                var openAssignments = s_dal.Assignment.ReadAll().Where(a => a.EndTime == null).ToList();
+                var availableVolunteers = volunteersList.Where(volunteer =>
+                    !openAssignments.Any(assignment => assignment.VolunteerId == volunteer.Id)).ToList();
+                //availableVolunteers = availableVolunteers.Where(v => s_rand.NextDouble() > 0.15).ToList();
+                if (availableVolunteers.Count == 0)
+                {
+                    //throw new InvalidOperationException("No available volunteers without an open call.");
+                    continue;
+                }
+                Volunteer volunteer = availableVolunteers[s_rand.Next(availableVolunteers.Count)];
+                
                 var volunteerId = volunteer.Id;
 
                 int range = (DateTime.Now - call.OpenTime).Days;
@@ -211,11 +221,11 @@ public static class Initialization
             double? latitude = latitudes[i];
             double? longitude = longitudes[i];
             //toSwitch = s_rand.NextDouble();
-            Role job = (s_rand.NextDouble() >(0.90)) ? Role.Manager : Role.Volunteer;
+            Role job = (s_rand.NextDouble() > 0.8) ? Role.Manager : Role.Volunteer;
             string? volAddress = Addresses[i++];
-            toSwitch = s_rand.Next(2);
-            bool active = (toSwitch % 2 == 0) ? true : false;
-            double? maxDistance = null;
+            //toSwitch = s_rand.Next(2);
+            bool active = (s_rand.NextDouble() < 0.9) ? true : false;
+            double? maxDistance = s_rand.Next(2) == 0 ? null : s_rand.NextDouble() * 5;
             RangeType typeDis;
             toSwitch = s_rand.Next(1, 4);
             switch (toSwitch)
@@ -309,5 +319,11 @@ public static class Initialization
             5 => AssignmentEnum.CancelAdmin,
             _ => AssignmentEnum.TakenCare
         };
+    }
+    private static bool HasAssignment(int id)
+    {
+        var assignList = s_dal.Assignment.ReadAll()
+            .FirstOrDefault(assignment => (assignment.VolunteerId == id) && assignment.EndTime == null);
+        return assignList != null;
     }
 }

@@ -1,4 +1,4 @@
-﻿using BO;
+﻿  using BO;
 using DalApi;
 
 
@@ -19,7 +19,7 @@ internal static class VolunteerManager
         bool? isEmail = checkEmail(volToCheck.Email) ?? throw new BO.BlIntegrityOfValuesException("Error in email format");
         if (!int.TryParse(volToCheck.PhoneNumber, out int number))
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
-        if (volToCheck.PhoneNumber.Length != 9 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
+        if (volToCheck.PhoneNumber.Length != 10 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
         if (volToCheck.MaxDis < 0/* || volToCheck.MaxDis == null*/)
             throw new BO.BlIntegrityOfValuesException("Error in Max Distance format");
@@ -89,22 +89,22 @@ internal static class VolunteerManager
     internal static BO.CallInProgress? VolCall(int id, string address)
     {
         Func<DO.Assignment, bool> func = item => item.VolunteerId == id;
-        DO.Assignment? CurrentAss = s_dal.Assignment.Read(func);
-        if (CurrentAss is not null)/*?? throw new BO.BlNullPropertyException($"Assignment does not exist");*/
+        DO.Assignment? currentAss = s_dal.Assignment.Read(func);
+        if (currentAss is not null)/*?? throw new BO.BlNullPropertyException($"Assignment does not exist");*/
         {
-            DO.Call CurrentCall = s_dal.Call.Read(CurrentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {CurrentAss.CallId} does not exist");
+            DO.Call currentCall = s_dal.Call.Read(currentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
             return new()
             {
                 Id = id,
-                CallId = CurrentCall.Id,
-                CallType = (BO.CallType)CurrentCall.CallType,
-                Description = CurrentCall.Description,
-                FullAddress = CurrentCall.CallAddress,
-                OpenTime = CurrentCall.OpenTime,
-                MaxCloseTime = CurrentCall.MaxTime,
-                EntryTime = CurrentAss.InterTime,
-                VolDistance = VolunteerManager.CalculateDis(address, CurrentCall.CallAddress),
-                status = (CurrentCall.MaxTime is null || (CurrentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
+                CallId = currentCall.Id,
+                CallType = (BO.CallType)currentCall.CallType,
+                Description = currentCall.Description,
+                FullAddress = currentCall.CallAddress,
+                OpenTime = currentCall.OpenTime,
+                MaxCloseTime = currentCall.MaxTime,
+                EntryTime = currentAss.InterTime,
+                VolDistance = VolunteerManager.CalculateDis(address, currentCall.CallAddress),
+                status = (currentCall.MaxTime is null || (currentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
             };
         }
         return null;
@@ -114,15 +114,16 @@ internal static class VolunteerManager
     /// <summary>
     /// Gets a volunteer from the database and returns it as a data entity of type volunteer in list
     /// </summary>
-    /// <param name="OldVolunteer">volunteer from the database</param>
+    /// <param name="oldVolunteer">volunteer from the database</param>
     /// <returns> returns it as a data entity of type volunteer in list</returns>
-    internal static IEnumerable<BO.VolunteerInList> ToVolunteerInList(IEnumerable<DO.Volunteer> OldVolunteer)
+    internal static IEnumerable<BO.VolunteerInList> ToVolunteerInList(IEnumerable<DO.Volunteer> oldVolunteer)
     {
         IEnumerable<DO.Assignment> oldAssignments = s_dal.Assignment.ReadAll(null);
         List<BO.VolunteerInList> volunteerInLists = new List<BO.VolunteerInList>();
-        foreach (DO.Volunteer item in OldVolunteer)
+        foreach (DO.Volunteer item in oldVolunteer)
         {
-            DO.Assignment? VolunteerAssignment = oldAssignments.FirstOrDefault(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTime != null));
+            DO.Assignment? volunteerAssignment = oldAssignments.LastOrDefault(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTime == null));
+            int? callId = volunteerAssignment != null ? volunteerAssignment.CallId : null;
             volunteerInLists.Add(new()
             {
                 Id = item.Id,
@@ -131,8 +132,8 @@ internal static class VolunteerManager
                 HandleCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.TakenCare)),
                 ExpiredCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.CancelExpired)),
                 CancelCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.SelfCancel || assignment.EndTreatment == DO.AssignmentEnum.CancelAdmin)),
-                CallId = VolunteerAssignment != null ? VolunteerAssignment.CallId : null,
-                InTreatment = VolunteerAssignment != null ? (BO.CallInTreatment)s_dal.Call.Read(VolunteerAssignment.CallId)!.CallType : BO.CallInTreatment.None
+                CallId = callId != null ? callId : null,
+                InTreatment = callId.HasValue ? (BO.CallInTreatment)s_dal.Call.Read(callId.Value)!.CallType : BO.CallInTreatment.None
             });
         };
         return volunteerInLists.AsEnumerable();
@@ -142,7 +143,7 @@ internal static class VolunteerManager
     /// Calculates the distance between the 2 given addresses
     /// </summary>
     /// <param name="volAddress"> volunteer address</param>
-    /// <param name="callAddress"> call addresss</param>
+    /// <param name="callAddress"> call address</param>
     /// <returns></returns>
     public static double CalculateDis(string? volAddress, string callAddress)
     {

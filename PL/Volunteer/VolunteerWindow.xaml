@@ -29,7 +29,8 @@
                 <RowDefinition Height="35*"/>
                 <RowDefinition Height="35*"/>
                 <RowDefinition Height="35*"/>
-                <RowDefinition Height="141*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="106*"/>
             </Grid.RowDefinitions>
             <Label Content="ID:" Grid.Column="0" Grid.Row="0"/>
             <Label Content="Full Name:" Grid.Column="0" Grid.Row="1" />
@@ -45,7 +46,7 @@
                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
             <Label Content="Total expired calls:" Grid.Column="3" Grid.Row="4" 
                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-            <Label Content="Call&#xD;&#xA; in&#xD;&#xA; volunteer&#xD;&#xA; care:" Grid.Column="0" Grid.Row="5" 
+            <Label Content="Call in volunteer care:" Grid.Column="0" Grid.Row="5" 
                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="0,35,63,0" Grid.RowSpan="2"/>
 
             <TextBox Grid.Column="1" Grid.Row="0"
@@ -76,44 +77,21 @@
             <TextBox Grid.Column="4" Grid.Row ="4"
                      Text="{Binding CurrentVolunteer.ExpiredCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
                      Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-            <ContentControl HorizontalAlignment="Left" Margin="64,0,0,0" Grid.Row="6" VerticalAlignment="Center" Height="101" Width="726" Grid.ColumnSpan="5" DataContext="{Binding CurrentVolunteer.InCall, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1.3*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1.2*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="Id" Grid.Row="0" Grid.Column="0" RenderTransformOrigin="0.5,0.5"/>
-                    <TextBox Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="1"/>
-                    <Label Content="CallId" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Text="{Binding CallId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="1" Grid.Column="1"/>
-                    <Label Content="CallType"  Grid.Row="2" Grid.Column="0"/>
-                    <TextBox Text="{Binding CallType, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="1"/>
-                    <Label Content="Description" Grid.Row="0" Grid.Column="2" RenderTransformOrigin="0.5,0.5"/>
-                    <TextBox Text="{Binding Description, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="3"/>
-                    <Label Content="Address" Grid.Row="1" Grid.Column="2"/>
-                    <TextBox Text="{Binding FullAddress, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="1" Grid.Column="3"/>
-                    <Label Content="open time"  Grid.Row="2" Grid.Column="2"/>
-                    <TextBox Text="{Binding OpenTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="3"/>
-                    <!--<Label Content="Max time" Grid.Row="0" Grid.Column="2" RenderTransformOrigin="0.5,0.5"/>
-                    <TextBox Text="{Binding MaxCloseTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="3"/>-->
-                    <Label Content="entry time" Grid.Row="0" Grid.Column="4"/>
-                    <TextBox Text="{Binding EntryTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="5"/>
-                    <Label Content="distance"  Grid.Row="1" Grid.Column="4"/>
-                    <TextBox Text="{Binding VolDistance, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Grid.Column="5"/>
-                    <Label Content="status"  Grid.Row="2" Grid.Column="4"/>
-                    <TextBox Text="{Binding status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="5"/>
-                </Grid>
-
-            </ContentControl>
+            <DataGrid HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Height="101" Width="726" 
+          Grid.ColumnSpan="5" AutoGenerateColumns="True" ItemsSource="{Binding CurrentVolunteer.InCall}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*" />
+                    <DataGridTextColumn Header="CallId" Binding="{Binding CallId}" Width="*" />
+                    <DataGridTextColumn Header="CallType" Binding="{Binding CallType}" Width="*" />
+                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
+                    <DataGridTextColumn Header="Address" Binding="{Binding FullAddress}" Width="*" />
+                    <DataGridTextColumn Header="Open Time" Binding="{Binding OpenTime}" Width="*" />
+                    <DataGridTextColumn Header="Entry Time" Binding="{Binding EntryTime}" Width="*" />
+                    <DataGridTextColumn Header="Distance" Binding="{Binding VolDistance}" Width="*" />
+                    <DataGridTextColumn Header="Status" Binding="{Binding status}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+            
         </Grid>
         <Button Content="{Binding ButtonText}" Click="btnAddUpdate_Click" Grid.Row="1"/>
 
