@@ -210,8 +210,8 @@ public static class Initialization
             string phoneNumber = phonPre + s_rand.Next(1000000, 10000000);
             double? latitude = latitudes[i];
             double? longitude = longitudes[i];
-            toSwitch = s_rand.Next(2);
-            Role job = (toSwitch % 2 == 0) ? Role.Manager : Role.Donater;
+            //toSwitch = s_rand.NextDouble();
+            Role job = (s_rand.NextDouble() >(0.90)) ? Role.Manager : Role.Volunteer;
             string? volAddress = Addresses[i++];
             toSwitch = s_rand.Next(2);
             bool active = (toSwitch % 2 == 0) ? true : false;

@@ -18,8 +18,8 @@ public enum RangeType
 /// </summary>
 public enum Role
 {
-    Manager,
-    Donater
+    Volunteer,
+    Manager
 }
 
 /// <summary>

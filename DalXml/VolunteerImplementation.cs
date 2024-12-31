@@ -25,7 +25,7 @@ internal class VolunteerImplementation : IVolunteer
             FullName = (string?)v.Element("FullName") ?? " ",
             PhoneNumber = (string?)v.Element("PhoneNumber") ?? " ",
             Email = (string?)v.Element("Email") ?? " ",
-            Job = v.ToEnumNullable<Role>("Job") ?? Role.Donater,
+            Job = v.ToEnumNullable<Role>("Job") ?? Role.Volunteer,
             Active = (bool?)v.Element("Active") ?? false,
             Distance = v.ToEnumNullable<RangeType>("Distance") ?? RangeType.Walking,
             VolAddress = (string?)v.Element("VolAddress") ?? null,

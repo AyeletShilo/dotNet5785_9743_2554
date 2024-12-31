@@ -31,5 +31,5 @@ public record Volunteer
     
 
 {
-    public Volunteer(): this(0,"","","",Role.Donater,false,RangeType.Air) {}
+    public Volunteer(): this(0,"","","",Role.Volunteer,false,RangeType.Air) {}
 };
