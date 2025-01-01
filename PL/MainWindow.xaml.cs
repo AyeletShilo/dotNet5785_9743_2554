@@ -97,7 +97,17 @@ namespace PL
             if (result != MessageBoxResult.Yes) return;
             CloseAllWindowsExceptMain();
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-            s_bl.Admin.ResetDB();
+            try
+            { 
+                s_bl.Admin.ResetDB(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The data was not resrt properly. \nPlease Try Again:)",
+                               "Exception",
+                               MessageBoxButton.OK,
+                               MessageBoxImage.Error);
+            }
             Mouse.OverrideCursor = null;
         }
         private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
@@ -106,14 +116,17 @@ namespace PL
             if (result != MessageBoxResult.Yes) return;
             CloseAllWindowsExceptMain();
             Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
-           // try
+            try
             {
                 s_bl.Admin.InitializeDB();
             }
-            //catch(Exception ex)
-            //{
-            //    MessageBox.Show("Try Again:)");
-            //}
+            catch (Exception ex)
+            {
+                MessageBox.Show("The data was not initialized properly. \nPlease Try Again:)", 
+                               "Exception", 
+                               MessageBoxButton.OK,
+                               MessageBoxImage.Error);
+            }
             Mouse.OverrideCursor = null;
         }
 
