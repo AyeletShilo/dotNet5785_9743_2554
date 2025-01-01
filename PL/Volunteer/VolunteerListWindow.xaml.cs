@@ -19,6 +19,9 @@ namespace PL.Volunteer
             set { SetValue(VolunteerListProperty, value); }
         }
 
+        /// <summary>
+        /// DependencyProperty
+        /// </summary>
         public static readonly DependencyProperty VolunteerListProperty =
             DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
 
@@ -48,6 +51,9 @@ namespace PL.Volunteer
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(volunteerListObserver);
 
+        /// <summary>
+        /// constructor
+        /// </summary>
         public VolunteerListWindow()
         {
             InitializeComponent();

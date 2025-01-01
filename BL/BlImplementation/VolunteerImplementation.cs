@@ -136,8 +136,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 volunteerInList = volunteerInList.Where(volunteer => volunteer.IsActive == isActive);
             }
             volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter :v.InTreatment != null);
-            volunteerInList = null == sort ? volunteerInList.OrderBy(v => v.Id)
-                : volunteerInList.OrderBy<BO.VolunteerInList, object>(v => (sort switch
+            volunteerInList = sort == null ? volunteerInList.OrderBy(v => v.Id)
+                : volunteerInList.OrderBy<BO.VolunteerInList, object>(v => sort switch
                 {
                     BO.VolunteerData.Id => v.Id,
                     BO.VolunteerData.FullName => v.FullName,
@@ -147,7 +147,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                     BO.VolunteerData.ExpiredCalls => v.ExpiredCalls,
                     BO.VolunteerData.CallId => v.CallId,
                     BO.VolunteerData.InTreatment => v.InTreatment,
-                }));
+                });
             return volunteerInList;
         }
         catch (DO.DalXMLFileLoadCreateException ex)

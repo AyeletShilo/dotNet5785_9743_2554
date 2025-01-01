@@ -15,7 +15,7 @@ public static class Initialization
     private static IDal? s_dal;//stage 2
 
     private static readonly Random s_rand = new();
-    private static void createAssignment() ///לטפל בזמני כניסה ויציאה
+    private static void createAssignment()
     {
         //List<Call>? existingCall = s_dalCall?.ReadAll(); //stage1
         //List<Volunteer>? existingVol = s_dalVolunteer?.ReadAll(); //stage1
@@ -24,8 +24,8 @@ public static class Initialization
         IEnumerable<Volunteer>? volunteers = s_dal.Volunteer?.ReadAll(); //stage2
 
 
-        var callsList = calls.ToList();
-        var volunteersList = volunteers.ToList();
+        var callsList = calls!.ToList();
+        var volunteersList = volunteers!.ToList();
 
         for (int i = 1; i < 5; i++)
         {

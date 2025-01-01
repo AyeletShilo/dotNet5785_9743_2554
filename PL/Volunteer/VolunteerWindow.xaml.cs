@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Windows;
 using System.Windows.Controls;
+
 
 namespace PL.Volunteer
 {
@@ -12,19 +14,26 @@ namespace PL.Volunteer
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static int _id;
 
+        /// <summary>
+        /// This volunteer
+        /// </summary>
         public BO.Volunteer? CurrentVolunteer
         {
             get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
             set { SetValue(CurrentVolunteerProperty, value); }
         }
 
+        /// <summary>
+        /// DependencyProperty
+        /// </summary>
         public static readonly DependencyProperty CurrentVolunteerProperty =
             DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerWindow), new PropertyMetadata(null));
 
         public BO.Role RoleType { get; set; } = BO.Role.Volunteer;
 
-        public ObservableCollection<BO.CallInProgress> InCall { get; set; }
-
+        /// <summary>
+        /// DependencyProperty
+        /// </summary>
         public static readonly DependencyProperty ButtonTextProperty =
             DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
         public string ButtonText
@@ -44,47 +53,41 @@ namespace PL.Volunteer
                 }
                 else if (ButtonText == "Update")
                 {
-                    s_bl.Volunteer.Update(_id!, CurrentVolunteer!); 
+                    s_bl.Volunteer.Update(_id!, CurrentVolunteer!);
                     //MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                this.Close(); 
+                this.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
+        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id">id of who open this window</param>
         public VolunteerWindow(int id = 0)
         {
             ButtonText = id == 0 ? "Add" : "Update";
-            _id = id;
             InitializeComponent();
+            _id = id;
             CurrentVolunteer = (id != 0) ? s_bl.Volunteer.Read(id)!
                 : new BO.Volunteer()
-                { Id = 0, FullName = "", PhoneNumber = "", Email = ""/*,Address="",*/ };
-            //s_bl.AddObserver(id, VolunteerObserver);
-
-            //this.Closed += Window_Closed;
-            DataContext = this;
-
+                { Id = 0, FullName = "", PhoneNumber = "", Email = "" };
         }
+
 
         private void RefreshVolunteer()
         {
-            int id = CurrentVolunteer!.Id; // שומר את ה-ID של הסטודנט הנוכחי
-            CurrentVolunteer = null; // מנקה את הערך של CurrentStudent, כדי שה-Binding יתעדכן
-            CurrentVolunteer = s_bl.Volunteer.Read(id); // טוען מחדש את הסטודנט
+            int id = CurrentVolunteer!.Id; 
+            CurrentVolunteer = null; 
+            CurrentVolunteer = s_bl.Volunteer.Read(id); 
         }
 
-        private void VolunteerObserver(/*BO.Volunteer updatedVolunteer*/) => RefreshVolunteer();
-        //{
-        //    Dispatcher.Invoke(() =>
-        //    {
-        //        // מילוי מחדש של הפריט
-        //        CurrentVolunteer = updatedVolunteer;
-        //    });
-        //}
+        private void VolunteerObserver() => RefreshVolunteer();
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Volunteer.AddObserver(VolunteerObserver);
 
@@ -100,19 +103,9 @@ namespace PL.Volunteer
 
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void ShowDescription(object sender, System.Windows.Input.MouseEventArgs e)
         {
-
-        }
-
-        private void TextBox_TextChanged_1(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
-        private void TextBox_TextChanged_2(object sender, TextChangedEventArgs e)
-        {
-
+            MessageBox.Show(CurrentVolunteer.InCall.Description);
         }
     }
 }

@@ -49,15 +49,17 @@
             <Label Content="Total expired calls:" Grid.Column="3" Grid.Row="4" 
                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
             <Label Content="Call in volunteer care:" Grid.Column="0" Grid.Row="5" 
-                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="0,35,63,0" Grid.RowSpan="2"/>
+                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="0,35,254,0" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2">
+            </Label>
 
-            <TextBox Grid.Column="1" Grid.Row="0"
+            <TextBox Grid.Column="1" Grid.Row="0" MaxLength="9" 
                      Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
+                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}" />
             <TextBox Grid.Column="1" Grid.Row="1"
                      Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
             <TextBox Grid.Column="1" Grid.Row="2" 
-                     Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+                     Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
+                     MaxLength="10"/>
             <TextBox Grid.Column="1" Grid.Row="3" 
                      Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
             <TextBox Grid.Column="1" Grid.Row="4"
@@ -65,7 +67,7 @@
             <ComboBox Grid.Column="1" Grid.Row="5" 
                       SelectedValue="{Binding CurrentVolunteer.Job,  Mode=TwoWay, NotifyOnValidationError=true}" 
                       SelectionChanged="ComboBox_SelectionChanged"
-                      ItemsSource="{Binding Source={StaticResource RoleOptKey}}"/>
+                      ItemsSource="{Binding Source={StaticResource RoleOptKey}}" BorderBrush="Black" OpacityMask="#FF090909"/>
             <CheckBox Grid.Column="4" Grid.Row="0" Content="click for active" 
                       IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}"/>
             <TextBox Grid.Column="4" Grid.Row="1" 
@@ -79,22 +81,46 @@
             <TextBox Grid.Column="4" Grid.Row ="4"
                      Text="{Binding CurrentVolunteer.ExpiredCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
                      Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
-            <DataGrid HorizontalAlignment="Left" Grid.Row="7" VerticalAlignment="Center" Height="101" Width="726" 
-          Grid.ColumnSpan="5" AutoGenerateColumns="True" ItemsSource="{Binding CurrentVolunteer.InCall}" Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  
-                      IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Id" Binding ="{Binding Id}" Width="*" />
-                    <DataGridTextColumn Header="CallId" Binding="{Binding CallId}" Width="*" />
-                    <DataGridTextColumn Header="CallType" Binding="{Binding CallType}" Width="*" />
-                    <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="*" />
-                    <DataGridTextColumn Header="Address" Binding="{Binding FullAddress}" Width="*" />
-                    <DataGridTextColumn Header="Open Time" Binding="{Binding OpenTime}" Width="*" />
-                    <DataGridTextColumn Header="Entry Time" Binding="{Binding EntryTime}" Width="*" />
-                    <DataGridTextColumn Header="Distance" Binding="{Binding VolDistance}" Width="*" />
-                    <DataGridTextColumn Header="Status" Binding="{Binding status}" Width="*" />
-                </DataGrid.Columns>
-            </DataGrid>
-            
+            <ContentControl HorizontalAlignment="Left"  Grid.Row="7" VerticalAlignment="Center" Height="101" Width="726" Grid.ColumnSpan="5" DataContext="{Binding CurrentVolunteer.InCall, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}">
+                <Grid ShowGridLines="True" Margin="4,4,-49,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="1.5*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Id" Grid.Row="0" Grid.Column="0" RenderTransformOrigin="0.5,0.5"/>
+                    <TextBox Text="{Binding Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="1"/>
+                    <Label Content="CallId" Grid.Row="1" Grid.Column="0"/>
+                    <TextBox Text="{Binding CallId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="1" Grid.Column="1"/>
+                    <Label Content="CallType:"  Grid.Row="2" Grid.Column="0"/>
+                    <TextBox Text="{Binding CallType, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="1"/>
+                    <Label Content="Description:" Grid.Row="0" Grid.Column="2" RenderTransformOrigin="0.5,0.5"/>
+                    <TextBox Text="{Binding Description, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="3" MouseEnter="ShowDescription" />
+                    <Label Content="CallAddress:" Grid.Row="1" Grid.Column="2"/>
+                    <TextBox Text="{Binding FullAddress, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="1" Grid.Column="3"/>
+                    <Label Content="Open time:"  Grid.Row="2" Grid.Column="2"/>
+                    <TextBox Text="{Binding OpenTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="3"/>
+                    <!--<Label Content="Max time" Grid.Row="0" Grid.Column="2" RenderTransformOrigin="0.5,0.5"/>
+        <TextBox Text="{Binding MaxCloseTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="3"/>-->
+                    <Label Content="Entry time:" Grid.Row="0" Grid.Column="4"/>
+                    <TextBox Text="{Binding EntryTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="5"/>
+                    <Label Content="distance:"  Grid.Row="1" Grid.Column="4"/>
+                    <TextBox Text="{Binding VolDistance, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Grid.Column="5"/>
+                    <Label Content="status:"  Grid.Row="2" Grid.Column="4"/>
+                    <TextBox Text="{Binding status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="5"/>
+                </Grid>
+
+            </ContentControl>
+
+
         </Grid>
         <Button Content="{Binding ButtonText}" Click="btnAddUpdate_Click" Grid.Row="1"/>
 
