@@ -76,7 +76,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the volunteer you want does not exist in the database</exception>
     public BO.Role GetMyJob(int id)
     {
-        BO.Volunteer result = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist");
+        BO.Volunteer result = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist.");
         return result.Job;
     }
 

@@ -1,11 +1,53 @@
-﻿<Window x:Class="PL.MainWindow"
+﻿<Window x:Class="PL.AdminWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="AdminWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
+        Closed="Window_Closed"
+        Loaded="ScreenLoaded">
+
+
+
+    <!--Config-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="100*"/>
+        </Grid.RowDefinitions>
+
+        <!--Clock-->
+        <Grid Margin="205,0,215,10">
+            <Label Content="{Binding CurrentDate}" FontWeight="Bold" FontSize="20" Margin="0,10,0,0" VerticalAlignment="Top" Height="50"/>
+            <Button Content="Add One Minute" Click="btnAddOneMinute_Click" HorizontalAlignment="Stretch" Margin="0,80,0,0" VerticalAlignment="Top"/>
+            <Button Content="Add One Hour" Click="btnAddOneHour_Click" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Top"/>
+            <Button Content="Add One Day " Click="btnAddOneDay_Click" HorizontalAlignment="Stretch" Margin="0,120,0,0" VerticalAlignment="Top"/>
+            <Button Content="Add One Month" Click="btnAddOneMonth_Click" HorizontalAlignment="Stretch" Margin="0,140,0,0" VerticalAlignment="Top"/>
+            <Button Content="Add One Year" Click="btnAddOneYear_Click" HorizontalAlignment="Stretch" Margin="0,160,0,0" VerticalAlignment="Top"/>
+        </Grid>
+
+        <!--RiskRange-->
+        <TextBox HorizontalAlignment="Left" Margin="27,91,0,0" TextWrapping="Wrap" Text="{Binding RiskRange}" FontWeight="Bold" FontSize="20" VerticalAlignment="Top" Width="124" Height="26" TextChanged="TextBox_TextChanged"/>
+        <Button Content="Update Risk Range" Click="btnUpdateRiskRange_Click" HorizontalAlignment="Left" Margin="27,138,0,0" VerticalAlignment="Top" Height="26" Width="124"/>
+
+        <Button Content="InitializeDB" Click ="btnInitializeDB_Click" HorizontalAlignment="Left" Margin="552,92,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
+        <Button Content="Handle Volunteers" Click="btnVolunteer_Click" HorizontalAlignment="Center" Margin="0,92,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
+        <Button Content="ResetDB" Click="btnResetDB_Click"  HorizontalAlignment="Left" Margin="137,92,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
+
+    </Grid>
+</Window>
+
+<!--<Window x:Class="PL.EntryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
+        Title="EntryWindow" Height="450" Width="800">
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="25" />
@@ -26,54 +68,10 @@
         </Grid.RowDefinitions>
         <Label Content="Enter Your ID:" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Margin="0,15,0,0" Height="33" Width="192" FontFamily="Cooper Black" FontSize="24"/>
         <TextBox Grid.Row="1" Margin="0,61,0,28" BorderBrush="#FF090909" HorizontalAlignment="Center" Width="324"
-             Text="{Binding TextInput, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+             Text="{Binding TextInput, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Button Content="Volunteer window" Height="90" Margin="74,0,0,0" Grid.Row="3" Width="232"
                 IsEnabled="{Binding IsButtonVEnabled}"/>
         <Button Content="Main window" Height="90" Margin="498,0,0,0" Grid.Row="3" Width="232"
                 IsEnabled="{Binding IsButtonMEnabled}" Click="btn_OpenWindow"/>
-    </Grid>
-</Window>
-
-
-
-<!--<Window x:Class="PL.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
-        Closed="Window_Closed"
-        Loaded="ScreenLoaded">
-
-
-
-    --><!--Config--><!--
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="80*"/>
-            <RowDefinition Height="100*"/>
-        </Grid.RowDefinitions>
-
-        --><!--Clock--><!--
-        <Grid Margin="205,0,215,10">
-            <Label Content="{Binding CurrentDate}" FontWeight="Bold" FontSize="20" Margin="0,10,0,0" VerticalAlignment="Top" Height="50"/>
-            <Button Content="Add One Minute" Click="btnAddOneMinute_Click" HorizontalAlignment="Stretch" Margin="0,80,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Hour" Click="btnAddOneHour_Click" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Day " Click="btnAddOneDay_Click" HorizontalAlignment="Stretch" Margin="0,120,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Month" Click="btnAddOneMonth_Click" HorizontalAlignment="Stretch" Margin="0,140,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Year" Click="btnAddOneYear_Click" HorizontalAlignment="Stretch" Margin="0,160,0,0" VerticalAlignment="Top"/>
-        </Grid>
-
-        --><!--RiskRange--><!--
-        <TextBox HorizontalAlignment="Left" Margin="27,91,0,0" TextWrapping="Wrap" Text="{Binding RiskRange}" FontWeight="Bold" FontSize="20" VerticalAlignment="Top" Width="124" Height="26" TextChanged="TextBox_TextChanged"/>
-        <Button Content="Update Risk Range" Click="btnUpdateRiskRange_Click" HorizontalAlignment="Left" Margin="27,138,0,0" VerticalAlignment="Top" Height="26" Width="124"/>
-
-        <Button Content="InitializeDB" Click ="btnInitializeDB_Click" HorizontalAlignment="Left" Margin="552,92,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
-        <Button Content="Handle Volunteers" Click="btnVolunteer_Click" HorizontalAlignment="Center" Margin="0,92,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
-        <Button Content="ResetDB" Click="btnResetDB_Click"  HorizontalAlignment="Left" Margin="137,92,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
-
     </Grid>
 </Window>-->
