@@ -10,8 +10,6 @@
         Closed="Window_Closed"
         Loaded="ScreenLoaded">
 
-
-
     <!--Config-->
     <Grid>
         <Grid.RowDefinitions>
