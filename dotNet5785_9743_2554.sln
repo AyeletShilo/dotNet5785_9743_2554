@@ -31,7 +31,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BL", "BL\BL.csproj", "{7CFF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlTest", "BlTest\BlTest.csproj", "{3BCAADFD-DDF9-4C62-9882-AA5F56F0D214}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PL", "PL\PL.csproj", "{EBF1CFBE-992C-4E2C-A7A6-E1210D2A236E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PL", "PL\PL.csproj", "{EBF1CFBE-992C-4E2C-A7A6-E1210D2A236E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,7 +77,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{1B1A2BAA-714D-44BB-BE10-CE0212866C55} = {E6B9A7F9-9041-4477-8B7A-FB84CDF1CB77}
-		{EBF1CFBE-992C-4E2C-A7A6-E1210D2A236E} = {E6B9A7F9-9041-4477-8B7A-FB84CDF1CB77}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54196258-74D6-4EA0-9590-FBBD2C3C96F7}
