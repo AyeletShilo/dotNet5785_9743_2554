@@ -14,22 +14,32 @@ namespace PL
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static private BO.Role user;
         private int _id;
-        private static bool isAdminLoggedIn = false;
-        public bool IsButtonVEnabled { get; set; } = false;
-        public bool IsButtonMEnabled { get; set; } = false;
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        public string? TextInput
+        {
+            get { return (string)GetValue(VolunteerListProperty); }
+            set { SetValue(VolunteerListProperty, value); }
+        }
+
+        /// <summary>
+        /// DependencyProperty
+        /// </summary>
+        public static readonly DependencyProperty VolunteerListProperty =
+            DependencyProperty.Register("TextInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
+        private void btn_enter(object sender, RoutedEventArgs e)
         {
             try
             {
-                var textBox = sender as TextBox;
-                _id = int.Parse(textBox.Text);
-                user = s_bl.Volunteer.GetMyJob(_id);
-                if (user == BO.Role.Manager)
+
+                if (int.TryParse(TextInput, out _id))
                 {
-                    IsButtonMEnabled = true;
+                    user = s_bl.Volunteer.GetMyJob(_id);
+                    if (user == BO.Role.Manager)
+                    {
+                        new ChoseWindow(_id).Show();
+                        Close();
+                    }
                 }
-                IsButtonVEnabled = true;
             }
             catch (Exception ex)
             {
@@ -37,27 +47,32 @@ namespace PL
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var textBox = sender as TextBox;
+            if (textBox.Text.Length == 9)
+                try
+                {
+                    //var textBox = sender as TextBox;
+                    _id = int.Parse(textBox.Text);
+                    user = s_bl.Volunteer.GetMyJob(_id);
+                    if (user == BO.Role.Manager)
+                    {
+                        new ChoseWindow(_id).Show();
+                        TextInput = null;
+                        //Close();
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+        }
         public MainWindow()
         {
             InitializeComponent();
         }
-
-        private void btn_OpenWindow(object sender, RoutedEventArgs e)
-        {
-            if (!isAdminLoggedIn)
-            {
-                isAdminLoggedIn = true;
-                AdminWindow adminWindow = new AdminWindow();
-                adminWindow.Show();
-                adminWindow.Closed += (s, args) => isAdminLoggedIn = false;
-            }
-            else
-            {
-                MessageBox.Show("An administrator is already logged in. Please try again later :)", "Attention",
-                    MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-
-        }
     }
 }
-
