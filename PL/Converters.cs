@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace PL;
 
@@ -109,3 +110,20 @@ public class ConvertUpdateMaxTime : IValueConverter
         throw new NotImplementedException("ConvertBack is not implemented");
     }
 }
+
+public class MultiConditionToIsEnabledConverter : IMultiValueConverter
+{
+    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (values.Length < 2) return false;
+
+        return values[0] == null && (bool)values[1] == true;
+    }
+
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+

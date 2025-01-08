@@ -26,205 +26,73 @@
         <!--second grid-->
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="30*"/>
                 <RowDefinition Height="217*"/>
+                <RowDefinition Height="80*"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="163*"/>
                 <ColumnDefinition Width="163*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="{Binding CurrentVolunteer.Id, StringFormat='Welcome {0}'}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="74,0,34,0" />
+            <!--<Label Content="{Binding CurrentVolunteer.Id, StringFormat='Welcome {0}'}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="74,0,34,0" />-->
 
 
-            <!--Volunteer Details-->
-            <Grid Grid.Column="0" ShowGridLines="True" Margin="0,48,0,120" Grid.RowSpan="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="163*"/>
-                    <ColumnDefinition Width="163*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="3*"/>
-                </Grid.RowDefinitions>
-                <Label Content="Full Name:" Grid.Row="1"/>
-                <TextBox Text="{Binding CurrentVolunteer.FullName }" Grid.Row="2" TextChanged="TextBox_TextChanged" Margin="0,0,0,10" />
-                <Label Content="Phone Number:" Grid.Row="3"/>
-                <TextBox Grid.Row="4" Text="{Binding CurrentVolunteer.PhoneNumber }" Margin="0,0,0,10" />
-                <Label Content="Email:" Grid.Row="5"/>
-                <TextBox Grid.Row="6" Text="{Binding CurrentVolunteer.Email}" Margin="0,0,0,10"/>
-                <Label Content="Address:" Grid.Row="1" Grid.Column="1"/>
-                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentVolunteer.Address }" Margin="0,0,0,10" />
-                <!--<TextBlock Grid.Row="4" 
-                          Text="{Binding CurrentVolunteer.Job}" />-->
-                <Label Content="Max distance from call:" Grid.Row="3"  Grid.Column="1"/>
-                <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding CurrentVolunteer.MaxDis}" Margin="0,0,0,10"/>
-                <Label Content="Active Volunteer?" Grid.Row="5" Grid.RowSpan="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,10,0,16"/>
-                <CheckBox Grid.Row="5" Grid.Column="1"
-                          IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" Margin="0,7,0,0" Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="0.402,1.01" Grid.RowSpan="2"/>
-            </Grid>
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                <Label Content="{Binding CurrentVolunteer.CancelCalls}" ContentStringFormat="Total canceled calls: {0}"  Width="239"  />
+                <Label Content="{Binding CurrentVolunteer.ExpiredCalls}" ContentStringFormat="Total expired calls: {0}" Width="233" />
+                <Label Content="{Binding CurrentVolunteer.HandleCalls}" ContentStringFormat="Total handled calls: {0}"  Width="202" />
+            </StackPanel>
+            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="3"
+                     Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="222" Width="327" Margin="0,10,0,0">
+                <Grid ShowGridLines="True" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="20*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="60*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding CurrentCall.Id}" ContentStringFormat= "Your current Call Id {0}"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="{Binding CurrentCall.CallType}" ContentStringFormat="Call Type {0}"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding CurrentCall.CallAddress}" ContentStringFormat="Address {0}"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="Opening time"/>
+                    <Label Grid.Row="2" Grid.Column="1" Content="Open until"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="{Binding CurrentCall.OpenTime}"/>
+                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding CurrentCall.MaxCloseTime}"/>
+                    <Label Grid.Row="4" Grid.ColumnSpan="2" Content="{Binding CurrentCall.Description}" ContentStringFormat="Call details {0}"/>
+                </Grid>
+            </Border>
+            <Button Content="Done" Click="EndTreatment_Click" Margin="196,224,74,105" Grid.RowSpan="2" Grid.Column="1"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}"/>
+            <Button Content="Cancel" Click="CancelTreatment_Click" Margin="260,224,10,105" Grid.RowSpan="2"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" />
+            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="10" Margin="0,0,148,129">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="6*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="2*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="{Binding CurrentVolunteer.FullName}" ContentStringFormat="Welcome {0}" Grid.Row="1"/>
+                    <Label Content="{Binding CurrentVolunteer.Id}" Grid.Row="2"/>
+                    <Label Content="{Binding CurrentVolunteer.Job}" Grid.Row="3"/>
+                </Grid>
+            </Border>
+            <Button Margin="0,227,297,107" Grid.RowSpan="2" Content="Update My details" Click="UpdateVol_Click"/>
+            <Button Margin="138,229,137,105" Content="Chose new Call" Click="ChoseCall_Click" Grid.RowSpan="2">
+                <!--<Button.IsEnabled>
+                    <MultiBinding Converter="{MultiToIsEnabledConverterKey}">
+                        <Binding Path="CurrentVolunteer.InCall"/>
+                        <Binding Path="CurrentVolunteer.IsActive"/>
+                    </MultiBinding>
+                </Button.IsEnabled>-->
+            </Button>
+            <Button Content="Previous calls" Click="HistoryCalls_Click" Margin="33,229,237,100" Grid.RowSpan="2" Grid.Column="1"/>
 
-            <Label Content="{Binding CurrentVolunteer.HandleCalls, StringFormat='Total handled calls: {0}'}" Grid.Row="1" Grid.Column="1"  Margin="0,49,206,317" />
-            <Label Content="{Binding CurrentVolunteer.CancelCalls, StringFormat='Total canceled calls: {0}'}" Grid.Row="1" Grid.Column="2"  Margin="0,49,206,317" />
-            <Label Content="{Binding CurrentVolunteer.ExpiredCalls, StringFormat='Total expired calls: {0}'}" Grid.Row="1" Grid.Column="3"  Margin="0,49,206,317" />
-
-            <Grid Grid.Column="0" Margin="10,239,10,10" Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="25*"/>
-                    <RowDefinition Height="40*"/>
-                    <RowDefinition Height="40*"/>
-                </Grid.RowDefinitions>
-                <Label Grid.Row="0" Content="{Binding CurrentCall.Id, StringFormat = Call}"  />
-            </Grid>
-                
         </Grid>
     </Grid>
-    <!--<Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="205*"/>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="12*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="5,5,5,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="10*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="106*"/>
-            </Grid.RowDefinitions>
-            <Label Content="ID:" Grid.Column="0" Grid.Row="0" Margin="5,3,5,0"/>
-            <Label Content="Full Name:" Grid.Column="0" Margin="5,35,5,3" Grid.RowSpan="2" />
-            <Label Content="Phone Number:" Grid.Column="0" Grid.Row="1" Margin="5,32,5,7" Grid.RowSpan="2" />
-            <Label Content="Email:" Grid.Column="0" Grid.Row="2" Margin="5,29,5,9" Grid.RowSpan="2" />
-            <Label Content="Address:" Grid.Column="0" Grid.Row="3" Margin="5,26,5,12" Grid.RowSpan="2" />
-            <Label Content="Role:" Grid.Column="0" Grid.Row="4" Margin="5,23,5,15" Grid.RowSpan="2" />
-            <Label Content="Active?" Grid.Column="3" Grid.Row="0"/>
-            <Label Content="Max distance from call:" Grid.Column="3" HorizontalAlignment="Left" Margin="0,35,0,0" Grid.RowSpan="2" Width="127"/>
-            <Label Content="Total calls handled:" Grid.Column="3" Grid.Row="2"/>
-            -->
-    <!--Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>-->
-    <!--
-            <Label Content="Total calls canceled:" Grid.Column="3" Grid.Row="3"/>
-            -->
-    <!--Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>-->
-    <!--
-            <Label Content="Total expired calls:" Grid.Column="3" Grid.Row="4" />
-            -->
-    <!--Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>-->
-    <!--
-            <Label Content="Call in volunteer care:" Grid.Column="0" Grid.Row="5" 
-                   Margin="0,35,254,0" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2">
-                -->
-    <!--Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"-->
-    <!--
-            </Label>
-
-            <TextBox Grid.Row="0" MaxLength="9" 
-                     Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     IsReadOnly="True" Margin="123,3,27,0" Grid.ColumnSpan="2"/>
-            <TextBox
-                     Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Margin="123,35,27,3" Grid.RowSpan="2" Grid.ColumnSpan="2" />
-            <TextBox Grid.Row="1" 
-                     Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                     MaxLength="10" Margin="123,32,27,7" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
-            <TextBox Grid.Row="2" 
-                     Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Margin="123,29,27,9" Grid.RowSpan="2" Grid.ColumnSpan="2" />
-            <TextBox Grid.Row="3"
-                     Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Margin="123,26,27,12" Grid.RowSpan="2" Grid.ColumnSpan="2" />
-            <ComboBox Grid.Row="4" 
-                      SelectedValue="{Binding CurrentVolunteer.Job,  Mode=TwoWay, NotifyOnValidationError=true}" 
-                      IsReadOnly="True" BorderBrush="Black" OpacityMask="#FF090909" Margin="123,23,27,15" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
-            <CheckBox Grid.Column="4" Grid.Row="0" Content="click for active" 
-                      IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}"/>
-            <TextBox Grid.Column="4" Grid.Row="1" 
-                     Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
-            <TextBox Grid.Column="4" Grid.Row="2" 
-                     Text="{Binding CurrentVolunteer.HandleCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
-            <TextBox Grid.Column="4" Grid.Row="3" 
-                     Text="{Binding CurrentVolunteer.CancelCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
-            <TextBox Grid.Column="4" Grid.Row ="4"
-                     Text="{Binding CurrentVolunteer.ExpiredCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
-            <ContentControl HorizontalAlignment="Left"  Grid.Row="7" VerticalAlignment="Center" Height="101" Width="726" Grid.ColumnSpan="5" DataContext="{Binding CurrentCall}">
-                <Grid ShowGridLines="True" Margin="4,4,-49,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="20*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="20*"/>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="20*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="CallId" 
-                           Grid.Row="0" 
-                           Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,19,0"/>
-                    <TextBox Text="{Binding Id}"  
-                             Grid.Row="0" 
-                             Grid.Column="1"
-                             IsReadOnly="true"/>
-                    <Label Content="CallType:"  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,19,0"/>
-                    <TextBox Text="{Binding CallType}" Grid.Row="1" Grid.Column="1" IsReadOnly="true"/>
-                    <Label Content="Description:" Grid.Row="2" Grid.Column="0" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2" Margin="0,0,19,0"/>
-                    <TextBox Text="{Binding Description}"  Grid.Row="2" Grid.Column="1" IsReadOnly="true" />
-                    <Label Content="CallAddress:" Grid.Row="0" Grid.Column="2"  Margin="0,0,0,0"/>
-                    <TextBox Text="{Binding CallAddress}"  Grid.Row="0" Grid.Column="3"  Margin="0,0,0,0" IsReadOnly="true"/>
-                    <Label Content="Open time:"  Grid.Row="1" Grid.Column="2"  Margin="0,0,0,0"/>
-                    <TextBox Text="{Binding OpenTime}" Grid.Row="1" Grid.Column="3"  Margin="0,0,0,0" IsReadOnly="true"/>
-                    <Label Content="Max time" Grid.Row="2" Grid.Column="2" RenderTransformOrigin="0.5,0.5"  Margin="0,0,0,0"/>
-                    <TextBox Text="{Binding MaxCloseTime}"  Grid.Row="2" Grid.Column="3" Margin="0,0,0,0" IsReadOnly="true"/>
-                    <Label Content="status:"  Grid.Row="0" Grid.Column="4"/>
-                    <TextBox Text="{Binding Status}" Grid.Row="0" Grid.Column="5" Margin="0,0,0,0" IsReadOnly="true"/>
-                </Grid>
-            </ContentControl>
-
-            <DataGrid Grid.Row="7" Grid.ColumnSpan="5" Margin="10,104,10,-37" ItemsSource="{Binding Path=CurrentCall.CallAssignments}" IsReadOnly ="True" AutoGenerateColumns="False"
-       	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding VolunteerId}" Header="Volunteer Id" Width="*" >
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Background" Value="LightCyan"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding VolunteerName}" Header="Volunteer Name" Width="*" />
-                    <DataGridTextColumn Binding="{Binding InterTime}" Header="Inter Time" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding EndTime}" Header="End Time" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding EndTreatment}" Header="End Treatment" Width="*"/>
-
-                </DataGrid.Columns>
-            </DataGrid>
-
-        </Grid>-->
-    <!--<Button Content="{Binding ButtonText}" Click="btnAddUpdate_Click" Grid.Row="1"/>-->
-    <!--<Label Content="distance:"  Grid.Row="1" Grid.Column="4"/>
-        <TextBox Text="{Binding VolDistance, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Grid.Column="5"/>-->
-
-
-    <!--</Grid>-->
 </Window>
+

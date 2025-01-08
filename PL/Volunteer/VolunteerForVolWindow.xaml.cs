@@ -54,7 +54,7 @@ namespace PL.Volunteer
 
         public BO.Role RoleType { get; set; } = BO.Role.Volunteer;
 
-        
+
 
         /// <summary>
         /// Constructor
@@ -90,7 +90,50 @@ namespace PL.Volunteer
 
         }
 
+        private void UpdateVol_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
+
+        private void ChoseCall_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void HistoryCalls_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EndTreatment_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentCall != null)
+            {
+                try
+                {
+                    s_bl.Call.UpdateEndTreatment(CurrentVolunteer.Id, CurrentCall.Id);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
+
+        private void CancelTreatment_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentCall != null)
+            {
+                try
+                {
+                    s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id, CurrentCall.Id);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
     }
 }
 

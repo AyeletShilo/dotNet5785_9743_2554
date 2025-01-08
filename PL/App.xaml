@@ -15,6 +15,7 @@
         <local:ConvertUpdateDetails x:Key = "ConvertUpdateDetailsKey" />
         <local:ConvertUpdateMaxTime x:Key = "ConvertUpdateMaxTimeKey" />
         <local:ConvertUpdateType x:Key = "ConvertUpdateTypeKey" />
+        <local:MultiConditionToIsEnabledConverter x:Key="MultiToIsEnabledConverterKey"/>
 
     </Application.Resources>
 </Application>
