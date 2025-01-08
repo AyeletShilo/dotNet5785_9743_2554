@@ -4,9 +4,10 @@
              xmlns:local="clr-namespace:PL"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <local:FilterByCall x:Key="FilterByCallKey" />
-        <local:RoleOpt x:Key="RoleOptKey" />
-        <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey" />
-        <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey" />
+        <local:FilterByCall x:Key="FilterByCallKey"/>
+        <local:RoleOpt x:Key="RoleOptKey"/>
+        <local:ConvertUpdateToTrue x:Key="ConvertUpdateToTrueKey"/>
+        <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey"/>
+        <local:NullToVisibilityConverter x:Key="NullToVisibilityConverterKey"/>
     </Application.Resources>
 </Application>

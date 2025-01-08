@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using PL.Volunteer;
+using System.Windows;
 
 
 namespace PL
@@ -17,10 +18,11 @@ namespace PL
         }
         private void OpenAdminWindow()
         {
-            var adminWindow = new AdminWindow();
-            _isOpen = true;
-            adminWindow.Closed += (s, e) => _isOpen = false;
-            adminWindow.ShowDialog();
+            new AdminWindow().Show();
+            //var adminWindow = new AdminWindow();
+            //_isOpen = true;
+            //adminWindow.Closed += (s, e) => _isOpen = false;
+            //adminWindow.ShowDialog();
         }
 
         private void Button_AdminClick(object sender, RoutedEventArgs e)
@@ -34,7 +36,7 @@ namespace PL
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            new VolunteerForVolWindow(_id).Show();
         }
     }
 }

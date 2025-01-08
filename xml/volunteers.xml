@@ -208,4 +208,30 @@
     <Longitude>35.2171</Longitude>
     <MaxDistance>3.7909611732439656</MaxDistance>
   </Volunteer>
+  <Volunteer>
+    <Id>213662554</Id>
+    <FullName>Tehila Kufeld</FullName>
+    <PhoneNumber>0525256500</PhoneNumber>
+    <Email>gukvgukv@gmail.com</Email>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7394234</Latitude>
+    <Longitude>35.1827337</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>213899743</Id>
+    <FullName>Ayelet Shilo</FullName>
+    <PhoneNumber>0586313990</PhoneNumber>
+    <Email>thka841@gmail.com</Email>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7394234</Latitude>
+    <Longitude>35.1827337</Longitude>
+    <MaxDistance />
+  </Volunteer>
 </ArrayOfVolunteers>

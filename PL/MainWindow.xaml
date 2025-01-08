@@ -26,7 +26,7 @@
         </Grid.RowDefinitions>
         <Label Content="Enter Your ID:" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Top" Margin="0,33,0,0" Height="33" Width="192" FontFamily="Cooper Black" FontSize="24"/>
         <TextBox Grid.Row="1" Margin="0,82,0,22" BorderBrush="#FF090909" HorizontalAlignment="Center" Width="324"
-             Text="{Binding TextInput, Mode=TwoWay}" TextChanged="TextBox_TextChanged"/>
+             Text="{Binding TextInput, Mode=TwoWay}" TextChanged="TextBox_TextChanged" KeyDown="TextBox_KeyDown"/>
         <Button Content="Enter" Height="37" Margin="130,0,0,0" Grid.Row="2" Width="116" Click="btn_enter"/>
     </Grid>
 </Window>

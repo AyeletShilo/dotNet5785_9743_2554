@@ -99,12 +99,12 @@ internal static class VolunteerManager
                 CallId = currentCall.Id,
                 CallType = (BO.CallType)currentCall.CallType,
                 Description = currentCall.Description,
-                FullAddress = currentCall.CallAddress,
+                CallAddress = currentCall.CallAddress,
                 OpenTime = currentCall.OpenTime,
                 MaxCloseTime = currentCall.MaxTime,
                 EntryTime = currentAss.InterTime,
                 VolDistance = VolunteerManager.CalculateDis(address, currentCall.CallAddress),
-                status = (currentCall.MaxTime is null || (currentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
+                Status = (currentCall.MaxTime is null || (currentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
             };
         }
         return null;

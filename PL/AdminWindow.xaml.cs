@@ -30,7 +30,7 @@ namespace PL
             set { SetValue(CurrentDateProperty, value); }
         }
         public static readonly DependencyProperty CurrentDateProperty =
-            DependencyProperty.Register("CurrentDate", typeof(DateTime), typeof(MainWindow));
+            DependencyProperty.Register("CurrentDate", typeof(DateTime), typeof(AdminWindow));
 
         private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
         {
