@@ -8,13 +8,16 @@
         Title="AddCall" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded" >
+        Loaded="Window_Loaded">
+       
+
+   
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="205*"/>
             <RowDefinition Height="25*"/>
-            <RowDefinition Height="12*"/>
+            <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0" Margin="5,5,5,10">
@@ -32,38 +35,32 @@
                 <RowDefinition Height="35*"/>
             </Grid.RowDefinitions>
 
-            <Label Content="ID:" Grid.Column="0" Grid.Row="0"/>
+            <Label Content="Add call details:" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="5"  FontWeight ="Bold" FontSize="32" HorizontalAlignment="Center"/>
             <Label Content="Call Type:" Grid.Column="0" Grid.Row="1" />
             <Label Content="Description:" Grid.Column="0" Grid.Row="2" />
             <Label Content="Call Address:" Grid.Column="0" Grid.Row="3" />
-            <Label Content="Open time:" Grid.Column="3" Grid.Row="0" />
-            <Label Content="Max Time to close:" Grid.Column="3" Grid.Row="1" />
-            <Label Content="Call status:" Grid.Column="3" Grid.Row="2"/>
+            <Label Content="Open time:" Grid.Column="3" Grid.Row="1" />
+            <Label Content="Max Time to close:" Grid.Column="3" Grid.Row="2" />
+            <Label Content="Call status:" Grid.Column="3" Grid.Row="3"/>
 
-            <TextBox Grid.Column="1" Grid.Row="0" MaxLength="9" 
-             Text="{Binding CurrentCall.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-             IsReadOnly= "True" />
+
             <ComboBox  Grid.Column="1" Grid.Row="1" 
-            SelectedValue="{Binding CurrentCall.CallType,  Mode=TwoWay, NotifyOnValidationError=true}" 
-             IsEnabled="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateTypeKey}}" 
+            SelectedValue="{Binding CurrentCall.CallType,  Mode=TwoWay, NotifyOnValidationError=true}"
             ItemsSource="{Binding Source={StaticResource TypeCallKey}}" BorderBrush="Black" OpacityMask="#FF090909"/>
             <TextBox Grid.Column="1" Grid.Row="2" 
-             Text="{Binding CurrentCall.Description, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-             MaxLength="10" IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}"/>
+             Text="{Binding CurrentCall.Description, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" MaxLength="10"/>
             <TextBox Grid.Column="1" Grid.Row="3" 
-             Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-             IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}" />
-            <TextBox Grid.Column="4" Grid.Row="0"
+             Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+            <TextBox Grid.Column="4" Grid.Row="1"
              Text="{Binding CurrentCall.OpenTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsReadOnly ="True"/>
-            <TextBox Grid.Column="4" Grid.Row="1" 
-             Text="{Binding CurrentCall.MaxCloseTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
-             IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateMaxTimeKey}}"/>
-            <ComboBox  Grid.Column="4" Grid.Row="2" 
+            <TextBox Grid.Column="4" Grid.Row="2" 
+             Text="{Binding CurrentCall.MaxCloseTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"/>
+            <ComboBox  Grid.Column="4" Grid.Row="3" 
             SelectedValue="{Binding CurrentCall.Status,  Mode=TwoWay, NotifyOnValidationError=true}"
             ItemsSource="{Binding Source={StaticResource StatusCallKey}}" BorderBrush= "Black" OpacityMask="#FF090909" IsEnabled="False"/>
         </Grid>
 
-        <Button Content="Button" HorizontalAlignment="Left" Margin="272,0,0,0" Grid.Row="2" VerticalAlignment="Center" Width="189"/>
+        <Button Content="Add Call" Click="bthAdd_Click" HorizontalAlignment="Center" VerticalAlignment="Top" Width="800" Height="63" Margin="0,358,0,0" Grid.RowSpan="3"/>
 
     </Grid>
 
