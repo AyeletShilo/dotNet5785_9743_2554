@@ -70,7 +70,7 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             BO.Call toDelete = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist");
-            if ((toDelete.Status == BO.CallStatus.Opened || toDelete.Status == BO.CallStatus.OpenInRisk) && toDelete.CallAssignments is null)
+            if ((toDelete.Status == BO.CallStatus.Opened || toDelete.Status == BO.CallStatus.OpenInRisk) && toDelete.CallAssignments?.Count ==0)
             {
                 _dal.Call.Delete(callId); //can throw Ex
                 CallManager.Observers.NotifyListUpdated();  //stage 5

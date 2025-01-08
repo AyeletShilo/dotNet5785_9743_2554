@@ -67,7 +67,8 @@ public enum CallListStatus
     Closed,
     Expired,
     OpenInRisk,
-    InTreatmentInRisk
+    InTreatmentInRisk,
+    None
 }
 
 public enum TimeUnit

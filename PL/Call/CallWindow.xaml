@@ -1,0 +1,103 @@
+﻿<Window x:Class="PL.Call.CallWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.Call"
+        mc:Ignorable="d"
+        Title="CallWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Closed="Window_Closed"
+        Loaded="Window_Loaded">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="205*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="12*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="5,5,5,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="106*"/>
+            </Grid.RowDefinitions>
+            <Label Content="ID:" Grid.Column="0" Grid.Row="0"/>
+            <Label Content="Call Type:" Grid.Column="0" Grid.Row="1" />
+            <Label Content="Description:" Grid.Column="0" Grid.Row="2" />
+            <Label Content="Call Address:" Grid.Column="0" Grid.Row="3" />
+            <Label Content="Open time:" Grid.Column="3" Grid.Row="0" />
+            <Label Content="Max Time to close:" Grid.Column="3" Grid.Row="1" />
+            <Label Content="Call status:" Grid.Column="3" Grid.Row="2"/>
+            <Label Content="Assignments of call:" Grid.Column="0" Grid.Row="4" FontWeight ="Bold" 
+               Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2">
+            </Label>
+
+
+            <TextBox Grid.Column="1" Grid.Row="0" MaxLength="9" 
+                 Text="{Binding CurrentCall.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                 IsReadOnly= "True" />
+            <ComboBox  Grid.Column="1" Grid.Row="1" 
+                SelectedValue="{Binding CurrentCall.CallType,  Mode=TwoWay, NotifyOnValidationError=true}" 
+                 IsEnabled="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateTypeKey}}" 
+                ItemsSource="{Binding Source={StaticResource TypeCallKey}}" BorderBrush="Black" OpacityMask="#FF090909"/>
+            <TextBox Grid.Column="1" Grid.Row="2" 
+                 Text="{Binding CurrentCall.Description, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
+                 MaxLength="10" IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}"/>
+            <TextBox Grid.Column="1" Grid.Row="3" 
+                 Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
+                 IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}" />
+            <TextBox Grid.Column="4" Grid.Row="0"
+                 Text="{Binding CurrentCall.OpenTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsReadOnly ="True"/>
+            <TextBox Grid.Column="4" Grid.Row="1" 
+                 Text="{Binding CurrentCall.MaxCloseTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
+                 IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateMaxTimeKey}}"/>
+            <ComboBox  Grid.Column="4" Grid.Row="2" 
+                SelectedValue="{Binding CurrentCall.Status,  Mode=TwoWay, NotifyOnValidationError=true}"
+                ItemsSource="{Binding Source={StaticResource StatusCallKey}}" BorderBrush= "Black" OpacityMask="#FF090909" IsEnabled="False"/>
+           
+            <DataGrid Grid.Row="5" ItemsSource="{Binding Path=CurrentCall.CallAssignments}" IsReadOnly ="True" AutoGenerateColumns="False"
+ 	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected" Grid.ColumnSpan="5" >
+
+                <DataGrid.Columns>
+
+                    <DataGridTextColumn Binding="{Binding VolunteerId}" Header=" volunteer Id" Width="*" >
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Background" Value="LightCyan"/>
+                                <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Binding="{Binding VolunteerName}" Header="volunteer name" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding InterTime}" Header="entry Time" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding EndTime}" Header="end Time" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding EndTreatment}" Header="treatment status" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+
+
+        </Grid>
+        <Button Content="Update" Click="btnUpdate_Click" Grid.Row="1"/>
+
+
+
+    </Grid>
+
+
+
+
+
+
+</Window>

@@ -79,8 +79,9 @@
                     <RowDefinition Height="40*"/>
                     <RowDefinition Height="40*"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Content="{Binding CurrentCall.Id, StringFormat= 'Call I}"
+                <Label Grid.Row="0" Content="{Binding CurrentCall.Id, StringFormat = Call}"  />
             </Grid>
+                
         </Grid>
     </Grid>
     <!--<Grid>

@@ -16,3 +16,26 @@ internal class RoleOpt : IEnumerable //?
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
+
+internal class FilterCall : IEnumerable 
+{
+    static readonly IEnumerable<BO.CallListStatus> s_enums =
+        (Enum.GetValues(typeof(BO.CallListStatus)) as IEnumerable<BO.CallListStatus>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
+
+internal class StatusCall : IEnumerable 
+{
+    static readonly IEnumerable<BO.CallStatus> s_enums =
+        (Enum.GetValues(typeof(BO.CallStatus)) as IEnumerable<BO.CallStatus>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
+internal class TypeCall : IEnumerable
+{
+    static readonly IEnumerable<BO.CallType> s_enums =
+        (Enum.GetValues(typeof(BO.CallType)) as IEnumerable<BO.CallType>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}

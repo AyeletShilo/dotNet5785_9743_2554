@@ -47,3 +47,65 @@ public class NullToVisibilityConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
+
+public class ConvertUpdateDetails : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        BO.CallStatus status = (BO.CallStatus)value;
+        switch (status)
+        {
+            case BO.CallStatus.Opened:
+                return false;
+            case BO.CallStatus.OpenInRisk:
+                return false;
+            default: return true;
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException("ConvertBack is not implemented");
+    }
+}
+
+public class ConvertUpdateType : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        BO.CallStatus status = (BO.CallStatus)value;
+        switch (status)
+        {
+            case BO.CallStatus.Opened:
+                return true;
+            case BO.CallStatus.OpenInRisk:
+                return true;
+            default: return false;
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException("ConvertBack is not implemented");
+    }
+}
+public class ConvertUpdateMaxTime : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        BO.CallStatus status = (BO.CallStatus)value;
+        switch (status)
+        {
+            case BO.CallStatus.Closed:
+                return true;
+            case BO.CallStatus.Expired:
+                return true;
+            default: return false;
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException("ConvertBack is not implemented");
+    }
+}

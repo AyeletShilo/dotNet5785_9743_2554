@@ -1,4 +1,5 @@
-﻿using PL.Volunteer;
+﻿using PL.Call;
+using PL.Volunteer;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -140,6 +141,11 @@ namespace PL
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        private void btnCall_Click(object sender, RoutedEventArgs e)
+        {
+            new CallListWindow().Show();
         }
     }
 }
