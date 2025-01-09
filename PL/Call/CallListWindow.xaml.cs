@@ -99,7 +99,7 @@ namespace PL.Call
 
         private void Cancel_Call(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("Do you sure you want to cancel the assignmrnt for this call?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            var result = MessageBox.Show("Do you sure you want to cancel the assignment for this call?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) return;
             try
             {
@@ -118,7 +118,7 @@ namespace PL.Call
             }
             catch (BO.BlCannotBeDeletedException ex)
             {
-                MessageBox.Show("this call assignment cannot be canceld");
+                MessageBox.Show("this call assignment cannot be canceled");
             }
 
         }

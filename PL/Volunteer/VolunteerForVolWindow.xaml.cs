@@ -1,4 +1,5 @@
-﻿using PL.Volunteer;
+﻿using PL.Call;
+using PL.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -102,7 +103,7 @@ namespace PL.Volunteer
 
         private void HistoryCalls_Click(object sender, RoutedEventArgs e)
         {
-
+            new HistoryCallsWindow(_id).Show();
         }
 
         private void EndTreatment_Click(object sender, RoutedEventArgs e)
@@ -111,7 +112,7 @@ namespace PL.Volunteer
             {
                 try
                 {
-                    s_bl.Call.UpdateEndTreatment(CurrentVolunteer.Id, CurrentCall.Id);
+                    s_bl.Call.UpdateEndTreatment(_id, CurrentCall.Id);
                 }
                 catch (Exception ex)
                 {

@@ -1,4 +1,4 @@
-﻿  using BO;
+﻿using BO;
 using DalApi;
 
 
@@ -103,7 +103,7 @@ internal static class VolunteerManager
                 OpenTime = currentCall.OpenTime,
                 MaxCloseTime = currentCall.MaxTime,
                 EntryTime = currentAss.InterTime,
-                VolDistance = VolunteerManager.CalculateDis(address, currentCall.CallAddress),
+                VolDistance = CalculateDis(address, currentCall.CallAddress),
                 Status = (currentCall.MaxTime is null || (currentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
             };
         }

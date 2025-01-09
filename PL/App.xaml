@@ -12,6 +12,7 @@
         <local:FilterCall x:Key = "FilterCallKey" />
         <local:StatusCall x:Key = "StatusCallKey" />
         <local:TypeCall x:Key = "TypeCallKey" />
+        <local:CloseCallData x:Key="CloseCallsSortKey"/>
         <local:ConvertUpdateDetails x:Key = "ConvertUpdateDetailsKey" />
         <local:ConvertUpdateMaxTime x:Key = "ConvertUpdateMaxTimeKey" />
         <local:ConvertUpdateType x:Key = "ConvertUpdateTypeKey" />

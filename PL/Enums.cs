@@ -32,10 +32,19 @@ internal class StatusCall : IEnumerable
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
+
 internal class TypeCall : IEnumerable
 {
     static readonly IEnumerable<BO.CallType> s_enums =
         (Enum.GetValues(typeof(BO.CallType)) as IEnumerable<BO.CallType>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
+
+internal class CloseCallData : IEnumerable
+{
+    static readonly IEnumerable<BO.CloseCallData> s_enums =
+        (Enum.GetValues(typeof(BO.CloseCallData)) as IEnumerable<BO.CloseCallData>)!;
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }

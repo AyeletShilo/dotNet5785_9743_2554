@@ -118,6 +118,7 @@ internal class CallImplementation : BlApi.ICall
                     BO.CloseCallData.OpenTime => call.OpenTime,
                     BO.CloseCallData.CloseTime => call.CloseTime,
                     BO.CloseCallData.EndTreatment => call.EndTreatment,
+                    _=>call.Id,
                 });
             return closeCalls;
         }
@@ -140,7 +141,7 @@ internal class CallImplementation : BlApi.ICall
         IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
         var openCalls = from item in oldCalls
                         let tmpCall = Read(item.Id)
-                        where tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened
+                        where (tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened)&&CallManager.CorrectDis(vol, item.Latitude, item.Longitude)
                         select CallManager.ToOpenCall(item, volId); //can throw Ex
 
 
@@ -158,6 +159,7 @@ internal class CallImplementation : BlApi.ICall
                 BO.OpenCallData.OpenTime => call.OpenTime,
                 BO.OpenCallData.MaxCloseTime => call.MaxCloseTime,
                 BO.OpenCallData.VolDistance => call.VolDistance,
+                _=> call.Id
             }));
         return openCalls;
 
@@ -272,6 +274,7 @@ internal class CallImplementation : BlApi.ICall
                     BO.CallData.CompletionTime => call.CompletionTime,
                     BO.CallData.Status => call.Status,
                     BO.CallData.TotalAssignments => call.TotalAssignments,
+                    _ => call.Id
                 }));
             return calls;
         }

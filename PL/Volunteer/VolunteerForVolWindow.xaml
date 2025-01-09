@@ -37,10 +37,10 @@
             <!--<Label Content="{Binding CurrentVolunteer.Id, StringFormat='Welcome {0}'}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="74,0,34,0" />-->
 
 
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                <Label Content="{Binding CurrentVolunteer.CancelCalls}" ContentStringFormat="Total canceled calls: {0}"  Width="239"  />
-                <Label Content="{Binding CurrentVolunteer.ExpiredCalls}" ContentStringFormat="Total expired calls: {0}" Width="233" />
-                <Label Content="{Binding CurrentVolunteer.HandleCalls}" ContentStringFormat="Total handled calls: {0}"  Width="202" />
+            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                <Label Content="{Binding CurrentVolunteer.HandleCalls}" ContentStringFormat="Total handled calls: {0}"  Width="230" />
+                <Label Content="{Binding CurrentVolunteer.CancelCalls}" ContentStringFormat="Total canceled calls: {0}"  Width="230"  />
+                <Label Content="{Binding CurrentVolunteer.ExpiredCalls}" ContentStringFormat="Total expired calls: {0}" Width="230" />
             </StackPanel>
             <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="3"
                      Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="222" Width="327" Margin="0,10,0,0">

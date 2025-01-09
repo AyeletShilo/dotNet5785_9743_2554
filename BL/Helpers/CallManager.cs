@@ -234,6 +234,16 @@ internal static class CallManager
         };
     }
 
+    internal static bool CorrectDis(DO.Volunteer vol, double callLat, double callLon)
+    {
+        if (vol.VolAddress != null)
+        {
+            double lat = (double)vol.Latitude - callLat, lon = (double)vol.Longitude - callLon;
+            return Math.Sqrt(Math.Pow(lat, 2) + Math.Pow(lon, 2)) <= vol.MaxDistance;
+        }
+        return true;
+    }
+
     /// <summary>
     /// Goes through all calls whose maximum completion time has passed and whose 
     /// processing has not yet finished - and closes them with a completion type of "Expired":

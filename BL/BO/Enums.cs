@@ -22,7 +22,8 @@ public enum CallType
     Cleaning,
     Repairing,
     TechnologyHelp,
-    Talking
+    Talking,
+    None
 }
 
 
@@ -113,7 +114,8 @@ public enum CloseCallData
     OpenTime,
     InterTime,
     CloseTime,
-    EndTreatment
+    EndTreatment,
+    None
 }
 
 public enum OpenCallData

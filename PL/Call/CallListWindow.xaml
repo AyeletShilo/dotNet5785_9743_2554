@@ -47,7 +47,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="*"/>
                 <DataGridTextColumn Binding="{Binding LeftTime}" Header="Left Time" Width="*"/>
-                <DataGridTextColumn Binding="{Binding CompletionTime}" Header="Complete Time" Width="*"/>
+                <DataGridTextColumn Binding="{Binding CompletionTime}" Header="Complate Time" Width="*"/>
                 <DataGridTextColumn Binding="{Binding Status}" Header="call status" Width="*"/>
                 <DataGridTextColumn Binding="{Binding TotalAssignments}" Header="Total Assignments" Width="*"/>
                 <DataGridTextColumn Binding="{Binding LastVolunteer}" Header="Last Volunteer" Width="*"/>

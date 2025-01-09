@@ -69,7 +69,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     }
 
     /// <summary>
-    /// returns volunteer gob accordding his Id
+    /// returns volunteer gob according his Id
     /// </summary>
     /// <param name="id">volunteer Id</param>
     /// <returns>volunteer gob</returns>
