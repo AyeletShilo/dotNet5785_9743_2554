@@ -15,5 +15,6 @@ public interface ICall : IObservable //stage 5
     void UpdateEndTreatment(int volId, int assignmentId);
     void UpdateCancelTreatment(int volId, int assignmentId);
     void CallToTreatment(int volId, int callId);
-
+    void GetAssignmentToEnd(int volId, int callId);
+    void GetAssignmentToCancel(int volId, int callId);
 }

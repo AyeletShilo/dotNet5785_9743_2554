@@ -18,17 +18,19 @@ namespace PL
         }
         private void OpenAdminWindow()
         {
-            new AdminWindow().Show();
-            //var adminWindow = new AdminWindow();
-            //_isOpen = true;
-            //adminWindow.Closed += (s, e) => _isOpen = false;
-            //adminWindow.ShowDialog();
+           // new AdminWindow().Show();
+            var adminWindow = new AdminWindow();
+            _isOpen = true;
+            adminWindow.Closed += (s, e) => _isOpen = false;
+            adminWindow.Show();
         }
 
         private void Button_AdminClick(object sender, RoutedEventArgs e)
         {
             if (!_isOpen)
-            { OpenAdminWindow(); }
+            { 
+                OpenAdminWindow(); 
+            }
             else
                 MessageBox.Show("There is another administrator on the system, so the admin screen is unavailable. Please try again later :)",
                     "Please note", MessageBoxButton.OK, MessageBoxImage.Warning);

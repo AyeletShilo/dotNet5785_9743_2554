@@ -112,7 +112,8 @@ namespace PL.Volunteer
             {
                 try
                 {
-                    s_bl.Call.UpdateEndTreatment(_id, CurrentCall.Id);
+                    s_bl.Call.GetAssignmentToEnd(_id, CurrentCall.Id);
+                    RefreshVolunteer();
                 }
                 catch (Exception ex)
                 {
@@ -127,7 +128,8 @@ namespace PL.Volunteer
             {
                 try
                 {
-                    s_bl.Call.UpdateCancelTreatment(CurrentVolunteer.Id, CurrentCall.Id);
+                    s_bl.Call.GetAssignmentToCancel(CurrentVolunteer.Id, CurrentCall.Id);
+                    RefreshVolunteer();
                 }
                 catch (Exception ex)
                 {

@@ -70,7 +70,7 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             BO.Call toDelete = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist");
-            if ((toDelete.Status == BO.CallStatus.Opened || toDelete.Status == BO.CallStatus.OpenInRisk) && toDelete.CallAssignments?.Count ==0)
+            if ((toDelete.Status == BO.CallStatus.Opened || toDelete.Status == BO.CallStatus.OpenInRisk) && toDelete.CallAssignments?.Count == 0)
             {
                 _dal.Call.Delete(callId); //can throw Ex
                 CallManager.Observers.NotifyListUpdated();  //stage 5
@@ -118,7 +118,7 @@ internal class CallImplementation : BlApi.ICall
                     BO.CloseCallData.OpenTime => call.OpenTime,
                     BO.CloseCallData.CloseTime => call.CloseTime,
                     BO.CloseCallData.EndTreatment => call.EndTreatment,
-                    _=>call.Id,
+                    _ => call.Id,
                 });
             return closeCalls;
         }
@@ -159,7 +159,7 @@ internal class CallImplementation : BlApi.ICall
                 BO.OpenCallData.OpenTime => call.OpenTime,
                 BO.OpenCallData.MaxCloseTime => call.MaxCloseTime,
                 BO.OpenCallData.VolDistance => call.VolDistance,
-                _=> call.Id
+                _ => call.Id
             }));
         return openCalls;
 
@@ -381,6 +381,26 @@ internal class CallImplementation : BlApi.ICall
         catch (DO.DalXMLFileLoadCreateException ex)
         {
             throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
+    }
+
+    public void GetAssignmentToEnd(int volId, int callId)
+    {
+        DO.Assignment assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment");
+       // if (assignment != null)
+        {
+            int assignId = assignment.Id;
+            UpdateEndTreatment(volId, assignId);
+        }
+    }
+
+    public void GetAssignmentToCancel(int volId, int callId)
+    {
+        DO.Assignment? assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment"); ;
+        //if (assignment != null)
+        {
+            int assignId = assignment.Id;
+            UpdateCancelTreatment(volId, assignId);
         }
     }
 
