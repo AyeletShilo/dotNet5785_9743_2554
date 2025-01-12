@@ -10,4 +10,5 @@ public interface IVolunteer : IObservable //stage 5
     void Update(int id, Volunteer volToUpdate);
     void Delete(int id);
     Role GetMyJob(int id);
+    void UpdateAddress(BO.Volunteer vol, string? newAdd);
 }

@@ -141,7 +141,7 @@ internal class CallImplementation : BlApi.ICall
         IEnumerable<DO.Call> oldCalls = _dal.Call.ReadAll(null);
         var openCalls = from item in oldCalls
                         let tmpCall = Read(item.Id)
-                        where (tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened)&&CallManager.CorrectDis(vol, item.Latitude, item.Longitude)
+                        where (tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened) && CallManager.CorrectDis(vol, item.Latitude, item.Longitude)
                         select CallManager.ToOpenCall(item, volId); //can throw Ex
 
 
@@ -363,7 +363,7 @@ internal class CallImplementation : BlApi.ICall
         try
         {
             DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
-            if (volId == assignment.VolunteerId && assignment.EndTreatment is null)
+            if (volId == assignment.VolunteerId && assignment.EndTreatment == null)
             {
                 DO.Assignment updateAssignment = new(assignmentId, assignment.CallId, volId,
                     assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.TakenCare);

@@ -83,12 +83,12 @@
             </Border>
             <Button Margin="0,227,297,107" Grid.RowSpan="2" Content="Update My details" Click="UpdateVol_Click"/>
             <Button Margin="138,229,137,105" Content="Chose new Call" Click="ChoseCall_Click" Grid.RowSpan="2">
-                <!--<Button.IsEnabled>
-                    <MultiBinding Converter="{MultiToIsEnabledConverterKey}">
+                <Button.IsEnabled>
+                    <MultiBinding Converter="{StaticResource MultiToIsEnabledConverterKey}">
                         <Binding Path="CurrentVolunteer.InCall"/>
                         <Binding Path="CurrentVolunteer.IsActive"/>
                     </MultiBinding>
-                </Button.IsEnabled>-->
+                </Button.IsEnabled>
             </Button>
             <Button Content="Previous calls" Click="HistoryCalls_Click" Margin="33,229,237,100" Grid.RowSpan="2" Grid.Column="1"/>
 

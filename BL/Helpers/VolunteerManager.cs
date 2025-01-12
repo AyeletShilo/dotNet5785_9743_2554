@@ -90,7 +90,7 @@ internal static class VolunteerManager
     {
         Func<DO.Assignment, bool> func = item => item.VolunteerId == id;
         DO.Assignment? currentAss = s_dal.Assignment.Read(func);
-        if (currentAss is not null)/*?? throw new BO.BlNullPropertyException($"Assignment does not exist");*/
+        if (currentAss != null && currentAss.EndTime == null)/*?? throw new BO.BlNullPropertyException($"Assignment does not exist");*/
         {
             DO.Call currentCall = s_dal.Call.Read(currentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
             return new()
@@ -171,7 +171,7 @@ internal static class VolunteerManager
         double y = deltaLat;
 
         double distance = R * Math.Sqrt(x * x + y * y); // נוסחת פיתגורס
-        return distance;
+        return Math.Round(distance, 4);
     }
 
 

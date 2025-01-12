@@ -58,9 +58,9 @@
                  Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
                  IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}" />
             <TextBox Grid.Column="4" Grid.Row="0"
-                 Text="{Binding CurrentCall.OpenTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsReadOnly ="True"/>
+                 Text="{Binding CurrentCall.OpenTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsReadOnly ="True"/>
             <TextBox Grid.Column="4" Grid.Row="1" 
-                 Text="{Binding CurrentCall.MaxCloseTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
+                 Text="{Binding CurrentCall.MaxCloseTime,  StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
                  IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateMaxTimeKey}}"/>
             <ComboBox  Grid.Column="4" Grid.Row="2" 
                 SelectedValue="{Binding CurrentCall.Status,  Mode=TwoWay, NotifyOnValidationError=true}"
@@ -81,8 +81,8 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding VolunteerName}" Header="volunteer name" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding InterTime}" Header="entry Time" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding EndTime}" Header="end Time" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="entry Time" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding EndTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="end Time" Width="*"/>
                     <DataGridTextColumn Binding="{Binding EndTreatment}" Header="treatment status" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>

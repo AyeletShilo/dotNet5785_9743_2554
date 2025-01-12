@@ -135,7 +135,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             {
                 volunteerInList = volunteerInList.Where(volunteer => volunteer.IsActive == isActive);
             }
-            volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter :v.InTreatment != null);
+            volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter : v.InTreatment != null);
             volunteerInList = sort == null ? volunteerInList.OrderBy(v => v.Id)
                 : volunteerInList.OrderBy<BO.VolunteerInList, object>(v => sort switch
                 {
@@ -172,14 +172,14 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
                 VolunteerManager.CheckLogic(volToUpdate); //can throw Ex
 
-                double[] AddressCordinate = CallManager.GetCoordinates(volToUpdate.Address);
+                double[] addressCordinate = CallManager.GetCoordinates(volToUpdate.Address);
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
                 if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id) != BO.Role.Manager)
                     throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 
                 DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
-             volToUpdate.Address, AddressCordinate[0], AddressCordinate[1], volToUpdate.MaxDis);
+             volToUpdate.Address, addressCordinate[0], addressCordinate[1], volToUpdate.MaxDis);
 
                 _dal.Volunteer.Update(doVolunteer);//can throw Ex
                 VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);  //stage 5
@@ -201,6 +201,13 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         }
     }
 
+    public void UpdateAddress(BO.Volunteer vol, string? newAdd)
+    {
+        BO.Volunteer copyVol = vol;
+        if (newAdd == "")
+            copyVol.Address = newAdd;
+        Update(vol.Id, copyVol);
+    }
     #region Stage 5
     public void AddObserver(Action listObserver) =>
     VolunteerManager.Observers.AddListObserver(listObserver); //stage 5

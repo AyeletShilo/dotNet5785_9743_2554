@@ -175,7 +175,7 @@ public static class Initialization
         string[] emailsEnds = { @"@gmail.com", @"@walla.co.il", @"@g.jct.ac.il" };
         int i = 0;
         string[] fullNames =
-            {"Amit Nakesh", "Nir Kuda", "Beni Mus", "Beti Bam","Avi Ron", "Gila Zahav", "Ram Kol", "Chani Chaim","Poli Din","Maya Gido","Ori Gami", "Dina Barzily", "Moise Kattan", "Ran Amitz", "Nurit Lady", "Jonathan Shapira" };
+            {"Amit Nakesh", "Nir Kuda", "Beni Mus", "Beti Bam","Avi Ron", "Gila Zahav", "Ram Kol", "Chani Chaim","Poli Din","Maya Gidu","Ori Gami", "Dina Barzily", "Moise Kattan", "Ran Amitz", "Nurit Lady", "Jonathan Shapira" };
         string[] Emails =
         {"amit234", "nirkush", "cbh", "bamb" ,"avi54","gila43" , "rkol", "chch" , "poli", "mgido", "ogami", "barzilay", "Kattani98","rAmitz", "perach" ,"jShapira"};
         string[] Addresses =

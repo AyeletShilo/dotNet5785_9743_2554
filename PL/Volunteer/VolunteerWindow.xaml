@@ -69,7 +69,7 @@
                       SelectionChanged="ComboBox_SelectionChanged"
                       ItemsSource="{Binding Source={StaticResource RoleOptKey}}" BorderBrush="Black" OpacityMask="#FF090909"/>
             <CheckBox Grid.Column="4" Grid.Row="0" Content="click for active" 
-                      IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}"/>
+                      IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" IsEnabled="{Binding CurrentVolunteer.InCall, Converter={StaticResource ConvertActiveIsEnableKey}}" />
             <TextBox Grid.Column="4" Grid.Row="1" 
                      Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
             <TextBox Grid.Column="4" Grid.Row="2" 

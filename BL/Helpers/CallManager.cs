@@ -69,7 +69,7 @@ internal static class CallManager
         if (currentMaxTime == false)
             throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
 
-        double[] AddressCoordinate = CallManager.GetCoordinates(toCheck.CallAddress); //לסדר חריגות פה
+        double[] AddressCoordinate = CallManager.GetCoordinates(toCheck.CallAddress); 
 
         DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, AddressCoordinate[0],
             AddressCoordinate[1], toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
@@ -233,9 +233,10 @@ internal static class CallManager
             VolDistance = VolunteerManager.CalculateDis(volAddress, item.CallAddress)
         };
     }
-
     internal static bool CorrectDis(DO.Volunteer vol, double callLat, double callLon)
     {
+        if (vol.MaxDistance == null)
+            return true;
         if (vol.VolAddress != null)
         {
             double lat = (double)vol.Latitude - callLat, lon = (double)vol.Longitude - callLon;
@@ -278,7 +279,7 @@ internal static class CallManager
                 else//if(call.CallAssignments.Last().EndTime==null)
                 {
                     assignUpdated = true;
-                    DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Controled Null
+                    DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Controlled Null
                     s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
                     Observers.NotifyItemUpdated(assignToUp.Id); //stage 5
                     //call.CallAssignments.Last().EndTime = newClock;

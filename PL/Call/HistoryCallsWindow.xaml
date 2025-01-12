@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="HistoryCallsWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <!--Closed="Window_Closed"-->
-        <!--Loaded="Window_Loaded">-->
+    <!--Closed="Window_Closed"
+        Loaded="Window_Loaded">-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="11*"/>
@@ -54,9 +54,9 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="*"/>
                     <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="2*"/>
-                    <DataGridTextColumn Binding="{Binding OpenTime}" Header="Open Time" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding InterTime}" Header="Start at" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding CloseTime}" Header="Close Time" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Start at" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding CloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="*"/>
                     <DataGridTextColumn Binding="{Binding EndTreatment}" Header="Close at" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>

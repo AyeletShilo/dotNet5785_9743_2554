@@ -1,0 +1,58 @@
+﻿<Window x:Class="PL.Volunteer.VolunteerDataWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL.Volunteer"
+        mc:Ignorable="d"
+        Title="VolunteerDataWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Closed="Window_Closed"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="11*"/>
+            <RowDefinition Height="418*"/>
+            <RowDefinition Height="11*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="11*"/>
+            <ColumnDefinition Width="782*"/>
+            <ColumnDefinition Width="11*"/>
+        </Grid.ColumnDefinitions>
+        <!--Volunteer Details-->
+        <Grid Grid.Column="1" ShowGridLines="False"  Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="10*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+                <RowDefinition Height="35*"/>
+            </Grid.RowDefinitions>
+            <Label Content="Full Name:" Grid.Row="1"/>
+            <TextBox Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" Grid.Row="1" Grid.Column="1" />
+            <Label Content="Phone Number:" Grid.Row="2"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" />
+            <Label Content="Email:" Grid.Row="3"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+            <Label Content="Address:" Grid.Row="1" Grid.Column="3"/>
+            <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" />
+            <!--<TextBlock Grid.Row="4" 
+                          Text="{Binding CurrentVolunteer.Job}" />-->
+            <Label Content="Max distance from call:" Grid.Row="2"  Grid.Column="3"/>
+            <TextBox Grid.Row="2" Grid.Column="4" Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"/>
+            <Label Content="Active Volunteer?" Grid.Row="3" Grid.Column="3"  Margin="0,10,0,16"/>
+            <CheckBox Grid.Row="3" Grid.Column="4"
+                          IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsEnabled="{Binding CurrentVolunteer.InCall, Converter={StaticResource ConvertActiveIsEnableKey}}" Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="0.402,1.01" Grid.RowSpan="2"/>
+            <Button Grid.Row="8" Grid.ColumnSpan="5" Content="Update" Click="Button_Click"/>
+        </Grid>
+    </Grid>
+</Window>

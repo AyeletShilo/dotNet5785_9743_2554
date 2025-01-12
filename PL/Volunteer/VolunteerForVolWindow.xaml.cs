@@ -63,9 +63,9 @@ namespace PL.Volunteer
         /// <param name="id">id of who open this window</param>
         public VolunteerForVolWindow(int id = 0)
         {
+            CurrentVolunteer = s_bl.Volunteer.Read(id);
             InitializeComponent();
             _id = id;
-            CurrentVolunteer = s_bl.Volunteer.Read(id);
             if (CurrentVolunteer!.InCall != null)
             {
                 CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
@@ -93,12 +93,12 @@ namespace PL.Volunteer
 
         private void UpdateVol_Click(object sender, RoutedEventArgs e)
         {
-
+            new VolunteerDataWindow(_id).Show();
         }
 
         private void ChoseCall_Click(object sender, RoutedEventArgs e)
         {
-
+            new ChooseCallWindow(_id).Show();
         }
 
         private void HistoryCalls_Click(object sender, RoutedEventArgs e)
