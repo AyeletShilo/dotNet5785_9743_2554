@@ -2,10 +2,18 @@
 
 namespace PL;
 
-internal class FilterByCall : IEnumerable //?
+internal class FilterByCall : IEnumerable 
 {
     static readonly IEnumerable<BO.CallInTreatment> s_enums =
         (Enum.GetValues(typeof(BO.CallInTreatment)) as IEnumerable<BO.CallInTreatment>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
+
+internal class SortVolunteer : IEnumerable 
+{
+    static readonly IEnumerable<BO.VolunteerData> s_enums =
+        (Enum.GetValues(typeof(BO.VolunteerData)) as IEnumerable<BO.VolunteerData>)!;
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
@@ -25,6 +33,13 @@ internal class FilterCall : IEnumerable
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
 
+internal class SortCall : IEnumerable
+{
+    static readonly IEnumerable<BO.CallData> s_enums =
+        (Enum.GetValues(typeof(BO.CallData)) as IEnumerable<BO.CallData>)!;
+
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
 internal class StatusCall : IEnumerable 
 {
     static readonly IEnumerable<BO.CallStatus> s_enums =
@@ -46,5 +61,12 @@ internal class CloseCallData : IEnumerable
     static readonly IEnumerable<BO.CloseCallData> s_enums =
         (Enum.GetValues(typeof(BO.CloseCallData)) as IEnumerable<BO.CloseCallData>)!;
 
+    public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
+}
+
+internal class OpenCallData : IEnumerable
+{
+    static readonly IEnumerable<BO.OpenCallData> s_enums =
+        (Enum.GetValues(typeof(BO.OpenCallData)) as IEnumerable<BO.OpenCallData>)!;
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }

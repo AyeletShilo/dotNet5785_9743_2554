@@ -28,12 +28,45 @@
         </Grid>
 
         <!--RiskRange-->
-        <TextBox HorizontalAlignment="Left" Margin="27,91,0,0" TextWrapping="Wrap" Text="{Binding RiskRange}" FontWeight="Bold" FontSize="20" VerticalAlignment="Top" Width="124" Height="26" TextChanged="TextBox_TextChanged"/>
+        <TextBox HorizontalAlignment="Left" Margin="27,91,0,0" TextWrapping="Wrap" Text="{Binding RiskRange}" FontWeight="Bold" FontSize="20" VerticalAlignment="Top" Width="124" Height="26"/>
         <Button Content="Update Risk Range" Click="btnUpdateRiskRange_Click" HorizontalAlignment="Left" Margin="27,138,0,0" VerticalAlignment="Top" Height="26" Width="124"/>
 
-        <Button Content="InitializeDB" Click ="btnInitializeDB_Click" HorizontalAlignment="Left" Margin="552,92,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
+        <Button Content="InitializeDB" Click ="btnInitializeDB_Click" HorizontalAlignment="Left" Margin="89,141,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
         <Button Content="Handle Volunteers" Click="btnVolunteer_Click" HorizontalAlignment="Center" Margin="0,146,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
-        <Button Content="ResetDB" Click="btnResetDB_Click"  HorizontalAlignment="Left" Margin="137,92,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
+        <Button Content="ResetDB" Click="btnResetDB_Click"  HorizontalAlignment="Left" Margin="89,47,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
         <Button Content = "Handle Calls" Click = "btnCall_Click" HorizontalAlignment = "Center" Margin = "0,47,0,0" VerticalAlignment = "Top" Height = "40" Width = "120" Grid.Row = "1" />
+
+        
+        <Grid Grid.Row="1" Margin="507,47,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Button Content="Opened" Grid.Row="0" Grid.Column="0" Click="Opened_Click"/>
+            <Button Content="In treatment"  Grid.Row="1" Grid.Column="0" Click="Tretment_Click"/>
+            <Button Content="Closed" Grid.Row="2" Grid.Column="0" Click="Closed_Click"/>
+            <Button Content="Expired" Grid.Row="3" Grid.Column="0" Click="Expired_Click" />
+            <Button Content="Open in risk" Grid.Row="4" Grid.Column="0" Click="OpenRisk_Click"/>
+            <Button Content="In treatment in risk" Grid.Row="5" Grid.Column="0" Click="TretmentRisk_Click"/>
+            
+            <TextBox Text="{Binding CallsAmount[0], Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
+            <TextBox Text="{Binding CallsAmount[1], Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
+            <TextBox Text="{Binding CallsAmount[2], Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
+            <TextBox Text="{Binding CallsAmount[3], Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
+            <TextBox Text="{Binding CallsAmount[4], Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
+            <TextBox Text="{Binding CallsAmount[5], Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
+
+        </Grid>
+        <Label Content="Amount of call according status:" HorizontalAlignment="Left" Margin="507,24,0,0" Grid.Row="1" VerticalAlignment="Top" Width="283"/>
     </Grid>
 </Window>

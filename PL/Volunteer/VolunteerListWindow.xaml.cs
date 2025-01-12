@@ -26,21 +26,35 @@ namespace PL.Volunteer
             DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
 
         public BO.CallInTreatment CallType { get; set; } = BO.CallInTreatment.None;
+
+        public BO.VolunteerData? SortValue { get; set; } = BO.VolunteerData.Id;
         public BO.VolunteerInList? SelectedVolunteer { get; set; }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallType = (BO.CallInTreatment)((ComboBox)sender).SelectedItem;
 
             queryVolunteerList();
-            //VolunteerList = (CallType == BO.CallInTreatment.None)
-            //    ? s_bl?.Volunteer.ReadAll()!
-            //    : s_bl?.Volunteer.ReadAll(null, BO.VolunteerData.InTreatment, CallType)!;
+        }
+
+        private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SortValue = (BO.VolunteerData)((ComboBox)sender).SelectedItem;
+            queryVolunteerList();
         }
 
         private void queryVolunteerList()
-    => VolunteerList = (CallType == BO.CallInTreatment.None) ?
-        s_bl?.Volunteer.ReadAll()! : s_bl?.Volunteer.ReadAll(null, BO.VolunteerData.InTreatment, CallType)!;
+        {
+            if (CallType == BO.CallInTreatment.None && SortValue== BO.VolunteerData.Id)
+                VolunteerList = s_bl?.Volunteer.ReadAll()!;
+            else if(CallType == BO.CallInTreatment.None)
+                VolunteerList = s_bl?.Volunteer.ReadAll(null,SortValue)!;
+            else if(SortValue == BO.VolunteerData.Id)
+                VolunteerList = s_bl?.Volunteer.ReadAll(null, null, CallType)!;
+            else
+                VolunteerList= s_bl?.Volunteer.ReadAll(null, SortValue, CallType)!;
+            
+        }
 
         private void volunteerListObserver()
             => queryVolunteerList();

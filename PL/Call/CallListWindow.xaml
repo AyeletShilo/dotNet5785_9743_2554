@@ -21,12 +21,19 @@
         <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Label" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Top" Grid.Column="0"/>
+            <Label Content="Filter calls by:" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0"/>
             <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                       ItemsSource="{Binding Source={StaticResource FilterCallKey}}"
-                      SelectionChanged="ComboBox_SelectionChanged"  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}">
+                      SelectionChanged="Filter_SelectionChanged"  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}">
+            </ComboBox>
+            <Label Content="Sort calls by:" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2"/>
+            <ComboBox Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+          ItemsSource="{Binding Source={StaticResource SortCallKey}}"
+          SelectionChanged="Sort_SelectionChanged"  SelectedValue="{Binding Path=CallSort, Mode=TwoWay}">
             </ComboBox>
 
 

@@ -10,13 +10,17 @@
         <local:ConvertUpdateToVisible x:Key="ConvertUpdateToVisibleKey"/>
         <local:NullToVisibilityConverter x:Key="NullToVisibilityConverterKey"/>
         <local:FilterCall x:Key = "FilterCallKey" />
+        <local:SortCall x:Key="SortCallKey"/>
         <local:StatusCall x:Key = "StatusCallKey" />
         <local:TypeCall x:Key = "TypeCallKey" />
+        <local:SortVolunteer x:Key= "SortVolunteerKey"/>
         <local:CloseCallData x:Key="CloseCallsSortKey"/>
+        <local:OpenCallData x:Key="OpenCallsSortKey"/>
         <local:ConvertUpdateDetails x:Key = "ConvertUpdateDetailsKey" />
         <local:ConvertUpdateMaxTime x:Key = "ConvertUpdateMaxTimeKey" />
         <local:ConvertUpdateType x:Key = "ConvertUpdateTypeKey" />
-        <local:MultiConditionToIsEnabledConverter x:Key="MultiToIsEnabledConverterKey"/>
+        <local:ConvertActiveIsEnable x:Key="ConvertActiveIsEnableKey"/>
+        <local:MultiToIsEnabledConverter x:Key="MultiToIsEnabledConverterKey"/>
 
     </Application.Resources>
 </Application>

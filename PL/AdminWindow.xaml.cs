@@ -1,4 +1,5 @@
-﻿using PL.Call;
+﻿using BO;
+using PL.Call;
 using PL.Volunteer;
 using System.Text;
 using System.Windows;
@@ -21,6 +22,7 @@ namespace PL
         public AdminWindow()
         {
             InitializeComponent();
+            queryCallList();
         }
 
 
@@ -80,11 +82,13 @@ namespace PL
             RiskRange = s_bl.Admin.GetMaxRange();
             s_bl.Admin.AddClockObserver(clockObserver);
             s_bl.Admin.AddConfigObserver(configObserver);
+            s_bl.Call.AddObserver(CallAmountObserver);
         }
         private void Window_Closed(object sender, /*Routed*/EventArgs e) //?
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
+            s_bl.Call.RemoveObserver(CallAmountObserver);
         }
 
         private void btnVolunteer_Click(object sender, RoutedEventArgs e)
@@ -97,7 +101,7 @@ namespace PL
             var result = MessageBox.Show("Do you want to do reset?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) return;
             CloseAllWindowsExceptMain();
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.AppStarting;
             try
             {
                 s_bl.Admin.ResetDB();
@@ -116,7 +120,7 @@ namespace PL
             var result = MessageBox.Show("Do you want to do an initialization?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) return;
             CloseAllWindowsExceptMain();
-            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.AppStarting;
             try
             {
                 s_bl.Admin.InitializeDB();
@@ -138,14 +142,67 @@ namespace PL
                     window.Close();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
-
         private void btnCall_Click(object sender, RoutedEventArgs e)
         {
             new CallListWindow().Show();
         }
+
+
+
+        public IEnumerable<int> CallsAmount
+        {
+            get { return (IEnumerable<int>)GetValue(CallsAmountProperty); }
+            set { SetValue(CallsAmountProperty, value); }
+        }
+
+        /// <summary>
+        /// DependencyProperty
+        /// </summary>
+        public static readonly DependencyProperty CallsAmountProperty =
+            DependencyProperty.Register("CallsAmount", typeof(IEnumerable<int>) ,typeof(AdminWindow));
+
+
+        //public BO.CallListStatus Status { get; set; } = BO.CallListStatus.None;
+
+        //private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    Status = (BO.CallListStatus)((ComboBox)sender).SelectedItem;
+        //    queryCallList();
+        //}
+
+        private void queryCallList()
+        {
+            CallsAmount = s_bl.Call.HowManyCalls();
+            //int Amount = CallsAmount[(int)Status];
+        }
+        private void CallAmountObserver()
+            => queryCallList();
+
+        private void Opened_Click(object sender, RoutedEventArgs e)
+        {
+            new CallListWindow(0, BO.CallListStatus.Opened).Show();
+        }
+
+        private void Closed_Click(object sender, RoutedEventArgs e)
+        {
+            new CallListWindow(0, BO.CallListStatus.Closed).Show();
+        }
+        private void Tretment_Click(object sender, RoutedEventArgs e)
+        {
+            new CallListWindow(0, BO.CallListStatus.InTreatment).Show();
+        }
+        private void Expired_Click(object sender, RoutedEventArgs e)
+        {
+            new CallListWindow(0, BO.CallListStatus.Expired).Show();
+        }
+        private void OpenRisk_Click(object sender, RoutedEventArgs e)
+        {
+            new CallListWindow(0, BO.CallListStatus.OpenInRisk).Show();
+        }
+        private void TretmentRisk_Click(object sender, RoutedEventArgs e)
+        {
+            new CallListWindow(0, BO.CallListStatus.InTreatmentInRisk).Show();
+        }
     }
+    
 }

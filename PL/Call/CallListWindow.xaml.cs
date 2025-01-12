@@ -21,10 +21,12 @@ namespace PL.Call
     /// </summary>
     public partial class CallListWindow : Window
     {
-        public CallListWindow(int id = 0)
+        public CallListWindow(int id = 0 , BO.CallListStatus status = BO.CallListStatus.None)
         {
             InitializeComponent();
             VolunteerId = id;
+            CallFilter = status;
+            queryCallList();
         }
         public int VolunteerId
         {
@@ -49,16 +51,32 @@ namespace PL.Call
         public static readonly DependencyProperty CallListProperty =
             DependencyProperty.Register("CallList", typeof(IEnumerable<BO.CallInList>), typeof(CallListWindow), new PropertyMetadata(null));
 
-        public BO.CallListStatus CallFilter { get; set; } = BO.CallListStatus.None; 
+        public BO.CallListStatus CallFilter { get; set; } = BO.CallListStatus.None;
+        public BO.CallData CallSort { get; set; } = BO.CallData.CallId;
 
         public BO.CallInList? SelectedCall { get; set; }
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallFilter = (BO.CallListStatus)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
+
+        private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CallSort= (BO.CallData)((ComboBox)sender).SelectedItem;
+            queryCallList();
+        }
         private void queryCallList()
-            => CallList = (CallFilter == BO.CallListStatus.None) ? s_bl?.Call.ReadAll()! : s_bl?.Call.ReadAll(BO.CallData.Status, null, CallFilter)!; 
+        {
+            if (CallFilter == BO.CallListStatus.None && CallSort == BO.CallData.CallId)
+                CallList = s_bl?.Call.ReadAll()!;
+            else if(CallFilter == BO.CallListStatus.None)
+                CallList = s_bl.Call.ReadAll(null, CallSort, null)!;
+            else if(CallSort == BO.CallData.CallId)
+                CallList = s_bl.Call.ReadAll(BO.CallData.Status, null, CallFilter)!;
+            else
+                CallList = s_bl.Call.ReadAll(BO.CallData.Status, CallSort, CallFilter)!;
+        }
         private void callListObserver()
              => queryCallList();
 
