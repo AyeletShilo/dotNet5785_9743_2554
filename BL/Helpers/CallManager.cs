@@ -69,7 +69,7 @@ internal static class CallManager
         if (currentMaxTime == false)
             throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
 
-        double[] AddressCoordinate = CallManager.GetCoordinates(toCheck.CallAddress); 
+        double[] AddressCoordinate = CallManager.GetCoordinates(toCheck.CallAddress);
 
         DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, AddressCoordinate[0],
             AddressCoordinate[1], toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
