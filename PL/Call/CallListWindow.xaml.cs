@@ -21,8 +21,10 @@ namespace PL.Call
     /// </summary>
     public partial class CallListWindow : Window
     {
-        public CallListWindow(int id = 0 , BO.CallListStatus status = BO.CallListStatus.None)
+        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        public CallListWindow(int id = 0 , BO.CallListStatus status = BO.CallListStatus.None,bool isFilter = true)
         {
+            IsFilter = isFilter;
             InitializeComponent();
             VolunteerId = id;
             CallFilter = status;
@@ -40,8 +42,6 @@ namespace PL.Call
         public static readonly DependencyProperty VolunteerIdProperty =
             DependencyProperty.Register("VolunteerId", typeof(int), typeof(CallListWindow), new PropertyMetadata(null));
 
-        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-
         public IEnumerable<BO.CallInList> CallList
         {
             get { return (IEnumerable<BO.CallInList>)GetValue(CallListProperty); }
@@ -53,6 +53,7 @@ namespace PL.Call
 
         public BO.CallListStatus CallFilter { get; set; } = BO.CallListStatus.None;
         public BO.CallData CallSort { get; set; } = BO.CallData.CallId;
+        public bool IsFilter { get; set; } = true;
 
         public BO.CallInList? SelectedCall { get; set; }
         private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)

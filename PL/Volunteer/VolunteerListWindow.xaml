@@ -29,7 +29,7 @@
                       SelectedValue="{Binding Path=CallType, Mode=TwoWay}"
                       ItemsSource="{Binding Source={StaticResource FilterByCallKey}}"
                       SelectionChanged="Filter_SelectionChanged" Height="43"/>
-            <Label Content="Sort volunteers by:" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2"/>
+            <Label Content="Sort volunteers by:" HorizontalAlignment="Center" Grid.Column="2"/>
             <ComboBox Grid.Column="3" VerticalAlignment="Top"
                 SelectedValue="{Binding Path=SortValue, Mode=TwoWay}"
                 ItemsSource="{Binding Source={StaticResource SortVolunteerKey}}"
@@ -61,11 +61,18 @@
                 <DataGridTextColumn Binding="{Binding CancelCalls}" Header="Cancel Calls" Width="*"/>
                 <DataGridTextColumn Binding="{Binding ExpiredCalls}" Header="Expired Calls" Width="*"/>
                 <DataGridTextColumn Binding="{Binding CallId}" Header="Call Id" Width="*"/>
-                <DataGridTextColumn Binding="{Binding InTreatment}" Header="Call Type" Width="*"/>
-                <DataGridTemplateColumn Header="Delete" Width="*">
+                <DataGridTextColumn Binding="{Binding InTreatment}" Header="Call Type" Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Background" Value="{Binding Path = InTreatment, Converter={StaticResource ConvertVolTypeToColorKey}}" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                                   
+                <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Click="Delete_Volunteer" />
+                            <Button Click="Delete_Volunteer" Content="Delete" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

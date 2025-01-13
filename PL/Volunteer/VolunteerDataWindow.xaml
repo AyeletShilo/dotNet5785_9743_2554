@@ -8,7 +8,14 @@
         Title="VolunteerDataWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Background="#D6E5CC" >
+    <Window.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}"/>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource  ComboBoxStyle}"/>
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="11*"/>

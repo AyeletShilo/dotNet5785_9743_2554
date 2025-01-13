@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
+﻿using BO;
+using System.Diagnostics;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
+using System.Windows.Media;
 
 namespace PL;
 
@@ -130,7 +132,7 @@ public class MultiToIsEnabledConverter : IMultiValueConverter
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
         return (values[0] == null && (bool)values[1] == true);
-        
+
         if (values[0] == null || values[1] == null)
             Debug.WriteLine("One of the bindings is null.");
 
@@ -146,3 +148,107 @@ public class MultiToIsEnabledConverter : IMultiValueConverter
 }
 
 
+class ConvertCallTypeToColor : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        BO.CallType callType = (BO.CallType)value;
+        switch (callType)
+        {
+            case BO.CallType.Repairing:
+                return Brushes.Yellow;
+            case BO.CallType.Talking:
+                return Brushes.Orange;
+            case BO.CallType.Cleaning:
+                return Brushes.Green;
+            case BO.CallType.TechnologyHelp:
+                return Brushes.PaleVioletRed;
+            case BO.CallType.Shopping:
+                return Brushes.Purple;
+            default:
+                return Brushes.White;
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+class ConvertStatusToColor : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        BO.CallListStatus status = (BO.CallListStatus)value;
+        switch (status)
+        {
+            case BO.CallListStatus.Opened:
+                return Brushes.Yellow;
+            case BO.CallListStatus.Closed:
+                return Brushes.Orange;
+            case BO.CallListStatus.InTreatment:
+                return Brushes.Green;
+            case BO.CallListStatus.Expired:
+                return Brushes.PaleVioletRed;
+            case BO.CallListStatus.OpenInRisk:
+                return Brushes.Purple;
+            case BO.CallListStatus.InTreatmentInRisk:
+                return Brushes.Silver;
+            default:
+                return Brushes.White;
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+class ConvertVolTypeToColor : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        BO.CallInTreatment callType = (BO.CallInTreatment)value;
+        switch (callType)
+        {
+            case BO.CallInTreatment.Repairing:
+                return Brushes.Yellow;
+            case BO.CallInTreatment.Talking:
+                return Brushes.Orange;
+            case BO.CallInTreatment.Cleaning:
+                return Brushes.Green;
+            case BO.CallInTreatment.TechnologyHelp:
+                return Brushes.PaleVioletRed;
+            case BO.CallInTreatment.Shopping:
+                return Brushes.Purple;
+            default:
+                return Brushes.White;
+        }
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class ConvertStatusToVisible : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        bool isFilter = (bool)value;
+        if (isFilter == true)
+        {
+            return Visibility.Visible;
+        }
+
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException("ConvertBack is not implemented");
+    }
+}

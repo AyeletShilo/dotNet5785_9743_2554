@@ -8,7 +8,12 @@
         Title="AdminWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
         Closed="Window_Closed"
-        Loaded="ScreenLoaded">
+        Loaded="ScreenLoaded"
+        Background="#D6E5CC">
+    <Window.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
+    </Window.Resources>
+  
 
     <!--Config-->
     <Grid>
@@ -34,7 +39,7 @@
         <Button Content="InitializeDB" Click ="btnInitializeDB_Click" HorizontalAlignment="Left" Margin="89,141,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
         <Button Content="Handle Volunteers" Click="btnVolunteer_Click" HorizontalAlignment="Center" Margin="0,146,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
         <Button Content="ResetDB" Click="btnResetDB_Click"  HorizontalAlignment="Left" Margin="89,47,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
-        <Button Content = "Handle Calls" Click = "btnCall_Click" HorizontalAlignment = "Center" Margin = "0,47,0,0" VerticalAlignment = "Top" Height = "40" Width = "120" Grid.Row = "1" />
+        <Button Content = "Handle Calls" Click = "btnCall_Click"  Margin = "0,47,0,0" Height = "40" Width = "120" Grid.Row = "1" HorizontalAlignment = "Center" VerticalAlignment = "Top" />
 
         
         <Grid Grid.Row="1" Margin="507,47,0,0">

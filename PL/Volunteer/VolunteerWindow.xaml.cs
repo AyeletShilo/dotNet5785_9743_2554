@@ -105,7 +105,7 @@ namespace PL.Volunteer
 
         private void ShowDescription(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            MessageBox.Show(CurrentVolunteer.InCall.Description);
+            //MessageBox.Show(CurrentVolunteer.InCall.Description);//בעיה במסך הוספה 
         }
     }
 }

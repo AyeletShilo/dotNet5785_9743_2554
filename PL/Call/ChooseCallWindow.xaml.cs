@@ -98,12 +98,12 @@ namespace PL.Call
         {
             if (SelectedCall != null)
                 s_bl.Call.CallToTreatment(_id, SelectedCall.Id);
-
+            queryCallList();
         }
 
         private void UpdateAdd_Click(object sender, RoutedEventArgs e)
         {
-            s_bl.Volunteer.UpdateAddress(Volunteer, Volunteer.Address);
+            //s_bl.Volunteer.UpdateAddress(Volunteer, Volunteer.Address);
             queryCallList();
         }
 

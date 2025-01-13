@@ -8,7 +8,13 @@
         Title="VolunteerWindow" Height="450" Width="800"  
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Background="#D6E5CC" >
+    <Window.Resources>
+        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}"/>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource  ComboBoxStyle}"/>
+    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -19,10 +25,10 @@
         <Grid Grid.Row="0" Margin="5,5,5,10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="0.5*"/>
                 <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="7*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="35*"/>
@@ -41,16 +47,15 @@
             <Label Content="Address:" Grid.Column="0" Grid.Row="4" />
             <Label Content="Role:" Grid.Column="0" Grid.Row="5" />
             <Label Content="Active?" Grid.Column="3" Grid.Row="0"/>
-            <Label Content="Max distance from call:" Grid.Column="3"  Grid.Row="1"/>
-            <Label Content="Total calls handled:" Grid.Column="3" Grid.Row="2" 
+            <Label Content="Max distance from call:" Grid.Column="3"  Grid.Row="1" FontSize="13"/>
+            <Label Content="Handled Calls:" Grid.Column="3" Grid.Row="2" 
                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-            <Label Content="Total calls canceled:" Grid.Column="3" Grid.Row="3"
+            <Label Content="Canceled Calls:" Grid.Column="3" Grid.Row="3"
                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-            <Label Content="Total expired calls:" Grid.Column="3" Grid.Row="4" 
+            <Label Content="Expired calls:" Grid.Column="3" Grid.Row="4" 
                    Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-            <Label Content="Call in volunteer care:" Grid.Column="0" Grid.Row="5" 
-                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="0,35,254,0" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2">
-            </Label>
+            <Label Content="Call in volunteer care:" Grid.Row="5" 
+                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="0,33,0,2" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" Width="161"/>
 
             <TextBox Grid.Column="1" Grid.Row="0" MaxLength="9" 
                      Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
@@ -92,7 +97,7 @@
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>-->
-                <Grid ShowGridLines="True" Margin="4,4,-49,4">
+                <Grid ShowGridLines="True" Margin="4,4,-49,4" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="3*"/>
@@ -106,6 +111,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    
                     <Label Content="Id" Grid.Row="0" Grid.Column="0" RenderTransformOrigin="0.5,0.5"/>
                     <TextBox Text="{Binding InCall.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="1"/>
                     <Label Content="CallId" Grid.Row="1" Grid.Column="0"/>

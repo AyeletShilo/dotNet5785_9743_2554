@@ -146,14 +146,15 @@ internal static class CallManager
     {
         try
         {
-            IEnumerable<DO.Volunteer> oldVolunteer = s_dal.Volunteer.ReadAll(null); //can throw Ex
+            //IEnumerable<DO.Volunteer> oldVolunteer = s_dal.Volunteer.ReadAll(null); //can throw Ex
             List<BO.CallInList>? callInLists = new List<BO.CallInList>();
 
             foreach (DO.Call item in oldCalls)
             {
                 DO.Assignment? callAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
 
-                if (callAssignment is null)
+
+                if (callAssignment is null || callAssignment.VolunteerId == 0)
                 {
                     callInLists.Add(new()
                     {
@@ -171,6 +172,7 @@ internal static class CallManager
 
                 else
                 {
+                    string? lastVolunteer = s_dal.Volunteer.Read(callAssignment.VolunteerId)!.FullName;
                     callInLists.Add(new()
                     {
                         Id = callAssignment.Id,
@@ -178,7 +180,7 @@ internal static class CallManager
                         CallType = (BO.CallType)item.CallType,
                         OpenTime = item.OpenTime,
                         LeftTime = item.MaxTime - AdminManager.Now,
-                        LastVolunteer = null,
+                        LastVolunteer = lastVolunteer,
                         CompletionTime = (callAssignment.EndTreatment == DO.AssignmentEnum.TakenCare) ? (callAssignment.EndTime - item.OpenTime) : null,
                         Status = MakeStatus(callAssignment, item),
                         TotalAssignments = oldAssignment.Count(a => a.CallId == item.Id)

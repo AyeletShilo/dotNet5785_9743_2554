@@ -180,28 +180,28 @@ namespace PL
 
         private void Opened_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.Opened).Show();
+            new CallListWindow(0, BO.CallListStatus.Opened, false).Show();
         }
 
         private void Closed_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.Closed).Show();
+            new CallListWindow(0, BO.CallListStatus.Closed ,false).Show();
         }
         private void Tretment_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.InTreatment).Show();
+            new CallListWindow(0, BO.CallListStatus.InTreatment,false).Show();
         }
         private void Expired_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.Expired).Show();
+            new CallListWindow(0, BO.CallListStatus.Expired , false).Show();
         }
         private void OpenRisk_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.OpenInRisk).Show();
+            new CallListWindow(0, BO.CallListStatus.OpenInRisk , false).Show();
         }
         private void TretmentRisk_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.InTreatmentInRisk).Show();
+            new CallListWindow(0, BO.CallListStatus.InTreatmentInRisk , false).Show();
         }
     }
     

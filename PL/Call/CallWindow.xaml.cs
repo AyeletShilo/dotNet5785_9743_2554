@@ -78,5 +78,9 @@ namespace PL.Call
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Call.RemoveObserver(CallObserver);
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

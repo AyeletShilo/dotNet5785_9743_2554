@@ -87,6 +87,10 @@ namespace PL
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
+            {
+                var app = (App)Application.Current;
+                app.SetPreviousWindow(this);
+
                 try
                 {
                     _id = int.Parse(TextInput);
@@ -108,11 +112,14 @@ namespace PL
                     MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
                         MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
 
         }
         public MainWindow()
         {
             InitializeComponent();
         }
+
     }
+
 }

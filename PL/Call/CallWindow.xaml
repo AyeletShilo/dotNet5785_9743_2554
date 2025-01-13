@@ -8,7 +8,16 @@
         Title="CallWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Background="#D6E5CC" >
+    <Window.Resources>
+            <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
+            <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}"/>
+            <Style TargetType="ComboBox" BasedOn="{StaticResource  ComboBoxStyle}"/>
+           
+    </Window.Resources>
+        
+        
 
     <Grid>
         <Grid.RowDefinitions>
@@ -18,11 +27,11 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Margin="5,5,5,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="9*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition Width="9*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="35*"/>
@@ -43,17 +52,15 @@
                Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" RenderTransformOrigin="0.5,0.5" Grid.ColumnSpan="2">
             </Label>
 
-
-            <TextBox Grid.Column="1" Grid.Row="0" MaxLength="9" 
-                 Text="{Binding CurrentCall.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                 IsReadOnly= "True" />
-            <ComboBox  Grid.Column="1" Grid.Row="1" 
+            <TextBox Grid.Column="1" Grid.Row="0" MaxLength="9" IsReadOnly= "True" 
+                     Text="{Binding CurrentCall.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                <ComboBox  Grid.Column="1" Grid.Row="1" 
                 SelectedValue="{Binding CurrentCall.CallType,  Mode=TwoWay, NotifyOnValidationError=true}" 
                  IsEnabled="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateTypeKey}}" 
                 ItemsSource="{Binding Source={StaticResource TypeCallKey}}" BorderBrush="Black" OpacityMask="#FF090909"/>
             <TextBox Grid.Column="1" Grid.Row="2" 
                  Text="{Binding CurrentCall.Description, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                 MaxLength="10" IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}"/>
+                 MaxLength="10" FontSize="10" IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}"/>
             <TextBox Grid.Column="1" Grid.Row="3" 
                  Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
                  IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}" />
@@ -64,10 +71,11 @@
                  IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateMaxTimeKey}}"/>
             <ComboBox  Grid.Column="4" Grid.Row="2" 
                 SelectedValue="{Binding CurrentCall.Status,  Mode=TwoWay, NotifyOnValidationError=true}"
-                ItemsSource="{Binding Source={StaticResource StatusCallKey}}" BorderBrush= "Black" OpacityMask="#FF090909" IsEnabled="False"/>
-           
+                ItemsSource="{Binding Source={StaticResource StatusCallKey}}" BorderBrush= "Black" OpacityMask="#FF090909" IsEnabled="False" SelectionChanged="ComboBox_SelectionChanged">
+            </ComboBox>
+
             <DataGrid Grid.Row="5" ItemsSource="{Binding Path=CurrentCall.CallAssignments}" IsReadOnly ="True" AutoGenerateColumns="False"
- 	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected" Grid.ColumnSpan="5" >
+ 	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected" Grid.ColumnSpan="5">
 
                 <DataGrid.Columns>
 
