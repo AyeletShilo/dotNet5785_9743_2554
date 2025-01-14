@@ -437,7 +437,7 @@ Press 0 to exit"
                     case VolunteerChoice.ReturnJob:
                         Console.WriteLine("ID for volunteer: ");
                         int VolId = int.Parse(Console.ReadLine()!);
-                        Console.WriteLine(s_bl.Volunteer.GetMyJob(VolId));
+                        //Console.WriteLine(s_bl.Volunteer.GetMyJob(VolId));
                         break;
                     default:
                         stopV = true;

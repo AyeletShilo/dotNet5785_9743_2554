@@ -9,13 +9,13 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
         Closed="Window_Closed"
         Loaded="ScreenLoaded">
-    <Window.Background>
+    <!--<Window.Background>
         <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>
+    </Window.Background>-->
     <Window.Resources>
         <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
     </Window.Resources>
-  
+
 
     <!--Config-->
     <Grid>
@@ -43,12 +43,8 @@
         <Button Content="ResetDB" Click="btnResetDB_Click"  HorizontalAlignment="Left" Margin="89,47,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
         <Button Content = "Handle Calls" Click = "btnCall_Click"  Margin = "0,47,0,0" Height = "40" Width = "120" Grid.Row = "1" HorizontalAlignment = "Center" VerticalAlignment = "Top" />
 
-        
-        <Grid Grid.Row="1" Margin="507,47,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+
+        <Grid Grid.Row="1" Margin="600,47,0,0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -59,21 +55,57 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Button Content="Opened" Grid.Row="0" Grid.Column="0" Click="Opened_Click"/>
-            <Button Content="In treatment"  Grid.Row="1" Grid.Column="0" Click="Tretment_Click"/>
-            <Button Content="Closed" Grid.Row="2" Grid.Column="0" Click="Closed_Click"/>
-            <Button Content="Expired" Grid.Row="3" Grid.Column="0" Click="Expired_Click" />
-            <Button Content="Open in risk" Grid.Row="4" Grid.Column="0" Click="OpenRisk_Click"/>
-            <Button Content="In treatment in risk" Grid.Row="5" Grid.Column="0" Click="TretmentRisk_Click"/>
-            
-            <TextBox Text="{Binding CallsAmount[0], Mode=TwoWay}" Grid.Row="0" Grid.Column="1"/>
-            <TextBox Text="{Binding CallsAmount[1], Mode=TwoWay}" Grid.Row="1" Grid.Column="1"/>
-            <TextBox Text="{Binding CallsAmount[2], Mode=TwoWay}" Grid.Row="2" Grid.Column="1"/>
-            <TextBox Text="{Binding CallsAmount[3], Mode=TwoWay}" Grid.Row="3" Grid.Column="1"/>
-            <TextBox Text="{Binding CallsAmount[4], Mode=TwoWay}" Grid.Row="4" Grid.Column="1"/>
-            <TextBox Text="{Binding CallsAmount[5], Mode=TwoWay}" Grid.Row="5" Grid.Column="1"/>
+            <Button Grid.Row="0" Grid.Column="0" Click="Opened_Click">
+                <Button.Content>
+                    <TextBlock>
+                        <Run Text="Opened: "/>
+                        <Run Text="{Binding CallsAmount[0],Mode=TwoWay}"/>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="0"  Click="Tretment_Click">
+                <Button.Content>
+                    <TextBlock>
+            <Run Text="In treatment: "/>
+            <Run Text="{Binding CallsAmount[1], Mode=TwoWay}"/>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+
+            <Button Grid.Row="2" Grid.Column="0"  Click="Closed_Click">
+                <Button.Content>
+                    <TextBlock>
+                        <Run Text="Closed: "/>
+                        <Run Text="{Binding CallsAmount[2], Mode=TwoWay}"/>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="0"  Click="Expired_Click">
+                <Button.Content>
+                    <TextBlock>
+            <Run Text="Expired: "/>
+            <Run Text="{Binding CallsAmount[3], Mode=TwoWay}"/>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="0"  Click="OpenRisk_Click">
+                <Button.Content>
+                    <TextBlock>
+                        <Run Text="Open in risk: "/>
+                        <Run Text="{Binding CallsAmount[4], Mode=TwoWay}"/>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
+            <Button Grid.Row="5" Grid.Column="0"  Click="TretmentRisk_Click">
+                <Button.Content>
+                    <TextBlock>
+             <Run Text="In treatment in risk: "/>
+             <Run Text="{Binding CallsAmount[5], Mode=TwoWay}"/>
+                    </TextBlock>
+                </Button.Content>
+            </Button>
 
         </Grid>
-        <Label Content="Amount of call according status:" HorizontalAlignment="Left" Margin="507,24,0,0" Grid.Row="1" VerticalAlignment="Top" Width="283"/>
+        <Label Content="Amount of call according status:" HorizontalAlignment="Left" Margin="604,24,0,0" Grid.Row="1" VerticalAlignment="Top" Width="186" FontSize="11"/>
     </Grid>
 </Window>

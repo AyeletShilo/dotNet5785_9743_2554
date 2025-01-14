@@ -30,7 +30,7 @@ namespace PL
         public static readonly DependencyProperty IDProperty =
             DependencyProperty.Register("IDInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
 
-        public string? PassInput
+        public string PassInput
         {
             get { return (string)GetValue(PaaswordProperty); }
             set { SetValue(PaaswordProperty, value); }
@@ -103,50 +103,56 @@ namespace PL
             //}
         }
 
-        private void Pass_TextChanged(object sender, TextChangedEventArgs e)
+        //private void Pass_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    var textBox = sender as TextBox;
+        //    if (textBox.Text.Length == 8)
+        //    {
+        //        PassInput = textBox.Text;
+        //    }
+        //}
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            var textBox = sender as TextBox;
-            if (textBox.Text.Length == 8)
-            {
-                PassInput = textBox.Text;
-            }
+            PassInput = ((PasswordBox)sender).Password;
         }
 
-            //private void TextBox_KeyDown(object sender, KeyEventArgs e)
-            //{
-            //if (e.Key == Key.Enter)
-            //{
-            //    var app = (App)Application.Current;
-            //    app.SetPreviousWindow(this);
 
-            //    try
-            //    {
-            //        _id = int.Parse(IDInput);
-            //        user = s_bl.Volunteer.GetMyJob(_id, PassInput);
-            //        if (user == BO.Role.Manager)
-            //        {
-            //            new ChoseWindow(_id).Show();
-            //            Close();
-            //        }
-            //        else if (user == BO.Role.Volunteer)
-            //        {
-            //            new VolunteerForVolWindow(_id).Show();
-            //            Close();
-            //        }
+        //private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //if (e.Key == Key.Enter)
+        //{
+        //    var app = (App)Application.Current;
+        //    app.SetPreviousWindow(this);
 
-            //    }
-                
-            //    catch (BlPasswordException ex1)
-            //    {
-            //        MessageBox.Show(ex1.Message + "Please enter correct password again:)", "Exception",
-            //            MessageBoxButton.OK, MessageBoxImage.Error);
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
-            //            MessageBoxButton.OK, MessageBoxImage.Error);
-            //    }
-            //}
+        //    try
+        //    {
+        //        _id = int.Parse(IDInput);
+        //        user = s_bl.Volunteer.GetMyJob(_id, PassInput);
+        //        if (user == BO.Role.Manager)
+        //        {
+        //            new ChoseWindow(_id).Show();
+        //            Close();
+        //        }
+        //        else if (user == BO.Role.Volunteer)
+        //        {
+        //            new VolunteerForVolWindow(_id).Show();
+        //            Close();
+        //        }
+
+        //    }
+
+        //    catch (BlPasswordException ex1)
+        //    {
+        //        MessageBox.Show(ex1.Message + "Please enter correct password again:)", "Exception",
+        //            MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
+        //            MessageBoxButton.OK, MessageBoxImage.Error);
+        //    }
+        //}
 
         //}
         public MainWindow()

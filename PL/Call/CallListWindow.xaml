@@ -9,9 +9,9 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
         Loaded="Window_Loaded">
-    <Window.Background>
+    <!--<Window.Background>
         <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>
+    </Window.Background>-->
     <Window.Resources>
         <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
         <Style TargetType="ComboBox" BasedOn="{StaticResource  ComboBoxStyle}"/>
