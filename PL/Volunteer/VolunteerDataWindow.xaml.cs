@@ -21,6 +21,19 @@ namespace PL.Volunteer
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private static int _id;
+        private Window _preWind;
+        public VolunteerDataWindow(int id, Window preWind)
+        {
+            _id = id;
+            InitializeComponent();
+            CurrentVolunteer = s_bl.Volunteer.Read(_id);
+            _preWind = preWind;
+        }
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            _preWind.Show();
+            this.Close();
+        }
 
         public BO.Volunteer? CurrentVolunteer
         {
@@ -33,13 +46,7 @@ namespace PL.Volunteer
         /// </summary>
         public static readonly DependencyProperty CurrentVolunteerProperty =
             DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerDataWindow), new PropertyMetadata(null));
-        public VolunteerDataWindow(int id)
-        {
-            _id = id;
-            InitializeComponent();
-            CurrentVolunteer = s_bl.Volunteer.Read(_id);
-        }
-
+        
         private void RefreshVolunteer()
         {
             int id = CurrentVolunteer!.Id;

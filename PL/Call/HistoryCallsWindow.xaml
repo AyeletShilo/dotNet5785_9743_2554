@@ -9,6 +9,9 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <!--Closed="Window_Closed"
         Loaded="Window_Loaded">-->
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
+    </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="11*"/>

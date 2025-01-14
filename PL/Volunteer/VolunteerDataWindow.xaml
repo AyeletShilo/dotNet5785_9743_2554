@@ -8,8 +8,10 @@
         Title="VolunteerDataWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded"
-        Background="#D6E5CC" >
+        Loaded="Window_Loaded">
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
+    </Window.Background>
     <Window.Resources>
         <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
         <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}"/>
@@ -62,6 +64,7 @@
             <CheckBox Grid.Row="3" Grid.Column="4"
                           IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" IsEnabled="{Binding CurrentVolunteer.InCall, Converter={StaticResource ConvertActiveIsEnableKey}}" Width="25" Height="25" HorizontalAlignment="Right" VerticalAlignment="Top" RenderTransformOrigin="0.402,1.01" Grid.RowSpan="2"/>
             <Button Grid.Row="8" Grid.ColumnSpan="5" Content="Update" Click="Button_Click"/>
+            <Button Content="Button" HorizontalAlignment="Left" Height="51" Margin="23,5,0,0" VerticalAlignment="Top" Width="162" Click="BackButton_Click" Grid.ColumnSpan="2" Grid.Row="4"/>
         </Grid>
     </Grid>
 </Window>

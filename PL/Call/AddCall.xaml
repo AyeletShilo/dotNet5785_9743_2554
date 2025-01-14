@@ -8,8 +8,10 @@
         Title="AddCall" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded"
-        Background="#D6E5CC" >
+        Loaded="Window_Loaded">
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
+    </Window.Background>
     <Window.Resources>
         <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
         <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}">

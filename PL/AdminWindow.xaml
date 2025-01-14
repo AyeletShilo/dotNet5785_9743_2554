@@ -8,8 +8,10 @@
         Title="AdminWindow" Height="450" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
         Closed="Window_Closed"
-        Loaded="ScreenLoaded"
-        Background="#D6E5CC">
+        Loaded="ScreenLoaded">
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
+    </Window.Background>
     <Window.Resources>
         <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
     </Window.Resources>

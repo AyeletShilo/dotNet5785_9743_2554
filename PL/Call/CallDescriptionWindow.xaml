@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="CallDescriptionWindow" Height="450" Width="450"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
+    </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="11*"/>

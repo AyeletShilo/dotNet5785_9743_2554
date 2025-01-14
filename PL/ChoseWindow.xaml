@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="ChoseWindow" Height="250" Width="400"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
+    </Window.Background>
     <Window.Resources>
         <Style TargetType="Button">
             <Setter Property="FontSize" Value="25" />
