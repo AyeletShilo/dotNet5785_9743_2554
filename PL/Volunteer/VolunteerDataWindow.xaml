@@ -49,6 +49,8 @@
             <Label Content="Phone Number:" Grid.Row="2"/>
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" />
             <Label Content="Email:" Grid.Row="3"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding CurrentVolunteer.Password, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" />
+            <Label Content="Password:" Grid.Row="4"/>
             <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
             <Label Content="Address:" Grid.Row="1" Grid.Column="3"/>
             <TextBox Grid.Row="1" Grid.Column="4" Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" />

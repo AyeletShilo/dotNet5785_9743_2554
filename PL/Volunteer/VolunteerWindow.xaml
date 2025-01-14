@@ -46,6 +46,7 @@
             <Label Content="Email:" Grid.Column="0" Grid.Row="3" />
             <Label Content="Address:" Grid.Column="0" Grid.Row="4" />
             <Label Content="Role:" Grid.Column="0" Grid.Row="5" />
+            <Label Content="Password:" Grid.Column="3" Grid.Row="5" />
             <Label Content="Active?" Grid.Column="3" Grid.Row="0"/>
             <Label Content="Max distance from call:" Grid.Column="3"  Grid.Row="1" FontSize="13"/>
             <Label Content="Handled Calls:" Grid.Column="3" Grid.Row="2" 
@@ -67,6 +68,8 @@
                      MaxLength="10"/>
             <TextBox Grid.Column="1" Grid.Row="3" 
                      Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
+            <TextBox Grid.Column="4" Grid.Row="5" 
+                     Text="{Binding CurrentVolunteer.Password, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
             <TextBox Grid.Column="1" Grid.Row="4"
                      Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
             <ComboBox Grid.Column="1" Grid.Row="5" 

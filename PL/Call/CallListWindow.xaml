@@ -75,7 +75,7 @@
                 <DataGridTemplateColumn Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Click="Delete_Call" Content="Delete"/>
+                            <Button Click="Delete_Call" Content="Delete"  Visibility="{Binding Path=. ,Converter={StaticResource ConvertDeleteToVisibleKey}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

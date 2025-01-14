@@ -25,6 +25,7 @@
         <local:ConvertCallTypeToColor x:Key="ConvertCallTypeToColorKey" />
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
         <local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>
+        <local:ConvertDeleteToVisible x:Key="ConvertDeleteToVisibleKey"/>
 
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="14"/>

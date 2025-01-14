@@ -20,6 +20,7 @@ public record Volunteer
     string FullName,
     string PhoneNumber,
     string Email,
+    string? Password,
     Role Job,
     bool Active,
     RangeType Distance, 
@@ -31,5 +32,5 @@ public record Volunteer
     
 
 {
-    public Volunteer(): this(0,"","","",Role.Volunteer,false,RangeType.Air) {}
+    public Volunteer(): this(0,"","","","",Role.Volunteer,false,RangeType.Air) {}
 };

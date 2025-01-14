@@ -21,6 +21,8 @@ internal static class VolunteerManager
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
         if (volToCheck.PhoneNumber.Length != 10 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
+        if (volToCheck.Password is not null && volToCheck.Password.Length != 8 )
+            throw new BO.BlIntegrityOfValuesException("Error in Password format");
         if (volToCheck.MaxDis < 0/* || volToCheck.MaxDis == null*/)
             throw new BO.BlIntegrityOfValuesException("Error in Max Distance format");
         if (volToCheck.Id < 10000000 || volToCheck.Id > 999999999)

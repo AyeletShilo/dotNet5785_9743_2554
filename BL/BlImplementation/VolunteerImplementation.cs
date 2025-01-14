@@ -24,7 +24,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             double[] AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address);
 
             DO.Volunteer doVolunteer =
-              new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
+              new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, boVolunteer.Password,(DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
               boVolunteer.Address, AddressCoordinate[0], AddressCoordinate[1], boVolunteer.MaxDis);
 
 
@@ -74,9 +74,11 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <param name="id">volunteer Id</param>
     /// <returns>volunteer gob</returns>
     /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the volunteer you want does not exist in the database</exception>
-    public BO.Role GetMyJob(int id)
+    public BO.Role GetMyJob(int id,string? password)
     {
         BO.Volunteer result = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist.");
+        if (password != result.Password)
+            throw new BO.BlPasswordException($"Volunteer password is incorrect");
         return result.Job;
     }
 
@@ -100,6 +102,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 PhoneNumber = doVolunteer.PhoneNumber,
                 Email = doVolunteer.Email,
                 Address = doVolunteer.VolAddress,
+                Password = doVolunteer.Password,
                 Latitude = doVolunteer.Latitude,
                 Longitude = doVolunteer.Longitude,
                 Job = (BO.Role)doVolunteer.Job,
@@ -167,7 +170,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         try
         {
-            if (id == volToUpdate.Id || GetMyJob(id) == BO.Role.Manager)
+            if (id == volToUpdate.Id || GetMyJob(id, volToUpdate.Password) == BO.Role.Manager)
             {
                 VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
                 VolunteerManager.CheckLogic(volToUpdate); //can throw Ex
@@ -175,10 +178,10 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 double[] addressCordinate = CallManager.GetCoordinates(volToUpdate.Address);
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
-                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id) != BO.Role.Manager)
+                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id, volToUpdate.Password) != BO.Role.Manager)
                     throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 
-                DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
+                DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, volToUpdate.Password, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
              volToUpdate.Address, addressCordinate[0], addressCordinate[1], volToUpdate.MaxDis);
 
                 _dal.Volunteer.Update(doVolunteer);//can throw Ex

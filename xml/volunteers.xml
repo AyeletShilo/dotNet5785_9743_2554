@@ -1,63 +1,68 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfVolunteers>
   <Volunteer>
-    <Id>369791983</Id>
+    <Id>224344804</Id>
     <FullName>Amit Nakesh</FullName>
-    <PhoneNumber>0532538428</PhoneNumber>
-    <Email>amit234@walla.co.il</Email>
+    <PhoneNumber>0533528666</PhoneNumber>
+    <Email>amit234@gmail.com</Email>
+    <Password>9413221</Password>
     <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Walking</Distance>
+    <Distance>Car</Distance>
     <VolAddress>Ha-Narkis 3,Jerusalem, Israel</VolAddress>
     <Latitude>31.7771</Latitude>
     <Longitude>35.2255</Longitude>
-    <MaxDistance />
+    <MaxDistance>0.1521845267400329</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>393648191</Id>
+    <Id>328636329</Id>
     <FullName>Nir Kuda</FullName>
-    <PhoneNumber>0509856218</PhoneNumber>
-    <Email>nirkush@gmail.com</Email>
+    <PhoneNumber>0509611137</PhoneNumber>
+    <Email>nirkush@walla.co.il</Email>
+    <Password>13650814</Password>
     <Job>Volunteer</Job>
     <Active>true</Active>
     <Distance>Car</Distance>
     <VolAddress>Jaffa 210,Jerusalem, Israel</VolAddress>
     <Latitude>31.7814</Latitude>
     <Longitude>35.2277</Longitude>
-    <MaxDistance />
+    <MaxDistance>1.0551294555261266</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>312704554</Id>
+    <Id>307927731</Id>
     <FullName>Beni Mus</FullName>
-    <PhoneNumber>0531088243</PhoneNumber>
-    <Email>cbh@g.jct.ac.il</Email>
-    <Job>Manager</Job>
+    <PhoneNumber>0509231330</PhoneNumber>
+    <Email>cbh@walla.co.il</Email>
+    <Password>24281345</Password>
+    <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Air</Distance>
+    <Distance>Car</Distance>
     <VolAddress>Brazil 101,Jerusalem, Israel</VolAddress>
     <Latitude>31.7859</Latitude>
     <Longitude>35.209</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>271120313</Id>
+    <Id>220125595</Id>
     <FullName>Beti Bam</FullName>
-    <PhoneNumber>0522838478</PhoneNumber>
-    <Email>bamb@walla.co.il</Email>
-    <Job>Manager</Job>
+    <PhoneNumber>0521338431</PhoneNumber>
+    <Email>bamb@g.jct.ac.il</Email>
+    <Password>98692725</Password>
+    <Job>Volunteer</Job>
     <Active>true</Active>
     <Distance>Walking</Distance>
     <VolAddress>Nechama 32,Jerusalem, Israel</VolAddress>
     <Latitude>31.779</Latitude>
     <Longitude>35.2201</Longitude>
-    <MaxDistance />
+    <MaxDistance>0.3811022909013606</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>281154823</Id>
+    <Id>210024584</Id>
     <FullName>Avi Ron</FullName>
-    <PhoneNumber>0536841636</PhoneNumber>
-    <Email>avi54@walla.co.il</Email>
-    <Job>Volunteer</Job>
+    <PhoneNumber>0583467591</PhoneNumber>
+    <Email>avi54@g.jct.ac.il</Email>
+    <Password>96370785</Password>
+    <Job>Manager</Job>
     <Active>true</Active>
     <Distance>Air</Distance>
     <VolAddress>Bayit Va-Gan 46,Jerusalem, Israel</VolAddress>
@@ -66,172 +71,157 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>293994117</Id>
+    <Id>288367800</Id>
     <FullName>Gila Zahav</FullName>
-    <PhoneNumber>0532207659</PhoneNumber>
-    <Email>gila43@g.jct.ac.il</Email>
+    <PhoneNumber>0588778949</PhoneNumber>
+    <Email>gila43@walla.co.il</Email>
+    <Password>74398164</Password>
     <Job>Volunteer</Job>
-    <Active>false</Active>
+    <Active>true</Active>
     <Distance>Walking</Distance>
     <VolAddress>Ha-Pisga 90,Jerusalem, Israel</VolAddress>
     <Latitude>31.7742</Latitude>
     <Longitude>35.2116</Longitude>
-    <MaxDistance>1.672184915754697</MaxDistance>
+    <MaxDistance>3.982679349201117</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>226875672</Id>
+    <Id>310563309</Id>
     <FullName>Ram Kol</FullName>
-    <PhoneNumber>0539657837</PhoneNumber>
+    <PhoneNumber>0521263573</PhoneNumber>
     <Email>rkol@g.jct.ac.il</Email>
+    <Password>41049299</Password>
     <Job>Manager</Job>
-    <Active>false</Active>
-    <Distance>Walking</Distance>
+    <Active>true</Active>
+    <Distance>Car</Distance>
     <VolAddress>Bar-Lev 119,Jerusalem, Israel</VolAddress>
     <Latitude>31.7725</Latitude>
     <Longitude>35.2212</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>233555093</Id>
+    <Id>321788234</Id>
     <FullName>Chani Chaim</FullName>
-    <PhoneNumber>0503774426</PhoneNumber>
+    <PhoneNumber>0522097006</PhoneNumber>
     <Email>chch@gmail.com</Email>
+    <Password>26267998</Password>
     <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Air</Distance>
+    <Distance>Walking</Distance>
     <VolAddress>Najara 19,Jerusalem, Israel</VolAddress>
     <Latitude>31.7633</Latitude>
     <Longitude>35.2083</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>240523837</Id>
+    <Id>213963341</Id>
     <FullName>Poli Din</FullName>
-    <PhoneNumber>0582435818</PhoneNumber>
-    <Email>poli@gmail.com</Email>
+    <PhoneNumber>0589852881</PhoneNumber>
+    <Email>poli@g.jct.ac.il</Email>
+    <Password>34021367</Password>
     <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Air</Distance>
+    <Distance>Walking</Distance>
     <VolAddress>Agron 5,Jerusalem, Israel</VolAddress>
     <Latitude>31.7808</Latitude>
     <Longitude>35.2139</Longitude>
-    <MaxDistance />
+    <MaxDistance>0.9794226693329072</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>380494575</Id>
+    <Id>303765291</Id>
     <FullName>Maya Gidu</FullName>
-    <PhoneNumber>0531199752</PhoneNumber>
-    <Email>mgido@g.jct.ac.il</Email>
-    <Job>Manager</Job>
+    <PhoneNumber>0506558665</PhoneNumber>
+    <Email>mgido@gmail.com</Email>
+    <Password>21745696</Password>
+    <Job>Volunteer</Job>
     <Active>true</Active>
     <Distance>Air</Distance>
     <VolAddress>Hilel 67,Jerusalem, Israel</VolAddress>
     <Latitude>31.7723</Latitude>
     <Longitude>35.2134</Longitude>
-    <MaxDistance>1.6003144700916687</MaxDistance>
+    <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>251427852</Id>
+    <Id>315932715</Id>
     <FullName>Ori Gami</FullName>
-    <PhoneNumber>0531124497</PhoneNumber>
-    <Email>ogami@g.jct.ac.il</Email>
+    <PhoneNumber>0509820733</PhoneNumber>
+    <Email>ogami@gmail.com</Email>
+    <Password>25348287</Password>
     <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Walking</Distance>
+    <Distance>Car</Distance>
     <VolAddress>Iben-Ezra 27,Jerusalem, Israel</VolAddress>
     <Latitude>31.7727</Latitude>
     <Longitude>35.2128</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>356675496</Id>
-    <FullName>Dina Barzily</FullName>
-    <PhoneNumber>0509106134</PhoneNumber>
-    <Email>barzilay@g.jct.ac.il</Email>
-    <Job>Volunteer</Job>
-    <Active>true</Active>
-    <Distance>Air</Distance>
-    <VolAddress>Rivka 118,Jerusalem, Israel</VolAddress>
-    <Latitude>31.7731</Latitude>
-    <Longitude>35.2123</Longitude>
-    <MaxDistance>0.8872820672483117</MaxDistance>
-  </Volunteer>
-  <Volunteer>
-    <Id>277400404</Id>
+    <Id>310478516</Id>
     <FullName>Moise Kattan</FullName>
-    <PhoneNumber>0521633064</PhoneNumber>
+    <PhoneNumber>0504551134</PhoneNumber>
     <Email>Kattani98@walla.co.il</Email>
+    <Password>58802217</Password>
     <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Walking</Distance>
+    <Distance>Car</Distance>
     <VolAddress>Daniel 41,Jerusalem, Israel</VolAddress>
     <Latitude>31.7756</Latitude>
     <Longitude>35.2167</Longitude>
-    <MaxDistance>3.855647939714096</MaxDistance>
+    <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>233584515</Id>
+    <Id>344023668</Id>
     <FullName>Ran Amitz</FullName>
-    <PhoneNumber>0525667357</PhoneNumber>
+    <PhoneNumber>0585028623</PhoneNumber>
     <Email>rAmitz@g.jct.ac.il</Email>
+    <Password>67983912</Password>
     <Job>Volunteer</Job>
-    <Active>true</Active>
-    <Distance>Walking</Distance>
+    <Active>false</Active>
+    <Distance>Car</Distance>
     <VolAddress>Ha-Sigalit 6,Jerusalem, Israel</VolAddress>
     <Latitude>31.7664</Latitude>
     <Longitude>35.215</Longitude>
-    <MaxDistance>1.5370994153998363</MaxDistance>
-  </Volunteer>
-  <Volunteer>
-    <Id>386706873</Id>
-    <FullName>Nurit Lady</FullName>
-    <PhoneNumber>0536853262</PhoneNumber>
-    <Email>perach@gmail.com</Email>
-    <Job>Volunteer</Job>
-    <Active>true</Active>
-    <Distance>Air</Distance>
-    <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
-    <Latitude>31.765</Latitude>
-    <Longitude>35.2143</Longitude>
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>351591771</Id>
+    <Id>392011120</Id>
     <FullName>Jonathan Shapira</FullName>
-    <PhoneNumber>0533252250</PhoneNumber>
-    <Email>jShapira@gmail.com</Email>
+    <PhoneNumber>0521250435</PhoneNumber>
+    <Email>jShapira@g.jct.ac.il</Email>
+    <Password>65236037</Password>
     <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Walking</Distance>
+    <Distance>Car</Distance>
     <VolAddress>Shmuel Hanavi 20, Jerusalem, Israel</VolAddress>
     <Latitude>31.8017</Latitude>
     <Longitude>35.2171</Longitude>
-    <MaxDistance>3.7909611732439656</MaxDistance>
+    <MaxDistance>4.5755763014362</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>213899743</Id>
-    <FullName>Ayelet Shilo</FullName>
-    <PhoneNumber>0586313990</PhoneNumber>
-    <Email>thka841@gmail.com</Email>
-    <Job>Manager</Job>
+    <Id>262565278</Id>
+    <FullName>Nurit Lady</FullName>
+    <PhoneNumber>0523502735</PhoneNumber>
+    <Email>perach@gmail.com</Email>
+    <Password>35986158</Password>
+    <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Air</Distance>
+    <Distance>Walking</Distance>
     <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
     <Latitude>31.7394234</Latitude>
     <Longitude>35.1827337</Longitude>
-    <MaxDistance />
+    <MaxDistance>4.039580215201729</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>213662554</Id>
-    <FullName>Tehila Kufeld</FullName>
-    <PhoneNumber>0525256500</PhoneNumber>
-    <Email>gukvgukv@gmail.com</Email>
-    <Job>Manager</Job>
+    <Id>312655715</Id>
+    <FullName>Dina Barzily</FullName>
+    <PhoneNumber>0534431715</PhoneNumber>
+    <Email>barzilay@walla.co.il</Email>
+    <Password>38498175</Password>
+    <Job>Volunteer</Job>
     <Active>true</Active>
-    <Distance>Air</Distance>
-    <VolAddress>Ha-Narkis 3,Jerusalem, Israel</VolAddress>
-    <Latitude>31.738579700000003</Latitude>
-    <Longitude>34.97567059514735</Longitude>
-    <MaxDistance />
+    <Distance>Walking</Distance>
+    <VolAddress>Rivka 118,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7551066</Latitude>
+    <Longitude>35.2145451</Longitude>
+    <MaxDistance>2.1974397262691348</MaxDistance>
   </Volunteer>
 </ArrayOfVolunteers>

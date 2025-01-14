@@ -10,6 +10,7 @@ public class Volunteer
     public required string FullName { get; set; }
     public required string PhoneNumber { get; set; }
     public required string Email { get; set; }
+    public string? Password { get; set; }
     public string? Address { get; set; }
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }

@@ -376,11 +376,14 @@ Press 0 to exit
             Console.WriteLine("new address:");
             string? add = Console.ReadLine();
 
+            Console.WriteLine("new password:");
+            string? password= Console.ReadLine();
+
             Console.WriteLine("new maximom distance:");
             double dis = double.Parse(Console.ReadLine());
 
             //s_dalVolunteer?.Create(new(id, fullName, phoneNumber, email, job, active, distance, add, 0, 0, dis)); //stage 1
-            s_dal.Volunteer?.Create(new(id, fullName, phoneNumber, email, job, active, distance, add, 0, 0, dis)); //stage 2
+            s_dal.Volunteer?.Create(new(id, fullName, phoneNumber, email,password, job, active, distance, add, 0, 0, dis)); //stage 2
         }
     }
     private void readA(string type)
@@ -555,6 +558,9 @@ Press 0 to exit
                 Console.WriteLine("new address:");
                 string? add = Console.ReadLine() ?? oldItem.VolAddress;
 
+                Console.WriteLine("new Password:");
+                string? Password = Console.ReadLine() ?? oldItem.Password;
+
                 double? latitude = oldItem.Latitude;
                 double? longitude = oldItem.Longitude;
                 //double latitude = double.Parse(Console.ReadLine());
@@ -570,7 +576,7 @@ Press 0 to exit
                    
 
                 //s_dalVolunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis)); //stage 1
-                s_dal.Volunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email, job, active, distance, add, latitude, longitude, dis)); //stage 2
+                s_dal.Volunteer?.Update(new(oldItem.Id, fullName, phoneNumber, email,Password, job, active, distance, add, latitude, longitude, dis)); //stage 2
             }
             else
                 throw new Exception($"Object of type Volunteer with this ID does not exists");

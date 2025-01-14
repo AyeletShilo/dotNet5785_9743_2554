@@ -221,6 +221,7 @@ public static class Initialization
             double? latitude = latitudes[i];
             double? longitude = longitudes[i];
             //toSwitch = s_rand.NextDouble();
+            string password = s_rand.Next(1000000,100000000).ToString();
             Role job = (s_rand.NextDouble() > 0.8) ? Role.Manager : Role.Volunteer;
             string? volAddress = Addresses[i++];
             //toSwitch = s_rand.Next(2);
@@ -244,7 +245,7 @@ public static class Initialization
                     break;
             }
             //s_dalVolunteer!.Create(new(id, name, phoneNumber, email, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
-            s_dal.Volunteer!.Create(new(id, name, phoneNumber, email, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
+            s_dal.Volunteer!.Create(new(id, name, phoneNumber, email, password, job, active, typeDis, volAddress, latitude, longitude, maxDistance));
         }
         //string? password, //extra
 

@@ -252,3 +252,22 @@ public class ConvertStatusToVisible : IValueConverter
         throw new NotImplementedException("ConvertBack is not implemented");
     }
 }
+
+public class ConvertDeleteToVisible : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.CallInList call)
+        {
+            if ((call.Status == BO.CallListStatus.Opened || call.Status == BO.CallListStatus.OpenInRisk) && call.TotalAssignments == 0)
+                return Visibility.Visible;
+
+        }
+        return Visibility.Collapsed;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException("ConvertBack is not implemented");
+    }
+}

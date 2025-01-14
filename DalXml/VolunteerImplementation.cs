@@ -25,6 +25,7 @@ internal class VolunteerImplementation : IVolunteer
             FullName = (string?)v.Element("FullName") ?? " ",
             PhoneNumber = (string?)v.Element("PhoneNumber") ?? " ",
             Email = (string?)v.Element("Email") ?? " ",
+            Password= (string?)v.Element("Password") ?? " ",
             Job = v.ToEnumNullable<Role>("Job") ?? Role.Volunteer,
             Active = (bool?)v.Element("Active") ?? false,
             Distance = v.ToEnumNullable<RangeType>("Distance") ?? RangeType.Walking,
@@ -136,7 +137,8 @@ internal class VolunteerImplementation : IVolunteer
     {
         return new XElement("Volunteer", new XElement("Id", item.Id), new XElement("FullName", item.FullName),
                                                         new XElement("PhoneNumber",item.PhoneNumber),
-                                                        new XElement("Email", item.Email), new XElement("Job", item.Job),
+                                                        new XElement("Email", item.Email), new XElement("Password", item.Password),
+                                                        new XElement("Job", item.Job),
                                                         new XElement("Active", item.Active), new XElement("Distance", item.Distance),
                                                         new XElement("VolAddress", item.VolAddress), new XElement("Latitude", item.Latitude),
                                                         new XElement("Longitude", item.Longitude), new XElement("MaxDistance", item.MaxDistance));

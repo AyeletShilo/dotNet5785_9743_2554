@@ -50,7 +50,14 @@ namespace PL.Volunteer
         private void VolunteerObserver() => RefreshVolunteer();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            s_bl.Volunteer.Update(_id!, CurrentVolunteer!);
+            try
+            {
+                s_bl.Volunteer.Update(_id!, CurrentVolunteer!);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             Close();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)

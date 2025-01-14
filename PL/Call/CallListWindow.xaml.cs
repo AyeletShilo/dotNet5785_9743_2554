@@ -1,4 +1,5 @@
 ﻿using BO;
+using DO;
 using PL.Volunteer;
 using System;
 using System.Collections.Generic;
@@ -133,7 +134,7 @@ namespace PL.Call
             }
             catch (BO.BlDoesNotExistException ex)
             {
-                MessageBox.Show("call not exist");
+                MessageBox.Show(/*"call not exist"*/ "this call assignment cannot be canceled");
             }
             catch (BO.BlCannotBeDeletedException ex)
             {

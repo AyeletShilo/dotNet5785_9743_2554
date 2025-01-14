@@ -60,5 +60,10 @@ public class BlCantHandleItException : Exception
     public BlCantHandleItException(string? message) : base(message) { }
 }
 
+[Serializable]
+public class BlPasswordException : Exception
+{
+    public BlPasswordException(string? message) : base(message) { }
+}
 
 #endregion
