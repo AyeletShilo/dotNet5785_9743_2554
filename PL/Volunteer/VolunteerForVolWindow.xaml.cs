@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace PL.Volunteer
@@ -24,6 +25,20 @@ namespace PL.Volunteer
 
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static int _id;
+        private char _firstLet;
+        public char FirstLet
+        {
+            get { return _firstLet; }
+            set
+            {
+                if (_firstLet != value)
+                {
+                    _firstLet = value;
+                    //OnPropertyChanged(nameof(FirstLet));
+                }
+            }
+        }
+
 
         /// <summary>
         /// This volunteer
@@ -66,12 +81,13 @@ namespace PL.Volunteer
             CurrentVolunteer = s_bl.Volunteer.Read(id);
             InitializeComponent();
             _id = id;
+            FirstLet = CurrentVolunteer.FullName[0];
             if (CurrentVolunteer!.InCall != null)
             {
                 CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
             }
         }
-
+        
         private void RefreshVolunteer()
         {
             int id = CurrentVolunteer!.Id;
@@ -93,7 +109,10 @@ namespace PL.Volunteer
 
         private void UpdateVol_Click(object sender, RoutedEventArgs e)
         {
-            new VolunteerDataWindow(_id).Show();
+            var nextWind = new VolunteerDataWindow(_id, this);
+            nextWind.Show();
+            this.Hide();
+            //new VolunteerDataWindow(_id).Show();
         }
 
         private void ChoseCall_Click(object sender, RoutedEventArgs e)

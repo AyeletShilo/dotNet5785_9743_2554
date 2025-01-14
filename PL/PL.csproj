@@ -14,7 +14,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Image\Background %281%29.png" />
+    <None Remove="Image\background.png" />
+    <None Remove="Image\editHope.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BL\BL.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Image\Background (1).png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\editHope.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  
 
 </Project>

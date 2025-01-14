@@ -6,12 +6,26 @@
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
         Title="VolunteerForVolWindow" Height="450" Width="800"
-                DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
         Loaded="Window_Loaded">
+    <Window.Background>
+        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (1).png" Stretch="UniformToFill"/>
+    </Window.Background>
+    
+    <Window.Resources>
+        <Style x:Key="lableStyle" TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Height" Value="Auto"/>
+        </Style>
+    </Window.Resources>
 
     <!--main grid-->
-    <Grid ShowGridLines="True">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="19*"/>
             <RowDefinition Height="406*"/>
@@ -22,33 +36,80 @@
             <ColumnDefinition Width="790*"/>
             <ColumnDefinition Width="8*"/>
         </Grid.ColumnDefinitions>
+        <!--user name-->
+        <Border Grid.RowSpan="2" Grid.ColumnSpan="2" BorderBrush="Fuchsia" BorderThickness="1" Padding="0,1,1,1" CornerRadius="0,0,20,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="95*"/>
+                    <RowDefinition Height="63*"/>
+                    <RowDefinition Height="29*"/>
+                    <RowDefinition Height="34*"/>
+                </Grid.RowDefinitions>
 
+                <Border Width="60" Height="60" CornerRadius="50" Background="Transparent" Margin="2,39,190,59" Grid.RowSpan="2" >
+                    <Button Background="Transparent" BorderThickness="0" Click="UpdateVol_Click">
+                        <Image Source="C:\Users\Administrator\source\repos\newOne\PL\Image\editHope.png" Width="40" Height="38" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="false"/>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </Border>
+
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="70" Height="70">
+                    <!-- עיגול -->
+                    <Ellipse Fill="LightBlue" />
+
+                    <!-- טקסט -->
+                    <TextBlock Text="{Binding FirstLet}"
+                       FontFamily="Cooper Black"
+                               FontSize="40"
+                               FontWeight="Bold" 
+                               Foreground="DarkBlue"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Grid>
+                <Label Content="{Binding CurrentVolunteer.FullName}" ContentStringFormat="Welcome {0}" Grid.Row="1"
+               HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+               FontFamily="Cooper Black" FontSize="16"/>
+                <Label Content="{Binding CurrentVolunteer.Id}" Grid.Row="2" FontFamily="Monotype Corsiva" FontSize="18" 
+               HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+                <Label Content="{Binding CurrentVolunteer.Job}" Grid.Row="3" FontFamily="Monotype Corsiva" FontSize="16"
+               HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+            </Grid>
+        </Border>
         <!--second grid-->
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="217*"/>
-                <RowDefinition Height="80*"/>
+                <RowDefinition Height="256*"/>
+                <RowDefinition Height="85*"/>
+                <RowDefinition Height="56*"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="163*"/>
-                <ColumnDefinition Width="163*"/>
+                <ColumnDefinition Width="299*"/>
+                <ColumnDefinition Width="485*"/>
             </Grid.ColumnDefinitions>
-            <!--<Label Content="{Binding CurrentVolunteer.Id, StringFormat='Welcome {0}'}" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Margin="74,0,34,0" />-->
-
-
-            <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <!--Total Calls-->
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="47,0,0,0" Width="690">
                 <Label Content="{Binding CurrentVolunteer.HandleCalls}" ContentStringFormat="Total handled calls: {0}"  Width="230" />
                 <Label Content="{Binding CurrentVolunteer.CancelCalls}" ContentStringFormat="Total canceled calls: {0}"  Width="230"  />
                 <Label Content="{Binding CurrentVolunteer.ExpiredCalls}" ContentStringFormat="Total expired calls: {0}" Width="230" />
             </StackPanel>
-            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="3"
-                     Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top" Height="222" Width="327" Margin="0,10,0,0">
-                <Grid ShowGridLines="True" Grid.Column="1">
+
+            <!--CallDetails-->
+            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="3" Background="AntiqueWhite"
+                     Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Grid.Column="1" Height="Auto" Width="Auto" Margin="26,0,24,85" Grid.RowSpan="2">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25*"/>
                         <RowDefinition Height="40*"/>
-                        <RowDefinition Height="20*"/>
+                        <RowDefinition Height="40*"/>
+                        <RowDefinition Height="40*"/>
                         <RowDefinition Height="40*"/>
                         <RowDefinition Height="60*"/>
                     </Grid.RowDefinitions>
@@ -56,33 +117,25 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Label Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding CurrentCall.Id}" ContentStringFormat= "Your current Call Id {0}"/>
-                    <Label Grid.Row="1" Grid.Column="0" Content="{Binding CurrentCall.CallType}" ContentStringFormat="Call Type {0}"/>
-                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding CurrentCall.CallAddress}" ContentStringFormat="Address {0}"/>
-                    <Label Grid.Row="2" Grid.Column="0" Content="Opening time"/>
-                    <Label Grid.Row="2" Grid.Column="1" Content="Open until"/>
-                    <Label Grid.Row="3" Grid.Column="0" Content="{Binding CurrentCall.OpenTime}"/>
-                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding CurrentCall.MaxCloseTime}"/>
-                    <Label Grid.Row="4" Grid.ColumnSpan="2" Content="{Binding CurrentCall.Description}" ContentStringFormat="Call details {0}"/>
+                    <Label Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding CurrentCall.Id}" ContentStringFormat= "Your current Call Id {0}" Style="{StaticResource LabelStyle}"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="{Binding CurrentCall.CallType}" ContentStringFormat=" {0}" Style="{StaticResource LabelStyle}"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="{Binding CurrentCall.CallAddress}" ContentStringFormat=" {0}" Style="{StaticResource LabelStyle}"/>
+                    <Label Grid.Row="3" Grid.Column="1" Content="Open until" Visibility="{Binding CurrentCall.MaxCloseTime, Converter={StaticResource NullToVisibilityConverterKey}}" 
+                           Style="{StaticResource LabelStyle}"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="Opening time" Style="{StaticResource LabelStyle}"/>
+                    <Label Grid.Row="2" Grid.Column="1" Content="{Binding CurrentCall.OpenTime}" Style="{StaticResource LabelStyle}"/>
+                    <Label Grid.Row="3" Grid.Column="1" Content="{Binding CurrentCall.MaxCloseTime}" Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Grid.Row="5" Grid.ColumnSpan="2" TextWrapping="Wrap" FontFamily="Goudy Old Style" >
+                        <Run Text="Call details: "/>
+                        <Run Text="{Binding CurrentCall.Description}"/>
+                    </TextBlock>
                 </Grid>
             </Border>
-            <Button Content="Done" Click="EndTreatment_Click" Margin="196,224,74,105" Grid.RowSpan="2" Grid.Column="1"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}"/>
-            <Button Content="Cancel" Click="CancelTreatment_Click" Margin="260,224,10,105" Grid.RowSpan="2"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" />
-            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="10" Margin="0,0,148,129">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="6*"/>
-                        <RowDefinition Height="4*"/>
-                        <RowDefinition Height="2*"/>
-                        <RowDefinition Height="2*"/>
-                    </Grid.RowDefinitions>
-                    <Label Content="{Binding CurrentVolunteer.FullName}" ContentStringFormat="Welcome {0}" Grid.Row="1"/>
-                    <Label Content="{Binding CurrentVolunteer.Id}" Grid.Row="2"/>
-                    <Label Content="{Binding CurrentVolunteer.Job}" Grid.Row="3"/>
-                </Grid>
-            </Border>
-            <Button Margin="0,227,297,107" Grid.RowSpan="2" Content="Update My details" Click="UpdateVol_Click"/>
-            <Button Margin="138,229,137,105" Content="Chose new Call" Click="ChoseCall_Click" Grid.RowSpan="2">
+            <Button Content="Done" Click="EndTreatment_Click" Grid.Row="1"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="13,10,237,16" Grid.Column="1"/>
+            <Button Content="Cancel" Click="CancelTreatment_Click" Grid.Column="1" Grid.Row="1"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="262,10,0,16" />
+
+            <!--<Button Grid.Row="1" Content="Update My details" Click="UpdateVol_Click" Margin="0,10,270,56" Grid.RowSpan="2"/>-->
+            <Button  Content="Chose new Call" Click="ChoseCall_Click" Grid.Row="1" Margin="140,10,94,56" Grid.RowSpan="2">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{StaticResource MultiToIsEnabledConverterKey}">
                         <Binding Path="CurrentVolunteer.InCall"/>
@@ -90,7 +143,8 @@
                     </MultiBinding>
                 </Button.IsEnabled>
             </Button>
-            <Button Content="Previous calls" Click="HistoryCalls_Click" Margin="33,229,237,100" Grid.RowSpan="2" Grid.Column="1"/>
+            <Button Content="Previous calls" Click="HistoryCalls_Click"  Grid.Column="0" Grid.Row="1" Margin="0,25,225,56" Grid.RowSpan="2"/>
+            
 
         </Grid>
     </Grid>
