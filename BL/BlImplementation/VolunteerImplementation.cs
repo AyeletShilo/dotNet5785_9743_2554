@@ -211,6 +211,13 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             copyVol.Address = newAdd;
         Update(vol.Id, copyVol);
     }
+
+    public double? Dis(string? volAddress, string callAddress)
+    {
+        if (volAddress == null)
+            return null;
+        return VolunteerManager.CalculateDis(volAddress, callAddress);
+    }
     #region Stage 5
     public void AddObserver(Action listObserver) =>
     VolunteerManager.Observers.AddListObserver(listObserver); //stage 5

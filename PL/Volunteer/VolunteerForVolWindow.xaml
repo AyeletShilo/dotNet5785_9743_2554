@@ -10,15 +10,18 @@
         Closed="Window_Closed"
         Loaded="Window_Loaded">
     <Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (1).png" Stretch="UniformToFill"/>
+        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png" Stretch="UniformToFill"/>
     </Window.Background>
-    
+
     <Window.Resources>
-        <Style x:Key="lableStyle" TargetType="Label">
+        <Style x:Key="labelStyle" TargetType="Label">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Goudy Old Style"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#FFB24846"/>
             <Setter Property="Width" Value="Auto"/>
             <Setter Property="Height" Value="Auto"/>
         </Style>
@@ -33,11 +36,13 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="790*"/>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="315*"/>
+            <ColumnDefinition Width="214*"/>
+            <ColumnDefinition Width="233*"/>
+            <ColumnDefinition Width="31*"/>
         </Grid.ColumnDefinitions>
         <!--user name-->
-        <Border Grid.RowSpan="2" Grid.ColumnSpan="2" BorderBrush="Fuchsia" BorderThickness="1" Padding="0,1,1,1" CornerRadius="0,0,20,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+        <Border Grid.RowSpan="2" BorderBrush="AntiqueWhite" BorderThickness="1" Padding="0,1,1,1" CornerRadius="0,20,0,0" HorizontalAlignment="Right" VerticalAlignment="Top" Height="217" Grid.Column="2" Grid.ColumnSpan="3" Margin="0,0,31,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="95*"/>
@@ -54,6 +59,7 @@
                                 <Setter Property="Background" Value="Transparent" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="false"/>
+                                    <Trigger Property="ClickMode" Value="Press"/>
                                 </Style.Triggers>
                             </Style>
                         </Button.Style>
@@ -62,14 +68,14 @@
 
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="70" Height="70">
                     <!-- עיגול -->
-                    <Ellipse Fill="LightBlue" />
+                    <Ellipse Fill="AntiqueWhite" />
 
                     <!-- טקסט -->
                     <TextBlock Text="{Binding FirstLet}"
                        FontFamily="Cooper Black"
                                FontSize="40"
                                FontWeight="Bold" 
-                               Foreground="DarkBlue"
+                               Foreground="#FFC5025A"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                 </Grid>
@@ -83,28 +89,92 @@
             </Grid>
         </Border>
         <!--second grid-->
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,31,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="256*"/>
-                <RowDefinition Height="85*"/>
+                <RowDefinition Height="319*"/>
+                <RowDefinition Height="22*"/>
                 <RowDefinition Height="56*"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="299*"/>
-                <ColumnDefinition Width="485*"/>
+                <ColumnDefinition Width="320*"/>
+                <ColumnDefinition Width="203*"/>
+                <ColumnDefinition Width="238*"/>
             </Grid.ColumnDefinitions>
             <!--Total Calls-->
-            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Left" Margin="47,0,0,0" Width="690">
+            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Width="690" Grid.Column="1">
                 <Label Content="{Binding CurrentVolunteer.HandleCalls}" ContentStringFormat="Total handled calls: {0}"  Width="230" />
                 <Label Content="{Binding CurrentVolunteer.CancelCalls}" ContentStringFormat="Total canceled calls: {0}"  Width="230"  />
-                <Label Content="{Binding CurrentVolunteer.ExpiredCalls}" ContentStringFormat="Total expired calls: {0}" Width="230" />
+                <Label Content="{Binding CurrentVolunteer.ExpiredCalls}" ContentStringFormat="Total expired calls: {0}" Width="230" Foreground="#FFB08A85" />
             </StackPanel>
 
             <!--CallDetails-->
-            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="3" Background="AntiqueWhite"
-                     Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Grid.Column="1" Height="Auto" Width="Auto" Margin="26,0,24,85" Grid.RowSpan="2">
-                <Grid>
+            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="3" Background="#FFFEF2EE"
+                     Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Grid.Column="0" Height="Auto" Width="Auto" Margin="16,0,16,1">
+                <Grid Margin="8" Background="#7FFFFFFF">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="37*"/>
+                        <RowDefinition Height="37*"/>
+                        <RowDefinition Height="37*"/>
+                        <RowDefinition Height="22*"/>
+                        <RowDefinition Height="30*"/>
+                        <RowDefinition Height="23*"/>
+                        <RowDefinition Height="37*"/>
+                        <RowDefinition Height="56*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- כותרת ראשית -->
+                    <Label Grid.ColumnSpan="2" Content="{Binding CurrentCall.Id}" 
+                           ContentStringFormat="Open Call: {0}" 
+                           Height="10" Width="10"
+                           FontFamily="Goudy Old Style"
+                           Style="{StaticResource labelStyle}" 
+                           HorizontalAlignment="Left"
+                           FontSize="18" FontWeight="Bold" Foreground="#34495E" Margin="120,0,0,0"/>
+
+
+                    <Label Grid.Row="1" Grid.Column="0" Content="Call Type: " 
+                           Style="{StaticResource labelStyle}" 
+                           HorizontalAlignment="Left" Height="27" Width="72" FontWeight="Bold" Margin="53,0,0,0"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding CurrentCall.CallType}" 
+                           Style="{StaticResource labelStyle}" 
+                           HorizontalAlignment="Left" Margin="10,0,0,0" Height="10" Width="10"/>
+
+                    <!-- שדה כתובת -->
+                    <!--<Label Grid.Row="2" Grid.Column="0" Content="Address:" 
+                           Style="{StaticResource LabelStyle}" FontWeight="SemiBold" 
+                           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="124,0,0,0" Height="35"/>-->
+                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding CurrentCall.CallAddress}" 
+                           Style="{StaticResource labelStyle}"
+                           HorizontalAlignment="Left" Height="10" Width="10" Margin="120,0,0,0"/>
+                    <!--<Label Grid.Row="2" Grid.ColumnSpan="2" Margin="0,37,0,3" Grid.RowSpan="3" Content="{Binding _}"/>-->
+                    <!-- שעות פתיחה וסגירה -->
+                    <Label Grid.Row="5" Content="Opening time:" 
+                           Style="{StaticResource labelStyle}" FontWeight="SemiBold" VerticalAlignment="Top" Height="26" Width="120" Grid.RowSpan="2" />
+                    <Label Grid.Row="6" Content="{Binding CurrentCall.OpenTime}" 
+                           Style="{StaticResource labelStyle}" VerticalAlignment="Top" Height="10" Width="10"/>
+                    <Label Grid.Row="5" Grid.Column="1" Content="Open until:" 
+                           Visibility="{Binding CurrentCall.MaxCloseTime, Converter={StaticResource NullToVisibilityConverterKey}}" 
+                           Style="{StaticResource labelStyle}" FontWeight="SemiBold" Width="77" Height="26" VerticalAlignment="Top" Grid.RowSpan="2"/>
+                    <Label Grid.Row="6" Grid.Column="1" Content="{Binding CurrentCall.MaxCloseTime}" 
+                           Style="{StaticResource labelStyle}" VerticalAlignment="Top" FontFamily="Gabriola" Height="10" Width="10"/>
+
+                    <!-- תיאור השיחה -->
+                    <Border Grid.Row="7" Grid.ColumnSpan="2" Background="#FFF4F4F4" CornerRadius="5, 5,0,0" Padding="4">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                            <TextBlock TextWrapping="Wrap" FontFamily="Goudy Old Style" FontSize="14" Foreground="#FFB24846">
+                            <Run Text="Call details: " FontWeight="SemiBold"/>
+                            <Run Text="{Binding CurrentCall.Description}" />
+                            </TextBlock>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+
+                <!--<Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25*"/>
                         <RowDefinition Height="40*"/>
@@ -129,13 +199,13 @@
                         <Run Text="Call details: "/>
                         <Run Text="{Binding CurrentCall.Description}"/>
                     </TextBlock>
-                </Grid>
+                </Grid>-->
             </Border>
-            <Button Content="Done" Click="EndTreatment_Click" Grid.Row="1"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="13,10,237,16" Grid.Column="1"/>
-            <Button Content="Cancel" Click="CancelTreatment_Click" Grid.Column="1" Grid.Row="1"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="262,10,0,16" />
+            <Button Content="Done" Click="EndTreatment_Click" Grid.Row="2"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="16,10,263,-13"/>
+            <Button Content="Cancel" Click="CancelTreatment_Click" Grid.Row="2"  Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="122,10,157,-13" />
 
             <!--<Button Grid.Row="1" Content="Update My details" Click="UpdateVol_Click" Margin="0,10,270,56" Grid.RowSpan="2"/>-->
-            <Button  Content="Chose new Call" Click="ChoseCall_Click" Grid.Row="1" Margin="140,10,94,56" Grid.RowSpan="2">
+            <Button  Content="Chose new Call" Click="ChoseCall_Click" Grid.Row="2" Margin="3,3,99,53" Grid.Column="2">
                 <Button.IsEnabled>
                     <MultiBinding Converter="{StaticResource MultiToIsEnabledConverterKey}">
                         <Binding Path="CurrentVolunteer.InCall"/>
@@ -143,10 +213,40 @@
                     </MultiBinding>
                 </Button.IsEnabled>
             </Button>
-            <Button Content="Previous calls" Click="HistoryCalls_Click"  Grid.Column="0" Grid.Row="1" Margin="0,25,225,56" Grid.RowSpan="2"/>
-            
+            <Button Content="Previous calls" Click="HistoryCalls_Click"  Grid.Column="1" Margin="96,113,149,84" Grid.ColumnSpan="2"/>
+            <Image HorizontalAlignment="Left" Height="73" Margin="65,28,0,0" VerticalAlignment="Top" Width="95" Source="/Volunteer/GrandMa.png" Grid.Column="1" Grid.Row="2"/>
+            <Image HorizontalAlignment="Left" Height="68" Margin="82,6,0,0" VerticalAlignment="Top" Width="70" Source="/Volunteer/cancel1.png" Grid.Column="2" Grid.Row="2"/>
+            <Button Background="Transparent" BorderThickness="0" Click="CancelTreatment_Click" Width="Auto" Height="Auto" Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="85,285,177,46" Grid.RowSpan="3">
+                <Image Source="/Volunteer/cancel3.png" Width="48" Height="46" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <!--resource??-->
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="false"/>
+                            <Trigger Property="ClickMode" Value="Press"/>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <Button Background="Transparent" BorderThickness="0" Click="EndTreatment_Click" Width="Auto" Height="Auto" Margin="170,273,85,34" Grid.RowSpan="3" Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" >
+                <Image Source="/Volunteer/check.png" Width="Auto" Height="Auto" />
+
+                <!--resource??-->
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="false"/>
+                            <Trigger Property="ClickMode" Value="Press"/>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
 
         </Grid>
+
     </Grid>
 </Window>
 

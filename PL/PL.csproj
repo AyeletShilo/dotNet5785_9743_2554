@@ -18,6 +18,13 @@
     <None Remove="Image\Background %282%29.png" />
     <None Remove="Image\background.png" />
     <None Remove="Image\editHope.png" />
+    <None Remove="Image\GrandMa.png" />
+    <None Remove="Image\GrandMa.svg" />
+    <None Remove="Volunteer\cancel.png" />
+    <None Remove="Volunteer\cancel1.png" />
+    <None Remove="Volunteer\cancel3.png" />
+    <None Remove="Volunteer\check.png" />
+    <None Remove="Volunteer\GrandMa.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +44,14 @@
     <Resource Include="Image\editHope.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Image\GrandMa.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Volunteer\cancel.png" />
+    <Resource Include="Volunteer\cancel1.png" />
+    <Resource Include="Volunteer\cancel3.png" />
+    <Resource Include="Volunteer\check.png" />
+    <Resource Include="Volunteer\GrandMa.png" />
   </ItemGroup>
 
   

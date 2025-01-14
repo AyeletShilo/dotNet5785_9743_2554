@@ -25,6 +25,7 @@ namespace PL.Volunteer
 
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static int _id;
+        static double? _distance;
         private char _firstLet;
         public char FirstLet
         {
@@ -81,10 +82,11 @@ namespace PL.Volunteer
             CurrentVolunteer = s_bl.Volunteer.Read(id);
             InitializeComponent();
             _id = id;
-            FirstLet = CurrentVolunteer.FullName[0];
+            FirstLet = CurrentVolunteer!.FullName[0];
             if (CurrentVolunteer!.InCall != null)
             {
                 CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
+                _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress);
             }
         }
         
