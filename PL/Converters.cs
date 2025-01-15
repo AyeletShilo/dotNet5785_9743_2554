@@ -8,6 +8,9 @@ using System.Windows.Media;
 
 namespace PL;
 
+/// <summary>
+/// 
+/// </summary>
 public class ConvertUpdateToTrue : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -21,6 +24,9 @@ public class ConvertUpdateToTrue : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class ConvertUpdateToVisible : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -39,6 +45,9 @@ public class ConvertUpdateToVisible : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class NullToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -52,6 +61,9 @@ public class NullToVisibilityConverter : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class ConvertUpdateDetails : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -73,6 +85,9 @@ public class ConvertUpdateDetails : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class ConvertUpdateType : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -93,6 +108,10 @@ public class ConvertUpdateType : IValueConverter
         throw new NotImplementedException("ConvertBack is not implemented");
     }
 }
+
+/// <summary>
+/// 
+/// </summary>
 public class ConvertUpdateMaxTime : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -114,6 +133,9 @@ public class ConvertUpdateMaxTime : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class ConvertActiveIsEnable : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -127,6 +149,9 @@ public class ConvertActiveIsEnable : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class MultiToIsEnabledConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -147,7 +172,9 @@ public class MultiToIsEnabledConverter : IMultiValueConverter
     }
 }
 
-
+/// <summary>
+/// 
+/// </summary>
 class ConvertCallTypeToColor : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -176,6 +203,9 @@ class ConvertCallTypeToColor : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 class ConvertStatusToColor : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -206,6 +236,9 @@ class ConvertStatusToColor : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 class ConvertVolTypeToColor : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -234,6 +267,9 @@ class ConvertVolTypeToColor : IValueConverter
     }
 }
 
+/// <summary>
+/// 
+/// </summary>
 public class ConvertStatusToVisible : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -253,6 +289,9 @@ public class ConvertStatusToVisible : IValueConverter
     }
 }
 
+/// <summary>
+/// In call list window, hides the delete button from the call row when the call cannot be deleted
+/// </summary>
 public class ConvertDeleteToVisible : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

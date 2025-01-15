@@ -15,41 +15,32 @@ namespace PL
     public partial class MainWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        static private BO.Role user;
-        private int _id;
-        private string _pass;
-
-        //public 
-        public string? IDInput
-        {
-            get { return (string)GetValue(IDProperty); }
-            set { SetValue(IDProperty, value); }
-        }
 
         /// <summary>
-        /// DependencyProperty
+        /// Constructor
         /// </summary>
-        public static readonly DependencyProperty IDProperty =
-            DependencyProperty.Register("IDInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
-
-        public string PassInput
+        public MainWindow()
         {
-            get { return (string)GetValue(PasswordProperty); }
-            set { SetValue(PasswordProperty, value); }
+            InitializeComponent();
         }
 
-        public static readonly DependencyProperty PasswordProperty =
-            DependencyProperty.Register("PassInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
 
-        
-        private void btn_enter(object sender, RoutedEventArgs e)
+        static private BO.Role user;
+        private int _id;
+        public string? Id { get; set; }
+        public string Password { get; set; }
+
+
+        /// <summary>
+        /// Moving to the next window according to the volunteer's ID when the "Login" button is pressed
+        /// </summary>
+        private void btn_Login(object sender, RoutedEventArgs e)
         {
             try
             {
-
-                if (int.TryParse(IDInput, out _id))
+                if (int.TryParse(Id, out _id))
                 {
-                    user = s_bl.Volunteer.GetMyJob(_id, PassInput);
+                    user = s_bl.Volunteer.GetMyJob(_id, Password);
                     if (user == BO.Role.Manager)
                     {
                         new ChoseWindow(_id).Show();
@@ -73,15 +64,41 @@ namespace PL
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
         private void ID_TextChanged(object sender, TextChangedEventArgs e)
         {
             var textBox = sender as TextBox;
             if (textBox.Text.Length == 9)
             {
-                IDInput = textBox.Text;
+                Id = textBox.Text;
             }
         }
         #region draft
+        // private string _pass;
+        //public 
+        //
+        //{
+        //    get { return (string)GetValue(IDProperty); }
+        //    set { SetValue(IDProperty, value); }
+        //}
+
+        ///// <summary>
+        ///// DependencyProperty
+        ///// </summary>
+        //public static readonly DependencyProperty IDProperty =
+        //    DependencyProperty.Register("IDInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
+
+        //public string PassInput
+        //{
+        //    get { return (string)GetValue(PasswordProperty); }
+        //    set { SetValue(PasswordProperty, value); }
+        //}
+
+        //public static readonly DependencyProperty PasswordProperty =
+        //    DependencyProperty.Register("PassInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
         //try
         //{
         //    //var textBox = sender as TextBox;
@@ -117,11 +134,17 @@ namespace PL
         //}
         #endregion
 
+        /// <summary>
+        /// Converting the password from window display to string
+        /// </summary>
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
-            PassInput = ((PasswordBox)sender).Password;
+            Password = ((PasswordBox)sender).Password;
         }
 
+        /// <summary>
+        /// Moves the cursor to the password box when the volunteer presses Enter in the ID box.
+        /// </summary>
         private void ID_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -132,15 +155,17 @@ namespace PL
             }
         }
 
+        /// <summary>
+        /// Moving to the next window according to the volunteer's id and password when the volunteer presses Enter in password box
+        /// </summary>
         private void TextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 try
                 {
-                    _pass = PassInput;
-                    _id = int.Parse(IDInput);
-                    user = s_bl.Volunteer.GetMyJob(_id, _pass);
+                    _id = int.Parse(Id);
+                    user = s_bl.Volunteer.GetMyJob(_id, Password);
                     if (user == BO.Role.Manager)
                     {
                         new ChoseWindow(_id).Show();
@@ -166,10 +191,8 @@ namespace PL
             }
 
         }
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+
+        
 
     }
 

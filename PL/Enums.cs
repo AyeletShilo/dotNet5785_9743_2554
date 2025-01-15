@@ -17,7 +17,8 @@ internal class SortVolunteer : IEnumerable
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
-internal class RoleOpt : IEnumerable //?
+
+internal class RoleOpt : IEnumerable 
 {
     static readonly IEnumerable<BO.Role> s_enums =
         (Enum.GetValues(typeof(BO.Role)) as IEnumerable<BO.Role>)!;
@@ -40,6 +41,7 @@ internal class SortCall : IEnumerable
 
     public IEnumerator GetEnumerator() => s_enums.GetEnumerator();
 }
+
 internal class StatusCall : IEnumerable 
 {
     static readonly IEnumerable<BO.CallStatus> s_enums =

@@ -19,14 +19,19 @@ namespace PL
     /// </summary>
     public partial class AdminWindow : Window
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public AdminWindow()
         {
             InitializeComponent();
             queryCallList();
         }
 
-
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+        // Dependency objects
+        #region
         public DateTime CurrentDate
         {
             get { return (DateTime)GetValue(CurrentDateProperty); }
@@ -35,6 +40,26 @@ namespace PL
         public static readonly DependencyProperty CurrentDateProperty =
             DependencyProperty.Register("CurrentDate", typeof(DateTime), typeof(AdminWindow));
 
+        public TimeSpan RiskRange
+        {
+            get { return (TimeSpan)GetValue(RiskRangeProperty); }
+            set { SetValue(RiskRangeProperty, value); }
+        }
+        public static readonly DependencyProperty RiskRangeProperty =
+            DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(AdminWindow));
+
+        public IEnumerable<int> CallsAmount
+        {
+            get { return (IEnumerable<int>)GetValue(CallsAmountProperty); }
+            set { SetValue(CallsAmountProperty, value); }
+        }
+
+        public static readonly DependencyProperty CallsAmountProperty =
+            DependencyProperty.Register("CallsAmount", typeof(IEnumerable<int>), typeof(AdminWindow));
+        #endregion
+
+        //Config area
+        #region
         private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.ForwardClock(BO.TimeUnit.Minute);
@@ -55,13 +80,6 @@ namespace PL
         {
             s_bl.Admin.ForwardClock(BO.TimeUnit.Year);
         }
-        public TimeSpan RiskRange
-        {
-            get { return (TimeSpan)GetValue(RiskRangeProperty); }
-            set { SetValue(RiskRangeProperty, value); }
-        }
-        public static readonly DependencyProperty RiskRangeProperty =
-            DependencyProperty.Register("RiskRange", typeof(TimeSpan), typeof(AdminWindow));
         private void btnUpdateRiskRange_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.SetMaxRange(RiskRange);
@@ -70,13 +88,16 @@ namespace PL
         {
             CurrentDate = s_bl.Admin.GetClock();
         }
-
         private void configObserver()
         {
             RiskRange = s_bl.Admin.GetMaxRange();
         }
+        #endregion
 
-        private void ScreenLoaded(object sender, RoutedEventArgs e) //?
+        /// <summary>
+        /// Screen loaded events
+        /// </summary>
+        private void ScreenLoaded(object sender, RoutedEventArgs e) 
         {
             CurrentDate = s_bl.Admin.GetClock();
             RiskRange = s_bl.Admin.GetMaxRange();
@@ -84,18 +105,36 @@ namespace PL
             s_bl.Admin.AddConfigObserver(configObserver);
             s_bl.Call.AddObserver(CallAmountObserver);
         }
-        private void Window_Closed(object sender, /*Routed*/EventArgs e) //?
+
+        /// <summary>
+        /// Screen closed events
+        /// </summary>
+        private void Window_Closed(object sender, /*Routed*/EventArgs e)
         {
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
             s_bl.Call.RemoveObserver(CallAmountObserver);
         }
 
+        /// <summary>
+        /// Open the volunteer list window
+        /// </summary>
         private void btnVolunteer_Click(object sender, RoutedEventArgs e)
         {
             new VolunteerListWindow().Show();
         }
 
+        /// <summary>
+        /// Open the call list window
+        /// </summary>
+        private void btnCall_Click(object sender, RoutedEventArgs e)
+        {
+            new CallListWindow().Show();
+        }
+
+        /// <summary>
+        /// Reset data base
+        /// </summary>
         private void btnResetDB_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("Do you want to do reset?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -115,6 +154,10 @@ namespace PL
             }
             Mouse.OverrideCursor = null;
         }
+
+        /// <summary>
+        /// Intialize data base
+        /// </summary>
         private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
         {
             var result = MessageBox.Show("Do you want to do an initialization?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -134,50 +177,15 @@ namespace PL
             }
             Mouse.OverrideCursor = null;
         }
-
         private void CloseAllWindowsExceptMain()
         {
             foreach (Window window in Application.Current.Windows.Cast<Window>().ToList())
                 if (window != this)
                     window.Close();
         }
-
-        private void btnCall_Click(object sender, RoutedEventArgs e)
-        {
-            new CallListWindow().Show();
-        }
-
-
-
-        public IEnumerable<int> CallsAmount
-        {
-            get { return (IEnumerable<int>)GetValue(CallsAmountProperty); }
-            set { SetValue(CallsAmountProperty, value); }
-        }
-
-        /// <summary>
-        /// DependencyProperty
-        /// </summary>
-        public static readonly DependencyProperty CallsAmountProperty =
-            DependencyProperty.Register("CallsAmount", typeof(IEnumerable<int>) ,typeof(AdminWindow));
-
-
-        //public BO.CallListStatus Status { get; set; } = BO.CallListStatus.None;
-
-        //private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    Status = (BO.CallListStatus)((ComboBox)sender).SelectedItem;
-        //    queryCallList();
-        //}
-
-        private void queryCallList()
-        {
-            CallsAmount = s_bl.Call.HowManyCalls();
-            //int Amount = CallsAmount[(int)Status];
-        }
-        private void CallAmountObserver()
-            => queryCallList();
-
+       
+        //Calls amounts
+        #region
         private void Opened_Click(object sender, RoutedEventArgs e)
         {
             new CallListWindow(0, BO.CallListStatus.Opened, false).Show();
@@ -203,6 +211,12 @@ namespace PL
         {
             new CallListWindow(0, BO.CallListStatus.InTreatmentInRisk , false).Show();
         }
+
+        private void queryCallList()
+            => CallsAmount = s_bl.Call.HowManyCalls();
+        private void CallAmountObserver()
+            => queryCallList();
     }
-    
+    #endregion
+
 }
