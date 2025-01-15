@@ -17,7 +17,9 @@ namespace PL
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static private BO.Role user;
         private int _id;
+        private string _pass;
 
+        //public 
         public string? IDInput
         {
             get { return (string)GetValue(IDProperty); }
@@ -32,11 +34,11 @@ namespace PL
 
         public string PassInput
         {
-            get { return (string)GetValue(PaaswordProperty); }
-            set { SetValue(PaaswordProperty, value); }
+            get { return (string)GetValue(PasswordProperty); }
+            set { SetValue(PasswordProperty, value); }
         }
 
-        public static readonly DependencyProperty PaaswordProperty =
+        public static readonly DependencyProperty PasswordProperty =
             DependencyProperty.Register("PassInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
 
         
@@ -78,30 +80,32 @@ namespace PL
             {
                 IDInput = textBox.Text;
             }
-            //try
-            //{
-            //    //var textBox = sender as TextBox;
-            //    _id = int.Parse(textBox.Text);
-            //    user = s_bl.Volunteer.GetMyJob(_id);
-            //    if (user == BO.Role.Manager)
-            //    {
-            //        new ChoseWindow(_id).Show();
-            //        TextInput = null;
-            //        //Close();
-            //    }
-            //    else if (user == BO.Role.Volunteer)
-            //    {
-            //        new VolunteerForVolWindow(_id).Show();
-            //        Close();
-            //    }
-
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
-            //        MessageBoxButton.OK, MessageBoxImage.Error);
-            //}
         }
+        #region draft
+        //try
+        //{
+        //    //var textBox = sender as TextBox;
+        //    _id = int.Parse(textBox.Text);
+        //    user = s_bl.Volunteer.GetMyJob(_id);
+        //    if (user == BO.Role.Manager)
+        //    {
+        //        new ChoseWindow(_id).Show();
+        //        TextInput = null;
+        //        //Close();
+        //    }
+        //    else if (user == BO.Role.Volunteer)
+        //    {
+        //        new VolunteerForVolWindow(_id).Show();
+        //        Close();
+        //    }
+
+        //}
+        //catch (Exception ex)
+        //{
+        //    MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
+        //        MessageBoxButton.OK, MessageBoxImage.Error);
+        //}
+
 
         //private void Pass_TextChanged(object sender, TextChangedEventArgs e)
         //{
@@ -111,50 +115,57 @@ namespace PL
         //        PassInput = textBox.Text;
         //    }
         //}
+        #endregion
 
         private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
         {
             PassInput = ((PasswordBox)sender).Password;
         }
 
+        private void ID_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                // העבר את המוקד לתיבת הטקסט הבאה
+                var textBox = sender as TextBox;
+                textBox?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+            }
+        }
 
-        //private void TextBox_KeyDown(object sender, KeyEventArgs e)
-        //{
-        //if (e.Key == Key.Enter)
-        //{
-        //    var app = (App)Application.Current;
-        //    app.SetPreviousWindow(this);
+        private void TextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                try
+                {
+                    _pass = PassInput;
+                    _id = int.Parse(IDInput);
+                    user = s_bl.Volunteer.GetMyJob(_id, _pass);
+                    if (user == BO.Role.Manager)
+                    {
+                        new ChoseWindow(_id).Show();
+                        Close();
+                    }
+                    else if (user == BO.Role.Volunteer)
+                    {
+                        new VolunteerForVolWindow(_id).Show();
+                        Close();
+                    }
+                }
 
-        //    try
-        //    {
-        //        _id = int.Parse(IDInput);
-        //        user = s_bl.Volunteer.GetMyJob(_id, PassInput);
-        //        if (user == BO.Role.Manager)
-        //        {
-        //            new ChoseWindow(_id).Show();
-        //            Close();
-        //        }
-        //        else if (user == BO.Role.Volunteer)
-        //        {
-        //            new VolunteerForVolWindow(_id).Show();
-        //            Close();
-        //        }
+                catch (BlPasswordException ex1)
+                {
+                    MessageBox.Show(ex1.Message + "Please enter correct password again:)", "Exception",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
 
-        //    }
-
-        //    catch (BlPasswordException ex1)
-        //    {
-        //        MessageBox.Show(ex1.Message + "Please enter correct password again:)", "Exception",
-        //            MessageBoxButton.OK, MessageBoxImage.Error);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
-        //            MessageBoxButton.OK, MessageBoxImage.Error);
-        //    }
-        //}
-
-        //}
+        }
         public MainWindow()
         {
             InitializeComponent();

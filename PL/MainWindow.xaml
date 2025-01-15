@@ -25,16 +25,18 @@
             <RowDefinition Height="19*"/>
         </Grid.RowDefinitions>
         <Label Content="Enter Your ID:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="92,0,0,0" Height="33" Width="192" FontFamily="Cooper Black" FontSize="24"/>
+        <StackPanel Margin="0,0,0,45" Grid.RowSpan="3">
         <TextBox Grid.Row="1" Margin="32,10,0,93" BorderBrush="#FF090909" HorizontalAlignment="Left" Width="324"
-            Text="{Binding IDInput, Mode=TwoWay}" TextChanged="ID_TextChanged"/>
+            Text="{Binding IDInput, Mode=TwoWay}" TextChanged="ID_TextChanged" KeyDown="ID_KeyDown"/>
         <!--KeyDown="TextBox_KeyDown"-->
-        <Label Content="Enter Your Password:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="54,0,0,0" Height="33" Width="336" FontFamily="Cooper Black" FontSize="24" Grid.Row="1"/>
+        <!--<Label Content="Enter Your Password:" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="54,0,0,0" Height="33" Width="336" FontFamily="Cooper Black" FontSize="24" Grid.Row="1"/>-->
         <!--<TextBox Grid.Row="1" Margin="0,82,0,22" BorderBrush="#FF090909" HorizontalAlignment="Center" Width="324"
             Text="{Binding PassInput, Mode=TwoWay}" TextChanged="Pass_TextChanged"/>-->
         <PasswordBox 
-             Grid.Row="1" Margin="0,82,0,22" BorderBrush="#FF090909" HorizontalAlignment="Center" Width="324"
+             Grid.Row="1"  BorderBrush="#FF090909" HorizontalAlignment="Center" Width="324"
              PasswordChar="*"
-             PasswordChanged="PasswordBox_PasswordChanged"/>
+             PasswordChanged="PasswordBox_PasswordChanged" KeyDown="TextBox_KeyDown"/>
+        </StackPanel>
         <!--KeyDown="TextBox_KeyDown"-->
         <Button Content="Enter" Height="37" Margin="130,0,0,0" Grid.Row="2" Width="116" Click="btn_enter"/>
     </Grid>

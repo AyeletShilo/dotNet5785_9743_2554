@@ -32,16 +32,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Filter calls by:" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Visibility= "{Binding Path= IsFilter, Converter={StaticResource ConvertStatusToVisibleKey}}"/>
-            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding Path= IsFilter, Converter={StaticResource ConvertStatusToVisibleKey}}"
-                      ItemsSource="{Binding Source={StaticResource FilterCallKey}}"
-                      SelectionChanged="Filter_SelectionChanged"  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}">
-            </ComboBox>
-            <Label Content="Sort calls by:" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2"/>
-            <ComboBox Grid.Column="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                ItemsSource="{Binding Source={StaticResource SortCallKey}}" SelectionChanged="Sort_SelectionChanged"  SelectedValue="{Binding Path=CallSort, Mode=TwoWay}">
-            </ComboBox>
-
 
         </Grid>
         <DataGrid Margin="5" Grid.Row="1" ItemsSource="{Binding Path=CallList}" IsReadOnly ="True" AutoGenerateColumns="False"

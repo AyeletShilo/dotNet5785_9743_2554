@@ -387,21 +387,15 @@ internal class CallImplementation : BlApi.ICall
     public void GetAssignmentToEnd(int volId, int callId)
     {
         DO.Assignment assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment");
-       // if (assignment != null)
-        {
-            int assignId = assignment.Id;
-            UpdateEndTreatment(volId, assignId);
-        }
+        int assignId = assignment.Id;
+        UpdateEndTreatment(volId, assignId);
     }
 
     public void GetAssignmentToCancel(int volId, int callId)
     {
-        DO.Assignment? assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment"); ;
-        //if (assignment != null)
-        {
-            int assignId = assignment.Id;
-            UpdateCancelTreatment(volId, assignId);
-        }
+        DO.Assignment? assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment");
+        int assignId = assignment.Id;
+        UpdateCancelTreatment(volId, assignId);
     }
 
     #region Stage 5

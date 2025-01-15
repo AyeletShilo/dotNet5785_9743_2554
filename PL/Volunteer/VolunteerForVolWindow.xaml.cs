@@ -1,19 +1,7 @@
 ﻿using PL.Call;
-using PL.Volunteer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace PL.Volunteer
 {
@@ -25,52 +13,7 @@ namespace PL.Volunteer
 
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static int _id;
-        static double? _distance;
-        private char _firstLet;
-        public char FirstLet
-        {
-            get { return _firstLet; }
-            set
-            {
-                if (_firstLet != value)
-                {
-                    _firstLet = value;
-                    //OnPropertyChanged(nameof(FirstLet));
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// This volunteer
-        /// </summary>
-        public BO.Volunteer? CurrentVolunteer
-        {
-            get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
-            set { SetValue(CurrentVolunteerProperty, value); }
-        }
-
-        /// <summary>
-        /// DependencyProperty
-        /// </summary>
-        public static readonly DependencyProperty CurrentVolunteerProperty =
-            DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerForVolWindow), new PropertyMetadata(null));
-
-
-        public BO.Call? CurrentCall
-        {
-            get { return (BO.Call?)GetValue(CurrentCallProperty); }
-            set { SetValue(CurrentCallProperty, value); }
-        }
-
-        /// <summary>
-        /// DependencyProperty
-        /// </summary>
-        public static readonly DependencyProperty CurrentCallProperty =
-            DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(VolunteerForVolWindow), new PropertyMetadata(null));
-
-        public BO.Role RoleType { get; set; } = BO.Role.Volunteer;
-
+        static string? _distance;
 
 
         /// <summary>
@@ -82,19 +25,61 @@ namespace PL.Volunteer
             CurrentVolunteer = s_bl.Volunteer.Read(id);
             InitializeComponent();
             _id = id;
-            FirstLet = CurrentVolunteer!.FullName[0];
+
             if (CurrentVolunteer!.InCall != null)
             {
                 CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
-                _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress);
+                _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress).ToString();
             }
         }
-        
+
+        #region properties
+        public BO.Volunteer? CurrentVolunteer
+        {
+            get { return (BO.Volunteer?)GetValue(CurrentVolunteerProperty); }
+            set { SetValue(CurrentVolunteerProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentVolunteerProperty =
+            DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerForVolWindow), new PropertyMetadata(null));
+
+
+        public BO.Call? CurrentCall
+        {
+            get { return (BO.Call?)GetValue(CurrentCallProperty); }
+            set { SetValue(CurrentCallProperty, value); }
+        }
+
+        public static readonly DependencyProperty CurrentCallProperty =
+            DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(VolunteerForVolWindow), new PropertyMetadata(null));
+
+        public char FirstLet => CurrentVolunteer!.FullName[0];
+        //{
+        //    get { return CurrentVolunteer!.FullName[0]; }
+        //}
+        public string? Distance => _distance;
+        //{
+        //    get { return _distance; }
+        //}
+
+        //public static readonly DependencyProperty DistanceProperty =
+        //    DependencyProperty.Register("Distance", typeof(string), typeof(VolunteerForVolWindow), new PropertyMetadata(null));
+        public BO.Role RoleType { get; set; } = BO.Role.Volunteer;
+
+        #endregion
+
+
         private void RefreshVolunteer()
         {
             int id = CurrentVolunteer!.Id;
             CurrentVolunteer = null;
             CurrentVolunteer = s_bl.Volunteer.Read(id);
+            if (CurrentVolunteer!.InCall != null)
+            {
+                CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
+                _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress).ToString();
+            }
+            char refresh = FirstLet;
         }
 
         private void VolunteerObserver() => RefreshVolunteer();
@@ -108,13 +93,13 @@ namespace PL.Volunteer
         {
 
         }
-
+        #region buttons
         private void UpdateVol_Click(object sender, RoutedEventArgs e)
         {
-            var nextWind = new VolunteerDataWindow(_id, this);
-            nextWind.Show();
-            this.Hide();
-            //new VolunteerDataWindow(_id).Show();
+            //var nextWind = new VolunteerDataWindow(_id, this);
+            //nextWind.Show();
+            //this.Hide();
+            new VolunteerDataWindow(_id).Show();
         }
 
         private void ChoseCall_Click(object sender, RoutedEventArgs e)
@@ -124,7 +109,10 @@ namespace PL.Volunteer
 
         private void HistoryCalls_Click(object sender, RoutedEventArgs e)
         {
-            new HistoryCallsWindow(_id).Show();
+            var nextWind = new HistoryCallsWindow(_id, this);
+            nextWind.Show();
+            this.Hide();
+            //new HistoryCallsWindow(_id).Show();
         }
 
         private void EndTreatment_Click(object sender, RoutedEventArgs e)
@@ -138,7 +126,7 @@ namespace PL.Volunteer
                 }
                 catch (Exception ex)
                 {
-
+                    MessageBox.Show(ex.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
@@ -154,44 +142,10 @@ namespace PL.Volunteer
                 }
                 catch (Exception ex)
                 {
-
+                    MessageBox.Show(ex.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
+        #endregion 
     }
 }
-
-
-
-
-//private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
-//{
-//    try
-//    {
-//        if (ButtonText == "Add")
-//        {
-//            s_bl.Volunteer.Create(CurrentVolunteer!);
-//            //MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-//        }
-//        else if (ButtonText == "Update")
-//        {
-//            s_bl.Volunteer.Update(_id!, CurrentVolunteer!);
-//            //MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-//        }
-//        this.Close();
-//    }
-//    catch (Exception ex)
-//    {
-//        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-//    }
-//}
-///// <summary>
-///// DependencyProperty
-///// </summary>
-//public static readonly DependencyProperty ButtonTextProperty =
-//    DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
-//public string ButtonText
-//{
-//    get { return (string)GetValue(ButtonTextProperty); }
-//    set { SetValue(ButtonTextProperty, value); }
-//}

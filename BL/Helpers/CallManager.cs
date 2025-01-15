@@ -211,7 +211,7 @@ internal static class CallManager
             OpenTime = item.OpenTime,
             InterTime = callAssignment.InterTime,
             CloseTime = callAssignment.EndTime,
-            EndTreatment = (BO.EndTreatment)callAssignment.EndTreatment
+            EndTreatment = (BO.EndTreatment?)callAssignment.EndTreatment
         };
     }
 

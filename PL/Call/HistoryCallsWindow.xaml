@@ -26,25 +26,43 @@
 
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="31*"/>
-                <RowDefinition Height="175*"/>
+                <RowDefinition Height="47*"/>
+                <RowDefinition Height="139*"/>
+                <RowDefinition Height="20*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+
+            <!--#region Sort and Filter -->
+            <Label Content="Filter calls by:" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Width="81"/>
+            <ComboBox Grid.Column="1" 
+                      ItemsSource="{Binding Source={StaticResource TypeCallKey}}"
+                      SelectionChanged="Filter_SelectionChanged"  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}" Margin="0,0,0,30"/>
+            <Label Content="Sort calls by:" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="76"/>
+            <ComboBox Grid.Column="3"
+                      ItemsSource="{Binding Source={StaticResource CloseCallsSortKey}}" 
+                      SelectionChanged="Sort_SelectionChanged"  SelectedValue="{Binding Path=CallSort, Mode=TwoWay}" Margin="0,0,0,30"/>
+            <!--<ComboBox Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                       ItemsSource="{Binding Source={StaticResource CloseCallsSortKey}}"
                       SelectionChanged="ComboBoxSort_SelectionChanged"  SelectedValue="{Binding Path=CallSort, Mode=TwoWay}">
             </ComboBox>
+            -->
             <!--<Label Content="Label" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Top" Grid.Column="0"/>-->
+            <!--
             <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
                       ItemsSource="{Binding Source={StaticResource TypeCallKey}}"
                       SelectionChanged="ComboBoxFilter_SelectionChanged"  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}">
-            </ComboBox>
-            <DataGrid Margin="5" Grid.Row="1"  Grid.ColumnSpan="2" ItemsSource="{Binding Path=CloseCallList}" IsReadOnly ="True" AutoGenerateColumns="False"
+            </ComboBox>-->
+            
+            <!--#endregion-->
+            
+            <DataGrid Margin="5,10,5,66" Grid.Row="1"  Grid.ColumnSpan="4" ItemsSource="{Binding Path=CloseCallList}" IsReadOnly ="True" AutoGenerateColumns="False"
  	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected"
-              SelectedItem="{Binding SelectedCall}">
+              SelectedItem="{Binding SelectedCall}" Background="#E5FFDAB9">
                 <DataGrid.Columns>
                     <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="*" >
                         <DataGridTextColumn.ElementStyle>
@@ -63,7 +81,22 @@
                     <DataGridTextColumn Binding="{Binding EndTreatment}" Header="Close at" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
+            
+            <Button Background="Transparent" BorderThickness="0" Click="BackButton_Click" Width="Auto" Height="Auto" Grid.Row="1" Margin="-12,247,37,10" Grid.RowSpan="2" >
+                <Image Source="/Volunteer/previous.png" Width="65" Height="48" />
+
+                <!--resource??-->
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="false"/>
+                            <Trigger Property="ClickMode" Value="Press"/>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
         </Grid>
     </Grid>
-       
+
 </Window>

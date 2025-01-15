@@ -1,17 +1,5 @@
-﻿using BO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL.Call
 {
@@ -22,7 +10,16 @@ namespace PL.Call
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private static int _id;
+        private Window _preWind;
 
+        public HistoryCallsWindow(int id, Window preWind)
+        {
+            _id = id;
+            InitializeComponent();
+            _preWind = preWind;
+        }
+
+        #region propeties
         public IEnumerable<BO.ClosedCallInList> CloseCallList
         {
             get { return (IEnumerable<BO.ClosedCallInList>)GetValue(CloseCallListProperty); }
@@ -32,43 +29,56 @@ namespace PL.Call
            DependencyProperty.Register("CloseCallList", typeof(IEnumerable<BO.ClosedCallInList>), typeof(HistoryCallsWindow), new PropertyMetadata(null));
 
         public BO.CallType CallFilter { get; set; } = BO.CallType.None;
+        public BO.CloseCallData CallSort { get; set; } = BO.CloseCallData.Id;
+        public BO.ClosedCallInList? SelectedCall { get; set; }
+        #endregion
 
-        private void ComboBoxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+
+        private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallFilter = (BO.CallType)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
 
-        public BO.CloseCallData CallSort { get; set; } = BO.CloseCallData.Id;
-
-        private void ComboBoxSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallSort = (BO.CloseCallData)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
+        
+
         private void queryCallList()
         {
-            if (CallSort == BO.CloseCallData.Id)
+            try
             {
-                if (CallFilter == BO.CallType.None)
-                    CloseCallList = s_bl?.Call.GetClosedCalls(_id)!;
+                if (CallSort == BO.CloseCallData.Id)
+                {
+                    if (CallFilter == BO.CallType.None)
+                        CloseCallList = s_bl?.Call.GetClosedCalls(_id)!;
+                    else
+                        CloseCallList = s_bl?.Call.GetClosedCalls(_id, CallFilter)!;
+                }
                 else
-                    CloseCallList = s_bl?.Call.GetClosedCalls(_id, CallFilter)!;
+                {
+                    if (CallFilter == BO.CallType.None)
+                        CloseCallList = s_bl?.Call.GetClosedCalls(_id, null, CallSort)!;
+                    else
+                        CloseCallList = s_bl?.Call.GetClosedCalls(_id, CallFilter, CallSort)!;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                if (CallFilter == BO.CallType.None)
-                    CloseCallList = s_bl?.Call.GetClosedCalls(_id, null, CallSort)!;
-                else
-                    CloseCallList = s_bl?.Call.GetClosedCalls(_id, CallFilter, CallSort)!;
+                MessageBox.Show(ex.Message + "Please try again", "Exception",MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
         }
 
-        public BO.ClosedCallInList? SelectedCall { get; set; }
-        public HistoryCallsWindow(int id)
+        private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            _id = id;
-            InitializeComponent();
+            _preWind.Show();
+            this.Close();
         }
+
     }
 }
