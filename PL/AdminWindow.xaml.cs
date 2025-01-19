@@ -195,7 +195,7 @@ namespace PL
         {
             new CallListWindow(0, BO.CallListStatus.Closed ,false).Show();
         }
-        private void Tretment_Click(object sender, RoutedEventArgs e)
+        private void Treatment_Click(object sender, RoutedEventArgs e)
         {
             new CallListWindow(0, BO.CallListStatus.InTreatment,false).Show();
         }
@@ -207,7 +207,7 @@ namespace PL
         {
             new CallListWindow(0, BO.CallListStatus.OpenInRisk , false).Show();
         }
-        private void TretmentRisk_Click(object sender, RoutedEventArgs e)
+        private void TreatmentRisk_Click(object sender, RoutedEventArgs e)
         {
             new CallListWindow(0, BO.CallListStatus.InTreatmentInRisk , false).Show();
         }
@@ -216,6 +216,11 @@ namespace PL
             => CallsAmount = s_bl.Call.HowManyCalls();
         private void CallAmountObserver()
             => queryCallList();
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
     #endregion
 

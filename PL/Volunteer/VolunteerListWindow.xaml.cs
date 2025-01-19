@@ -107,5 +107,10 @@ namespace PL.Volunteer
                 MessageBox.Show("this volunteer cannot be deleted");
             }
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

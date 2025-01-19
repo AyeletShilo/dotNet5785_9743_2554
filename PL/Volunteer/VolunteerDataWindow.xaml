@@ -5,13 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerDataWindow" Height="450" Width="800"
+        Title="VolunteerDataWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
-    <!--<Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>-->
+        Loaded="Window_Loaded"
+        Background="{StaticResource CreamColor}">
+
     <Window.Resources>
         <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
         <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}"/>
@@ -20,63 +19,91 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="11*"/>
-            <RowDefinition Height="418*"/>
-            <RowDefinition Height="11*"/>
+            <RowDefinition Height="67*"/>
+            <RowDefinition Height="Auto" MinHeight="314"/>
+            <RowDefinition Height="105*"/>
+            <RowDefinition Height="138*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="11*"/>
-            <ColumnDefinition Width="782*"/>
-            <ColumnDefinition Width="11*"/>
-        </Grid.ColumnDefinitions>
+        <Border Grid.Row="1" Padding="10" Background="{StaticResource AyeletLightColor}" Margin="30,30,30,30" CornerRadius="8">
+            <!-- Personal Details Section -->
+            <GroupBox Header="Personal Details" Style="{StaticResource FormGroupBoxStyle}" Margin="10,5,10,5" >
+                <Grid Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4.5*"/>
+                        <ColumnDefinition Width="7.5*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4.5*"/>
+                        <ColumnDefinition Width="7.5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label  Grid.Row="0" Grid.Column="0"
+                            Content="Full Name:"
+                            Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1"
+                             Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
+                             Style="{StaticResource FormTextBoxStyle}" />
+
+                    <Label Grid.Row="1" Grid.Column="0"
+                           Content="Phone:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1"
+                             Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }"
+                             Style="{StaticResource FormTextBoxStyle}"/>
+
+                    <Label Grid.Row="2" Grid.Column="0"
+                           Content="Email:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" 
+                             Text="{Binding CurrentVolunteer.Password, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" 
+                             Style="{StaticResource FormTextBoxStyle}"/>
+
+                    <Label Grid.Row="0" Grid.Column="3"
+                           Content="Password:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Grid.Row="0" Grid.Column="4"
+                             Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
+                             Style="{StaticResource FormTextBoxStyle}"/>
+
+                    <Label Grid.Row="1" Grid.Column="3"
+                           Content="Address:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Grid.Row="1" Grid.Column="4" 
+                             Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" 
+                             Style="{StaticResource FormTextBoxStyle}"/>
+                    <!--<TextBlock Grid.Row="4" 
+          Text="{Binding CurrentVolunteer.Job}" />-->
+                    <Label Grid.Row="2" Grid.Column="3"
+                           Content="Max distance from call:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                    <TextBox Grid.Row="2" Grid.Column="4" 
+                             Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
+                             Style="{StaticResource FormTextBoxStyle}"/>
+                    <!--<Label Content="Active Volunteer?" Grid.Row="3" Grid.Column="3"  Margin="0,10,0,16"/>-->
+                    <CheckBox Grid.Row="3" Grid.Column="4" Content="Active Volunteer?"
+                              IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
+                              IsEnabled="{Binding CurrentVolunteer.InCall, Converter={StaticResource ConvertActiveIsEnableKey}}"
+                              Style="{StaticResource FormCheckBoxStyle}"/>
+                </Grid>
+
+            </GroupBox>
+
+
+        </Border>
+        <Button Grid.Row="3" Content="Update" 
+                Click="Button_Click"
+                Style="{StaticResource MainButtonStyle}" Margin="270,10,270,20"/>
         
-        <!--Volunteer Details-->
-        <Grid Grid.Column="1" ShowGridLines="False"  Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="10*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="10*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="15*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="15*"/>
-                <RowDefinition Height="35*"/>
-            </Grid.RowDefinitions>
-            <Label Content="Full Name:" Grid.Row="1"/>
-            <TextBox Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                     Grid.Row="1" Grid.Column="1" Margin="0,5,0,30" />
-            <Label Content="Phone Number:" Grid.Row="2"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Margin="0,5,0,30"
-                     Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }"/>
-            <Label Content="Email:" Grid.Row="3"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Margin="0,5,0,30"
-                     Text="{Binding CurrentVolunteer.Password, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" />
-            <Label Content="Password:" Grid.Row="4"/>
-            <TextBox Grid.Row="4" Grid.Column="1" Margin="0,5,0,30" 
-                     Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
-            <Label Content="Address:" Grid.Row="1" Grid.Column="3"/>
-            <TextBox Grid.Row="1" Grid.Column="4" Margin="0,5,0,30"
-                     Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" />
-            <!--<TextBlock Grid.Row="4" 
-                          Text="{Binding CurrentVolunteer.Job}" />-->
-            <Label Content="Max distance from call:" Grid.Row="2"  Grid.Column="3"/>
-            <TextBox Grid.Row="2" Grid.Column="4" Margin="0,5,0,30" 
-                     Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"/>
-            <Label Content="Active Volunteer?" Grid.Row="3" Grid.Column="3"  Margin="0,10,0,16"/>
-            <CheckBox Grid.Row="3" Grid.Column="4" Content="Active Volunteer?"
-                      IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                      IsEnabled="{Binding CurrentVolunteer.InCall, Converter={StaticResource ConvertActiveIsEnableKey}}"
-                      Width="241" Height="25" HorizontalAlignment="Right" VerticalAlignment="Top" />
-            <Button Grid.Row="8" Grid.ColumnSpan="5" Content="Update" Click="Button_Click"
-                    Style="{StaticResource RoundedButton}"/>
-            <!--<Button Content="Button" HorizontalAlignment="Left" Height="51" VerticalAlignment="Center" Width="162" Click="BackButton_Click" Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="4"/>-->
-            
-        </Grid>
+        <Button Style="{StaticResource BackArrowButton}"
+                Click="BackButton_Click"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="10,10,0,0"
+                Panel.ZIndex="1"/>
     </Grid>
 </Window>

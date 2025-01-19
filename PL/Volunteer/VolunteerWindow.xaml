@@ -5,145 +5,245 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerWindow" Height="450" Width="800"  
+        Title="Volunteer Details" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
         Loaded="Window_Loaded"
-        Background="#D6E5CC" >
-    <Window.Resources>
-        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
-        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}"/>
-        <Style TargetType="ComboBox" BasedOn="{StaticResource  ComboBoxStyle}"/>
-    </Window.Resources>
+        Background="{StaticResource CreamColor}">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="205*"/>
-            <RowDefinition Height="25*"/>
-            <RowDefinition Height="12*"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Margin="5,5,5,10">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="7*"/>
-                <ColumnDefinition Width="0.5*"/>
-                <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="7*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="35*"/>
-                <RowDefinition Height="106*"/>
-            </Grid.RowDefinitions>
-            <Label Content="ID:" Grid.Column="0" Grid.Row="0"/>
-            <Label Content="Full Name:" Grid.Column="0" Grid.Row="1" />
-            <Label Content="Phone Number:" Grid.Column="0" Grid.Row="2" />
-            <Label Content="Email:" Grid.Column="0" Grid.Row="3" />
-            <Label Content="Address:" Grid.Column="0" Grid.Row="4" />
-            <Label Content="Role:" Grid.Column="0" Grid.Row="5" />
-            <Label Content="Password:" Grid.Column="3" Grid.Row="5" />
-            <Label Content="Active?" Grid.Column="3" Grid.Row="0"/>
-            <Label Content="Max distance from call:" Grid.Column="3"  Grid.Row="1" FontSize="13"/>
-            <Label Content="Handled Calls:" Grid.Column="3" Grid.Row="2" 
-                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-            <Label Content="Canceled Calls:" Grid.Column="3" Grid.Row="3"
-                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-            <Label Content="Expired calls:" Grid.Column="3" Grid.Row="4" 
-                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"/>
-            <Label Content="Call in volunteer care:" Grid.Row="5" 
-                   Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="0,33,0,2" Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5" Width="161"/>
+        <Border Padding="10,5" Background="{StaticResource AyeletLightColor}" Margin="20,20,20,20" CornerRadius="8">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="Auto" MinHeight="220"/>
+                    <RowDefinition Height="27*"/>
+                    <RowDefinition Height="Auto" MinHeight="186.041"/>
+                    <RowDefinition Height="20*"/>
+                </Grid.RowDefinitions>
 
-            <TextBox Grid.Column="1" Grid.Row="0" MaxLength="9" 
-                     Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}" />
-            <TextBox Grid.Column="1" Grid.Row="1"
-                     Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
-            <TextBox Grid.Column="1" Grid.Row="2" 
-                     Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                     MaxLength="10"/>
-            <TextBox Grid.Column="1" Grid.Row="3" 
-                     Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
-            <TextBox Grid.Column="4" Grid.Row="5" 
-                     Text="{Binding CurrentVolunteer.Password, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
-            <TextBox Grid.Column="1" Grid.Row="4"
-                     Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
-            <ComboBox Grid.Column="1" Grid.Row="5" 
-                      SelectedValue="{Binding CurrentVolunteer.Job,  Mode=TwoWay, NotifyOnValidationError=true}" 
-                      SelectionChanged="ComboBox_SelectionChanged"
-                      ItemsSource="{Binding Source={StaticResource RoleOptKey}}" BorderBrush="Black" OpacityMask="#FF090909"/>
-            <CheckBox Grid.Column="4" Grid.Row="0" Content="click for active" 
-                      IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}" IsEnabled="{Binding CurrentVolunteer.InCall, Converter={StaticResource ConvertActiveIsEnableKey}}" />
-            <TextBox Grid.Column="4" Grid.Row="1" 
-                     Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" />
-            <TextBox Grid.Column="4" Grid.Row="2" 
-                     Text="{Binding CurrentVolunteer.HandleCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
-            <TextBox Grid.Column="4" Grid.Row="3" 
-                     Text="{Binding CurrentVolunteer.CancelCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
-            <TextBox Grid.Column="4" Grid.Row ="4"
-                     Text="{Binding CurrentVolunteer.ExpiredCalls, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}"  IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
-            <ContentControl HorizontalAlignment="Left"  Grid.Row="7" VerticalAlignment="Center" Height="101" Width="726" Grid.ColumnSpan="5" Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}"
-                            DataContext="{Binding CurrentVolunteer, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}">
-                <!--<ContentControl.Style>
-                    <Style TargetType="ContentControl">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding InCall}" Value="{x:Null}">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </ContentControl.Style>-->
-                <Grid ShowGridLines="True" Margin="4,4,-49,4" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1.5*"/>
-                        <ColumnDefinition Width="3*"/>
-                        <ColumnDefinition Width="1.5*"/>
-                        <ColumnDefinition Width="3*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    
-                    <Label Content="Id" Grid.Row="0" Grid.Column="0" RenderTransformOrigin="0.5,0.5"/>
-                    <TextBox Text="{Binding InCall.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="1"/>
-                    <Label Content="CallId" Grid.Row="1" Grid.Column="0"/>
-                    <TextBox Text="{Binding InCall.CallId, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="1" Grid.Column="1" IsReadOnly="true"/>
-                    <Label Content="CallType:"  Grid.Row="2" Grid.Column="0"/>
-                    <TextBox Text="{Binding InCall.CallType, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="1" IsReadOnly="true"/>
-                    <Label Content="Description:" Grid.Row="0" Grid.Column="2" RenderTransformOrigin="0.5,0.5"/>
-                    <TextBox Text="{Binding InCall.Description, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="3" MouseEnter="ShowDescription" IsReadOnly="true" />
-                    <Label Content="CallAddress:" Grid.Row="1" Grid.Column="2"/>
-                    <TextBox Text="{Binding InCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="1" Grid.Column="3" IsReadOnly="true"/>
-                    <Label Content="Open time:"  Grid.Row="2" Grid.Column="2"/>
-                    <TextBox Text="{Binding InCall.OpenTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="3" IsReadOnly="true"/>
-                    <!--<Label Content="Max time" Grid.Row="0" Grid.Column="2" RenderTransformOrigin="0.5,0.5"/>
-        <TextBox Text="{Binding MaxCloseTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="3"/>-->
-                    <Label Content="Entry time:" Grid.Row="0" Grid.Column="4"/>
-                    <TextBox Text="{Binding InCall.EntryTime, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"  Grid.Row="0" Grid.Column="5" IsReadOnly="true"/>
-                    <Label Content="distance:"  Grid.Row="1" Grid.Column="4"/>
-                    <TextBox Text="{Binding InCall.VolDistance, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="1" Grid.Column="5" IsReadOnly="true"/>
-                    <Label Content="status:"  Grid.Row="2" Grid.Column="4"/>
-                    <TextBox Text="{Binding InCall.Status, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" Grid.Row="2" Grid.Column="5" IsReadOnly="true"/>
-                </Grid>
+                <!-- Personal Details Section -->
+                <GroupBox Header="Personal Details" Grid.Row="1" Style="{StaticResource FormGroupBoxStyle}" Margin="2,2,2,2">
+                    <Grid Margin="2.5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4.5*"/>
+                            <ColumnDefinition Width="7.5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="4.5*"/>
+                            <ColumnDefinition Width="7.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-            </ContentControl>
+                        <!-- Left Column -->
+                        <Label Grid.Row="0" Grid.Column="0"
+                           Content="ID:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                        <TextBox Grid.Column="1" Grid.Row="0" 
+                             Style="{StaticResource FormTextBoxStyle}"
+                             Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
+                             IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
 
+                        <Label Grid.Row="1" Grid.Column="0"
+                           Content="Full Name:" 
+                           Style="{StaticResource FormLabelStyle}" />
+                        <TextBox Grid.Column="1" Grid.Row="1" 
+                             Style="{StaticResource FormTextBoxStyle}"
+                            Text="{Binding CurrentVolunteer.FullName, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
-        </Grid>
-        <Button Content="{Binding ButtonText}" Click="btnAddUpdate_Click" Grid.Row="1"/>
+                        <Label Grid.Row="2" Grid.Column="0" 
+                           Content="Phone:" 
+                           Style="{StaticResource FormLabelStyle}" />
+                        <TextBox Grid.Column="1" Grid.Row="2" 
+                             Style="{StaticResource FormTextBoxStyle}"
+                             Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
+                        <!-- Additional Fields -->
+                        <Label Grid.Row="3" Grid.Column="0" 
+                           Content="Role:" Style="{StaticResource FormLabelStyle}" />
+                        <ComboBox Grid.Column="1" Grid.Row="3" 
+                              Margin="0,3"
+                              SelectedValue="{Binding CurrentVolunteer.Job, Mode=TwoWay, NotifyOnValidationError=true}"
+                              ItemsSource="{Binding Source={StaticResource RoleOptKey}}"
+                              SelectionChanged="ComboBox_SelectionChanged"/>
 
+                        <!-- Right Column -->
+                        <Label Grid.Row="1" Grid.Column="3"
+                           Content="Email:" 
+                           Style="{StaticResource FormLabelStyle}" />
+                        <TextBox Grid.Column="4" Grid.Row="1" 
+                             Style="{StaticResource FormTextBoxStyle}"
+                             Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
 
+                        <Label Grid.Row="2" Grid.Column="3"
+                           Content="Address:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                        <TextBox Grid.Column="4" Grid.Row="2" 
+                             Style="{StaticResource FormTextBoxStyle}"
+                             Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+
+                        <Label Grid.Row="3" Grid.Column="3"
+                           Content="Max Distance:" 
+                           Style="{StaticResource FormLabelStyle}" />
+                        <TextBox Grid.Column="4" Grid.Row="3" 
+                             Style="{StaticResource FormTextBoxStyle}"
+                             Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+
+                        <Label Grid.Row="0" Grid.Column="3"
+                           Content="Password:" 
+                           Style="{StaticResource FormLabelStyle}" />
+                        <TextBox Grid.Column="4" Grid.Row="0" 
+                             Style="{StaticResource FormTextBoxStyle}"
+                             Text="{Binding CurrentVolunteer.Password, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+
+                        <CheckBox Grid.Column="4" Grid.Row="4" 
+                              HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                              Content="Active Volunteer" 
+                              Style="{StaticResource FormCheckBoxStyle}"
+                            IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay}"
+                            IsEnabled="{Binding CurrentVolunteer.InCall, Converter={StaticResource ConvertActiveIsEnableKey}}"/>
+                    </Grid>
+                </GroupBox>
+                <GroupBox Header="Total calls" Grid.Row="2" Style="{StaticResource FormGroupBoxStyle}"
+                      Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="2,3,2,3">
+                    <Grid Margin="2.5,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0"
+                           Content="{Binding CurrentVolunteer.HandleCalls}" 
+                           ContentStringFormat="Handled: {0}"
+                           Style="{StaticResource FormLabelStyle}"
+                               FontSize="14"
+                               HorizontalAlignment="Center"/>
+                        <Label Grid.Column="1"
+                           Content="{Binding CurrentVolunteer.CancelCalls}" 
+                           ContentStringFormat="Canceled: {0}"
+                           Style="{StaticResource FormLabelStyle}"
+                                FontSize="14"
+                               HorizontalAlignment="Center"/>
+                        <Label Grid.Column="2"
+                           Content="{Binding CurrentVolunteer.ExpiredCalls}" 
+                           ContentStringFormat="Expired: {0}"
+                           Style="{StaticResource FormLabelStyle}"
+                                FontSize="14"
+                               HorizontalAlignment="Center"/>
+                    </Grid>
+                </GroupBox>
+                <!-- Call Details Section -->
+                <GroupBox Header="Current Call Details" Grid.Row="3" Style="{StaticResource FormGroupBoxStyle}"
+                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="2,2,2,2">
+                    <Grid Margin="2.5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4.5*"/>
+                            <ColumnDefinition Width="7.5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="4.5*"/>
+                            <ColumnDefinition Width="7.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+
+                        </Grid.RowDefinitions>
+
+                        <!-- Call Details Fields -->
+                        <Label Grid.Row="0" Grid.Column="0"
+                           Content="Call ID:" 
+                           Style="{StaticResource FormLabelStyle}" />
+                        <TextBox Grid.Row="0" Grid.Column="1"
+                             Text="{Binding CurrentVolunteer.InCall.CallId}" 
+                             Style="{StaticResource FormTextBoxStyle}"  
+                             IsReadOnly="True"/>
+
+                        <Label Grid.Row="1" Grid.Column="0" 
+                           Content="Type:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" 
+                             Text="{Binding CurrentVolunteer.InCall.CallType}" 
+                             Style="{StaticResource FormTextBoxStyle}" 
+                             IsReadOnly="True"/>
+
+                        <Label Grid.Row="2" Grid.Column="0"
+                           Content="Description:" 
+                           Style="{StaticResource FormLabelStyle}" />
+                        <TextBox Grid.Row="2" Grid.Column="1"
+                             Text="{Binding CurrentVolunteer.InCall.Description}" 
+                             Style="{StaticResource FormTextBoxStyle}" 
+                             IsReadOnly="True" 
+                             MouseEnter="ShowDescription">
+                            <TextBox.ToolTip>
+                                <ToolTip Content="{Binding CurrentVolunteer.InCall.Description}" 
+                                     Background="{StaticResource CreamColor}"
+                                     BorderBrush="{StaticResource AyeletHardColor}"
+                                     Foreground="{StaticResource AyeletHardColor}"
+                                         FontSize="16"/>
+                            </TextBox.ToolTip>
+                        </TextBox>
+
+                        <Label  Grid.Row="3" Grid.Column="0"
+                            Content="Address:" 
+                            Style="{StaticResource FormLabelStyle}"/>
+                        <TextBox Grid.Row="3" Grid.Column="1"
+                             Text="{Binding CurrentVolunteer.InCall.CallAddress}" 
+                             Style="{StaticResource FormTextBoxStyle}" 
+                             IsReadOnly="True"/>
+
+                        <Label  Grid.Row="0" Grid.Column="3"
+                            Content="Status:" 
+                            Style="{StaticResource FormLabelStyle}"/>
+                        <TextBox Grid.Row="0" Grid.Column="4"
+                             Text="{Binding CurrentVolunteer.InCall.Status}" 
+                             Style="{StaticResource FormTextBoxStyle}"  
+                             IsReadOnly="True"/>
+
+                        <Label Grid.Row="1" Grid.Column="3"
+                           Content="Distance:" 
+                           Style="{StaticResource FormLabelStyle}" />
+                        <TextBox Grid.Row="1" Grid.Column="4"
+                             Text="{Binding CurrentVolunteer.InCall.VolDistance}" 
+                             Style="{StaticResource FormTextBoxStyle}" 
+                             IsReadOnly="True"/>
+
+                        <Label Grid.Row="2" Grid.Column="3"
+                           Content="Open Time:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                        <TextBox Grid.Row="2" Grid.Column="4"
+                             Text="{Binding CurrentVolunteer.InCall.OpenTime}" 
+                             Style="{StaticResource FormTextBoxStyle}" 
+                             IsReadOnly="True"/>
+
+                        <Label Grid.Row="3" Grid.Column="3"
+                           Content="Entry Time:" 
+                           Style="{StaticResource FormLabelStyle}"/>
+                        <TextBox Grid.Row="3" Grid.Column="4"
+                             Text="{Binding CurrentVolunteer.InCall.EntryTime}" 
+                             Style="{StaticResource FormTextBoxStyle}" 
+                             IsReadOnly="True"/>
+                    </Grid>
+                </GroupBox>
+
+                <!-- Action Button -->
+                <Button Content="{Binding ButtonText}" Grid.Row="4" 
+                    Style="{StaticResource MainButtonStyle}"
+                    Click="btnAddUpdate_Click" Margin="270,10,270,10"/>
+                
+                <Button Style="{StaticResource BackArrowButton}"
+                        Click="BackButton_Click"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Panel.ZIndex="1" Grid.Row="4"/>
+
+            </Grid>
+        </Border>
     </Grid>
 </Window>

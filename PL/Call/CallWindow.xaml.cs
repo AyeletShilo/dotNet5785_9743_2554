@@ -82,5 +82,10 @@ namespace PL.Call
         {
 
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

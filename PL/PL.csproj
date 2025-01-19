@@ -15,17 +15,23 @@
 
   <ItemGroup>
     <None Remove="Background.png" />
+    <None Remove="Call\LOGO %282%29.png" />
+    <None Remove="ICON.ico" />
     <None Remove="Image\Background %281%29.png" />
     <None Remove="Image\Background %282%29.png" />
     <None Remove="Image\background.png" />
     <None Remove="Image\editHope.png" />
     <None Remove="Image\GrandMa.png" />
     <None Remove="Image\GrandMa.svg" />
+    <None Remove="LOGO %281%29.png" />
+    <None Remove="LOGO %283%29.ico" />
+    <None Remove="LOGO.png" />
     <None Remove="Volunteer\Background.png" />
     <None Remove="Volunteer\cancel.png" />
     <None Remove="Volunteer\cancel1.png" />
     <None Remove="Volunteer\cancel3.png" />
     <None Remove="Volunteer\check.png" />
+    <None Remove="Volunteer\editHope.png" />
     <None Remove="Volunteer\GrandMa.png" />
     <None Remove="Volunteer\previous.png" />
   </ItemGroup>
@@ -38,6 +44,8 @@
     <Resource Include="Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="ICON.ico" />
+    <Resource Include="LOGO %282%29.png" />
     <Resource Include="Image\Background (1).png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -53,11 +61,15 @@
     <Resource Include="Image\GrandMa.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="LOGO (1).png" />
+    <Resource Include="LOGO (3).ico" />
+    <Resource Include="LOGO.png" />
     <Resource Include="Volunteer\Background.png" />
     <Resource Include="Volunteer\cancel.png" />
     <Resource Include="Volunteer\cancel1.png" />
     <Resource Include="Volunteer\cancel3.png" />
     <Resource Include="Volunteer\check.png" />
+    <Resource Include="Volunteer\editHope.png" />
     <Resource Include="Volunteer\Images\GrandMa.png" />
     <Resource Include="Volunteer\previous.png" />
   </ItemGroup>

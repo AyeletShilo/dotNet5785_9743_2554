@@ -1,89 +1,121 @@
-﻿<!--External Grid-->
-<Window x:Class="PL.Volunteer.VolunteerListWindow"
+﻿<Window x:Class="PL.Volunteer.VolunteerListWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerListWindow" Height="640" Width="800"
+        Title="Volunteer List" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
-    <!--<Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>-->
-    <Grid>
+        Loaded="Window_Loaded"
+        Background="{StaticResource CreamColor}">
+
+
+
+    <Grid Margin="20,10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="500*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="59"/>
+            <RowDefinition Height="416*"/>
+            <RowDefinition Height="Auto" MinHeight="84.04"/>
         </Grid.RowDefinitions>
-        <!--Internal, Upper Grid-->
-        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Label Content="Filter volunteers by:" HorizontalAlignment="Center"  VerticalAlignment="Top" Grid.Column="0"/>
-            <ComboBox Grid.Column="1" VerticalAlignment="Top"
+
+            <Label Content="Filter by:" 
+                   Style="{StaticResource HeaderLabelStyle}"
+                   Grid.Column="0"
+                   Margin="40,0,0,0"/>
+
+
+            <ComboBox Grid.Column="1" Margin="20,0"
                       SelectedValue="{Binding Path=CallType, Mode=TwoWay}"
                       ItemsSource="{Binding Source={StaticResource FilterByCallKey}}"
-                      SelectionChanged="Filter_SelectionChanged" Height="43"/>
-            <Label Content="Sort volunteers by:" HorizontalAlignment="Center" Grid.Column="2"/>
-            <ComboBox Grid.Column="3" VerticalAlignment="Top"
-                SelectedValue="{Binding Path=SortValue, Mode=TwoWay}"
-                ItemsSource="{Binding Source={StaticResource SortVolunteerKey}}"
-                SelectionChanged="Sort_SelectionChanged" Height="43"/>
+                      SelectionChanged="Filter_SelectionChanged"/>
+
+            <Label Content="Sort by:" 
+                   Style="{StaticResource HeaderLabelStyle}"
+                   Grid.Column="2"
+                   Margin="40,0,0,0"/>
+
+            <ComboBox Grid.Column="3" Margin="20,0"
+                      SelectedValue="{Binding Path=SortValue, Mode=TwoWay}"
+                      ItemsSource="{Binding Source={StaticResource SortVolunteerKey}}"
+                      SelectionChanged="Sort_SelectionChanged"/>
 
         </Grid>
-        <DataGrid Margin="5" Grid.Row="1" ItemsSource="{Binding Path=VolunteerList}" IsReadOnly ="True" AutoGenerateColumns="False"
-       	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected"
-                  SelectedItem="{Binding SelectedVolunteer}" MouseDoubleClick="lsvVolunteersList_MouseDoubleClick">
+
+        <DataGrid Grid.Row="1" 
+                  Margin="0,15,0,15" 
+                  ItemsSource="{Binding Path=VolunteerList}" 
+                  SelectedItem="{Binding SelectedVolunteer}"
+                  MouseDoubleClick="lsvVolunteersList_MouseDoubleClick"
+                  Style="{StaticResource DataStyle}"
+                  CellStyle="{StaticResource CenteredDataGridCellStyle}">
+
+
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Id}" Header="Id" Width="*" >
+                <DataGridTextColumn Binding="{Binding Id}" Header="ID" Width="*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Background" Value="LightCyan"/>
                             <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="Foreground" Value="Black"/>
+                            <!--<Setter Property="Padding" Value="5"/>-->
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding FullName}" Header="Name" Width="*" />
+                <DataGridTextColumn Binding="{Binding FullName}" Header="Name" Width="*"/>
                 <DataGridTemplateColumn Header="Is Active" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsEnabled="False" IsChecked="{Binding Path=IsActive}" />
+                            <CheckBox IsEnabled="False" 
+                                    IsChecked="{Binding Path=IsActive}"
+                                    HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding HandleCalls}" Header="Handle Calls" Width="*"/>
-                <DataGridTextColumn Binding="{Binding CancelCalls}" Header="Cancel Calls" Width="*"/>
-                <DataGridTextColumn Binding="{Binding ExpiredCalls}" Header="Expired Calls" Width="*"/>
-                <DataGridTextColumn Binding="{Binding CallId}" Header="Call Id" Width="*"/>
+                <DataGridTextColumn Binding="{Binding HandleCalls}" Header="Handled" Width="*" CellStyle="{StaticResource CenteredDataGridCellStyle}"/>
+                <DataGridTextColumn Binding="{Binding CancelCalls}" Header="Canceled" Width="*" CellStyle="{StaticResource CenteredDataGridCellStyle}"/>
+                <DataGridTextColumn Binding="{Binding ExpiredCalls}" Header="Expired" Width="*"/>
+                <DataGridTextColumn Binding="{Binding CallId}" Header="Call ID" Width="*"/>
                 <DataGridTextColumn Binding="{Binding InTreatment}" Header="Call Type" Width="*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
-                            <Setter Property="Background" Value="{Binding Path = InTreatment, Converter={StaticResource ConvertVolTypeToColorKey}}" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalAlignment" Value="Stretch"/>
+                            <Setter Property="Background" Value="{Binding Path=InTreatment, Converter={StaticResource ConvertCallTypeToColorKey}}"/>
+                            <Setter Property="Foreground" Value="{Binding Path=InTreatment, Converter={StaticResource ConvertFontColorKey}}"/>
+                            <!--<Setter Property="Padding" Value="5"/>-->
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                                   
-                <DataGridTemplateColumn Width="*">
+                <DataGridTemplateColumn Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Click="Delete_Volunteer" Content="Delete"  />
+                            <Button Click="Delete_Volunteer" 
+                                    Style="{StaticResource DeleteButton}">
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"
+
+        <Button Content="Add New Volunteer" 
+                Grid.Row="2"
+                Style="{StaticResource MainButtonStyle}"
+                Margin="270,10,270,10"
                 Click="lsvVolunteersList_AddVolunteer"/>
-
-
+        <Button Style="{StaticResource BackArrowButton}"
+                Click="BackButton_Click"
+                HorizontalAlignment="Left"
+                Grid.Row="2" Grid.RowSpan="2"
+                Panel.ZIndex="1"
+                VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

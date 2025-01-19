@@ -69,5 +69,10 @@ namespace PL.Volunteer
            => s_bl.Volunteer.AddObserver(VolunteerObserver);
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(VolunteerObserver);
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
