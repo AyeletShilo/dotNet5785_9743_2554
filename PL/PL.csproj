@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <None Remove="Background.png" />
+    <None Remove="BigIcon.png" />
     <None Remove="Call\LOGO %282%29.png" />
     <None Remove="ICON.ico" />
     <None Remove="Image\Background %281%29.png" />
@@ -25,6 +26,7 @@
     <None Remove="Image\GrandMa.svg" />
     <None Remove="LOGO %281%29.png" />
     <None Remove="LOGO %283%29.ico" />
+    <None Remove="LOGO %28700 x 700 פיקסל%29.ico" />
     <None Remove="LOGO.png" />
     <None Remove="Volunteer\Background.png" />
     <None Remove="Volunteer\cancel.png" />
@@ -44,6 +46,7 @@
     <Resource Include="Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="BigIcon.png" />
     <Resource Include="ICON.ico" />
     <Resource Include="LOGO %282%29.png" />
     <Resource Include="Image\Background (1).png">
@@ -63,6 +66,7 @@
     </Resource>
     <Resource Include="LOGO (1).png" />
     <Resource Include="LOGO (3).ico" />
+    <Resource Include="LOGO (700 x 700 פיקסל).ico" />
     <Resource Include="LOGO.png" />
     <Resource Include="Volunteer\Background.png" />
     <Resource Include="Volunteer\cancel.png" />
