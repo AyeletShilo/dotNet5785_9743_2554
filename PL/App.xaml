@@ -26,70 +26,533 @@
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
         <local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>
         <local:ConvertDeleteToVisible x:Key="ConvertDeleteToVisibleKey"/>
+        <local:FontSizeConverter x:Key="FontSizeConverterKey"/>
+        <local:ConvertFontColor x:Key="ConvertFontColorKey"/>
+        <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey" />
+        <local:MaxTimeForEndTimeConverter x:Key="MaxTimeForEndTimeConverterKey"/>
+        <local:TimeSpanToDateConverter x:Key="TimeSpanToDateConverterKey"/>
 
-        <Style x:Key="LabelStyle" TargetType="Label">
+
+
+        <!--#region Colors-->
+        <!-- Updated Color Palette -->
+        <SolidColorBrush x:Key="PrimaryColor" Color="#FF69B4"/>
+        <!-- Hot Pink -->
+        <SolidColorBrush x:Key="SecondaryColor" Color="#87CEEB"/>
+        <!-- Sky Blue -->
+        <SolidColorBrush x:Key="AccentColor" Color="#FFB6C1"/>
+        <!-- Light Pink -->
+        <SolidColorBrush x:Key="HighlightColor" Color="#98FB98"/>
+        <!-- Pale Green -->
+        <SolidColorBrush x:Key="PressedColor" Color="#c8c7b5"/>
+        <SolidColorBrush x:Key="Greeny" Color="#B7E1A3"/>
+        <SolidColorBrush x:Key="HardestGreenColor" Color="#29600F"/>
+        <SolidColorBrush x:Key="HardGreenColor" Color="#80B666"/>
+        <SolidColorBrush x:Key="CreamColor" Color="#F6F8DD"/>
+        <SolidColorBrush x:Key="AyeletColor" Color="#7D2C4A"/>
+        <SolidColorBrush x:Key="AyeletHardColor" Color="#802948"/>
+        <SolidColorBrush x:Key="AyeletLightColor" Color="#FFFFDFEB"/>
+        <SolidColorBrush x:Key="BackButtonColor" Color="#5A7A6F"/>
+
+        <!--Enum Colors-->
+        <SolidColorBrush x:Key="Color1" Color="#EBEBD9"/>
+        <SolidColorBrush x:Key="Color2" Color="#A9AE99"/>
+        <SolidColorBrush x:Key="Color3" Color="#707A61"/>
+        <SolidColorBrush x:Key="Color4" Color="#6A7B5C"/>
+        <SolidColorBrush x:Key="Color5" Color="#455D39"/>
+
+        <!--#endregion-->
+        
+        
+        <!--<Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontFamily" Value="Guttman Miryam"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Foreground" Value="#7D2216"/>
             <Setter Property="HorizontalAlignment" Value ="Center"/>
-            
-        </Style>
-
-        <Style x:Key="ButtonStyle" TargetType="Button">
+        </Style>-->
+        <!--<Style x:Key="ButtonStyle" TargetType="Button">
             <Setter Property="FontSize" Value="16" />
             <Setter Property="FontFamily" Value= "Sylfaen"/>
             <Setter Property="FontWeight" Value="Light"/>
             <Setter Property="Background" Value="#FF7AD1B1"/>
             <Setter Property="Foreground" Value="#FF952828"/>
+        </Style>-->
+
+        <!-- Base Style for Labels -->
+        <Style x:Key="BaseLabel" TargetType="Label">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#444444"/>
+            <Setter Property="Margin" Value="5"/>
         </Style>
 
+        <!-- Header Label Style -->
+        <Style x:Key="HeaderLabel" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+    <Setter Property="FontFamily" Value="Comic Sans MS"/>
+    <Setter Property="FontSize" Value="24"/>
+    <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+</Style>
+
+        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="FrankRuehl"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <!--<Style x:Key="TextBlockStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Guttman Miryam"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="Black"/>
+        </Style>-->
+
+        
+        
+        <!-- Animation Duration -->
+        <Duration x:Key="AnimationDuration">0:0:0.2</Duration>
+
+        <Style x:Key="MainButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource HardGreenColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource CreamColor}"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Greeny}"/>
+                    <Setter Property="Foreground" Value="{StaticResource HardestGreenColor}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style x:Key="HeaderLabelStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Border"
+                            Padding="8,5"
+                            Background="Transparent">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource Greeny}"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource HardGreenColor}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+       
+
+      
+
         <Style x:Key="RoundedButton" TargetType="Button">
+            <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" 
-                        BorderBrush="{TemplateBinding BorderBrush}" 
-                        BorderThickness="{TemplateBinding BorderThickness}" 
-                        CornerRadius="15">
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="10">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FocusVisualStyle">
+                <Setter.Value>
+                    <Style TargetType="Button">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Rectangle Margin="2" SnapsToDevicePixels="True" Stroke="{StaticResource AyeletColor}" StrokeThickness="2" StrokeDashArray="1 2"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="FontSize" 
+                    Value="{Binding RelativeSource={RelativeSource Self}, Path=Height, Converter={StaticResource FontSizeConverterKey}}" />
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="Gray"/>
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
+
+
+        </Style>
+
+        <Style x:Key="BackArrowButton" TargetType="Button">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="ToolTip" Value="Back"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse x:Name="circle" 
+                                     Fill="{StaticResource BackButtonColor}"
+                                     Stroke="{StaticResource CreamColor}"
+                                     StrokeThickness="1.5"/>
+                            <Path x:Name="arrow"
+                                  Data="M 25,20 L 15,20 L 20,15 M 15,20 L 20,25"
+                                  Stroke="{StaticResource CreamColor}"
+                                  StrokeThickness="2"
+                                  StrokeLineJoin="Round"
+                                  StrokeStartLineCap="Round"
+                                  StrokeEndLineCap="Round"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource CreamColor}"/>
+                                <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource BackButtonColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource CreamColor}"/>
+                                <Setter Property="Stroke" TargetName="arrow" Value="{StaticResource PressedColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="#388E3C"/>
+        </Style>
+
+        <Style x:Key="DangerButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#F44336"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="#D32F2F"/>
+        </Style>
+        
+        <Style x:Key="BasePhotoButton" TargetType="Button">
+            <Setter Property="Width" Value="30"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style x:Key="DeleteButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse x:Name="circle" 
+                             Fill="{StaticResource AyeletHardColor}"/>
+                            <Image Source="/LOGO.png">
+                            </Image>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource HardGreenColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ChooseButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse x:Name="circle" 
+                             Fill="{StaticResource AyeletHardColor}"/>
+                            <Image Source="/LOGO (1).png"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource HardGreenColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="CancleButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
+            <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Ellipse x:Name="circle" Fill="{StaticResource AyeletHardColor}"/>
+                                <Image Source="/LOGO (2).png"/>
+                            </Grid>
+
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Fill" TargetName="circle" Value="{StaticResource HardGreenColor}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+        <Style x:Key="DataStyle" TargetType="DataGrid">
+            <Setter Property="IsReadOnly" Value="true"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+            <Setter Property="EnableRowVirtualization" Value="True"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AyeletHardColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="{StaticResource AyeletLightColor}"/>
+            <Setter Property="GridLinesVisibility" Value="All"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource HardestGreenColor}"/>
+            <Setter Property="VerticalGridLinesBrush" Value="{StaticResource HardestGreenColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style x:Key="CenteredDataGridCellStyle" TargetType="DataGridCell">
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <!--<Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Background" Value="Transparent" />-->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Grid Background="{TemplateBinding Background}"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              SnapsToDevicePixels="True">
+                            <ContentPresenter 
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                SnapsToDevicePixels="True"/>
+                            <ScrollViewer 
+                        HorizontalScrollBarVisibility="Auto" 
+                        VerticalScrollBarVisibility="Disabled"
+                        SnapsToDevicePixels="True">
+                                <TextBlock
+                            Text="{TemplateBinding Content}" 
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            TextWrapping="NoWrap"
+                            TextTrimming="CharacterEllipsis" 
+                            SnapsToDevicePixels="True"/>
+                            </ScrollViewer>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="{StaticResource Greeny}"/>
+            <Setter Property="Foreground" Value="{StaticResource AyeletColor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,5"/>
+        </Style>
+        <Style TargetType="DataGridRow">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Background" Value="{StaticResource CreamColor}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Animated Button Style -->
+        <Style x:Key="CheerfulButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource AyeletLightColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource HardestGreenColor}"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="15,8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="20">
+                            <ContentPresenter x:Name="contentPresenter" 
+                                            HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <EventTrigger RoutedEvent="MouseEnter">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                            To="1.1" Duration="{StaticResource AnimationDuration}"/>
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                            To="1.1" Duration="{StaticResource AnimationDuration}"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <EventTrigger RoutedEvent="MouseLeave">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)"
+                                            To="1.0" Duration="{StaticResource AnimationDuration}"/>
+                                        <DoubleAnimation 
+                                            Storyboard.TargetName="border"
+                                            Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)"
+                                            To="1.0" Duration="{StaticResource AnimationDuration}"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{StaticResource HardGreenColor}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#CCCCCC"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <ScaleTransform/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+<!--#region Conect DataGrid-->
+        <Style x:Key="FormLabelStyle" TargetType="Label">
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Foreground" Value="{StaticResource HardestGreenColor}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5,0,10,0"/>
+        </Style>
+
+        <Style x:Key="FormTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="5,0"/>
+            <Setter Property="BorderBrush" Value="{StaticResource HardGreenColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ScrollViewer x:Name="PART_ContentHost"/>
                         </Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
-
-        <Style x:Key="TextBoxStyle" TargetType="TextBox">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontFamily" Value="FrankRuehl"/>
-            <Setter Property="FontWeight" Value="Normal"/>
+        <Style x:Key="FormCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="Foreground" Value="{StaticResource HardestGreenColor}"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+        <Style x:Key="CallDetailsGridStyle" TargetType="Grid">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Margin" Value="10"/>
         </Style>
 
-        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontFamily" Value="FrankRuehl"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            
-        </Style>
-
-        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+        <Style x:Key="FormGroupBoxStyle" TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="{StaticResource HardGreenColor}"/>
+            <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontFamily" Value="Guttman Miryam"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
         </Style>
-
-        <Style TargetType="Window">
-            <Setter Property="Background">
-                <Setter.Value>
-                    <ImageBrush ImageSource="/Background.png" Stretch="UniformToFill" />
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
+<!--#endregion-->
+        
     </Application.Resources>
 </Application>

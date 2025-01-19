@@ -5,46 +5,271 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="AdminWindow" Height="450" Width="800"
+        Title="AdminWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
+        Background="{StaticResource CreamColor}"
         Closed="Window_Closed"
         Loaded="ScreenLoaded">
-    <!--<Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>-->
+
     <Window.Resources>
-        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
+        <Style x:Key="MaterialDropShadow" TargetType="Border">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect
+                Color="Black"
+                Direction="320"
+                ShadowDepth="5"
+                Opacity="0.5"
+                BlurRadius="10" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TimeButton" TargetType="Button" BasedOn="{StaticResource RoundedButton}">
+            <Setter Property="Background" Value="{StaticResource CreamColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource HardGreenColor}"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="AmountButtons" TargetType="Button" BasedOn="{StaticResource RoundedButton}">
+            <Setter Property="Background" Value="{StaticResource CreamColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AyeletColor}"/>
+            <Setter Property="FontFamily" Value="Trebuchet MS"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="{StaticResource HardestGreenColor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="DataButtons" TargetType="Button" BasedOn="{StaticResource RoundedButton}">
+            <Setter Property="Background" Value="{StaticResource AyeletColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource CreamColor}"/>
+            <Setter Property="FontFamily" Value="Ariel"/>
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="Foreground" Value="{StaticResource CreamColor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+
     </Window.Resources>
 
 
     <!--Config-->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80*"/>
-            <RowDefinition Height="100*"/>
+            <RowDefinition Height="164.015"/>
+            <RowDefinition Height="270.025"/>
         </Grid.RowDefinitions>
 
-        <!--Clock-->
-        <Grid Margin="205,0,215,10">
-            <Label Content="{Binding CurrentDate}" FontWeight="Bold" FontSize="20" Margin="0,10,0,0" VerticalAlignment="Top" Height="50"/>
-            <Button Content="Add One Minute" Click="btnAddOneMinute_Click" HorizontalAlignment="Stretch" Margin="0,80,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Hour" Click="btnAddOneHour_Click" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Day " Click="btnAddOneDay_Click" HorizontalAlignment="Stretch" Margin="0,120,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Month" Click="btnAddOneMonth_Click" HorizontalAlignment="Stretch" Margin="0,140,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Year" Click="btnAddOneYear_Click" HorizontalAlignment="Stretch" Margin="0,160,0,0" VerticalAlignment="Top"/>
+        <Button Style="{StaticResource BackArrowButton}"
+                Click="BackButton_Click"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="10,10,0,0"
+                Panel.ZIndex="1"/>
+        
+        <!--Time Defination-->
+        <Border Grid.Row="0" 
+        Background="{StaticResource Greeny}"
+        CornerRadius="25" 
+        Padding="10"
+        Margin="125,20,125,20">
+            <!--Effect="{StaticResource MaterialDropShadow}">-->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--clock-->
+                <Label  Grid.Row="0" 
+                        Style="{StaticResource BaseLabel}"
+                        Content="{Binding CurrentDate}" 
+                        FontFamily="Comic Sans MS"
+                        FontSize="30"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Margin="0,0,0,5"/>
+                <!--ForWard Clock-->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0"
+                            Content="+Year" 
+                            Click="btnAddOneYear_Click"
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"/>
+                    <Button Grid.Column="1"
+                            Content="+Month" 
+                            Click="btnAddOneMonth_Click"                            
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"/>
+                    <Button Grid.Column="2"
+                            Content="+Day " 
+                            Click="btnAddOneDay_Click"
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"/>
+                    <Button Grid.Column="3"
+                            Content="+Hour" 
+                            Click="btnAddOneHour_Click"
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"/>
+                    <Button Grid.Column="4"
+                            Content="+Minute" 
+                            Click="btnAddOneMinute_Click"
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"/>
+                </Grid>
+            </Grid>
+        </Border>
+        <Grid Grid.Row="1" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="333"/>
+                <ColumnDefinition Width="467"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="106.01"/>
+                    <RowDefinition Height="164.015"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Column="1" Grid.Row="0"
+                    Background="{StaticResource AyeletLightColor}"
+                    CornerRadius="15" 
+                    Padding="5"
+                    Margin="5,0,10,5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <UniformGrid Columns="1" Grid.Column="0">
+                            <Button Click="Opened_Click" 
+                                 Content="{Binding CallsAmount[0], Mode=TwoWay}" 
+                                 ContentStringFormat="⚡Opened Calls: {0}"
+                                 Style="{StaticResource AmountButtons}"
+                                 Margin="5,5,0,0"
+                                Width="Auto" Height="Auto"/>
+
+                            <Button  Click="Treatment_Click"
+                                 Content="{Binding CallsAmount[1], Mode=TwoWay}"
+                                 ContentStringFormat="🔧 In treatment: {0}" 
+                                 Style="{StaticResource AmountButtons}"
+                                 Margin="5,5,0,0"
+                                 Height="Auto"/>
+
+                            <Button  Click="Closed_Click"
+                                     Content="{Binding CallsAmount[2], Mode=TwoWay}"
+                                     ContentStringFormat="✅ Closed: {0}"
+                                     Style="{StaticResource AmountButtons}"
+                                     Margin="5,5,0,0"
+                                     Height="Auto"/>
+                        </UniformGrid>
+                        <UniformGrid Columns="1" Grid.Column="1">
+                            <Button Click="Expired_Click" 
+                                    Content="{Binding CallsAmount[3], Mode=TwoWay}" 
+                                    ContentStringFormat="⏰ Expired Calls: {0}"
+                                    Style="{StaticResource AmountButtons}"
+                                    Margin="5,5,0,0"
+                                    Width="Auto" Height="Auto"/>
+
+                            <Button  Click="OpenRisk_Click"
+                                     Content="{Binding CallsAmount[4], Mode=TwoWay}"
+                                     ContentStringFormat="⚡⚠️ Open in risk: {0}" 
+                                     Style="{StaticResource AmountButtons}"
+                                     Margin="5,5,0,0"
+                                     Height="Auto"/>
+
+                            <Button  Click="TreatmentRisk_Click"
+                                     Content="{Binding CallsAmount[5], Mode=TwoWay}"
+                                     ContentStringFormat="🔧⚠️ In treatment in risk: {0}"
+                                     Style="{StaticResource AmountButtons}"
+                                     Margin="5,5,0,0"
+                                     Height="Auto"/>
+                        </UniformGrid>
+                        <!--<StackPanel Grid.Column="0" Margin="5,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                        <Button Click="Opened_Click" 
+                                Content="{Binding CallsAmount[0], Mode=TwoWay}" 
+                                ContentStringFormat="⚡Opened Calls: {0}"
+                                Style="{StaticResource AmountButtons}"
+                                Margin="5,5,0,0"
+                                Width="Auto" Height="Auto"/>
+
+                        <Button  Click="Treatment_Click"
+                                 Content="{Binding CallsAmount[1], Mode=TwoWay}"
+                                 ContentStringFormat="🔧 In treatment: {0}" 
+                                 Style="{StaticResource AmountButtons}"
+                                 Margin="5,5,0,0"
+                                 Height="Auto"/>
+
+                        <Button  Click="Closed_Click"
+                                 Content="{Binding CallsAmount[2], Mode=TwoWay}"
+                                 ContentStringFormat="✅ Closed: {0}"
+                                 Style="{StaticResource AmountButtons}"
+                                 Margin="5,5,0,0"
+                                 Height="Auto"/>
+                    </StackPanel>-->
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="1" Margin="0,0,10,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Button Content="InitializeDB"
+                            Grid.Column="0" Grid.Row="0"
+                            Click ="btnInitializeDB_Click" 
+                            Style="{StaticResource DataButtons}"
+                            Margin="10,5,10,5"/>
+                    <Button Content="Handle Volunteers" 
+                            Grid.Column="1" Grid.Row="1"
+                            Click="btnVolunteer_Click"
+                            Style="{StaticResource DataButtons}"
+                            FontSize="24" 
+                            Margin="10,5,10,5" />
+                    <Button Content="ResetDB" 
+                            Grid.Column="1" Grid.Row="0"
+                            Click="btnResetDB_Click" 
+                            Style="{StaticResource DataButtons}"
+                            Margin="10,5,10,5"/>
+                    <Button Content = "Handle Calls"
+                            Grid.Column="0" Grid.Row="1"
+                            Click = "btnCall_Click"  
+                            Style="{StaticResource DataButtons}"
+                            Margin = "10,5,10,5"/>
+
+                </Grid>
+               
+            </Grid>
+            <StackPanel >
+                <!--RiskRange-->
+                <TextBox  Text="{Binding RiskRange, StringFormat='{}{0}'}" FontWeight="Bold" FontSize="20"/>
+                <Button Content="Update Risk Range"
+                        Click="btnUpdateRiskRange_Click" 
+                        Style="{StaticResource CheerfulButton}"/>
+            </StackPanel>
         </Grid>
 
-        <!--RiskRange-->
-        <TextBox HorizontalAlignment="Left" Margin="27,91,0,0" TextWrapping="Wrap" Text="{Binding RiskRange}" FontWeight="Bold" FontSize="20" VerticalAlignment="Top" Width="124" Height="26"/>
-        <Button Content="Update Risk Range" Click="btnUpdateRiskRange_Click" HorizontalAlignment="Left" Margin="27,138,0,0" VerticalAlignment="Top" Height="26" Width="124"/>
 
-        <Button Content="InitializeDB" Click ="btnInitializeDB_Click" HorizontalAlignment="Left" Margin="89,141,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
-        <Button Content="Handle Volunteers" Click="btnVolunteer_Click" HorizontalAlignment="Center" Margin="0,146,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
-        <Button Content="ResetDB" Click="btnResetDB_Click"  HorizontalAlignment="Left" Margin="89,47,0,0" VerticalAlignment="Top" Height="40" Width="120" Grid.Row="1"/>
-        <Button Content = "Handle Calls" Click = "btnCall_Click"  Margin = "0,47,0,0" Height = "40" Width = "120" Grid.Row = "1" HorizontalAlignment = "Center" VerticalAlignment = "Top" />
+        
 
 
-        <Grid Grid.Row="1" Margin="600,47,0,0">
+
+
+    </Grid>
+</Window>
+
+
+
+<!--<Grid Grid.Row="1" Margin="662,47,0,0">
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -55,27 +280,30 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Click="Opened_Click">
+            <Button Click="Opened_Click" Content="{Binding CallsAmount[0]}" ContentStringFormat="sghs {0}" />
+            -->
+<!--<Button Grid.Row="0" Grid.Column="0" Click="Opened_Click">
                 <Button.Content>
                     <TextBlock>
-                        <Run Text="Opened: "/>
+                        <Run Text="⚡Opened Calls: "/>
                         <Run Text="{Binding CallsAmount[0],Mode=TwoWay}"/>
                     </TextBlock>
                 </Button.Content>
-            </Button>
-            <Button Grid.Row="1" Grid.Column="0"  Click="Tretment_Click">
+            </Button>-->
+<!--<Button Grid.Row="1" Grid.Column="0"  Click="Tretment_Click">
                 <Button.Content>
                     <TextBlock>
-            <Run Text="In treatment: "/>
+            <Run Text="🔧 In treatment: "/>
             <Run Text="{Binding CallsAmount[1], Mode=TwoWay}"/>
                     </TextBlock>
                 </Button.Content>
-            </Button>
+            </Button>-->
+<!--
 
             <Button Grid.Row="2" Grid.Column="0"  Click="Closed_Click">
                 <Button.Content>
                     <TextBlock>
-                        <Run Text="Closed: "/>
+                        <Run Text="✅ Closed: "/>
                         <Run Text="{Binding CallsAmount[2], Mode=TwoWay}"/>
                     </TextBlock>
                 </Button.Content>
@@ -83,7 +311,7 @@
             <Button Grid.Row="3" Grid.Column="0"  Click="Expired_Click">
                 <Button.Content>
                     <TextBlock>
-            <Run Text="Expired: "/>
+            <Run Text="⏰ Expired: "/>
             <Run Text="{Binding CallsAmount[3], Mode=TwoWay}"/>
                     </TextBlock>
                 </Button.Content>
@@ -91,7 +319,7 @@
             <Button Grid.Row="4" Grid.Column="0"  Click="OpenRisk_Click">
                 <Button.Content>
                     <TextBlock>
-                        <Run Text="Open in risk: "/>
+                        <Run Text=" ⚡⚠️ Open in risk: "/>
                         <Run Text="{Binding CallsAmount[4], Mode=TwoWay}"/>
                     </TextBlock>
                 </Button.Content>
@@ -99,13 +327,21 @@
             <Button Grid.Row="5" Grid.Column="0"  Click="TretmentRisk_Click">
                 <Button.Content>
                     <TextBlock>
-             <Run Text="In treatment in risk: "/>
+             <Run Text=" 🔧⚠️ In treatment in risk: "/>
              <Run Text="{Binding CallsAmount[5], Mode=TwoWay}"/>
                     </TextBlock>
                 </Button.Content>
             </Button>
 
-        </Grid>
-        <Label Content="Amount of call according status:" HorizontalAlignment="Left" Margin="604,24,0,0" Grid.Row="1" VerticalAlignment="Top" Width="186" FontSize="11"/>
-    </Grid>
-</Window>
+        </Grid>-->
+<!--<Label Content="Amount of call according status:" HorizontalAlignment="Left" Margin="604,24,0,0" Grid.Row="1" VerticalAlignment="Top" Width="186" FontSize="11" Height="25"/>-->
+<!--Clock-->
+<!--
+        <Grid Grid.Row="1" Margin="205,0,215,10">
+
+            <Button Content="Add One Minute" Click="btnAddOneMinute_Click" HorizontalAlignment="Stretch" Margin="0,80,0,0" VerticalAlignment="Top"/>
+            <Button Content="Add One Hour" Click="btnAddOneHour_Click" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Top"/>
+            <Button Content="Add One Day " Click="btnAddOneDay_Click" HorizontalAlignment="Stretch" Margin="0,120,0,0" VerticalAlignment="Top"/>
+            <Button Content="Add One Month" Click="btnAddOneMonth_Click" HorizontalAlignment="Stretch" Margin="0,140,0,0" VerticalAlignment="Top"/>
+            <Button Content="Add One Year" Click="btnAddOneYear_Click" HorizontalAlignment="Stretch" Margin="0,160,0,0" VerticalAlignment="Top"/>
+        </Grid>-->

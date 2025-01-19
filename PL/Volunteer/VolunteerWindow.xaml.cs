@@ -107,5 +107,10 @@ namespace PL.Volunteer
         {
             //MessageBox.Show(CurrentVolunteer.InCall.Description);//בעיה במסך הוספה 
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

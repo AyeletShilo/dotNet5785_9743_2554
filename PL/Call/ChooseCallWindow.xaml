@@ -5,74 +5,114 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="ChooseCallWindow" Height="450" Width="800"
+        Title="ChooseCallWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
-    <!--<Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>-->
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="11*"/>
-            <RowDefinition Height="418*"/>
-            <RowDefinition Height="11*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="11*"/>
-            <ColumnDefinition Width="782*"/>
-            <ColumnDefinition Width="11*"/>
-        </Grid.ColumnDefinitions>
+        Loaded="Window_Loaded"
+        Background="{StaticResource CreamColor}">
 
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="31*"/>
-                <RowDefinition Height="31*"/>
-                <RowDefinition Height="175*"/>
-            </Grid.RowDefinitions>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto" MinHeight="78.04"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Text="{Binding Volunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=LostFocus}" TextChanged="TextBox_TextChanged"/>
-            <Button Grid.Column="1" Content="Update Address" Click="UpdateAdd_Click"/>
-            <ComboBox Grid.Row="1" Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-              ItemsSource="{Binding Source={StaticResource OpenCallsSortKey}}"
-              SelectionChanged="ComboBoxSort_SelectionChanged"  SelectedValue="{Binding Path=CallSort, Mode=TwoWay}">
-            </ComboBox>
-            <!--<Label Content="Label" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Top" Grid.Column="0"/>-->
-            <ComboBox Grid.Row="1" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-              ItemsSource="{Binding Source={StaticResource TypeCallKey}}"
-              SelectionChanged="ComboBoxFilter_SelectionChanged"  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}">
-            </ComboBox>
-            <DataGrid Margin="5" Grid.Row="2"  Grid.ColumnSpan="2" ItemsSource="{Binding Path=OpenCallList}" IsReadOnly ="True" AutoGenerateColumns="False"
-                      EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected"
-                      SelectedItem="{Binding SelectedCall}" SelectionChanged="DataGrid_SelectionChanged">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="2*" >
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Background" Value="LightCyan"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="2*"/>
-                    <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="3*"/>
-                    <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="2*"/>
-                    <DataGridTextColumn Binding="{Binding MaxCloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="2*"/>
-                    <DataGridTextColumn Binding="{Binding VolDistance}" Header="Distance from you" Width="3*"/>
-                    <DataGridTemplateColumn Header="Choose" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Click="Choose_Call" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+
+            <Label Content="Filter by:" 
+                   Style="{StaticResource HeaderLabelStyle}"
+                   Grid.Column="0"
+                   Margin="0,0,10,0"/>
+
+
+            <ComboBox Grid.Column="1" 
+                      SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}"
+                      ItemsSource="{Binding Source={StaticResource TypeCallKey}}"
+                      SelectionChanged="Filter_SelectionChanged"/>
+
+            <Label Content="Sort by:" 
+                   Style="{StaticResource HeaderLabelStyle}"
+                   Grid.Column="2"
+                   Margin="20,0,10,0"/>
+
+            <ComboBox Grid.Column="3"
+                      SelectedValue="{Binding Path=CallSort, Mode=TwoWay}"
+                      ItemsSource="{Binding Source={StaticResource OpenCallsSortKey}}"
+                      SelectionChanged="ComboBoxSort_SelectionChanged"/>
+
         </Grid>
 
+        <DataGrid  Grid.Row="1"
+                   Margin="0,15,0,15"
+                   ItemsSource="{Binding Path=OpenCallList}"
+                   SelectedItem="{Binding SelectedCall}" 
+                   SelectionChanged="DataGrid_SelectionChanged"
+                   Style="{StaticResource DataStyle}"
+                   CellStyle="{StaticResource CenteredDataGridCellStyle}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="2*" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="3*"/>
+                <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding MaxCloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding VolDistance}" Header="Distance" Width="3*"/>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Choose_Call" 
+                                        Style="{StaticResource ChooseButton}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <Grid Grid.Row="2"
+              Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="391"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <DockPanel Grid.Column="1">
+                <TextBox Text="{Binding Volunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=LostFocus}" 
+                         TextChanged="TextBox_TextChanged"
+                         Background="Transparent"
+                         BorderBrush="{StaticResource AyeletHardColor}"
+                         FontFamily="Trebuchet MS"
+                         FontSize="14"
+                         Foreground="{StaticResource AyeletColor}"
+                         DockPanel.Dock="Top" Height="41"/>
+                <Button Content="Change Address" 
+                        Click="UpdateAdd_Click"
+                        Style="{StaticResource CheerfulButton}"
+                        DockPanel.Dock="Bottom"/>
+            </DockPanel>
+            <Button Style="{StaticResource BackArrowButton}"
+                    Grid.Row="2"
+                    Click="BackButton_Click"
+                    HorizontalAlignment="left"
+                    VerticalAlignment="Bottom"
+                    Margin="10,10,0,0"
+                    Panel.ZIndex="1"/>
+        </Grid>
+
+
     </Grid>
+
+
 </Window>

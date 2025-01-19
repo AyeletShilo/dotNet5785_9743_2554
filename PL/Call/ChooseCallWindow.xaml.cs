@@ -111,5 +111,15 @@ namespace PL.Call
         {
 
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

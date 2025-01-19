@@ -21,6 +21,10 @@ namespace PL.Call
     public partial class AddCall : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        public DateTime CurrentTime 
+        {
+            get { return s_bl.Admin.GetClock(); }
+        }
         public AddCall()
         {
             InitializeComponent();
@@ -71,6 +75,10 @@ namespace PL.Call
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Call.RemoveObserver(CallObserver);
 
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
     

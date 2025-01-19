@@ -5,228 +5,278 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Volunteer"
         mc:Ignorable="d"
-        Title="VolunteerForVolWindow" Height="450" Width="800"
+        Title="Volunteer Dashboard" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
-    <Window.Background>
-        <ImageBrush ImageSource="/Volunteer/Background.png" Stretch="UniformToFill"/>
-    </Window.Background>
+        Loaded="Window_Loaded"
+        Background="{StaticResource CreamColor}">
 
     <Window.Resources>
-        <Style x:Key="labelStyle" TargetType="Label">
+
+
+        <!-- Base Style for Labels -->
+        <!--
+        <Style x:Key="BaseLabel" TargetType="Label">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="FontFamily" Value="Goudy Old Style"/>
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Foreground" Value="#FFB24846"/>
-            <Setter Property="Width" Value="Auto"/>
-            <Setter Property="Height" Value="Auto"/>
+            <Setter Property="Foreground" Value="#444444"/>
+            <Setter Property="Margin" Value="5"/>
         </Style>
+
+        -->
+        <!-- Header Label Style -->
+        <!--
+        <Style x:Key="HeaderLabel" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>-->
+
     </Window.Resources>
 
-    <!--main grid-->
-    <Grid>
+    <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="19*"/>
-            <RowDefinition Height="406*"/>
-            <RowDefinition Height="19*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="244*"/>
+            <RowDefinition Height="200*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="8*"/>
-            <ColumnDefinition Width="500*"/>
-            <ColumnDefinition Width="8*"/>
-        </Grid.ColumnDefinitions>
-        <!--user name-->
-        <Border Grid.Column="1" Grid.ColumnSpan="2" Grid.RowSpan="2" BorderBrush="AntiqueWhite" BorderThickness="1" Padding="0,1,1,1" CornerRadius="0,0,0,20" 
-                HorizontalAlignment="Right" VerticalAlignment="Top" Height="248">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="95*"/>
-                    <RowDefinition Height="63*"/>
-                    <RowDefinition Height="29*"/>
-                    <RowDefinition Height="34*"/>
-                </Grid.RowDefinitions>
 
-                <Border  Grid.Row="2" CornerRadius="50" Background="Transparent" Margin="6,15,192,7" Grid.RowSpan="2" >
-                    <Button Background="Transparent" BorderThickness="0" Click="UpdateVol_Click">
-                        <Image Source="C:\Users\Administrator\source\repos\newOne\PL\Image\editHope.png" Width="40" Height="38" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="false"/>
-                                    <Trigger Property="ClickMode" Value="Press"/>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-                    </Button>
-                </Border>
 
-                <Grid HorizontalAlignment="Center" VerticalAlignment="Center" Width="70" Height="70">
+        <!--Add this button to your main Grid, right after the Grid.RowDefinitions-->
 
-                    <Ellipse Fill="#FFFFF2EE" />
-
-                    <TextBlock Text="{Binding FirstLet}"
-                       FontFamily="Cooper Black"
-                               FontSize="40"
-                               FontWeight="Bold" 
-                               Foreground="#FFC5025A"
-                               
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center" />
-                </Grid>
-                <Label Content="{Binding CurrentVolunteer.FullName}" ContentStringFormat="Welcome {0}" Grid.Row="1"
-               HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-               FontFamily="Cooper Black" FontSize="16"/>
-                <Label Content="{Binding CurrentVolunteer.Id}" Grid.Row="2" FontFamily="Monotype Corsiva" FontSize="18" 
-               HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-                <Label Content="{Binding CurrentVolunteer.Job}" Grid.Row="3" FontFamily="Monotype Corsiva" FontSize="16"
-               HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-            </Grid>
-        </Border>
-        <!--second grid-->
-        <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,0,31,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="341*"/>
-                <RowDefinition Height="56*"/>
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="320*"/>
-                <ColumnDefinition Width="217*"/>
-                <ColumnDefinition Width="224*"/>
-            </Grid.ColumnDefinitions>
-            <!--Total Calls-->
-            <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" HorizontalAlignment="Center" Width="216" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="2" Margin="0,312,0,0">
-                <StackPanel.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleX="-1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </StackPanel.RenderTransform>
-                <Label Content="{Binding CurrentVolunteer.HandleCalls}" ContentStringFormat="Total handled calls: {0}"  Width="534" Style="{StaticResource LabelStyle}" />
-                <Label Content="{Binding CurrentVolunteer.CancelCalls}" ContentStringFormat="Total canceled calls: {0}"  Width="230"  Style="{StaticResource LabelStyle}" />
-                <Label Content="{Binding CurrentVolunteer.ExpiredCalls}" ContentStringFormat="Total expired calls: {0}" Width="230" Style="{StaticResource LabelStyle}" />
-            </StackPanel>
-
-            <!--CallDetails-->
-            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="3" Background="#FFFEF2EE"
-                     Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Grid.Column="0" Height="Auto" Width="Auto" Margin="16,0,16,1">
-                <Grid  Background="#7FFFFFFF">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="37*"/>
-                        <RowDefinition Height="37*"/>
-                        <RowDefinition Height="37*"/>
-                        <RowDefinition Height="37*"/>
-                        <RowDefinition Height="23*"/>
-                        <RowDefinition Height="30*"/>
-                        <RowDefinition Height="37*"/>
-                        <RowDefinition Height="56*"/>
-                    </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <!--<Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="567"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>-->
+            <!-- Profile Section -->
+            <Border Grid.Column="0" 
+                Background="{StaticResource Greeny}"
+                CornerRadius="25" 
+                Padding="20"
+                Margin="0,0,0,20"
+                >
+                <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.ColumnSpan="2" Content="{Binding CurrentCall.Id}" 
-                           ContentStringFormat="Open Call: {0}" 
-                           Height="Auto" Width="Auto"
-                           FontFamily="Goudy Old Style"
-                           Style="{StaticResource labelStyle}" 
-                           HorizontalAlignment="Center"
-                           FontSize="18" FontWeight="Bold" Foreground="#34495E"/>
+                    <!-- Profile Picture -->
+                    <Grid Width="80" Height="80" Margin="0,0,20,0">
+                        <Ellipse Fill="White"/>
+                        <TextBlock Text="{Binding FirstLet}"
+                             FontFamily="Comic Sans MS"
+                             FontSize="36"
+                             FontWeight="Bold"
+                             Foreground="{StaticResource AyeletColor}"
+                             HorizontalAlignment="Center"
+                             VerticalAlignment="Center"/>
+                    </Grid>
 
+                    <!-- Profile Info -->
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="{Binding CurrentVolunteer.FullName, StringFormat='Hello {0}!'}"
+                             FontFamily="Comic Sans MS"
+                             FontSize="24"
+                             Foreground="{StaticResource AyeletHardColor}"
+                             Margin="0,0,0,5"/>
+                        <TextBlock Text="{Binding CurrentVolunteer.Job}"
+                             FontFamily="Comic Sans MS"
+                             FontSize="16"
+                             Foreground="{StaticResource AyeletColor}"/>
+                        <TextBlock Text="{Binding CurrentVolunteer.Id}"
+                             FontFamily="Comic Sans MS"
+                             FontSize="14"
+                             Foreground="{StaticResource Color2}"/>
+                    </StackPanel>
 
-                    <Label Grid.Row="1" Grid.Column="0" Content="Call Type: " 
-                           Style="{StaticResource labelStyle}" 
-                           HorizontalAlignment="Left" Height="27" Width="72" FontWeight="Bold" Margin="53,0,0,0"/>
-                    <Label Grid.Row="1" Grid.Column="1" Content="{Binding CurrentCall.CallType}" 
-                           Style="{StaticResource labelStyle}" 
-                           HorizontalAlignment="Left" Margin="10,0,0,0" Width="Auto" Height="Auto"/>
-
-                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding CurrentCall.CallAddress}" 
-                           Style="{StaticResource labelStyle}"
-                           HorizontalAlignment="Center" Width="Auto" Height="Auto"/>
-
-                    <Label Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" 
-                           Content="{Binding Distance}" Width="Auto" Height="Auto"/>
-                    <Label Grid.Row="4" Content="Opening time:" 
-                           Style="{StaticResource labelStyle}" FontWeight="SemiBold" VerticalAlignment="Top" Height="26" Width="120" Grid.RowSpan="2" />
-                    <Label Grid.Row="5" Content="{Binding CurrentCall.OpenTime}" 
-                           Style="{StaticResource labelStyle}" VerticalAlignment="Top" Width="Auto" Height="Auto"/>
-                    <Label Grid.Row="4" Grid.Column="1" Content="Open until:" 
-                           Visibility="{Binding CurrentCall.MaxCloseTime, Converter={StaticResource NullToVisibilityConverterKey}}" 
-                           Style="{StaticResource labelStyle}" FontWeight="SemiBold" Width="Auto" Height="Auto" VerticalAlignment="Top" Grid.RowSpan="2"/>
-                    <Label Grid.Row="5" Grid.Column="1" Content="{Binding CurrentCall.MaxCloseTime}" 
-                           Style="{StaticResource labelStyle}" VerticalAlignment="Top" FontFamily="Gabriola" Width="Auto" Height="Auto"/>
-                    <Label Grid.Row="6" Grid.ColumnSpan="2" Content="{Binding CurrentCall.Status}" ContentStringFormat="Status- {0}"
-                           Style="{StaticResource labelStyle}" HorizontalAlignment="Center"/>
-
-                    <Border Grid.Row="7" Grid.ColumnSpan="2" Background="#FFF4F4F4" CornerRadius="5, 5,0,0" Padding="4">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                            <TextBlock TextWrapping="Wrap" FontFamily="Goudy Old Style" FontSize="14" Foreground="#FFB24846">
-                            <Run Text="Call details: " FontWeight="SemiBold"/>
-                            <Run Text="{Binding CurrentCall.Description}" />
-                            </TextBlock>
-                        </ScrollViewer>
-                    </Border>
+                    <Button Style="{StaticResource CheerfulButton}"
+                                Background="Transparent"
+                                Click="UpdateVol_Click"
+                                Margin="5" Grid.ColumnSpan="2"
+                            Width="50" Height="50">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/Volunteer/editHope.png" Width="64" Height="52" Margin="0,0,5,0"/>
+                        </StackPanel>
+                    </Button>
                 </Grid>
             </Border>
-
-            <!--<Button Grid.Row="1" Content="Update My details" Click="UpdateVol_Click" Margin="0,10,270,56" Grid.RowSpan="2"/>-->
-            <Button Content="Chose new Call" Click="ChoseCall_Click" 
-                    Grid.Row="0" Grid.Column="1" 
-                    Width="Auto" Height="Auto"  
-                    Style="{StaticResource RoundedButton}" Margin="16,10,100,261"
-                    Background="#FFFEF2EE">
-                <Button.IsEnabled>
-                    <MultiBinding Converter="{StaticResource MultiToIsEnabledConverterKey}">
-                        <Binding Path="CurrentVolunteer.InCall"/>
-                        <Binding Path="CurrentVolunteer.IsActive"/>
-                    </MultiBinding>
-                </Button.IsEnabled>
-            </Button>
-            <Button Content="Previous calls" Click="HistoryCalls_Click" 
-                    Width="Auto" Height="Auto" 
-                    Grid.Column="1" Margin="78,100,38,171"
-                    Style="{StaticResource RoundedButton}"
-                    Background="#FFFEF2EE"/>
-            <Image HorizontalAlignment="Left" Height="216"  VerticalAlignment="Top" Width="285" Source="/Image/GrandMa.png" Margin="270,181,0,0" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-            <Button Background="Transparent" BorderThickness="0" Click="CancelTreatment_Click" Width="Auto" Height="Auto" 
-                    Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="81,318,179,23" Grid.RowSpan="2">
-                <Image Source="/Volunteer/cancel3.png" Width="48" Height="46" HorizontalAlignment="Center" VerticalAlignment="Top"/>
-                <!--resource??-->
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="False"/>
-                            <Trigger Property="ClickMode" Value="Press"/>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-            <Button Background="Transparent" BorderThickness="0" Click="EndTreatment_Click" Width="Auto" Height="Auto" Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}" Margin="163,312,84,16" Grid.RowSpan="2" >
-                <Image Source="/Volunteer/check.png" Width="Auto" Height="Auto" />
-
-                <!--resource??-->
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="false"/>
-                            <Trigger Property="ClickMode" Value="Press"/>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
         </Grid>
+        <!-- Main Content -->
 
+        <Grid  Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    Background="{StaticResource AyeletLightColor}"
+                    CornerRadius="8"
+                    Padding="5" Margin="0,0,10,0" Panel.ZIndex="1"
+                    Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}">
+                <GroupBox Header="{Binding CurrentCall.Id, StringFormat='Current Call: {0} 📞'}" Margin="5" Padding="10" Grid.Row="1" Style="{StaticResource FormGroupBoxStyle}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="Auto" MinHeight="37.589"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Call Details -->
+                        <StackPanel Grid.Row="0" Margin="0,10,227,10" Grid.ColumnSpan="2">
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Type: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding CurrentCall.CallType}"/>
+                            </DockPanel>
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Address: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding CurrentCall.CallAddress}"/>
+                            </DockPanel>
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Distance: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding Distance}"/>
+                            </DockPanel>
+                        </StackPanel>
+
+                        <StackPanel  Grid.Row="0" Margin="227,10,0,10" Grid.ColumnSpan="2">
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Open Time: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding CurrentCall.OpenTime}"/>
+                            </DockPanel>
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Open Until: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding CurrentCall.MaxCloseTime}"/>
+                            </DockPanel>
+                            <DockPanel Margin="0,5">
+                                <TextBlock Text="Status: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
+                                <TextBlock Text="{Binding CurrentCall.Status}"/>
+                            </DockPanel>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,2">
+                            <!--<TextBlock Text="Description:" FontWeight="Bold" Margin="20,10" Height="24"/>-->
+                            <TextBlock Text="{Binding CurrentCall.Description, StringFormat='Descrition: {0}'}"  Style="{StaticResource TextBlockStyle}"
+                                       TextWrapping="Wrap"
+                                       Margin="20,10" Height="43"/>
+                        </StackPanel>
+                        <!-- Action Buttons -->
+                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2"
+                  Orientation="Horizontal" 
+                  HorizontalAlignment="Left"
+                  Margin="160,10,0,0" Width="134">
+                            <Button Style="{StaticResource CheerfulButton}"
+                    Background="#FF6B6B"
+                    Click="CancelTreatment_Click"
+                    Margin="0,0,10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Volunteer/cancel3.png" Width="20" Height="20" Margin="0,0,5,0"/>
+                                    <TextBlock Text="Cancel"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Style="{StaticResource CheerfulButton}"
+                    Background="#4CAF50"
+                    Click="EndTreatment_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="/Volunteer/check.png" Width="20" Height="20" Margin="0,0,5,0"/>
+                                    <TextBlock Text="Done"/>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                </GroupBox>
+            </Border>
+            <!-- Active Call Section -->
+            <Border Background="Transparent"
+                    CornerRadius="25"
+                    Margin="0"
+                    Padding="20"
+                    BorderBrush="{StaticResource SecondaryColor}"
+                    BorderThickness="2" Grid.Column="1"
+                    Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}">
+
+
+
+                <StackPanel>
+                    <!-- Stats -->
+                    <TextBlock Text="Your Statistics 📊"
+                             FontFamily="Comic Sans MS"
+                             FontSize="20"
+                             Foreground="{StaticResource AyeletHardColor}"
+                             Margin="0,0,0,15"/>
+
+                    <StackPanel Margin="5,20">
+                        <TextBlock Text="{Binding CurrentVolunteer.HandleCalls, StringFormat='✅ Handled Calls: {0}'}"
+                                 FontFamily="Comic Sans MS"
+                                 Margin="0,10"/>
+                        <TextBlock Text="{Binding CurrentVolunteer.CancelCalls, StringFormat='❌ Canceled Calls: {0}'}"
+                                 FontFamily="Comic Sans MS"
+                                 Margin="0,10"/>
+                        <TextBlock Text="{Binding CurrentVolunteer.ExpiredCalls, StringFormat='⏰ Expired Calls: {0}'}"
+                                 FontFamily="Comic Sans MS"
+                                 Margin="0,10"/>
+                    </StackPanel>
+                </StackPanel>
+
+
+            </Border>
+
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" MinWidth="249"/>
+            </Grid.ColumnDefinitions>
+            
+            
+            <!-- Action Buttons -->
+            <StackPanel Grid.Column="1">
+                <Button Content="🆕 Take New Call"
+                        Style="{StaticResource MainButtonStyle}"
+                        Click="ChoseCall_Click"
+                        Width="240" Height="80"
+                        Margin="10,15,10,0">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource MultiToIsEnabledConverterKey}">
+                            <Binding Path="CurrentVolunteer.InCall"/>
+                            <Binding Path="CurrentVolunteer.IsActive"/>
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+
+                <Button Content="📋 View History"
+                        Style="{StaticResource MainButtonStyle}"
+                        Click="HistoryCalls_Click"
+                        Width="240" Height="80"
+                        Margin="10"/>
+
+                
+            </StackPanel>
+            <Button Style="{StaticResource BackArrowButton}"
+Click="BackButton_Click"
+HorizontalAlignment="Left"
+Margin="10,22,0,102"
+Panel.ZIndex="1" Grid.Row="3" Width="40"/>
+        </Grid>
     </Grid>
 </Window>
 
+
+<!-- Add this button to your main Grid, right after the Grid.RowDefinitions -->
+<!--
+<Button Style="{StaticResource BackArrowButton}"
+Click="BackButton_Click"
+HorizontalAlignment="Left"
+VerticalAlignment="Top"
+Margin="10,10,0,0"
+Panel.ZIndex="1"/>-->

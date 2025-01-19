@@ -5,40 +5,60 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="CallListWindow" Height="450" Width="800"
+        Title="CallListWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
-        Loaded="Window_Loaded">
-    <!--<Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>-->
-    <Window.Resources>
-        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
-        <Style TargetType="ComboBox" BasedOn="{StaticResource  ComboBoxStyle}"/>
-    </Window.Resources>
+        Loaded="Window_Loaded"
+        Background="{StaticResource CreamColor}">
 
-    <Grid>
+    
+    <Grid Margin="15,10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40*"/>
-            <RowDefinition Height="500*"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="59"/>
+            <RowDefinition Height="416*"/>
+            <RowDefinition Height="Auto" MinHeight="84.04"/>
         </Grid.RowDefinitions>
 
-        <!--Internal, Upper Grid-->
-        <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
-        </Grid>
-        <DataGrid Margin="5" Grid.Row="1" ItemsSource="{Binding Path=CallList}" IsReadOnly ="True" AutoGenerateColumns="False"
-      	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected"
-                  SelectedItem="{Binding SelectedCall}" MouseDoubleClick="lsvCallsList_MouseDoubleClick" >
-            <DataGrid.Columns>
+            <Label Content="Filter by:" 
+               Style="{StaticResource HeaderLabelStyle}"
+               Grid.Column="0"
+               Margin="40,0,0,0"/>
 
+
+            <!--<ComboBox Grid.Column="1" Margin="20,0"
+                  SelectedValue="{Binding Path=CallType, Mode=TwoWay}"
+                  ItemsSource="{Binding Source={StaticResource FilterByCallKey}}"
+                  SelectionChanged="Filter_SelectionChanged"/>-->
+
+            <Label Content="Sort by:" 
+               Style="{StaticResource HeaderLabelStyle}"
+               Grid.Column="2"
+               Margin="40,0,0,0"/>
+
+            <!--<ComboBox Grid.Column="3" Margin="20,0"
+                  SelectedValue="{Binding Path=SortValue, Mode=TwoWay}"
+                  ItemsSource="{Binding Source={StaticResource SortVolunteerKey}}"
+                  SelectionChanged="Sort_SelectionChanged"/>-->
+
+        </Grid>
+
+        <DataGrid Grid.Row="1" 
+                  Margin="0,15,0,15" 
+                  ItemsSource="{Binding Path=CallList}" 
+                  SelectedItem="{Binding SelectedCall}"
+                  MouseDoubleClick="lsvCallsList_MouseDoubleClick"
+                  Style="{StaticResource DataStyle}"
+                  CellStyle="{StaticResource CenteredDataGridCellStyle}">
+
+            <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding CallId}" Header=" Call Id" Width="auto" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -50,37 +70,60 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="Background" Value="{Binding Path = CallType, Converter={StaticResource ConvertCallTypeToColorKey}}" />
+                            <Setter Property="Foreground" Value="{Binding Path= CallType, Converter={StaticResource ConvertFontColorKey}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding LeftTime}" Header="Left Time" Width="auto"/>
-                <DataGridTextColumn Binding="{Binding CompletionTime}" Header="Complate Time" Width="auto"/>
-                <DataGridTextColumn Binding="{Binding Status}" Header="call status" Width="auto">
+                <DataGridTextColumn Header="Left Time" Width="auto">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="LeftTime" Converter="{StaticResource TimeSpanToStringConverterKey}" />
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="Complate At" Width="auto">
+                    <DataGridTextColumn.Binding>
+                        <Binding Path="CompletionTime" Converter="{StaticResource TimeSpanToDateConverterKey}" />
+                    </DataGridTextColumn.Binding>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding Status}" Header="Status" Width="auto">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="Background" Value="{Binding Path = Status, Converter={StaticResource ConvertStatusToColorKey}}" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding TotalAssignments}" Header="Total Assignments" Width="auto"/>
+                <DataGridTextColumn Binding="{Binding TotalAssignments}" Header="Assignments" Width="auto"/>
                 <DataGridTextColumn Binding="{Binding LastVolunteer}" Header="Last Volunteer" Width="auto"/>
                 <DataGridTemplateColumn Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Click="Delete_Call" Content="Delete"  Visibility="{Binding Path=. ,Converter={StaticResource ConvertDeleteToVisibleKey}}" />
+                            <Button Click="Delete_Call"
+                                    Style="{StaticResource DeleteButton}"
+                                    Visibility="{Binding Path=. ,Converter={StaticResource ConvertDeleteToVisibleKey}}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Width="auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Click="Cancel_Call" Content="cancel" />
+                            <Button Click="Cancel_Call" Content="cancel" 
+                                    Style="{StaticResource CancleButton}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="lsvCallList_AddCall"/>
+        <Button Grid.Row="2"
+                Content="Add New Call"
+                Click="lsvCallList_AddCall"
+                Margin="270,10"
+                Style="{StaticResource MainButtonStyle}"/>
+        
+        <Button Style="{StaticResource BackArrowButton}"
+                Click="BackButton_Click"
+                HorizontalAlignment="Left"
+                Grid.Row="2"
+                Panel.ZIndex="1"
+                VerticalAlignment="Bottom"/>
     </Grid>
 </Window>

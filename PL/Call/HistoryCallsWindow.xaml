@@ -5,98 +5,76 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="HistoryCallsWindow" Height="450" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <!--Closed="Window_Closed"
-        Loaded="Window_Loaded">-->
-    <!--<Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>-->
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="11*"/>
-            <RowDefinition Height="418*"/>
-            <RowDefinition Height="11*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="11*"/>
-            <ColumnDefinition Width="782*"/>
-            <ColumnDefinition Width="11*"/>
-        </Grid.ColumnDefinitions>
+        Title="HistoryCallsWindow" Height="640" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Background="{StaticResource CreamColor}">
 
-        <Grid Grid.Row="1" Grid.Column="1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="47*"/>
-                <RowDefinition Height="139*"/>
-                <RowDefinition Height="20*"/>
-            </Grid.RowDefinitions>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid HorizontalAlignment="Stretch" Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
 
             <!--#region Sort and Filter -->
-            <Label Content="Filter calls by:" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Width="81"/>
+            <Label Content="Filter by:" 
+                   Style="{StaticResource HeaderLabelStyle}"
+                   Grid.Column="0"
+                   Margin="0,0,10,0"/>
             <ComboBox Grid.Column="1" 
+                      SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}"
                       ItemsSource="{Binding Source={StaticResource TypeCallKey}}"
-                      SelectionChanged="Filter_SelectionChanged"  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}" Margin="0,0,0,30"/>
-            <Label Content="Sort calls by:" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Height="26" Width="76"/>
+                      SelectionChanged="Filter_SelectionChanged"/>
+            <Label Content="Sort by:" 
+                   Style="{StaticResource HeaderLabelStyle}"
+                   Grid.Column="2"
+                   Margin="20,0,10,0"/>
             <ComboBox Grid.Column="3"
+                      SelectedValue="{Binding Path=CallSort, Mode=TwoWay}"
                       ItemsSource="{Binding Source={StaticResource CloseCallsSortKey}}" 
-                      SelectionChanged="Sort_SelectionChanged"  SelectedValue="{Binding Path=CallSort, Mode=TwoWay}" Margin="0,0,0,30"/>
-            <!--<ComboBox Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                      ItemsSource="{Binding Source={StaticResource CloseCallsSortKey}}"
-                      SelectionChanged="ComboBoxSort_SelectionChanged"  SelectedValue="{Binding Path=CallSort, Mode=TwoWay}">
-            </ComboBox>
-            -->
-            <!--<Label Content="Label" HorizontalAlignment="Left" Margin="200,0,0,0" VerticalAlignment="Top" Grid.Column="0"/>-->
-            <!--
-            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
-                      ItemsSource="{Binding Source={StaticResource TypeCallKey}}"
-                      SelectionChanged="ComboBoxFilter_SelectionChanged"  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}">
-            </ComboBox>-->
-            
+                      SelectionChanged="Sort_SelectionChanged"/>
+
             <!--#endregion-->
-            
-            <DataGrid Margin="5,10,5,66" Grid.Row="1"  Grid.ColumnSpan="4" ItemsSource="{Binding Path=CloseCallList}" IsReadOnly ="True" AutoGenerateColumns="False"
- 	          EnableRowVirtualization="True" RowDetailsVisibilityMode="VisibleWhenSelected"
-              SelectedItem="{Binding SelectedCall}" Background="#E5FFDAB9">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="*" >
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Background" Value="LightCyan"/>
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="Foreground" Value="Black"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                    <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="2*"/>
-                    <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Start at" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding CloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding EndTreatment}" Header="Close at" Width="*"/>
-                </DataGrid.Columns>
-            </DataGrid>
-            
-            <Button Background="Transparent" BorderThickness="0" Click="BackButton_Click" Width="Auto" Height="Auto" Grid.Row="1" Margin="-12,247,37,10" Grid.RowSpan="2" >
-                <Image Source="/Volunteer/previous.png" Width="65" Height="48" />
-
-                <!--resource??-->
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="false"/>
-                            <Trigger Property="ClickMode" Value="Press"/>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
         </Grid>
-    </Grid>
+        <DataGrid  Grid.Row="1"  
+                   Margin="0,15"
+                   ItemsSource="{Binding Path=CloseCallList}" 
+                   SelectedItem="{Binding SelectedCall}"
+                   Style="{StaticResource DataStyle}"
+                   CellStyle="{StaticResource CenteredDataGridCellStyle}">
+            
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="*" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="*"/>
+                <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="*"/>
+                <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Start at" Width="*"/>
+                <DataGridTextColumn Binding="{Binding CloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="*"/>
+                <DataGridTextColumn Binding="{Binding EndTreatment}" Header="Close at" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
+        <Button Style="{StaticResource BackArrowButton}"
+                Grid.Row="2"
+                Click="BackButton_Click"
+                HorizontalAlignment="left"
+                VerticalAlignment="Top"
+                Margin="10,10,0,0"
+                Panel.ZIndex="1"/>
+    </Grid>
 </Window>
