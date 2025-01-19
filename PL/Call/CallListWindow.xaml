@@ -33,20 +33,20 @@
                Margin="40,0,0,0"/>
 
 
-            <!--<ComboBox Grid.Column="1" Margin="20,0"
-                  SelectedValue="{Binding Path=CallType, Mode=TwoWay}"
-                  ItemsSource="{Binding Source={StaticResource FilterByCallKey}}"
-                  SelectionChanged="Filter_SelectionChanged"/>-->
+            <ComboBox Grid.Column="1" Margin="20,0"
+                  SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}"
+                  ItemsSource="{Binding Source={StaticResource FilterCallKey}}"
+                  SelectionChanged="Filter_SelectionChanged"/>
 
             <Label Content="Sort by:" 
                Style="{StaticResource HeaderLabelStyle}"
                Grid.Column="2"
                Margin="40,0,0,0"/>
 
-            <!--<ComboBox Grid.Column="3" Margin="20,0"
-                  SelectedValue="{Binding Path=SortValue, Mode=TwoWay}"
-                  ItemsSource="{Binding Source={StaticResource SortVolunteerKey}}"
-                  SelectionChanged="Sort_SelectionChanged"/>-->
+            <ComboBox Grid.Column="3" Margin="20,0"
+                  SelectedValue="{Binding Path=CallSort, Mode=TwoWay}"
+                  ItemsSource="{Binding Source={StaticResource SortCallKey}}"
+                  SelectionChanged="Sort_SelectionChanged"/>
 
         </Grid>
 

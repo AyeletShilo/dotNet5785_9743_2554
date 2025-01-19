@@ -221,9 +221,14 @@ public static class Initialization
             double? latitude = latitudes[i];
             double? longitude = longitudes[i];
             //toSwitch = s_rand.NextDouble();
-            string password = s_rand.Next(1000000,100000000).ToString();
             Role job = (s_rand.NextDouble() > 0.8) ? Role.Manager : Role.Volunteer;
             string? volAddress = Addresses[i++];
+            string password = s_rand.Next(10000, 100000).ToString();
+            char A = (char)(s_rand.Next(65, 90));
+            char a = (char)(s_rand.Next(97, 122));
+            int index = s_rand.Next(0, 20);
+            string sign = "!@#$%^&*(),.?\"':{}|<>";
+            password = password + sign[index] + A + a;
             //toSwitch = s_rand.Next(2);
             bool active = (s_rand.NextDouble() < 0.9) ? true : false;
             double? maxDistance = s_rand.Next(2) == 0 ? null : s_rand.NextDouble() * 5;

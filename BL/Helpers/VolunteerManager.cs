@@ -1,5 +1,6 @@
 ﻿using BO;
 using DalApi;
+using System.Text.RegularExpressions;
 
 
 namespace Helpers;
@@ -56,9 +57,44 @@ internal static class VolunteerManager
     {
         if (checkId(volToCheck.Id) == false)
             throw new BO.BlIntegrityOfValuesException("Error in ID integrity");
+
+        if (checkPass(volToCheck.Password) == false)
+            throw new BO.BlIntegrityOfValuesException("Password is not strong");
+
         if (volToCheck.Address != null)
             CallManager.GetCoordinates(volToCheck.Address);
     }
+
+    private static bool checkPass(string password)
+    {
+        bool isA = password.Any(char.IsUpper);
+        bool isa = password.Any(char.IsLower);
+        bool isdigit = password.Any(char.IsDigit);
+        bool isSign = Regex.IsMatch(password, @"[!@#$%^&*(),.?""':{}|<>]");
+        bool isSame = (password.Distinct().Count() <= 4) ? false : true;
+
+        bool isAbc = true;
+        for (int i = 0; i < 6 && isAbc == true; i++)
+        {
+            char first = password[i];
+            char second = password[i + 1];
+            char third = password[i + 2];
+
+            if (second == first + 1 && third == second + 1)
+            {
+                isAbc = false;
+            }
+
+            if (second == first - 1 && third == second - 1)
+            {
+                isAbc = false;
+            }
+        }
+
+        return isA && isa && isa && isdigit && isSign && isSame && isAbc;
+    }
+
+
 
     /// <summary>
     /// Check that the ID received is correct
