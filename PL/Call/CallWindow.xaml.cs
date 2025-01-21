@@ -24,6 +24,8 @@ namespace PL.Call
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private Window _preWind;
+
+        //constructor
         public CallWindow(Window preWind, int id = 0)
         {
 
@@ -32,18 +34,19 @@ namespace PL.Call
                 : new BO.Call() { Id = 0, CallAddress = "" };
             _preWind = preWind;
         }
+
         public BO.Call? CurrentCall
         {
             get { return (BO.Call?)GetValue(CurrentCallProperty); }
             set { SetValue(CurrentCallProperty, value); }
         }
 
-        /// <summary>
-        /// DependencyProperty
-        /// </summary>
         public static readonly DependencyProperty CurrentCallProperty =
             DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(CallWindow), new PropertyMetadata(null));
 
+        /// <summary>
+        /// Update call window
+        /// </summary>
         public void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -70,6 +73,9 @@ namespace PL.Call
             }
         }
 
+        /// <summary>
+        /// Re-reading call's details
+        /// </summary>
         private void RefreshCall()
         {
             int id = CurrentCall!.Id;
@@ -85,10 +91,10 @@ namespace PL.Call
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Call.RemoveObserver(CallObserver);
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        //private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
 
-        }
+        //}
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {

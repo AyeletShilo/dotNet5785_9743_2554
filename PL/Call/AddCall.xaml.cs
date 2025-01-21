@@ -22,17 +22,20 @@ namespace PL.Call
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private Window _preWind;
+
+        //constructor
         public AddCall(Window preWind)
         {
             InitializeComponent();
             CurrentCall = new BO.Call() { Id = 0 };
             _preWind = preWind;
         }
+
+        #region Properties
         public DateTime CurrentTime
         {
             get { return s_bl.Admin.GetClock(); }
         }
-
 
         public BO.Call? CurrentCall
         {
@@ -40,12 +43,14 @@ namespace PL.Call
             set { SetValue(CurrentCallProperty, value); }
         }
 
-        /// <summary>
-        /// DependencyProperty
-        /// </summary>
         public static readonly DependencyProperty CurrentCallProperty =
             DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(AddCall), new PropertyMetadata(null));
 
+        #endregion
+
+        /// <summary>
+        /// Adding call when clicking on a button
+        /// </summary>
         public void bthAdd_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -64,6 +69,9 @@ namespace PL.Call
             }
         }
 
+        /// <summary>
+        /// Re-reading call's details
+        /// </summary>
         private void RefreshCall()
         {
             int id = CurrentCall!.Id;

@@ -12,6 +12,9 @@ namespace PL.Call
         private static int _id;
         private Window _preWind;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
         public HistoryCallsWindow(int id, Window preWind)
         {
             _id = id;
@@ -33,21 +36,27 @@ namespace PL.Call
         public BO.ClosedCallInList? SelectedCall { get; set; }
         #endregion
 
-
-
+        /// <summary>
+        /// Filter volunteer's calls by type
+        /// </summary>
         private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallFilter = (BO.CallType)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
 
+        /// <summary>
+        /// Sort volunteer's calls by different values
+        /// </summary>
         private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallSort = (BO.CloseCallData)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
-        
 
+        /// <summary>
+        /// Re-reading the calls history after filtering or sorting the calls
+        /// </summary>
         private void queryCallList()
         {
             try
@@ -79,6 +88,5 @@ namespace PL.Call
             _preWind.Show();
             this.Close();
         }
-
     }
 }

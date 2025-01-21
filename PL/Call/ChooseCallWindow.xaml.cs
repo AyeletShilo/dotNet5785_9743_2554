@@ -1,4 +1,5 @@
 ﻿using DalApi;
+using PL.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +23,18 @@ namespace PL.Call
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private static int _id;
-        private Window _preWind;
-        public ChooseCallWindow(int id,Window preWind)
+        private VolunteerForVolWindow _preWind;
+
+        //constructor
+        public ChooseCallWindow(int id, VolunteerForVolWindow preWind)
         {
             _id = id;
             InitializeComponent();
             Volunteer = s_bl.Volunteer.Read(id)!;
             _preWind = preWind;
         }
+
+        #region Propertis
         public IEnumerable<BO.OpenCallInList> OpenCallList
         {
             get { return (IEnumerable<BO.OpenCallInList>)GetValue(OpenCallListProperty); }
@@ -47,20 +52,32 @@ namespace PL.Call
            DependencyProperty.Register("Volunteer", typeof(BO.Volunteer), typeof(ChooseCallWindow), new PropertyMetadata(null));
 
         public BO.CallType CallFilter { get; set; } = BO.CallType.None;
+        public BO.OpenCallData CallSort { get; set; } = BO.OpenCallData.Id;
+        public BO.OpenCallInList? SelectedCall { get; set; }
 
+        #endregion
+
+        /// <summary>
+        /// Filter calls by type
+        /// </summary>
         private void ComboBoxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallFilter = (BO.CallType)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
 
-        public BO.OpenCallData CallSort { get; set; } = BO.OpenCallData.Id;
-
+        /// <summary>
+        /// Sort calls by different values
+        /// </summary>
         private void ComboBoxSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallSort = (BO.OpenCallData)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
+
+        /// <summary>
+        /// Re-reading the calls history after filtering or sorting the calls
+        /// </summary>
         private void queryCallList()
         {
             try
@@ -86,9 +103,6 @@ namespace PL.Call
             }
         }
 
-        public BO.OpenCallInList? SelectedCall { get; set; }
-
-       
         private void callListObserver()
             => queryCallList();
 
@@ -98,12 +112,18 @@ namespace PL.Call
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(callListObserver);
 
+        /// <summary>
+        /// Open call details when clicking a call in the list
+        /// </summary>
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SelectedCall != null)
                 new CallDescriptionWindow(SelectedCall.Description).ShowDialog();
         }
 
+        /// <summary>
+        /// Choosing a call for treatment
+        /// </summary>
         private void Choose_Call(object sender, EventArgs e)
         {
             try
@@ -126,12 +146,9 @@ namespace PL.Call
             }
         }
 
-        private void UpdateAdd_Click(object sender, RoutedEventArgs e)
-        {
-            //s_bl.Volunteer.UpdateAddress(Volunteer, Volunteer.Address);
-            queryCallList();
-        }
-
+        /// <summary>
+        /// Change of volunteer address
+        /// </summary>
         private void Address_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -148,14 +165,10 @@ namespace PL.Call
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            _preWind.RefreshVolunteer();
             _preWind.Show();
             this.Close();
         }
 
-    //    private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    //    {
-
-    //    }
-    //
     }
 }

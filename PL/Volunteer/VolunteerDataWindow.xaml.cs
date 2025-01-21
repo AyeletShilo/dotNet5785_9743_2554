@@ -22,6 +22,10 @@ namespace PL.Volunteer
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private static int _id;
         private Window _preWind;
+
+        /// <summary>
+        /// constructor
+        /// </summary>
         public VolunteerDataWindow(int id, Window preWind)
         {
             _id = id;
@@ -29,11 +33,6 @@ namespace PL.Volunteer
             CurrentVolunteer = s_bl.Volunteer.Read(_id);
             _preWind = preWind;
         }
-        //private void BackButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    _preWind.Show();
-        //    this.Close();
-        //}
 
         #region Property
         public BO.Volunteer? CurrentVolunteer
@@ -46,14 +45,20 @@ namespace PL.Volunteer
             DependencyProperty.Register("CurrentVolunteer", typeof(BO.Volunteer), typeof(VolunteerDataWindow), new PropertyMetadata(null));
         #endregion
 
+        /// <summary>
+        /// Reading volunteer details
+        /// </summary>
         private void RefreshVolunteer()
         {
             int id = CurrentVolunteer!.Id;
             CurrentVolunteer = null;
             CurrentVolunteer = s_bl.Volunteer.Read(id);
         }
-        private void VolunteerObserver() => RefreshVolunteer();
-        private void Button_Click(object sender, RoutedEventArgs e)
+       
+        /// <summary>
+        /// Update volunteer details
+        /// </summary>
+        private void Update_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -66,6 +71,9 @@ namespace PL.Volunteer
             _preWind.Show();
             this. Close();
         }
+
+
+        private void VolunteerObserver() => RefreshVolunteer();
         private void Window_Loaded(object sender, RoutedEventArgs e)
            => s_bl.Volunteer.AddObserver(VolunteerObserver);
         private void Window_Closed(object sender, EventArgs e)

@@ -25,6 +25,8 @@ namespace PL.Call
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private Window _preWind;
+
+        //constructor
         public CallListWindow(Window preWind, int id = 0 , BO.CallListStatus status = BO.CallListStatus.None,bool isFilter = true)
         {
             IsFilter = isFilter;
@@ -34,16 +36,14 @@ namespace PL.Call
             queryCallList();
             _preWind = preWind;
         }
-        #region
+
+        #region Prperties
         public int VolunteerId
         {
             get { return (int)GetValue(VolunteerIdProperty); }
             set { SetValue(VolunteerIdProperty, value); }
         }
 
-        /// <summary>
-        /// DependencyProperty
-        /// </summary>
         public static readonly DependencyProperty VolunteerIdProperty =
             DependencyProperty.Register("VolunteerId", typeof(int), typeof(CallListWindow), new PropertyMetadata(null));
 
@@ -62,17 +62,28 @@ namespace PL.Call
 
         public BO.CallInList? SelectedCall { get; set; }
         #endregion
+
+        /// <summary>
+        /// Filter calls by type
+        /// </summary>
         private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallFilter = (BO.CallListStatus)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
 
+        /// <summary>
+        /// Sort calls by different values
+        /// </summary>
         private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallSort= (BO.CallData)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
+
+        /// <summary>
+        /// Re-reading the calls history after filtering or sorting the calls
+        /// </summary>
         private void queryCallList()
         {
             if (CallFilter == BO.CallListStatus.None && CallSort == BO.CallData.CallId)
@@ -84,6 +95,7 @@ namespace PL.Call
             else
                 CallList = s_bl.Call.ReadAll(BO.CallData.Status, CallSort, CallFilter)!;
         }
+
         private void callListObserver()
              => queryCallList();
 
@@ -93,6 +105,9 @@ namespace PL.Call
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Call.RemoveObserver(callListObserver);
 
+        /// <summary>
+        /// Opening a calls's details window when clicking on a call in the list
+        /// </summary>
         private void lsvCallsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedCall != null)
@@ -104,6 +119,9 @@ namespace PL.Call
             }
         }
 
+        /// <summary>
+        /// Opening adding call window when clicking on a button
+        /// </summary>
         private void lsvCallList_AddCall(object sender, RoutedEventArgs e)
         {
             var nextWind = new AddCall(this);
@@ -111,6 +129,10 @@ namespace PL.Call
             this.Hide();
             //new AddCall().Show();
         }
+
+        /// <summary>
+        /// Deleting call when clicking on a button
+        /// </summary>
         private void Delete_Call(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Do you sure you want to delete this call?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -130,6 +152,9 @@ namespace PL.Call
             }
         }
 
+        /// <summary>
+        /// canceling call assignment when clicking on a button
+        /// </summary>
         private void Cancel_Call(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Do you sure you want to cancel the assignment for this call?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);

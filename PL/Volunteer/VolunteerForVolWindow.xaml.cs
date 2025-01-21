@@ -78,8 +78,10 @@ namespace PL.Volunteer
 
         #endregion
 
-
-        private void RefreshVolunteer()
+        /// <summary>
+        /// Updating volunteer details
+        /// </summary>
+        public void RefreshVolunteer()
         {
             try
             {
@@ -106,11 +108,12 @@ namespace PL.Volunteer
 
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(VolunteerObserver);
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
 
-        }
         #region buttons
+
+        /// <summary>
+        /// Volunteer details update button
+        /// </summary>
         private void UpdateVol_Click(object sender, RoutedEventArgs e)
         {
             var nextWind = new VolunteerDataWindow(_id, this);
@@ -120,14 +123,21 @@ namespace PL.Volunteer
 
         }
 
+        /// <summary>
+        /// Call for treatment by the volunteer selection button
+        /// </summary>
         private void ChoseCall_Click(object sender, RoutedEventArgs e)
         {
             var nextWind = new ChooseCallWindow(_id, this);
             nextWind.Show();
             this.Hide();
+            RefreshVolunteer();
             //new ChooseCallWindow(_id).Show();
         }
 
+        /// <summary>
+        /// Volunteer call handling history button
+        /// </summary>
         private void HistoryCalls_Click(object sender, RoutedEventArgs e)
         {
             var nextWind = new HistoryCallsWindow(_id, this);
@@ -136,6 +146,9 @@ namespace PL.Volunteer
             //new HistoryCallsWindow(_id).Show();
         }
 
+        /// <summary>
+        /// Call Unassignment Button
+        /// </summary>
         private void EndTreatment_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentCall != null)
@@ -152,6 +165,9 @@ namespace PL.Volunteer
             }
         }
 
+        /// <summary>
+        /// End call handling button
+        /// </summary>
         private void CancelTreatment_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentCall != null)

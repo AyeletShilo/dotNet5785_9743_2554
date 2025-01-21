@@ -89,8 +89,9 @@
                     <ComboBox  Grid.Column="4" Grid.Row="2" 
                                SelectedValue="{Binding CurrentCall.Status,  Mode=TwoWay, NotifyOnValidationError=true}"
                                ItemsSource="{Binding Source={StaticResource StatusCallKey}}" 
-                               IsEnabled="False" SelectionChanged="ComboBox_SelectionChanged"
+                               IsEnabled="False" 
                                BorderBrush= "Black" OpacityMask="#FF090909"/>
+                    <!--SelectionChanged="ComboBox_SelectionChanged"-->
 
                 </Grid>
             </GroupBox>

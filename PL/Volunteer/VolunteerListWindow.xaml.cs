@@ -119,11 +119,6 @@ namespace PL.Volunteer
             //new VolunteerWindow().Show();
         }
 
-        //private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-
-        //}
-
         /// <summary>
         /// Deleting a volunteer from the list
         /// </summary>

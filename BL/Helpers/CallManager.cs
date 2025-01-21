@@ -319,6 +319,7 @@ private class LocationResult
                 {
                     assignUpdated = true; //stage 5
                     s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
+                    Observers.NotifyItemUpdated(call.Id); //stage 5
                     #region Are we need to update BO.Call??
                     //call.CallAssignments.Add(new BO.CallAssignInList
                     //{
@@ -336,6 +337,7 @@ private class LocationResult
                     DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Controlled Null
                     s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
                     Observers.NotifyItemUpdated(assignToUp.Id); //stage 5
+                    Observers.NotifyItemUpdated(call.Id); //stage 5
                     //call.CallAssignments.Last().EndTime = newClock;
                     //call.CallAssignments.Last().EndTreatment = EndTreatment.CancelExpired;
                 }

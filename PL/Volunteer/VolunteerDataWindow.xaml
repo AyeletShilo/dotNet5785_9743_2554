@@ -25,6 +25,7 @@
             <RowDefinition Height="138*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="1" Padding="10" Background="{StaticResource AyeletLightColor}" Margin="30,30,30,30" CornerRadius="8">
+            
             <!-- Personal Details Section -->
             <GroupBox Header="Personal Details" Style="{StaticResource FormGroupBoxStyle}" Margin="10,5,10,5" >
                 <Grid Margin="5">
@@ -123,7 +124,7 @@
 
         </Border>
         <Button Grid.Row="3" Content="Update" 
-                Click="Button_Click"
+                Click="Update_Click"
                 Style="{StaticResource MainButtonStyle}" Margin="270,10,270,20"/>
         
         <Button Style="{StaticResource BackArrowButton}"
