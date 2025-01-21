@@ -113,12 +113,13 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
 
-        <!--<Style x:Key="TextBlockStyle" TargetType="TextBlock">
+        <!--Neccesery-->
+        <Style x:Key="TextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontFamily" Value="Guttman Miryam"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="Black"/>
-        </Style>-->
+            <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
+        </Style>
 
         
         
@@ -367,7 +368,7 @@
             </Style>
 
         <Style x:Key="DataStyle" TargetType="DataGrid">
-            <Setter Property="IsReadOnly" Value="true"/>
+            <!--<Setter Property="IsReadOnly" Value="true"/>-->
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="EnableRowVirtualization" Value="True"/>
             <Setter Property="Background" Value="White"/>
@@ -384,10 +385,10 @@
         </Style>
 
         <Style x:Key="CenteredDataGridCellStyle" TargetType="DataGridCell">
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <!--<Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <!--<Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Background" Value="Transparent" />-->
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Background" Value="Transparent" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGridCell">
@@ -402,18 +403,18 @@
                         HorizontalScrollBarVisibility="Auto" 
                         VerticalScrollBarVisibility="Disabled"
                         SnapsToDevicePixels="True">
-                                <TextBlock
+                                --><!--<TextBlock
                             Text="{TemplateBinding Content}" 
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                             VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                             TextWrapping="NoWrap"
                             TextTrimming="CharacterEllipsis" 
-                            SnapsToDevicePixels="True"/>
+                            SnapsToDevicePixels="True"/>--><!--
                             </ScrollViewer>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
-            </Setter>
+            </Setter>-->
         </Style>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="{StaticResource Greeny}"/>
@@ -421,15 +422,18 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="10,5"/>
+            <!--<Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>-->
         </Style>
-        <Style TargetType="DataGridRow">
+        <!--<Style TargetType="DataGridRow">
             <Style.Triggers>
                 <Trigger Property="IsSelected" Value="True">
                     <Setter Property="Foreground" Value="Black"/>
                     <Setter Property="Background" Value="{StaticResource CreamColor}"/>
                 </Trigger>
             </Style.Triggers>
-        </Style>
+        </Style>-->
 
         <!-- Animated Button Style -->
         <Style x:Key="CheerfulButton" TargetType="Button">
@@ -499,7 +503,7 @@
             </Setter>
         </Style>
 
-<!--#region Conect DataGrid-->
+<!--#region Conect Details-->
         <Style x:Key="FormLabelStyle" TargetType="Label">
             <Setter Property="FontFamily" Value="Trebuchet MS"/>
             <Setter Property="FontSize" Value="16"/>
@@ -537,6 +541,7 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Margin" Value="5"/>
         </Style>
+        
         <Style x:Key="CallDetailsGridStyle" TargetType="Grid">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Margin" Value="10"/>
