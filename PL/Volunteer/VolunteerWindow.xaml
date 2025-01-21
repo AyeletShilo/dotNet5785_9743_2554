@@ -165,9 +165,15 @@
                                HorizontalAlignment="Center"/>
                     </Grid>
                 </GroupBox>
+
                 <!-- Call Details Section -->
-                <GroupBox Header="Current Call Details" Grid.Row="3" Style="{StaticResource FormGroupBoxStyle}"
-                     Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="2,2,2,2">
+                <GroupBox Header="Current Call Details" Grid.Row="3" Style="{StaticResource FormGroupBoxStyle}" Margin="2,2,2,2">
+                    <GroupBox.Visibility>
+                        <MultiBinding Converter="{StaticResource MultiToIsEnabledConverterKey}">
+                            <Binding Path="CurrentVolunteer.InCall" />
+                            <Binding Path="ButtonText" />
+                        </MultiBinding>
+                    </GroupBox.Visibility>
                     <Grid Margin="2.5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="4.5*"/>

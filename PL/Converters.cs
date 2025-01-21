@@ -156,7 +156,7 @@ public class MultiToIsEnabledConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-        return (values[0] == null && (bool)values[1] == true);
+        return (values[0] == null || (string)values[1] == "Add") ? Visibility.Hidden : Visibility.Visible;
 
         //if (values[0] == null || values[1] == null)
         //    Debug.WriteLine("One of the bindings is null.");
