@@ -26,7 +26,7 @@
             <RowDefinition Height ="147*"/>
             <RowDefinition Height ="46*"/>
         </Grid.RowDefinitions>
-        <Button Content="Volunteer window" Height="86" Margin="41,32,0,0" Grid.Row="1" Width="128" VerticalAlignment="Top" Click="Button_Click"/>
+        <Button Content="Volunteer window" Height="86" Margin="41,32,0,0" Grid.Row="1" Width="128" VerticalAlignment="Top" Click="Volunteer_Click"/>
         <Button Content="Main window" Height="90" Margin="223,30,0,0" Grid.Row="1" Width="123" VerticalAlignment="Top" Click="Button_AdminClick"/>
     </Grid>
 </Window>

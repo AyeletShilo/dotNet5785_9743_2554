@@ -60,7 +60,14 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="*"/>
+                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Background" Value="{Binding Path = CallType, Converter={StaticResource ConvertCallTypeToColorKey}}" />
+                            <Setter Property="Foreground" Value="{Binding Path= CallType, Converter={StaticResource ConvertFontColorKey}}"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="2*"/>
                 <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="*"/>
                 <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Start at" Width="*"/>

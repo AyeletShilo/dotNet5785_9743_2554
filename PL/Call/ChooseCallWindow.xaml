@@ -36,7 +36,7 @@
             <ComboBox Grid.Column="1" 
                       SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}"
                       ItemsSource="{Binding Source={StaticResource TypeCallKey}}"
-                      SelectionChanged="Filter_SelectionChanged"/>
+                      SelectionChanged="ComboBoxFilter_SelectionChanged"/>
 
             <Label Content="Sort by:" 
                    Style="{StaticResource HeaderLabelStyle}"
@@ -66,7 +66,14 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="2*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Background" Value="{Binding Path = CallType, Converter={StaticResource ConvertCallTypeToColorKey}}" />
+                            <Setter Property="Foreground" Value="{Binding Path= CallType, Converter={StaticResource ConvertFontColorKey}}"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="3*"/>
                 <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="2*"/>
                 <DataGridTextColumn Binding="{Binding MaxCloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="2*"/>
@@ -75,7 +82,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Click="Choose_Call" 
-                                        Style="{StaticResource ChooseButton}"/>
+                                        Style="{StaticResource ChooseButton}"
+                                    Panel.ZIndex="1"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -90,15 +98,18 @@
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="1">
                 <TextBox Text="{Binding Volunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=LostFocus}" 
-                         TextChanged="TextBox_TextChanged"
+                         
+                         
                          Background="Transparent"
                          BorderBrush="{StaticResource AyeletHardColor}"
                          FontFamily="Trebuchet MS"
                          FontSize="14"
                          Foreground="{StaticResource AyeletColor}"
                          DockPanel.Dock="Top" Height="41"/>
+                <!--TextChanged="Address_TextChanged"-->
+                
                 <Button Content="Change Address" 
-                        Click="UpdateAdd_Click"
+                        Click="Address_Click"
                         Style="{StaticResource CheerfulButton}"
                         DockPanel.Dock="Bottom"/>
             </DockPanel>

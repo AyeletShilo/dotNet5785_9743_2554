@@ -1,6 +1,7 @@
 ﻿using BO;
 using PL.Call;
 using PL.Volunteer;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,19 +20,23 @@ namespace PL
     /// </summary>
     public partial class AdminWindow : Window
     {
+        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        private Window _preWind;
+        private int adminId;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        public AdminWindow()
+        public AdminWindow(Window preWind ,int id)
         {
+            adminId = id;
             InitializeComponent();
             queryCallList();
+            _preWind = preWind;
         }
 
-        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
-        // Dependency objects
-        #region
+        #region DependencyObjects
         public DateTime CurrentDate
         {
             get { return (DateTime)GetValue(CurrentDateProperty); }
@@ -56,10 +61,10 @@ namespace PL
 
         public static readonly DependencyProperty CallsAmountProperty =
             DependencyProperty.Register("CallsAmount", typeof(IEnumerable<int>), typeof(AdminWindow));
-        #endregion
+        #endregion hui
 
-        //Config area
-        #region
+       
+        #region Config area
         private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.ForwardClock(BO.TimeUnit.Minute);
@@ -94,6 +99,7 @@ namespace PL
         }
         #endregion
 
+
         /// <summary>
         /// Screen loaded events
         /// </summary>
@@ -121,7 +127,10 @@ namespace PL
         /// </summary>
         private void btnVolunteer_Click(object sender, RoutedEventArgs e)
         {
-            new VolunteerListWindow().Show();
+            var nextWind = new VolunteerListWindow(this, adminId);
+            nextWind.Show();
+            this.Hide();
+            //new VolunteerListWindow().Show();
         }
 
         /// <summary>
@@ -129,7 +138,10 @@ namespace PL
         /// </summary>
         private void btnCall_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow().Show();
+            var nextWind = new CallListWindow(this);
+            nextWind.Show();
+            this.Hide();
+            //new CallListWindow().Show();
         }
 
         /// <summary>
@@ -183,33 +195,51 @@ namespace PL
                 if (window != this)
                     window.Close();
         }
-       
-        //Calls amounts
-        #region
+
+        
+        #region Calls amounts
         private void Opened_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.Opened, false).Show();
+            var nextWind = new CallListWindow(this, 0, BO.CallListStatus.Opened, false);
+            nextWind.Show();
+            this.Hide();
+            //new CallListWindow(this,0, BO.CallListStatus.Opened, false).Show();
         }
 
         private void Closed_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.Closed ,false).Show();
+            var nextWind = new CallListWindow(this, 0, BO.CallListStatus.Closed, false);
+            nextWind.Show();
+            this.Hide();
+           // new CallListWindow(this,0, BO.CallListStatus.Closed ,false).Show();
         }
         private void Treatment_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.InTreatment,false).Show();
+            var nextWind = new CallListWindow(this, 0, BO.CallListStatus.InTreatment, false);
+            nextWind.Show();
+            this.Hide();
+            //new CallListWindow(this,0, BO.CallListStatus.InTreatment,false).Show();
         }
         private void Expired_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.Expired , false).Show();
+            var nextWind = new CallListWindow(this, 0, BO.CallListStatus.Expired, false);
+            nextWind.Show();
+            this.Hide();
+            //new CallListWindow(this,0, BO.CallListStatus.Expired , false).Show();
         }
         private void OpenRisk_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.OpenInRisk , false).Show();
+            var nextWind = new CallListWindow(this, 0, BO.CallListStatus.OpenInRisk, false);
+            nextWind.Show();
+            this.Hide();
+            //new CallListWindow(this,0, BO.CallListStatus.OpenInRisk , false).Show();
         }
         private void TreatmentRisk_Click(object sender, RoutedEventArgs e)
         {
-            new CallListWindow(0, BO.CallListStatus.InTreatmentInRisk , false).Show();
+            var nextWind = new CallListWindow(this, 0, BO.CallListStatus.InTreatmentInRisk, false);
+            nextWind.Show();
+            this.Hide();
+            //new CallListWindow(this,0, BO.CallListStatus.InTreatmentInRisk , false).Show();
         }
 
         private void queryCallList()
@@ -219,7 +249,8 @@ namespace PL
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
     #endregion

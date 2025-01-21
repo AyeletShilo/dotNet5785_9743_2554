@@ -21,13 +21,13 @@ namespace PL.Volunteer
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private static int _id;
-        //private Window _preWind;
-        public VolunteerDataWindow(int id/*, Window preWind*/)
+        private Window _preWind;
+        public VolunteerDataWindow(int id, Window preWind)
         {
             _id = id;
             InitializeComponent();
             CurrentVolunteer = s_bl.Volunteer.Read(_id);
-            //_preWind = preWind;
+            _preWind = preWind;
         }
         //private void BackButton_Click(object sender, RoutedEventArgs e)
         //{
@@ -63,7 +63,8 @@ namespace PL.Volunteer
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-           // Close();
+            _preWind.Show();
+            this. Close();
         }
         private void Window_Loaded(object sender, RoutedEventArgs e)
            => s_bl.Volunteer.AddObserver(VolunteerObserver);
@@ -72,7 +73,8 @@ namespace PL.Volunteer
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
 }

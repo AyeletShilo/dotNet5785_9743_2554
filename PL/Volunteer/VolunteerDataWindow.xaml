@@ -52,24 +52,43 @@
                     <Label Grid.Row="1" Grid.Column="0"
                            Content="Phone:" 
                            Style="{StaticResource FormLabelStyle}"/>
-                    <TextBox Grid.Row="1" Grid.Column="1"
-                             Text="{Binding CurrentVolunteer.PhoneNumber, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }"
-                             Style="{StaticResource FormTextBoxStyle}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource FormTextBoxStyle}">
+                        <TextBox.Text>
+                            <Binding Path= "CurrentVolunteer.PhoneNumber" Mode= "TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" ValidatesOnDataErrors="true" >
+                                <Binding.ValidationRules>
+                                    <local:PhoneValidation/>
+                                </Binding.ValidationRules >
+                            </Binding >
+                        </TextBox.Text>
+                    </TextBox>
+                             
 
                     <Label Grid.Row="2" Grid.Column="0"
                            Content="Email:" 
                            Style="{StaticResource FormLabelStyle}"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" 
-                             Text="{Binding CurrentVolunteer.Password, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" 
-                             Style="{StaticResource FormTextBoxStyle}"/>
-
+                    <TextBox Grid.Row="2" Grid.Column="1"  Style="{StaticResource FormTextBoxStyle}">
+                        <TextBox.Text>
+                            <Binding Path= "CurrentVolunteer.Email" Mode= "TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" ValidatesOnDataErrors="true" >
+                                <Binding.ValidationRules>
+                                    <local:EmailValidation/>
+                                </Binding.ValidationRules >
+                            </Binding >
+                        </TextBox.Text>
+                    </TextBox>
+                             
                     <Label Grid.Row="0" Grid.Column="3"
                            Content="Password:" 
                            Style="{StaticResource FormLabelStyle}"/>
-                    <TextBox Grid.Row="0" Grid.Column="4"
-                             Text="{Binding CurrentVolunteer.Email, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                             Style="{StaticResource FormTextBoxStyle}"/>
-
+                    <TextBox Grid.Row="0" Grid.Column="4" Style="{StaticResource FormTextBoxStyle}">
+                        <TextBox.Text>
+                            <Binding Path= "CurrentVolunteer.Password" Mode= "TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" ValidatesOnDataErrors="true" >
+                                <Binding.ValidationRules>
+                                    <local:PassValidation/>
+                                </Binding.ValidationRules >
+                            </Binding >
+                        </TextBox.Text>
+                    </TextBox>
+                             
                     <Label Grid.Row="1" Grid.Column="3"
                            Content="Address:" 
                            Style="{StaticResource FormLabelStyle}"/>
@@ -78,12 +97,20 @@
                              Style="{StaticResource FormTextBoxStyle}"/>
                     <!--<TextBlock Grid.Row="4" 
           Text="{Binding CurrentVolunteer.Job}" />-->
+                    
                     <Label Grid.Row="2" Grid.Column="3"
                            Content="Max distance from call:" 
                            Style="{StaticResource FormLabelStyle}"/>
-                    <TextBox Grid.Row="2" Grid.Column="4" 
-                             Text="{Binding CurrentVolunteer.MaxDis, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
-                             Style="{StaticResource FormTextBoxStyle}"/>
+                    <TextBox Grid.Row="2" Grid.Column="4" Style="{StaticResource FormTextBoxStyle}">
+                        <TextBox.Text>
+                            <Binding Path= "CurrentVolunteer.MaxDis" Mode= "TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" ValidatesOnDataErrors="true" >
+                                <Binding.ValidationRules>
+                                    <local:DisValidation/>
+                                </Binding.ValidationRules >
+                            </Binding >
+                        </TextBox.Text>
+                    </TextBox>
+                             
                     <!--<Label Content="Active Volunteer?" Grid.Row="3" Grid.Column="3"  Margin="0,10,0,16"/>-->
                     <CheckBox Grid.Row="3" Grid.Column="4" Content="Active Volunteer?"
                               IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 

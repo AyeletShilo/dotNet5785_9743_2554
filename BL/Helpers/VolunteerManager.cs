@@ -22,7 +22,7 @@ internal static class VolunteerManager
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
         if (volToCheck.PhoneNumber.Length != 10 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
-        if (volToCheck.Password is not null && volToCheck.Password.Length != 8 )
+        if (volToCheck.Password is not null && volToCheck.Password.Length < 8 )
             throw new BO.BlIntegrityOfValuesException("Error in Password format");
         if (volToCheck.MaxDis < 0/* || volToCheck.MaxDis == null*/)
             throw new BO.BlIntegrityOfValuesException("Error in Max Distance format");
@@ -61,7 +61,7 @@ internal static class VolunteerManager
         if (checkPass(volToCheck.Password) == false)
             throw new BO.BlIntegrityOfValuesException("Password is not strong");
 
-        if (volToCheck.Address != null)
+        if (volToCheck.Address != "" && volToCheck.Address!=null)
             CallManager.GetCoordinates(volToCheck.Address);
     }
 
@@ -103,9 +103,11 @@ internal static class VolunteerManager
     /// <returns>A boolean variable that evaluates to true when the ID is correct.</returns>
     private static bool checkId(int id)
     {
-        int sum = 0;
+        int sum = 0, i = 0;
         string idString = id.ToString();
-        for (int i = 0; i < 8; i++)
+        if (idString.Length == 8)
+            i++;
+        for (; i < 8; i++)
         {
             int digit = idString[i] - '0'; // המרת התו למספר
             int multiplier = (i % 2 == 0) ? 1 : 2; // זוגי/אי-זוגי

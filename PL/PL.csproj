@@ -35,7 +35,6 @@
     <None Remove="Volunteer\check.png" />
     <None Remove="Volunteer\editHope.png" />
     <None Remove="Volunteer\GrandMa.png" />
-    <None Remove="Volunteer\previous.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -75,7 +74,6 @@
     <Resource Include="Volunteer\check.png" />
     <Resource Include="Volunteer\editHope.png" />
     <Resource Include="Volunteer\Images\GrandMa.png" />
-    <Resource Include="Volunteer\previous.png" />
   </ItemGroup>
 
   

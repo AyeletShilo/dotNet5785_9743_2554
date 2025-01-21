@@ -289,7 +289,7 @@ public static class Initialization
             sumDigits += (digits > 9) ? digits % 10 + digits / 10 : digits;
             tmpId /= 10;
         }
-        return randId * 10 + 10 - (sumDigits % 10);
+        return randId * 10 + ( 10 - (sumDigits % 10)) % 10;
     }
     private static DateTime GenerateOpeningTime()
     {

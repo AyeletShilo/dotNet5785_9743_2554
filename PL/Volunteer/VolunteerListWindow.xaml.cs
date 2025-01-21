@@ -1,4 +1,5 @@
 ﻿using BO;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,16 +13,26 @@ namespace PL.Volunteer
     public partial class VolunteerListWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        private Window _preWind;
+        private int _adminId;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public VolunteerListWindow(Window preWind, int adminId)
+        {
+            InitializeComponent();
+            _preWind = preWind;
+            _adminId = adminId;
+        }
+
+        #region Dependency objects
         public IEnumerable<BO.VolunteerInList> VolunteerList
         {
             get { return (IEnumerable<BO.VolunteerInList>)GetValue(VolunteerListProperty); }
             set { SetValue(VolunteerListProperty, value); }
         }
 
-        /// <summary>
-        /// DependencyProperty
-        /// </summary>
         public static readonly DependencyProperty VolunteerListProperty =
             DependencyProperty.Register("VolunteerList", typeof(IEnumerable<BO.VolunteerInList>), typeof(VolunteerListWindow), new PropertyMetadata(null));
 
@@ -30,6 +41,11 @@ namespace PL.Volunteer
         public BO.VolunteerData? SortValue { get; set; } = BO.VolunteerData.Id;
         public BO.VolunteerInList? SelectedVolunteer { get; set; }
 
+        #endregion
+
+        /// <summary>
+        /// Filter Volunteers by type of call in volunteer care
+        /// </summary>
         private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallType = (BO.CallInTreatment)((ComboBox)sender).SelectedItem;
@@ -37,23 +53,36 @@ namespace PL.Volunteer
             queryVolunteerList();
         }
 
+        /// <summary>
+        /// Sort the volunteers by volunteer values
+        /// </summary>
         private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SortValue = (BO.VolunteerData)((ComboBox)sender).SelectedItem;
             queryVolunteerList();
         }
 
+        /// <summary>
+        /// Refreshing the volunteer list after filtering or sorting
+        /// </summary>
         private void queryVolunteerList()
         {
-            if (CallType == BO.CallInTreatment.None && SortValue== BO.VolunteerData.Id)
-                VolunteerList = s_bl?.Volunteer.ReadAll()!;
-            else if(CallType == BO.CallInTreatment.None)
-                VolunteerList = s_bl?.Volunteer.ReadAll(null,SortValue)!;
-            else if(SortValue == BO.VolunteerData.Id)
-                VolunteerList = s_bl?.Volunteer.ReadAll(null, null, CallType)!;
-            else
-                VolunteerList= s_bl?.Volunteer.ReadAll(null, SortValue, CallType)!;
-            
+            try
+            {
+                if (CallType == BO.CallInTreatment.None && SortValue == BO.VolunteerData.Id)
+                    VolunteerList = s_bl?.Volunteer.ReadAll()!;
+                else if (CallType == BO.CallInTreatment.None)
+                    VolunteerList = s_bl?.Volunteer.ReadAll(null, SortValue)!;
+                else if (SortValue == BO.VolunteerData.Id)
+                    VolunteerList = s_bl?.Volunteer.ReadAll(null, null, CallType)!;
+                else
+                    VolunteerList = s_bl?.Volunteer.ReadAll(null, SortValue, CallType)!;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "Please try again", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
         }
 
         private void volunteerListObserver()
@@ -66,29 +95,38 @@ namespace PL.Volunteer
             => s_bl.Volunteer.RemoveObserver(volunteerListObserver);
 
         /// <summary>
-        /// constructor
+        /// Opening a volunteer's details window when clicking on a volunteer in the list
         /// </summary>
-        public VolunteerListWindow()
-        {
-            InitializeComponent();
-        }
-
         private void lsvVolunteersList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedVolunteer != null)
-                new VolunteerWindow(SelectedVolunteer.Id).Show();
+            {
+                var nextWind = new VolunteerWindow(this,_adminId,SelectedVolunteer.Id);
+                nextWind.Show();
+                this.Hide();
+                //new VolunteerWindow(SelectedVolunteer.Id).Show();
+            }
         }
 
+        /// <summary>
+        /// Open the Add Volunteer window
+        /// </summary>
         private void lsvVolunteersList_AddVolunteer(object sender, RoutedEventArgs e)
         {
-                new VolunteerWindow().Show();
-        }
-        
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
+            var nextWind = new VolunteerWindow(this, _adminId);
+            nextWind.Show();
+            this.Hide();
+            //new VolunteerWindow().Show();
         }
 
+        //private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+
+        //}
+
+        /// <summary>
+        /// Deleting a volunteer from the list
+        /// </summary>
         private void Delete_Volunteer(object sender, EventArgs e)
         {
             var result = MessageBox.Show("Do you sure you want to delete this volunteer?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
@@ -110,7 +148,8 @@ namespace PL.Volunteer
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
 }

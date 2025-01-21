@@ -4,6 +4,7 @@ using PL.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,14 +24,17 @@ namespace PL.Call
     public partial class CallListWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public CallListWindow(int id = 0 , BO.CallListStatus status = BO.CallListStatus.None,bool isFilter = true)
+        private Window _preWind;
+        public CallListWindow(Window preWind, int id = 0 , BO.CallListStatus status = BO.CallListStatus.None,bool isFilter = true)
         {
             IsFilter = isFilter;
             InitializeComponent();
             VolunteerId = id;
             CallFilter = status;
             queryCallList();
+            _preWind = preWind;
         }
+        #region
         public int VolunteerId
         {
             get { return (int)GetValue(VolunteerIdProperty); }
@@ -57,6 +61,7 @@ namespace PL.Call
         public bool IsFilter { get; set; } = true;
 
         public BO.CallInList? SelectedCall { get; set; }
+        #endregion
         private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             CallFilter = (BO.CallListStatus)((ComboBox)sender).SelectedItem;
@@ -91,12 +96,20 @@ namespace PL.Call
         private void lsvCallsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (SelectedCall != null)
-                new CallWindow(SelectedCall.CallId).Show();
+            {
+                var nextWind = new CallWindow(this,SelectedCall.CallId);
+                nextWind.Show();
+                this.Hide();
+                //new CallWindow(SelectedCall.CallId).Show();
+            }
         }
 
         private void lsvCallList_AddCall(object sender, RoutedEventArgs e)
         {
-            new AddCall().Show();
+            var nextWind = new AddCall(this);
+            nextWind.Show();
+            this.Hide();
+            //new AddCall().Show();
         }
         private void Delete_Call(object sender, EventArgs e)
         {
@@ -145,7 +158,8 @@ namespace PL.Call
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
 }

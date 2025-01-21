@@ -43,13 +43,20 @@ namespace PL
                     user = s_bl.Volunteer.GetMyJob(_id, Password);
                     if (user == BO.Role.Manager)
                     {
-                        new ChoseWindow(_id).Show();
-                        Close();
+                        var nextWind = new ChoseWindow(this,_id);
+                        nextWind.Show();
+                        this.Hide();
+
+                        //new ChoseWindow(_id).Show();
+                        //Close();
                     }
                     else if (user == BO.Role.Volunteer)
                     {
-                        new VolunteerForVolWindow(_id).Show();
-                        Close();
+                        var nextWind = new VolunteerForVolWindow(this, _id);
+                        nextWind.Show();
+                        this.Hide();
+                        //new VolunteerForVolWindow(this,_id).Show();
+                        //Close();
                     }
                 }
             }
@@ -66,7 +73,7 @@ namespace PL
         }
 
         /// <summary>
-        /// 
+        /// Blocking inappropriate ID format
         /// </summary>
         private void ID_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -168,13 +175,19 @@ namespace PL
                     user = s_bl.Volunteer.GetMyJob(_id, Password);
                     if (user == BO.Role.Manager)
                     {
-                        new ChoseWindow(_id).Show();
-                        Close();
+                        var nextWind = new ChoseWindow(this, _id);
+                        nextWind.Show();
+                        this.Hide();
+                        //new ChoseWindow(_id).Show();
+                        //Close();
                     }
                     else if (user == BO.Role.Volunteer)
                     {
-                        new VolunteerForVolWindow(_id).Show();
-                        Close();
+                        var nextWind = new VolunteerForVolWindow(this, _id);
+                        nextWind.Show();
+                        this.Hide();
+                        //new VolunteerForVolWindow(this,_id).Show();
+                        //Close();
                     }
                 }
 
@@ -191,8 +204,6 @@ namespace PL
             }
 
         }
-
-        
 
     }
 

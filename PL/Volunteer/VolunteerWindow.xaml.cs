@@ -13,7 +13,27 @@ namespace PL.Volunteer
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static int _id;
+        private int _adminId;
+        private Window _preWind;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="id">Id of who open this window</param>
+        public VolunteerWindow(Window preWind, int adminId,int id = 0)
+        {
+            ButtonText = id == 0 ? "Add" : "Update";
+            InitializeComponent();
+            _id = id;
+            _adminId = adminId;
+            CurrentVolunteer = (id != 0) ? s_bl.Volunteer.Read(id)!
+                : new BO.Volunteer()
+                { Id = 0, FullName = "", PhoneNumber = "", Email = "" };
+            _preWind = preWind;
+        }
+
+
+        #region Dependency objects
         /// <summary>
         /// This volunteer
         /// </summary>
@@ -42,6 +62,11 @@ namespace PL.Volunteer
             set { SetValue(ButtonTextProperty, value); }
         }
 
+        #endregion
+
+        /// <summary>
+        /// Volunteer add or update event when clicking a button
+        /// </summary>
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -53,9 +78,10 @@ namespace PL.Volunteer
                 }
                 else if (ButtonText == "Update")
                 {
-                    s_bl.Volunteer.Update(_id!, CurrentVolunteer!);
+                    s_bl.Volunteer.Update(_adminId, CurrentVolunteer!);
                     //MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+                _preWind.Show();//?
                 this.Close();
             }
             catch (Exception ex)
@@ -63,28 +89,17 @@ namespace PL.Volunteer
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        
+
         /// <summary>
-        /// Constructor
+        /// Returns the new volunteer after an update or addition.
         /// </summary>
-        /// <param name="id">id of who open this window</param>
-        public VolunteerWindow(int id = 0)
-        {
-            ButtonText = id == 0 ? "Add" : "Update";
-            InitializeComponent();
-            _id = id;
-            CurrentVolunteer = (id != 0) ? s_bl.Volunteer.Read(id)!
-                : new BO.Volunteer()
-                { Id = 0, FullName = "", PhoneNumber = "", Email = "" };
-        }
-
-
         private void RefreshVolunteer()
         {
             int id = CurrentVolunteer!.Id; 
             CurrentVolunteer = null; 
             CurrentVolunteer = s_bl.Volunteer.Read(id); 
         }
+
 
         private void VolunteerObserver() => RefreshVolunteer();
 
@@ -93,24 +108,27 @@ namespace PL.Volunteer
 
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(VolunteerObserver);
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
 
-        }
+        //private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        //}
 
-        }
+        //private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
 
-        private void ShowDescription(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            //MessageBox.Show(CurrentVolunteer.InCall.Description);//בעיה במסך הוספה 
-        }
+        //}
 
+        //private void ShowDescription(object sender, System.Windows.Input.MouseEventArgs e)
+        //{
+        //    //MessageBox.Show(CurrentVolunteer.InCall.Description);//בעיה במסך הוספה 
+        //}
+
+       
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
 }

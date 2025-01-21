@@ -89,12 +89,20 @@ internal static class CallManager
         if (string.IsNullOrWhiteSpace(address))
             throw new BO.BlNullPropertyException("Address cannot be empty or null." + nameof(address));
 
-        // Constructing the URL for the geocoding service with the provided address
+        //Constructing the URL for the geocoding service with the provided address
+
+        
+        //string apiKey = "pk.9c3fc19e8792d781f9847563010296cd";
+        //string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&key={apiKey}";
         string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
 
-        // Creating a synchronous HTTP request
+        //// Creating a synchronous HTTP request
         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
         request.Method = "GET";
+        //#pragma warning disable SYSLIB0014
+        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+        //        request.Method = "GET";
+        //#pragma warning restore SYSLIB0014
 
         // Sending the request and getting the response synchronously
         using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
@@ -119,14 +127,58 @@ internal static class CallManager
                 // Returning the latitude and longitude as an array
                 return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
             }
-
         }
     }
 
-    /// <summary>
-    /// Class to represent the structure of the geocoding response (latitude and longitude)
-    /// </summary>
-    private class LocationResult
+
+
+
+    //public static double[] GetCoordinates(string address)
+    //{
+
+            //    // URL לשירות Geocode.maps.co (שאינו דורש API Key)
+            //    string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
+
+            //    using (HttpClient client = new HttpClient())
+            //    {
+            //        // שליחת בקשה GET לשירות
+            //        HttpResponseMessage response = client.GetAsync(url).GetAwaiter().GetResult();
+
+            //        // בדיקת סטטוס התשובה
+            //        if (!response.IsSuccessStatusCode)
+            //        {
+            //            string errorResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+            //            Console.WriteLine($"Error Response: {errorResponse}");
+            //            throw new Exception($"Error in request: {response.StatusCode}");
+            //        }
+
+            //        // קריאת גוף התשובה כטקסט
+            //        string jsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+
+            //        // עיבוד התשובה ופרשנות JSON
+            //        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            //        var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
+
+            //        // אם אין תוצאות
+            //        if (results == null || results.Length == 0)
+            //        {
+            //            throw new Exception("No coordinates found for the given address.");
+            //        }
+
+            //        // החזרת הקואורדינטות
+            //        return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
+            //    }
+            //}
+
+
+            // מחלקת עזר לפענוח JSON
+
+
+
+            /// <summary>
+            /// Class to represent the structure of the geocoding response (latitude and longitude)
+            /// </summary>
+private class LocationResult
     {
         // Latitude as string in the JSON response
         public string Lat { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DalApi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,14 @@ namespace PL.Call
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private static int _id;
-
+        private Window _preWind;
+        public ChooseCallWindow(int id,Window preWind)
+        {
+            _id = id;
+            InitializeComponent();
+            Volunteer = s_bl.Volunteer.Read(id)!;
+            _preWind = preWind;
+        }
         public IEnumerable<BO.OpenCallInList> OpenCallList
         {
             get { return (IEnumerable<BO.OpenCallInList>)GetValue(OpenCallListProperty); }
@@ -55,30 +63,32 @@ namespace PL.Call
         }
         private void queryCallList()
         {
-            if (CallSort == BO.OpenCallData.Id)
+            try
             {
-                if (CallFilter == BO.CallType.None)
-                    OpenCallList = s_bl?.Call.GetOpenedCalls(_id)!;
+                if (CallSort == BO.OpenCallData.Id)
+                {
+                    if (CallFilter == BO.CallType.None)
+                        OpenCallList = s_bl?.Call.GetOpenedCalls(_id)!;
+                    else
+                        OpenCallList = s_bl?.Call.GetOpenedCalls(_id, CallFilter)!;
+                }
                 else
-                    OpenCallList = s_bl?.Call.GetOpenedCalls(_id, CallFilter)!;
+                {
+                    if (CallFilter == BO.CallType.None)
+                        OpenCallList = s_bl?.Call.GetOpenedCalls(_id, null, CallSort)!;
+                    else
+                        OpenCallList = s_bl?.Call.GetOpenedCalls(_id, CallFilter, CallSort)!;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                if (CallFilter == BO.CallType.None)
-                    OpenCallList = s_bl?.Call.GetOpenedCalls(_id, null, CallSort)!;
-                else
-                    OpenCallList = s_bl?.Call.GetOpenedCalls(_id, CallFilter, CallSort)!;
+                MessageBox.Show(ex.Message + "Please try again", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         public BO.OpenCallInList? SelectedCall { get; set; }
 
-        public ChooseCallWindow(int id)
-        {
-            _id = id;
-            InitializeComponent();
-            Volunteer = s_bl.Volunteer.Read(id)!;
-        }
+       
         private void callListObserver()
             => queryCallList();
 
@@ -96,9 +106,24 @@ namespace PL.Call
 
         private void Choose_Call(object sender, EventArgs e)
         {
-            if (SelectedCall != null)
-                s_bl.Call.CallToTreatment(_id, SelectedCall.Id);
-            queryCallList();
+            try
+            {
+                if (SelectedCall != null)
+                    s_bl.Call.CallToTreatment(_id, SelectedCall.Id);
+                queryCallList();
+            }
+            catch(BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show($"Call with ID={SelectedCall.Id} does not exists\"");
+            }
+            catch (BO.BlDoesAlreadyExistException)
+            {
+                MessageBox.Show($"Assignment for call with ID={SelectedCall.Id} already exists\"");
+            }
+            catch (BO.BlCantHandleItException)
+            {
+                MessageBox.Show("Unable to assign");
+            }
         }
 
         private void UpdateAdd_Click(object sender, RoutedEventArgs e)
@@ -107,19 +132,30 @@ namespace PL.Call
             queryCallList();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void Address_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                s_bl.Volunteer.Update(_id, Volunteer);
+                Volunteer = s_bl.Volunteer.Read(_id)!;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
 
-        private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+    //    private void Filter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    //    {
 
-        }
+    //    }
+    //
     }
 }

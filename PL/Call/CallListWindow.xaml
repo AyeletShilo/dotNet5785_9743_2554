@@ -30,13 +30,13 @@
             <Label Content="Filter by:" 
                Style="{StaticResource HeaderLabelStyle}"
                Grid.Column="0"
-               Margin="40,0,0,0"/>
+               Margin="40,0,0,0" Visibility= "{Binding Path= IsFilter,Converter={StaticResource ConvertStatusToVisibleKey}}"/>
 
 
             <ComboBox Grid.Column="1" Margin="20,0"
                   SelectedValue="{Binding Path=CallFilter, Mode=TwoWay}"
                   ItemsSource="{Binding Source={StaticResource FilterCallKey}}"
-                  SelectionChanged="Filter_SelectionChanged"/>
+                  SelectionChanged="Filter_SelectionChanged" Visibility= "{Binding Path= IsFilter,Converter={StaticResource ConvertStatusToVisibleKey}}"/>
 
             <Label Content="Sort by:" 
                Style="{StaticResource HeaderLabelStyle}"

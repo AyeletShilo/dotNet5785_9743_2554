@@ -57,7 +57,7 @@
                   SelectedItem="{Binding SelectedVolunteer}"
                   MouseDoubleClick="lsvVolunteersList_MouseDoubleClick"
                   Style="{StaticResource DataStyle}"
-                  CellStyle="{StaticResource CenteredDataGridCellStyle}">
+>
 
 
             <DataGrid.Columns>
@@ -79,8 +79,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding HandleCalls}" Header="Handled" Width="*" CellStyle="{StaticResource CenteredDataGridCellStyle}"/>
-                <DataGridTextColumn Binding="{Binding CancelCalls}" Header="Canceled" Width="*" CellStyle="{StaticResource CenteredDataGridCellStyle}"/>
+                <DataGridTextColumn Binding="{Binding HandleCalls}" Header="Handled" Width="*"/>
+                <DataGridTextColumn Binding="{Binding CancelCalls}" Header="Canceled" Width="*"/>
                 <DataGridTextColumn Binding="{Binding ExpiredCalls}" Header="Expired" Width="*"/>
                 <DataGridTextColumn Binding="{Binding CallId}" Header="Call ID" Width="*"/>
                 <DataGridTextColumn Binding="{Binding InTreatment}" Header="Call Type" Width="*">

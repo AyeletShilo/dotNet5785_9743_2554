@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace PL.Volunteer
 {
-    public class DigitValidation : ValidationRule
+    public class PhoneValidation : ValidationRule
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {
@@ -49,7 +49,7 @@ namespace PL.Volunteer
             string? password = value.ToString();
             if (!string.IsNullOrEmpty(password))
             {
-                if (password.Length == 8)
+                if (password.Length >= 8)
                     return ValidationResult.ValidResult; // תקין
             }
 
@@ -64,34 +64,13 @@ namespace PL.Volunteer
             if (value == null)
                 return ValidationResult.ValidResult;
 
-            double distance = (double)(value);
-            if (distance >= 0)
+            string distance = value.ToString()!;
+            if (distance[0] != 45)
                 return ValidationResult.ValidResult; // תקין
 
             return new ValidationResult(false, "מרחק לא יכול להיות שלילי");
         }
     }
-
-    public class IDValidation : ValidationRule
-    {
-        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
-        {
-            if (value != null)
-            {
-                int Id = (int)value;
-                if (Id < 10000000 || Id > 999999999)
-                {
-                    string id = value.ToString()!;
-                    if (id.Any(char.IsUpper) == false && id.Any(char.IsLower) == false)
-                        return ValidationResult.ValidResult; // תקין
-                }
-            }
-            return new ValidationResult(false, "סיסמא אינה חוקית");
-        }
-    }
-
-
-
 }
 
     

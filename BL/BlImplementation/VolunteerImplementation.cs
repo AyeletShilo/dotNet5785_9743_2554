@@ -21,7 +21,15 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             VolunteerManager.CheckFormat(boVolunteer);
             VolunteerManager.CheckLogic(boVolunteer);
 
-            double[] AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address);
+            double[] AddressCoordinate;
+            if (boVolunteer.Address != "" && boVolunteer.Address !=null )
+                AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address);
+            else
+            {
+                AddressCoordinate= new double[2];
+                AddressCoordinate[0] = 0;
+                AddressCoordinate[1] = 0;
+            }
 
             DO.Volunteer doVolunteer =
               new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, boVolunteer.Password,(DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
@@ -107,7 +115,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 Longitude = doVolunteer.Longitude,
                 Job = (BO.Role)doVolunteer.Job,
                 IsActive = doVolunteer.Active,
-                MaxDis = doVolunteer.MaxDistance,
+                MaxDis = doVolunteer.MaxDistance != null? Math.Round(doVolunteer.MaxDistance.Value,4) : null,
                 Distance = (BO.DisType)doVolunteer.Distance,
                 HandleCalls = volAssignments.Count(a => a.EndTreatment == DO.AssignmentEnum.TakenCare),
                 CancelCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelAdmin || a.EndTreatment == DO.AssignmentEnum.SelfCancel)),
@@ -170,15 +178,24 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         try
         {
-            if (id == volToUpdate.Id || GetMyJob(id, volToUpdate.Password) == BO.Role.Manager)
+            DO.Volunteer? updateVol = _dal.Volunteer.Read(id)!;
+            if (id == volToUpdate.Id || GetMyJob(id, updateVol.Password) == BO.Role.Manager)
             {
                 VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
                 VolunteerManager.CheckLogic(volToUpdate); //can throw Ex
 
-                double[] addressCordinate = CallManager.GetCoordinates(volToUpdate.Address);
+                double[] addressCordinate;
+                if (volToUpdate.Address != "" && volToUpdate.Address != null)
+                    addressCordinate = CallManager.GetCoordinates(volToUpdate.Address);
+                else
+                {
+                    addressCordinate = new double[2];
+                    addressCordinate[0] = 0;
+                    addressCordinate[1] = 0;
+                }
 
                 DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
-                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id, volToUpdate.Password) != BO.Role.Manager)
+                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id, updateVol.Password) != BO.Role.Manager)
                     throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 
                 DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, volToUpdate.Password, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,

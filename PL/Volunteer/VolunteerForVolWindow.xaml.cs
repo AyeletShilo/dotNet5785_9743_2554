@@ -14,23 +14,33 @@ namespace PL.Volunteer
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         static int _id;
         static string? _distance;
+        private Window _preWind;
 
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="id">id of who open this window</param>
-        public VolunteerForVolWindow(int id = 0)
+        public VolunteerForVolWindow(Window preWind ,int id = 0 )
         {
             CurrentVolunteer = s_bl.Volunteer.Read(id);
             InitializeComponent();
             _id = id;
-
-            if (CurrentVolunteer!.InCall != null)
+            _preWind = preWind;
+            try
             {
-                CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
-                _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress).ToString();
+                if (CurrentVolunteer!.InCall != null)
+                {
+                    CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
+                    _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress).ToString();
+                }
             }
+          
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "Please try again", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        
         }
 
         #region properties
@@ -71,15 +81,22 @@ namespace PL.Volunteer
 
         private void RefreshVolunteer()
         {
-            int id = CurrentVolunteer!.Id;
-            CurrentVolunteer = null;
-            CurrentVolunteer = s_bl.Volunteer.Read(id);
-            if (CurrentVolunteer!.InCall != null)
+            try
             {
-                CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
-                _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress).ToString();
+                int id = CurrentVolunteer!.Id;
+                CurrentVolunteer = null;
+                CurrentVolunteer = s_bl.Volunteer.Read(id);
+                if (CurrentVolunteer!.InCall != null)
+                {
+                    CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
+                    _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress).ToString();
+                }
+                char refresh = FirstLet;
             }
-            char refresh = FirstLet;
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "Please try again", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void VolunteerObserver() => RefreshVolunteer();
@@ -96,15 +113,19 @@ namespace PL.Volunteer
         #region buttons
         private void UpdateVol_Click(object sender, RoutedEventArgs e)
         {
-            //var nextWind = new VolunteerDataWindow(_id, this);
-            //nextWind.Show();
-            //this.Hide();
-            new VolunteerDataWindow(_id).Show();
+            var nextWind = new VolunteerDataWindow(_id, this);
+            nextWind.Show();
+            this.Hide();
+            //new VolunteerDataWindow(_id).Show();
+
         }
 
         private void ChoseCall_Click(object sender, RoutedEventArgs e)
         {
-            new ChooseCallWindow(_id).Show();
+            var nextWind = new ChooseCallWindow(_id, this);
+            nextWind.Show();
+            this.Hide();
+            //new ChooseCallWindow(_id).Show();
         }
 
         private void HistoryCalls_Click(object sender, RoutedEventArgs e)
@@ -150,7 +171,8 @@ namespace PL.Volunteer
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
 }

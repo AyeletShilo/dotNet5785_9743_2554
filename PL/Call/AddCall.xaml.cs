@@ -21,15 +21,18 @@ namespace PL.Call
     public partial class AddCall : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public DateTime CurrentTime 
+        private Window _preWind;
+        public AddCall(Window preWind)
+        {
+            InitializeComponent();
+            CurrentCall = new BO.Call() { Id = 0 };
+            _preWind = preWind;
+        }
+        public DateTime CurrentTime
         {
             get { return s_bl.Admin.GetClock(); }
         }
-        public AddCall()
-        {
-            InitializeComponent();
-            CurrentCall = new BO.Call() { Id = 0};
-        }
+
 
         public BO.Call? CurrentCall
         {
@@ -48,6 +51,7 @@ namespace PL.Call
             try
             {
                 s_bl.Call.Create(CurrentCall!);
+                _preWind.Show();//?
                 this.Close();
             }
             catch (BO.BlXMLFileLoadCreateException ex1)
@@ -77,7 +81,8 @@ namespace PL.Call
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
 }

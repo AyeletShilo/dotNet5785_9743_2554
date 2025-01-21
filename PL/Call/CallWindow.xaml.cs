@@ -23,12 +23,14 @@ namespace PL.Call
     public partial class CallWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public CallWindow(int id = 0)
+        private Window _preWind;
+        public CallWindow(Window preWind, int id = 0)
         {
 
             InitializeComponent();
             CurrentCall = (id != 0) ? s_bl.Call.Read(id)!
                 : new BO.Call() { Id = 0, CallAddress = "" };
+            _preWind = preWind;
         }
         public BO.Call? CurrentCall
         {
@@ -47,6 +49,7 @@ namespace PL.Call
             try
             {
                 s_bl.Call.Update(CurrentCall!);
+                _preWind.Show(); //?
                 this.Close();
             }
             catch (BO.BlDoesNotExistException ex1)
@@ -60,6 +63,10 @@ namespace PL.Call
             catch(BlIntegrityOfValuesException ex3)
             {
                 MessageBox.Show($"Error in integrity");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message + "Please try again", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -85,7 +92,8 @@ namespace PL.Call
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
 }
