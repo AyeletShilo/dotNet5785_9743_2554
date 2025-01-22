@@ -10,9 +10,7 @@ using System.Windows.Media;
 
 namespace PL;
 
-/// <summary>
-///
-/// </summary>
+
 public class ConvertUpdateToTrue : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -64,7 +62,7 @@ public class NullToVisibilityConverter : IValueConverter
 }
 
 /// <summary>
-/// 
+/// Removing the ability to update some call details based on call status
 /// </summary>
 public class ConvertUpdateDetails : IValueConverter
 {
@@ -88,7 +86,7 @@ public class ConvertUpdateDetails : IValueConverter
 }
 
 /// <summary>
-/// 
+/// Removing the ability to update some call details based on call status
 /// </summary>
 public class ConvertUpdateType : IValueConverter
 {
@@ -112,7 +110,7 @@ public class ConvertUpdateType : IValueConverter
 }
 
 /// <summary>
-/// 
+/// Removing the ability to update some call details based on call status
 /// </summary>
 public class ConvertUpdateMaxTime : IValueConverter
 {
@@ -166,6 +164,7 @@ public class MultiToIsEnabledConverter : IMultiValueConverter
         throw new NotImplementedException();
     }
 }
+
 
 public class CallMultiConverter : IMultiValueConverter
 {
@@ -273,7 +272,7 @@ class ConvertVolTypeToColor : IValueConverter
 }
 
 /// <summary>
-/// 
+/// Hiding the call filtering button when they are opened already filtered
 /// </summary>
 public class ConvertStatusToVisible : IValueConverter
 {
@@ -330,7 +329,9 @@ public class FontSizeConverter : IValueConverter
     }
 }
 
-
+/// <summary>
+/// convert timeSpan tobe on string format
+/// </summary>
 public class TimeSpanToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -352,6 +353,9 @@ public class TimeSpanToStringConverter : IValueConverter
     }
 }
 
+/// <summary>
+/// convert imeSpan to be on string format
+/// </summary>
 public class TimeSpanToDateConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -375,6 +379,10 @@ public class TimeSpanToDateConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
+
+/// <summary>
+/// convert risk range to show only days
+/// </summary
 public class TimeSpanToDaysConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
