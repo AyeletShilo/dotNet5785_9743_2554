@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace PL;
 
@@ -241,35 +240,6 @@ class ConvertFontColor : IValueConverter
         throw new NotImplementedException();
     }
 }
-
-class ConvertCallTypeToPitcher : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallType callType = (BO.CallType)value;
-        switch (callType)
-        {
-            case BO.CallType.Repairing:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/reapairing.png"));
-            case BO.CallType.Talking:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/talking.png"));
-            case BO.CallType.Cleaning:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/cleaning.png"));
-            case BO.CallType.TechnologyHelp:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/technologic.png"));
-            case BO.CallType.Shopping:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/Shopping.png"));
-            default:
-                return null;
-        }
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
-
 /// <summary>
 ///  Changes the background of call in list according to the call type
 /// </summary>
@@ -300,38 +270,6 @@ class ConvertVolTypeToColor : IValueConverter
         throw new NotImplementedException();
     }
 }
-
-
-public class ConvertStatusToColor : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallListStatus callType = (BO.CallListStatus)value;
-        switch (callType)
-        {
-            case BO.CallListStatus.Opened:
-                return (SolidColorBrush)Application.Current.FindResource("Color1");
-            case BO.CallListStatus.InTreatment:
-                return (SolidColorBrush)Application.Current.FindResource("Color2");
-            case BO.CallListStatus.InTreatmentInRisk:
-                return (SolidColorBrush)Application.Current.FindResource("Color3");
-            case BO.CallListStatus.Expired:
-                return (SolidColorBrush)Application.Current.FindResource("Color4");
-            case BO.CallListStatus.Closed:
-                return (SolidColorBrush)Application.Current.FindResource("Color5");
-            case BO.CallListStatus.OpenInRisk:
-                return Brushes.White;
-            default:
-                return Brushes.White;
-        }
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException("ConvertBack is not implemented");
-    }
-}
-
 
 /// <summary>
 /// Hiding the call filtering button when they are opened already filtered
