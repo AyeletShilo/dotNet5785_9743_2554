@@ -7,8 +7,6 @@
         mc:Ignorable="d"
         Title="AddCall" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Closed="Window_Closed"
-        Loaded="Window_Loaded"
         Background="{StaticResource CreamColor}">
 
 

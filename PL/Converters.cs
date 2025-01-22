@@ -1,6 +1,8 @@
 ﻿using BO;
+using DO;
 using System.Diagnostics;
 using System.Globalization;
+using System.Threading.Channels;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
@@ -9,7 +11,7 @@ using System.Windows.Media;
 namespace PL;
 
 /// <summary>
-/// 
+///
 /// </summary>
 public class ConvertUpdateToTrue : IValueConverter
 {
@@ -25,7 +27,7 @@ public class ConvertUpdateToTrue : IValueConverter
 }
 
 /// <summary>
-/// 
+/// Does not allow changing the attribute when the window is used for adding rather than updating
 /// </summary>
 public class ConvertUpdateToVisible : IValueConverter
 {
@@ -46,7 +48,7 @@ public class ConvertUpdateToVisible : IValueConverter
 }
 
 /// <summary>
-/// 
+/// Does not allow entry to the call selection screen when there is a call in the volunteer's care
 /// </summary>
 public class NullToVisibilityConverter : IValueConverter
 {
@@ -134,7 +136,7 @@ public class ConvertUpdateMaxTime : IValueConverter
 }
 
 /// <summary>
-/// 
+/// Does not allow updating a volunteer as inactive when there is a call in his care
 /// </summary>
 public class ConvertActiveIsEnable : IValueConverter
 {
@@ -150,23 +152,13 @@ public class ConvertActiveIsEnable : IValueConverter
 }
 
 /// <summary>
-/// 
+/// Hides the call in the volunteer's care details when there is no call or when it is for adding 
 /// </summary>
 public class MultiToIsEnabledConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
         return (values[0] == null || (string)values[1] == "Add") ? Visibility.Hidden : Visibility.Visible;
-
-        //return (values[0] != null || (bool)values[1] == false) ? Visibility.Collapsed : Visibility.Visible;
-        
-
-        //if (values[0] == null || values[1] == null)
-        //    Debug.WriteLine("One of the bindings is null.");
-
-        //if (values[1] != null && !(values[1] is bool))
-        //    Debug.WriteLine($"Unexpected type for isActive: {values[1].GetType()}");
-        //return false;
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -183,13 +175,6 @@ public class CallMultiConverter : IMultiValueConverter
         if (values[0] != null || (bool)values[1] == false)
             return false;
         return true;
-
-        //if (values[0] == null || values[1] == null)
-        //    Debug.WriteLine("One of the bindings is null.");
-
-        //if (values[1] != null && !(values[1] is bool))
-        //    Debug.WriteLine($"Unexpected type for isActive: {values[1].GetType()}");
-        //return false;
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -199,7 +184,7 @@ public class CallMultiConverter : IMultiValueConverter
 }
 
 /// <summary>
-/// 
+/// Changes the background of call in list according to the call type
 /// </summary>
 class ConvertCallTypeToColor : IValueConverter
 {
@@ -229,6 +214,9 @@ class ConvertCallTypeToColor : IValueConverter
     }
 }
 
+/// <summary>
+/// Changes the font of call in the list according to the call type
+/// </summary>
 class ConvertFontColor : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -253,42 +241,8 @@ class ConvertFontColor : IValueConverter
         throw new NotImplementedException();
     }
 }
-
 /// <summary>
-/// 
-/// </summary>
-class ConvertStatusToColor : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallListStatus status = (BO.CallListStatus)value;
-        switch (status)
-        {
-            case BO.CallListStatus.Opened:
-                return Brushes.Yellow;
-            case BO.CallListStatus.Closed:
-                return Brushes.Orange;
-            case BO.CallListStatus.InTreatment:
-                return Brushes.Green;
-            case BO.CallListStatus.Expired:
-                return Brushes.PaleVioletRed;
-            case BO.CallListStatus.OpenInRisk:
-                return Brushes.Purple;
-            case BO.CallListStatus.InTreatmentInRisk:
-                return Brushes.Silver;
-            default:
-                return Brushes.White;
-        }
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-/// <summary>
-/// 
+///  Changes the background of call in list according to the call type
 /// </summary>
 class ConvertVolTypeToColor : IValueConverter
 {
@@ -421,21 +375,26 @@ public class TimeSpanToDateConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
-public class MaxTimeForEndTimeConverter : IValueConverter
+public class TimeSpanToDaysConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is DateTime? && value !=null)
+        if (value is TimeSpan timeSpan)
         {
-            DateTime dateTime= (DateTime)value;
-            return dateTime.AddMonths(3);
+            return timeSpan.TotalDays.ToString("0"); 
         }
-        return null;
+        return "0"; 
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        throw new NotImplementedException();
+        
+        if (double.TryParse(value.ToString(), out double days))
+        {
+            return TimeSpan.FromDays(days);
+        }
+        return TimeSpan.Zero;
     }
 }
+
 

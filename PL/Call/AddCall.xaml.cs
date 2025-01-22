@@ -27,7 +27,7 @@ namespace PL.Call
         public AddCall(Window preWind)
         {
             InitializeComponent();
-            CurrentCall = new BO.Call() { Id = 0 };
+            CurrentCall = new BO.Call() { Id = 0};
             _preWind = preWind;
         }
 
@@ -77,23 +77,23 @@ namespace PL.Call
             }
         }
 
-        /// <summary>
-        /// Re-reading call's details
-        /// </summary>
-        private void RefreshCall() //?
-        {
-            //int id = CurrentCall!.Id;
-            //CurrentCall = null;
-            //CurrentCall = s_bl.Call.Read(id);
-        }
+        ///// <summary>
+        ///// Re-reading call's details
+        ///// </summary>
+        //private void RefreshCall() //?
+        //{
+        //    //int id = CurrentCall!.Id;
+        //    //CurrentCall = null;
+        //    //CurrentCall = s_bl.Call.Read(id);
+        //}
 
-        private void CallObserver() => RefreshCall();
+        //private void CallObserver() => RefreshCall();
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Call.AddObserver(CallObserver);
+        //private void Window_Loaded(object sender, RoutedEventArgs e)
+        //    => s_bl.Call.AddObserver(CallObserver);
 
-        private void Window_Closed(object sender, EventArgs e)
-            => s_bl.Call.RemoveObserver(CallObserver);
+        //private void Window_Closed(object sender, EventArgs e)
+        //    => s_bl.Call.RemoveObserver(CallObserver);
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {

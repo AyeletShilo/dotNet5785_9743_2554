@@ -251,8 +251,16 @@
             </Grid>
             <StackPanel >
                 <!--RiskRange-->
-                <TextBox  Text="{Binding RiskRange, StringFormat='{}{0}'}" FontWeight="Bold" FontSize="20"/>
-                <Button Content="Update Risk Range"
+                <TextBox  Text="{Binding RiskRange, Converter={StaticResource TimeSpanToDaysConverterKey}}" FontWeight="Bold" FontSize="20" >
+                    <TextBox.ToolTip>
+                        <ToolTip Content="In days format" 
+                                 Background="{StaticResource CreamColor}"
+                                 BorderBrush="{StaticResource AyeletHardColor}"
+                                 Foreground="{StaticResource AyeletHardColor}"
+                                 FontSize="16"/>
+                    </TextBox.ToolTip>
+                </TextBox>
+                    <Button Content="Update Risk Range"
                         Click="btnUpdateRiskRange_Click" 
                         Style="{StaticResource CheerfulButton}"/>
             </StackPanel>

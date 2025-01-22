@@ -61,7 +61,8 @@ namespace PL
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-
+            _preWind.Show();
+            this.Close();
         }
     }
 }
