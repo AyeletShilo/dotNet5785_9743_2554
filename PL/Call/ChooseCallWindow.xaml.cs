@@ -107,10 +107,10 @@ namespace PL.Call
             => queryCallList();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Volunteer.AddObserver(callListObserver);
+            => s_bl.Call.AddObserver(callListObserver);
 
         private void Window_Closed(object sender, EventArgs e)
-            => s_bl.Volunteer.RemoveObserver(callListObserver);
+            => s_bl.Call.RemoveObserver(callListObserver);
 
         /// <summary>
         /// Open call details when clicking a call in the list
@@ -131,6 +131,7 @@ namespace PL.Call
                 if (SelectedCall != null)
                     s_bl.Call.CallToTreatment(_id, SelectedCall.Id);
                 queryCallList();
+                _preWind.RefreshVolunteer();
             }
             catch(BO.BlDoesNotExistException ex)
             {
@@ -155,6 +156,7 @@ namespace PL.Call
             {
                 s_bl.Volunteer.Update(_id, Volunteer);
                 Volunteer = s_bl.Volunteer.Read(_id)!;
+                queryCallList();
             }
             catch (Exception ex)
             {

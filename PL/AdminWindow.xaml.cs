@@ -138,7 +138,7 @@ namespace PL
         /// </summary>
         private void btnCall_Click(object sender, RoutedEventArgs e)
         {
-            var nextWind = new CallListWindow(this);
+            var nextWind = new CallListWindow(this, adminId);
             nextWind.Show();
             this.Hide();
             //new CallListWindow().Show();

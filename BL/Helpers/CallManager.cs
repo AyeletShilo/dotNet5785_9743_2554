@@ -1,6 +1,7 @@
 ﻿using BlImplementation;
 using BO;
 using DalApi;
+using DO;
 using System.Net;
 using System.Text.Json;
 
@@ -205,10 +206,20 @@ private class LocationResult
             {
                 DO.Assignment? callAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
 
-
+                
                 if (callAssignment is null || callAssignment.VolunteerId == 0)
                 {
-                    callInLists.Add(new()
+
+                    CallListStatus _Status;
+                    if ((item.MaxTime - AdminManager.Now) > AdminManager.MaxRange || item.MaxTime is null)
+                        _Status = BO.CallListStatus.Opened;
+                    else if ((item.MaxTime - AdminManager.Now) > TimeSpan.Zero)
+                        _Status = BO.CallListStatus.OpenInRisk;
+                    else
+                        _Status = BO.CallListStatus.Expired;
+
+
+                        callInLists.Add(new()
                     {
                         Id = null,
                         CallId = item.Id,
@@ -217,7 +228,7 @@ private class LocationResult
                         LeftTime = item.MaxTime != null ? (TimeSpan)(item.MaxTime - AdminManager.Now) : null,
                         LastVolunteer = null,
                         CompletionTime = null,
-                        Status = BO.CallListStatus.Opened,
+                        Status = _Status,
                         TotalAssignments = 0
                     });
                 }
@@ -304,49 +315,86 @@ private class LocationResult
     /// processing has not yet finished - and closes them with a completion type of "Expired":
     /// </summary>
     /// <param name="newClock">the time of the update</param>
+    //internal static void UpdateExpiredCalls(DateTime oldClock, DateTime newClock)
+    //{
+    //    var calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock);
+    //    bool assignUpdated = false;  //stage 5
+    //    Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
+    //    IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate);
+
+    //    if (callsToUp.Any())
+    //    {
+    //        foreach (var call in callsToUp)
+    //        {
+    //            if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
+    //            {
+    //                assignUpdated = true; //stage 5
+    //                s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
+    //                Observers.NotifyItemUpdated(call.Id); //stage 5
+    //                #region Are we need to update BO.Call??
+    //                //call.CallAssignments.Add(new BO.CallAssignInList
+    //                //{
+    //                //    VolunteerId = 0,
+    //                //    VolunteerName = null,
+    //                //    InterTime = newClock,
+    //                //    EndTime = newClock,
+    //                //    EndTreatment = EndTreatment.CancelExpired
+    //                //});
+    //                #endregion
+    //            }
+    //            else//if(call.CallAssignments.Last().EndTime==null)
+    //            {
+    //                assignUpdated = true;
+    //                DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Controlled Null
+    //                s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
+    //                Observers.NotifyItemUpdated(assignToUp.Id); //stage 5
+    //                Observers.NotifyItemUpdated(call.Id); //stage 5
+
+    //                //call.CallAssignments.Last().EndTime = newClock;
+    //                //call.CallAssignments.Last().EndTreatment = EndTreatment.CancelExpired;
+    //            }
+    //        }
+    //    }
+
+    //    bool timeChanged = oldClock != newClock; //stage 5
+    //    if (timeChanged || assignUpdated)
+    //        Observers.NotifyListUpdated(); //stage 5
+    //}
+
     internal static void UpdateExpiredCalls(DateTime oldClock, DateTime newClock)
     {
         var calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock);
-        bool assignUpdated = false;  //stage 5
+        bool assignUpdated = false;
+        bool listUpdated = false;
+
         Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
         IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate);
 
-        if (callsToUp.Any())
+        foreach (var call in callsToUp)
         {
-            foreach (var call in callsToUp)
+            if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
             {
-                if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
-                {
-                    assignUpdated = true; //stage 5
-                    s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
-                    Observers.NotifyItemUpdated(call.Id); //stage 5
-                    #region Are we need to update BO.Call??
-                    //call.CallAssignments.Add(new BO.CallAssignInList
-                    //{
-                    //    VolunteerId = 0,
-                    //    VolunteerName = null,
-                    //    InterTime = newClock,
-                    //    EndTime = newClock,
-                    //    EndTreatment = EndTreatment.CancelExpired
-                    //});
-                    #endregion
-                }
-                else//if(call.CallAssignments.Last().EndTime==null)
-                {
-                    assignUpdated = true;
-                    DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Controlled Null
-                    s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
-                    Observers.NotifyItemUpdated(assignToUp.Id); //stage 5
-                    Observers.NotifyItemUpdated(call.Id); //stage 5
-                    //call.CallAssignments.Last().EndTime = newClock;
-                    //call.CallAssignments.Last().EndTreatment = EndTreatment.CancelExpired;
-                }
+                assignUpdated = true;
+                listUpdated = true;
+                s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
+                Observers.NotifyItemUpdated(call.Id);
+            }
+            else
+            {
+                assignUpdated = true;
+                listUpdated = true;
+                DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id);
+                s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
+                Observers.NotifyItemUpdated(assignToUp.Id);
+                Observers.NotifyItemUpdated(call.Id);
             }
         }
 
-        bool timeChanged = oldClock != newClock; //stage 5
-        if (timeChanged || assignUpdated)
-            Observers.NotifyListUpdated(); //stage 5
+        if (oldClock != newClock || listUpdated)
+        {
+            Observers.NotifyListUpdated();
+        }
     }
+
 
 }

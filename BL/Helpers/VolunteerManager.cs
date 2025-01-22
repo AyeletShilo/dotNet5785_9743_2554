@@ -70,7 +70,7 @@ internal static class VolunteerManager
         bool isA = password.Any(char.IsUpper);
         bool isa = password.Any(char.IsLower);
         bool isdigit = password.Any(char.IsDigit);
-        bool isSign = Regex.IsMatch(password, @"[!@#$%^&*(),.?""':{}|<>]");
+        bool isSign = Regex.IsMatch(password, @"[!@#$%^&*;(),.?""':{}|<>]");
         bool isSame = (password.Distinct().Count() <= 4) ? false : true;
 
         bool isAbc = true;
@@ -91,7 +91,7 @@ internal static class VolunteerManager
             }
         }
 
-        return isA && isa && isa && isdigit && isSign && isSame && isAbc;
+       return isA && isa && isa && isdigit && isSign && isSame && isAbc;
     }
 
 

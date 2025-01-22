@@ -31,7 +31,7 @@
         <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey" />
         <local:MaxTimeForEndTimeConverter x:Key="MaxTimeForEndTimeConverterKey"/>
         <local:TimeSpanToDateConverter x:Key="TimeSpanToDateConverterKey"/>
-
+        <local:CallMultiConverter x:Key="CallMultiConverterKey"/>
 
 
         <!--#region Colors-->

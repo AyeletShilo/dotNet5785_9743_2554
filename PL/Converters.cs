@@ -158,6 +158,32 @@ public class MultiToIsEnabledConverter : IMultiValueConverter
     {
         return (values[0] == null || (string)values[1] == "Add") ? Visibility.Hidden : Visibility.Visible;
 
+        //return (values[0] != null || (bool)values[1] == false) ? Visibility.Collapsed : Visibility.Visible;
+        
+
+        //if (values[0] == null || values[1] == null)
+        //    Debug.WriteLine("One of the bindings is null.");
+
+        //if (values[1] != null && !(values[1] is bool))
+        //    Debug.WriteLine($"Unexpected type for isActive: {values[1].GetType()}");
+        //return false;
+    }
+
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class CallMultiConverter : IMultiValueConverter
+{
+    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    {
+        
+        if (values[0] != null || (bool)values[1] == false)
+            return false;
+        return true;
+
         //if (values[0] == null || values[1] == null)
         //    Debug.WriteLine("One of the bindings is null.");
 

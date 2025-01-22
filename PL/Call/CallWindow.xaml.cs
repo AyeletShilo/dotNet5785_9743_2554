@@ -65,7 +65,7 @@ namespace PL.Call
             }
             catch(BlIntegrityOfValuesException ex3)
             {
-                MessageBox.Show($"Error in integrity");
+                MessageBox.Show(ex3.Message);
             }
             catch (Exception ex)
             {

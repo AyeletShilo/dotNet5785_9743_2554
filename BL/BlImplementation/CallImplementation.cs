@@ -184,7 +184,7 @@ internal class CallImplementation : BlApi.ICall
         //{
         //    statusCounts[group.Status] = group.Count;
         //}
-        #endregion
+        #endregion 
         return statusCounts;
     }
 

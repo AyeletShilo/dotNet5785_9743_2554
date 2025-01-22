@@ -247,7 +247,7 @@
                         Width="240" Height="80"
                         Margin="10,15,10,0">
                     <Button.IsEnabled>
-                        <MultiBinding Converter="{StaticResource MultiToIsEnabledConverterKey}">
+                        <MultiBinding Converter="{StaticResource CallMultiConverterKey}">
                             <Binding Path="CurrentVolunteer.InCall"/>
                             <Binding Path="CurrentVolunteer.IsActive"/>
                         </MultiBinding>
@@ -256,7 +256,7 @@
 
                 <Button Content="📋 View History"
                         Style="{StaticResource MainButtonStyle}"
-                        Click="HistoryCalls_Click"
+                        Click="HistoryCalls_Click" 
                         Width="240" Height="80"
                         Margin="10"/>
 

@@ -227,7 +227,7 @@ public static class Initialization
             char A = (char)(s_rand.Next(65, 90));
             char a = (char)(s_rand.Next(97, 122));
             int index = s_rand.Next(0, 20);
-            string sign = "!@#$%^&*(),.?\"':{}|<>";
+            string sign = "!@#$%^*(),.?\"':{}|<>";
             password = password + sign[index] + A + a;
             //toSwitch = s_rand.Next(2);
             bool active = (s_rand.NextDouble() < 0.9) ? true : false;

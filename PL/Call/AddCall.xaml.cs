@@ -32,10 +32,18 @@ namespace PL.Call
         }
 
         #region Properties
+
+        //public DateTime CurrentTime
+        //{
+        //    get { return s_bl.Admin.GetClock(); }
+        //}
         public DateTime CurrentTime
         {
             get { return s_bl.Admin.GetClock(); }
+            set { SetValue(CurrentTimeProperty, value); }
         }
+        public static readonly DependencyProperty CurrentTimeProperty =
+            DependencyProperty.Register("CurrentTime", typeof(DateTime), typeof(AddCall), new PropertyMetadata(null));
 
         public BO.Call? CurrentCall
         {
@@ -72,11 +80,11 @@ namespace PL.Call
         /// <summary>
         /// Re-reading call's details
         /// </summary>
-        private void RefreshCall()
+        private void RefreshCall() //?
         {
-            int id = CurrentCall!.Id;
-            CurrentCall = null;
-            CurrentCall = s_bl.Call.Read(id);
+            //int id = CurrentCall!.Id;
+            //CurrentCall = null;
+            //CurrentCall = s_bl.Call.Read(id);
         }
 
         private void CallObserver() => RefreshCall();

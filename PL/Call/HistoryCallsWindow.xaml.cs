@@ -83,6 +83,14 @@ namespace PL.Call
 
         }
 
+        private void callListObserver()
+            => queryCallList();
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+            => s_bl.Call.AddObserver(callListObserver);
+
+        private void Window_Closed(object sender, EventArgs e)
+            => s_bl.Call.RemoveObserver(callListObserver);
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             _preWind.Show();

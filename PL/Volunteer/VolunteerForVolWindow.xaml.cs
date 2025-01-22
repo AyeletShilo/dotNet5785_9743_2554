@@ -85,9 +85,9 @@ namespace PL.Volunteer
         {
             try
             {
-                int id = CurrentVolunteer!.Id;
-                CurrentVolunteer = null;
-                CurrentVolunteer = s_bl.Volunteer.Read(id);
+                //int id = CurrentVolunteer!.Id;
+                //CurrentVolunteer = null;
+                CurrentVolunteer = s_bl.Volunteer.Read(_id);
                 if (CurrentVolunteer!.InCall != null)
                 {
                     CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
