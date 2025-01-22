@@ -304,8 +304,30 @@ private class LocationResult
             return true;
         if (vol.VolAddress != null)
         {
-            double lat = (double)vol.Latitude - callLat, lon = (double)vol.Longitude - callLon;
-            return Math.Sqrt(Math.Pow(lat, 2) + Math.Pow(lon, 2)) <= vol.MaxDistance;
+            //double lat = (double)vol.Latitude - callLat;
+            //double lon = (double)vol.Longitude - callLon;
+            const double R = 6371; // רדיוס כדור הארץ בקילומטרים
+
+            // המרת מעלות לרדיאנים
+            double ToRadians(double angle) => Math.PI * angle / 180.0;
+
+            double phi1 = ToRadians((double)vol.Latitude);
+            double phi2 = ToRadians(callLat);
+
+            double deltaLat = ToRadians(callLat - (double)vol.Latitude);
+            double deltaLon = ToRadians(callLon - (double)vol.Longitude);
+
+            // חישוב המרחק בקירוב לשטח מישורי
+            double x = deltaLon * Math.Cos((phi1 + phi2) / 2);
+            double y = deltaLat;
+
+            double distance = R * Math.Sqrt(x * x + y * y);
+            return distance <= vol.MaxDistance;
+            //lat = Math.Pow(lat, 2);
+            //lon = Math.Pow(lon, 2);
+            //lat += lon;
+            //lat = Math.Sqrt(lat);
+            //return lat <= vol.MaxDistance;
         }
         return true;
     }

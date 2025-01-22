@@ -201,7 +201,7 @@
                     CornerRadius="25"
                     Margin="0"
                     Padding="20"
-                    BorderBrush="{StaticResource SecondaryColor}"
+                    BorderBrush="{StaticResource AyeletLightColor}"
                     BorderThickness="2" Grid.Column="1"
                     Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}">
 

@@ -24,26 +24,18 @@
         <local:MultiToIsEnabledConverter x:Key="MultiToIsEnabledConverterKey"/>
         <local:ConvertCallTypeToColor x:Key="ConvertCallTypeToColorKey" />
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
-        <local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>
+        <!--<local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>-->
         <local:ConvertDeleteToVisible x:Key="ConvertDeleteToVisibleKey"/>
         <local:FontSizeConverter x:Key="FontSizeConverterKey"/>
         <local:ConvertFontColor x:Key="ConvertFontColorKey"/>
         <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey" />
-        <local:MaxTimeForEndTimeConverter x:Key="MaxTimeForEndTimeConverterKey"/>
+        <!--<local:MaxTimeForEndTimeConverter x:Key="MaxTimeForEndTimeConverterKey"/>-->
         <local:TimeSpanToDateConverter x:Key="TimeSpanToDateConverterKey"/>
+        <local: TimeSpanToDaysConverter x:Key="TimeSpanToDaysConverterKey"/>
         <local:CallMultiConverter x:Key="CallMultiConverterKey"/>
 
 
         <!--#region Colors-->
-        <!-- Updated Color Palette -->
-        <SolidColorBrush x:Key="PrimaryColor" Color="#FF69B4"/>
-        <!-- Hot Pink -->
-        <SolidColorBrush x:Key="SecondaryColor" Color="#87CEEB"/>
-        <!-- Sky Blue -->
-        <SolidColorBrush x:Key="AccentColor" Color="#FFB6C1"/>
-        <!-- Light Pink -->
-        <SolidColorBrush x:Key="HighlightColor" Color="#98FB98"/>
-        <!-- Pale Green -->
         <SolidColorBrush x:Key="PressedColor" Color="#c8c7b5"/>
         <SolidColorBrush x:Key="Greeny" Color="#B7E1A3"/>
         <SolidColorBrush x:Key="HardestGreenColor" Color="#29600F"/>
@@ -79,7 +71,7 @@
             <Setter Property="Foreground" Value="#FF952828"/>
         </Style>-->
 
-        <!-- Base Style for Labels -->
+        <!-- nessecery -->
         <Style x:Key="BaseLabel" TargetType="Label">
             <Setter Property="HorizontalAlignment" Value="Center"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
@@ -92,26 +84,19 @@
         </Style>
 
         <!-- Header Label Style -->
-        <Style x:Key="HeaderLabel" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+        <!--<Style x:Key="HeaderLabel" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
     <Setter Property="FontFamily" Value="Comic Sans MS"/>
     <Setter Property="FontSize" Value="24"/>
     <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
     <Setter Property="FontWeight" Value="Bold"/>
-</Style>
+</Style>-->
 
-        <Style x:Key="TextBoxStyle" TargetType="TextBox">
+        <!--<Style x:Key="TextBoxStyle" TargetType="TextBox">
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
-
-        <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontFamily" Value="FrankRuehl"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>
+        </Style>-->
 
         <!--Neccesery-->
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
@@ -329,6 +314,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        
         <Style x:Key="ChooseButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -348,6 +335,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style x:Key="CancleButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
             <Setter Property="Template">
                     <Setter.Value>
@@ -385,36 +373,7 @@
         </Style>
 
         <Style x:Key="CenteredDataGridCellStyle" TargetType="DataGridCell">
-            <!--<Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="DataGridCell">
-                        <Grid Background="{TemplateBinding Background}"
-                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                              SnapsToDevicePixels="True">
-                            <ContentPresenter 
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                SnapsToDevicePixels="True"/>
-                            <ScrollViewer 
-                        HorizontalScrollBarVisibility="Auto" 
-                        VerticalScrollBarVisibility="Disabled"
-                        SnapsToDevicePixels="True">
-                                --><!--<TextBlock
-                            Text="{TemplateBinding Content}" 
-                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                            TextWrapping="NoWrap"
-                            TextTrimming="CharacterEllipsis" 
-                            SnapsToDevicePixels="True"/>--><!--
-                            </ScrollViewer>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>-->
+           
         </Style>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="{StaticResource Greeny}"/>

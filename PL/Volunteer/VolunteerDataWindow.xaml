@@ -92,8 +92,9 @@
                                 <ToolTip Width="200" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
                                    Foreground="{StaticResource AyeletHardColor}">
 
-                                    <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
-                                        <TextBlock TextWrapping="Wrap" Text="A strong password contains at least 8 characters,
+                                    <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
+                                        <TextBlock TextWrapping="Wrap" Text="A strong password contains:
+                                                                             at least 8 characters,
                                                                              an uppercase letter, a lowercase letter, a special symbol,
                                                                              and does not contain sequences of numbers or letters" FontSize="16"/>
                                     </Border>

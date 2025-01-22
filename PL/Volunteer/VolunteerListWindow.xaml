@@ -70,7 +70,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding FullName}" Header="Name" Width="*"/>
-                <DataGridTemplateColumn Header="Is Active" Width="*">
+                <DataGridTemplateColumn Header="Active?" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsEnabled="False" 
@@ -79,10 +79,10 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding HandleCalls}" Header="Handled" Width="*"/>
-                <DataGridTextColumn Binding="{Binding CancelCalls}" Header="Canceled" Width="*"/>
-                <DataGridTextColumn Binding="{Binding ExpiredCalls}" Header="Expired" Width="*"/>
-                <DataGridTextColumn Binding="{Binding CallId}" Header="Call ID" Width="*"/>
+                <DataGridTextColumn Binding="{Binding HandleCalls}" Header="Handled" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CancelCalls}" Header="Canceled" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding ExpiredCalls}" Header="Expired" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CallId}" Header="Call ID" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding InTreatment}" Header="Call Type" Width="*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">

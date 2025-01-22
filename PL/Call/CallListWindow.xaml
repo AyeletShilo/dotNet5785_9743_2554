@@ -79,7 +79,7 @@
                         <Binding Path="LeftTime" Converter="{StaticResource TimeSpanToStringConverterKey}" />
                     </DataGridTextColumn.Binding>
                 </DataGridTextColumn>
-                <DataGridTextColumn  Header="Complate At" Width="auto">
+                <DataGridTextColumn  Header="Complate At" Width="*">
                     <DataGridTextColumn.Binding>
                         <Binding Path="CompletionTime" Converter="{StaticResource TimeSpanToDateConverterKey}" />
                     </DataGridTextColumn.Binding>
