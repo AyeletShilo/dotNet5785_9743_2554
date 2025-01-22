@@ -58,5 +58,10 @@ namespace PL
             this.Hide();
 
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

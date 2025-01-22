@@ -83,63 +83,6 @@ namespace PL
                 Id = textBox.Text;
             }
         }
-        #region draft
-        // private string _pass;
-        //public 
-        //
-        //{
-        //    get { return (string)GetValue(IDProperty); }
-        //    set { SetValue(IDProperty, value); }
-        //}
-
-        ///// <summary>
-        ///// DependencyProperty
-        ///// </summary>
-        //public static readonly DependencyProperty IDProperty =
-        //    DependencyProperty.Register("IDInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
-
-        //public string PassInput
-        //{
-        //    get { return (string)GetValue(PasswordProperty); }
-        //    set { SetValue(PasswordProperty, value); }
-        //}
-
-        //public static readonly DependencyProperty PasswordProperty =
-        //    DependencyProperty.Register("PassInput", typeof(string), typeof(MainWindow), new PropertyMetadata(null));
-        //try
-        //{
-        //    //var textBox = sender as TextBox;
-        //    _id = int.Parse(textBox.Text);
-        //    user = s_bl.Volunteer.GetMyJob(_id);
-        //    if (user == BO.Role.Manager)
-        //    {
-        //        new ChoseWindow(_id).Show();
-        //        TextInput = null;
-        //        //Close();
-        //    }
-        //    else if (user == BO.Role.Volunteer)
-        //    {
-        //        new VolunteerForVolWindow(_id).Show();
-        //        Close();
-        //    }
-
-        //}
-        //catch (Exception ex)
-        //{
-        //    MessageBox.Show(ex.Message + " Please enter correct ID again:)", "Exception",
-        //        MessageBoxButton.OK, MessageBoxImage.Error);
-        //}
-
-
-        //private void Pass_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    var textBox = sender as TextBox;
-        //    if (textBox.Text.Length == 8)
-        //    {
-        //        PassInput = textBox.Text;
-        //    }
-        //}
-        #endregion
 
         /// <summary>
         /// Converting the password from window display to string

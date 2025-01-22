@@ -5,22 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="CallDescriptionWindow" Height="450" Width="450"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
-    <!--<Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>-->
+        Title="Description" Height="450" Width="450"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Background="{StaticResource CreamColor}">
+   
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="11*"/>
-            <RowDefinition Height="418*"/>
-            <RowDefinition Height="11*"/>
+            
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="11*"/>
-            <ColumnDefinition Width="782*"/>
-            <ColumnDefinition Width="11*"/>
-        </Grid.ColumnDefinitions>
+        <GroupBox Header="Description" Style="{StaticResource FormGroupBoxStyle}" Margin="20">
+            <!--<Image Source="{Binding DescriptionType, Converter={StaticResource DesForImageKey}}"/>-->
+        </GroupBox>
+        
         <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Description}" Margin="94,60,94,60"/>
     </Grid>
 </Window>
