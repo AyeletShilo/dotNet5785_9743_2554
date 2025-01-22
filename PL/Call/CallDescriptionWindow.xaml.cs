@@ -21,7 +21,7 @@ namespace PL.Call
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         public string Description { get; set; }
-        public CallDescriptionWindow(string desc)
+        public CallDescriptionWindow(string desc/*, BO.CallType type*/)
         {
             Description = desc;
             InitializeComponent();

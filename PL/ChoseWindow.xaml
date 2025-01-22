@@ -5,28 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="ChoseWindow" Height="250" Width="400"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        Title="Choose Window" Height="640" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Background="{StaticResource CreamColor}">
     <!--<Window.Background>
         <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
     </Window.Background>-->
     <Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="FontSize" Value="25" />
+        <!--<Style TargetType="Button">
+            <Setter Property="FontSize" Value="12" />
             <Setter Property="FontFamily" Value="Comic Sans MS" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="BorderBrush" Value="BlacK"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
+        </Style>-->
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height ="41*"/>
-            <RowDefinition Height ="147*"/>
-            <RowDefinition Height ="46*"/>
+            <RowDefinition Height ="Auto" MinHeight="592"/>
+            <RowDefinition Height ="Auto" MinHeight="40"/>
         </Grid.RowDefinitions>
-        <Button Content="Volunteer window" Height="86" Margin="41,32,0,0" Grid.Row="1" Width="128" VerticalAlignment="Top" Click="Volunteer_Click"/>
-        <Button Content="Main window" Height="90" Margin="223,30,0,0" Grid.Row="1" Width="123" VerticalAlignment="Top" Click="Button_AdminClick"/>
+        <Border Background="#CCFFDFEB" BorderBrush="{StaticResource HardestGreenColor}" CornerRadius="10" Margin="40,40,40,20" Padding="20" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Button Content="Volunteer window" Margin="10,5" Grid.Row="0" FontSize="50"
+                        Style="{StaticResource MainButtonStyle}"  Click="Volunteer_Click" Height="100"/>
+                <Button Content="Main window" Margin="10,5" Grid.Row="1" FontSize="50"
+                        Style="{StaticResource MainButtonStyle}" Click="Button_AdminClick" Height="100"/>
+                <Image Source="/LOGO (3).png" Grid.Row="2"/>
+            </Grid>
+
+        </Border>
+
+
+        <Button Style="{StaticResource BackArrowButton}"
+                        Click="BackButton_Click"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Panel.ZIndex="1" Grid.Row="0" Height="40" Width="40" Margin="20,0,0,0" RenderTransformOrigin="0.525,-0.224"/>
     </Grid>
 </Window>
