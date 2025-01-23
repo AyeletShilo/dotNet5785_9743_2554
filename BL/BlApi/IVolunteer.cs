@@ -12,4 +12,5 @@ public interface IVolunteer : IObservable //stage 5
     Role GetMyJob(int id, string? password);
     void UpdateAddress(BO.Volunteer vol, string? newAdd);
     double? Dis(string? volAddress, string callAddress);
+    string MakeStrongPassword();
 }

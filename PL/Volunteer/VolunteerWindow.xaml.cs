@@ -28,7 +28,7 @@ namespace PL.Volunteer
             _adminId = adminId;
             CurrentVolunteer = (id != 0) ? s_bl.Volunteer.Read(id)!
                 : new BO.Volunteer()
-                { Id = 0, FullName = "", PhoneNumber = "", Email = "" };
+                { Id = 0, FullName = "", PhoneNumber = "", Email = "", Password = s_bl.Volunteer.MakeStrongPassword() };
             _preWind = preWind;
         }
 

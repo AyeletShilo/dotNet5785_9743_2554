@@ -18,18 +18,19 @@
     <None Remove="Call\LOGO %282%29.png" />
     <None Remove="delete %281%29.png" />
     <None Remove="ICON.ico" />
-    <None Remove="Image\Background %281%29.png" />
-    <None Remove="Image\Background %282%29.png" />
-    <None Remove="Image\background.png" />
+    <None Remove="Image\cancel3.png" />
+    <None Remove="Image\check.png" />
+    <None Remove="Image\cleaning.png" />
+    <None Remove="Image\edit %282%29.png" />
     <None Remove="Image\editHope.png" />
-    <None Remove="Image\GrandMa.png" />
     <None Remove="Image\GrandMa.svg" />
+    <None Remove="Image\repairing.png" />
+    <None Remove="Image\shopping.png" />
+    <None Remove="Image\talking.png" />
+    <None Remove="Image\tech.png" />
     <None Remove="LOGO %283%29.png" />
     <None Remove="LOGO %284%29.png" />
     <None Remove="plus.png" />
-    <None Remove="Volunteer\cancel3.png" />
-    <None Remove="Volunteer\check.png" />
-    <None Remove="Volunteer\editHope.png" />
     <None Remove="Volunteer\GrandMa.png" />
   </ItemGroup>
 
@@ -39,30 +40,51 @@
 
   <ItemGroup>
     <Resource Include="BigIcon.png" />
-    <Resource Include="delete (1).png" />
-    <Resource Include="ICON.ico" />
-    <Resource Include="cancle.png" />
-    <Resource Include="Image\Background (1).png">
+    <Resource Include="Image\delete %281%29.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Image\Background (2).png">
+    <Resource Include="Image\cleaning.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Image\background.png">
+    <Resource Include="Image\edit (2).png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\ICON.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\cancle.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\cancel3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\check.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\editHope.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Image\GrandMa.png">
+    <Resource Include="Image\LOGO %283%29.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="LOGO (3).png" />
-    <Resource Include="LOGO (4).png" />
-    <Resource Include="plus.png" />
-    <Resource Include="Volunteer\cancel3.png" />
-    <Resource Include="Volunteer\check.png" />
-    <Resource Include="Volunteer\editHope.png" />
+    <Resource Include="Image\LOGO %284%29.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\repairing.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\shopping.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\talking.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\tech.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\plus.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Volunteer\Images\GrandMa.png" />
   </ItemGroup>
 

@@ -99,7 +99,7 @@ namespace PL
         {
             if (e.Key == Key.Enter)
             {
-                // העבר את המוקד לתיבת הטקסט הבאה
+                // move to the next text box
                 var textBox = sender as TextBox;
                 textBox?.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
             }

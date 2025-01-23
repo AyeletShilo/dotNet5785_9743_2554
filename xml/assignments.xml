@@ -25,14 +25,6 @@
     <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
   <Assignment>
-    <Id>7</Id>
-    <CallId>14</CallId>
-    <VolunteerId>212873061</VolunteerId>
-    <InterTime>2024-12-30T03:23:18.020587+02:00</InterTime>
-    <EndTime xsi:nil="true" />
-    <EndTreatment xsi:nil="true" />
-  </Assignment>
-  <Assignment>
     <Id>8</Id>
     <CallId>46</CallId>
     <VolunteerId>356762062</VolunteerId>
@@ -391,5 +383,13 @@
     <InterTime>2025-01-16T20:37:18.3264055+02:00</InterTime>
     <EndTime>2026-02-19T19:10:17</EndTime>
     <EndTreatment>SelfCancel</EndTreatment>
+  </Assignment>
+  <Assignment>
+    <Id>7</Id>
+    <CallId>14</CallId>
+    <VolunteerId>212873061</VolunteerId>
+    <InterTime>2024-12-30T03:23:18.020587+02:00</InterTime>
+    <EndTime>2026-02-19T19:10:17</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
 </ArrayOfAssignment>

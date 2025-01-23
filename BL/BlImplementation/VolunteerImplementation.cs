@@ -22,17 +22,17 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             VolunteerManager.CheckLogic(boVolunteer);
 
             double[] AddressCoordinate;
-            if (boVolunteer.Address != "" && boVolunteer.Address !=null )
+            if (boVolunteer.Address != "" && boVolunteer.Address != null)
                 AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address);
             else
             {
-                AddressCoordinate= new double[2];
+                AddressCoordinate = new double[2];
                 AddressCoordinate[0] = 0;
                 AddressCoordinate[1] = 0;
             }
 
             DO.Volunteer doVolunteer =
-              new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, boVolunteer.Password,(DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
+              new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, boVolunteer.Password, (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
               boVolunteer.Address, AddressCoordinate[0], AddressCoordinate[1], boVolunteer.MaxDis);
 
 
@@ -82,7 +82,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <param name="id">volunteer Id</param>
     /// <returns>volunteer gob</returns>
     /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the volunteer you want does not exist in the database</exception>
-    public BO.Role GetMyJob(int id,string? password)
+    public BO.Role GetMyJob(int id, string? password)
     {
         BO.Volunteer result = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist.");
         if (password != result.Password)
@@ -115,7 +115,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                 Longitude = doVolunteer.Longitude,
                 Job = (BO.Role)doVolunteer.Job,
                 IsActive = doVolunteer.Active,
-                MaxDis = doVolunteer.MaxDistance != null? Math.Round(doVolunteer.MaxDistance.Value,4) : null,
+                MaxDis = doVolunteer.MaxDistance != null ? Math.Round(doVolunteer.MaxDistance.Value, 4) : null,
                 Distance = (BO.DisType)doVolunteer.Distance,
                 HandleCalls = volAssignments.Count(a => a.EndTreatment == DO.AssignmentEnum.TakenCare),
                 CancelCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelAdmin || a.EndTreatment == DO.AssignmentEnum.SelfCancel)),
@@ -234,6 +234,18 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         if (volAddress == null)
             return null;
         return VolunteerManager.CalculateDis(volAddress, callAddress);
+    }
+
+    public string MakeStrongPassword()
+    {
+        Random s_rand = new();
+        string password = s_rand.Next(10000, 100000).ToString();
+        char A = (char)(s_rand.Next(65, 90));
+        char a = (char)(s_rand.Next(97, 122));
+        int index = s_rand.Next(0, 20);
+        string sign = "!@#$%^*(),.?\"':{}|<>";
+        password= password + sign[index] + A + a;
+        return new string(password.OrderBy(x => s_rand.Next()).ToArray());
     }
     #region Stage 5
     public void AddObserver(Action listObserver) =>

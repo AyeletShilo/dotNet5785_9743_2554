@@ -24,14 +24,15 @@
         <local:MultiToIsEnabledConverter x:Key="MultiToIsEnabledConverterKey"/>
         <local:ConvertCallTypeToColor x:Key="ConvertCallTypeToColorKey" />
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
-        <!--<local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>-->
+        <local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>
+        <local:ConvertCallTypeToPitcher x:Key="ConvertCallTypeToPitcherKey"/>
         <local:ConvertDeleteToVisible x:Key="ConvertDeleteToVisibleKey"/>
         <local:FontSizeConverter x:Key="FontSizeConverterKey"/>
         <local:ConvertFontColor x:Key="ConvertFontColorKey"/>
         <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey" />
         <!--<local:MaxTimeForEndTimeConverter x:Key="MaxTimeForEndTimeConverterKey"/>-->
         <local:TimeSpanToDateConverter x:Key="TimeSpanToDateConverterKey"/>
-        <local: TimeSpanToDaysConverter x:Key="TimeSpanToDaysConverterKey"/>
+        <local:TimeSpanToDaysConverter x:Key="TimeSpanToDaysConverterKey"/>
         <local:CallMultiConverter x:Key="CallMultiConverterKey"/>
 
 
@@ -271,7 +272,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+        <!--<Style x:Key="PrimaryButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#4CAF50"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Padding" Value="10"/>
@@ -285,7 +286,7 @@
             <Setter Property="Padding" Value="10"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="BorderBrush" Value="#D32F2F"/>
-        </Style>
+        </Style>-->
         
         <Style x:Key="BasePhotoButton" TargetType="Button">
             <Setter Property="Width" Value="30"/>
@@ -301,7 +302,7 @@
                         <Grid>
                             <Ellipse x:Name="circle" 
                              Fill="{StaticResource AyeletHardColor}"/>
-                            <Image Source="/delete (1).png">
+                            <Image Source="/Image/delete (1).png">
                             </Image>
                         </Grid>
 
@@ -323,7 +324,7 @@
                         <Grid>
                             <Ellipse x:Name="circle" 
                              Fill="{StaticResource AyeletHardColor}"/>
-                            <Image Source="/plus.png"/>
+                            <Image Source="/Image/plus.png"/>
                         </Grid>
 
                         <ControlTemplate.Triggers>
@@ -342,7 +343,7 @@
                         <ControlTemplate TargetType="Button">
                             <Grid>
                                 <Ellipse x:Name="circle" Fill="{StaticResource AyeletHardColor}"/>
-                                <Image Source="/cancle.png"/>
+                                <Image Source="/Image/cancle.png"/>
                             </Grid>
 
                             <ControlTemplate.Triggers>
@@ -354,6 +355,24 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+        <Style x:Key="EditButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Ellipse x:Name="circle" Fill="{StaticResource AyeletHardColor}"/>
+                            <Image Source="/Image/edit (2).png"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Fill" TargetName="circle" Value="{StaticResource HardGreenColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <Style x:Key="DataStyle" TargetType="DataGrid">
             <Setter Property="IsReadOnly" Value="true"/>

@@ -155,20 +155,6 @@
     <MaxDistance>1.3807374245677195</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>356762062</Id>
-    <FullName>Ran Amitz</FullName>
-    <PhoneNumber>0539549383</PhoneNumber>
-    <Email>rAmitz@g.jct.ac.il</Email>
-    <Password>26592:Ih</Password>
-    <Job>Manager</Job>
-    <Active>true</Active>
-    <Distance>Car</Distance>
-    <VolAddress>Ha-Sigalit 7,Jerusalem, Israel</VolAddress>
-    <Latitude>31.7401008</Latitude>
-    <Longitude>35.1966955</Longitude>
-    <MaxDistance>3.2504307906531293</MaxDistance>
-  </Volunteer>
-  <Volunteer>
     <Id>354400996</Id>
     <FullName>Nir Kuda</FullName>
     <PhoneNumber>0525665384</PhoneNumber>
@@ -197,20 +183,6 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>212873061</Id>
-    <FullName>Amit Nakeh</FullName>
-    <PhoneNumber>0588653456</PhoneNumber>
-    <Email>amit234@gmail.com</Email>
-    <Password>99976$Gv</Password>
-    <Job>Manager</Job>
-    <Active>true</Active>
-    <Distance>Walking</Distance>
-    <VolAddress>Ha-Narkis 5,Jerusalem, Israel</VolAddress>
-    <Latitude>31.738579700000003</Latitude>
-    <Longitude>34.97567059514735</Longitude>
-    <MaxDistance />
-  </Volunteer>
-  <Volunteer>
     <Id>216206953</Id>
     <FullName>Jonathan Shapira</FullName>
     <PhoneNumber>0538928359</PhoneNumber>
@@ -223,5 +195,33 @@
     <Latitude>31.7882405</Latitude>
     <Longitude>35.2259816</Longitude>
     <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>212873061</Id>
+    <FullName>Amit Nakeh</FullName>
+    <PhoneNumber>0588653456</PhoneNumber>
+    <Email>amit234@gmail.com</Email>
+    <Password>99976$Gv</Password>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Walking</Distance>
+    <VolAddress>Al-Wad 5,Jerusalem, Israel</VolAddress>
+    <Latitude>31.804254</Latitude>
+    <Longitude>35.1137682</Longitude>
+    <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>356762062</Id>
+    <FullName>Ran Amitz</FullName>
+    <PhoneNumber>0539549383</PhoneNumber>
+    <Email>rAmitz@g.jct.ac.il</Email>
+    <Password>26592:Ih</Password>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Ha-Sigalit 7,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7401008</Latitude>
+    <Longitude>35.1966955</Longitude>
+    <MaxDistance>3.2504</MaxDistance>
   </Volunteer>
 </ArrayOfVolunteers>

@@ -223,12 +223,7 @@ public static class Initialization
             //toSwitch = s_rand.NextDouble();
             Role job = (s_rand.NextDouble() > 0.8) ? Role.Manager : Role.Volunteer;
             string? volAddress = Addresses[i++];
-            string password = s_rand.Next(10000, 100000).ToString();
-            char A = (char)(s_rand.Next(65, 90));
-            char a = (char)(s_rand.Next(97, 122));
-            int index = s_rand.Next(0, 20);
-            string sign = "!@#$%^*(),.?\"':{}|<>";
-            password = password + sign[index] + A + a;
+            string password = MakePassword();
             //toSwitch = s_rand.Next(2);
             bool active = (s_rand.NextDouble() < 0.9) ? true : false;
             double? maxDistance = s_rand.Next(2) == 0 ? null : s_rand.NextDouble() * 5;
@@ -331,5 +326,15 @@ public static class Initialization
         var assignList = s_dal.Assignment.ReadAll()
             .FirstOrDefault(assignment => (assignment.VolunteerId == id) && assignment.EndTime == null);
         return assignList != null;
+    }
+    private static string MakePassword()
+    {
+        string password = s_rand.Next(10000, 100000).ToString();
+        char A = (char)(s_rand.Next(65, 90));
+        char a = (char)(s_rand.Next(97, 122));
+        int index = s_rand.Next(0, 20);
+        string sign = "!@#$%^*(),.?\"':{}|<>";
+        password = password + sign[index] + A + a;
+        return new string(password.OrderBy(x => s_rand.Next()).ToArray());
     }
 }

@@ -11,21 +11,16 @@
         Loaded="Window_Loaded"
         Background="{StaticResource CreamColor}">
 
-    <Window.Resources>
-        <Style TargetType="Label" BasedOn="{StaticResource LabelStyle}"/>
-        <Style TargetType="TextBox" BasedOn="{StaticResource TextBoxStyle}"/>
-        <Style TargetType="ComboBox" BasedOn="{StaticResource  ComboBoxStyle}"/>
-    </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="67*"/>
             <RowDefinition Height="Auto" MinHeight="314"/>
-            <RowDefinition Height="105*"/>
-            <RowDefinition Height="138*"/>
+            <RowDefinition Height="151*"/>
+            <RowDefinition Height="92*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="1" Padding="10" Background="{StaticResource AyeletLightColor}" Margin="30,30,30,30" CornerRadius="8">
-            
+
             <!-- Personal Details Section -->
             <GroupBox Header="Personal Details" Style="{StaticResource FormGroupBoxStyle}" Margin="10,5,10,5" >
                 <Grid Margin="5">
@@ -62,7 +57,7 @@
                             </Binding >
                         </TextBox.Text>
                     </TextBox>
-                             
+
 
                     <Label Grid.Row="2" Grid.Column="0"
                            Content="Email:" 
@@ -76,7 +71,7 @@
                             </Binding >
                         </TextBox.Text>
                     </TextBox>
-                             
+
                     <Label Grid.Row="0" Grid.Column="3"
                            Content="Password:" 
                            Style="{StaticResource FormLabelStyle}"/>
@@ -89,20 +84,20 @@
                             </Binding >
                         </TextBox.Text>
                         <TextBox.ToolTip>
-                                <ToolTip Width="200" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
+                            <ToolTip Width="200" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
                                    Foreground="{StaticResource AyeletHardColor}">
 
-                                    <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
-                                        <TextBlock TextWrapping="Wrap" Text="A strong password contains:
+                                <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
+                                    <TextBlock TextWrapping="Wrap" Text="A strong password contains:
                                                                              at least 8 characters,
                                                                              an uppercase letter, a lowercase letter, a special symbol,
                                                                              and does not contain sequences of numbers or letters" FontSize="16"/>
-                                    </Border>
-                                </ToolTip>
-                            </TextBox.ToolTip>
-                        
+                                </Border>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+
                     </TextBox>
-                             
+
                     <Label Grid.Row="1" Grid.Column="3"
                            Content="Address:" 
                            Style="{StaticResource FormLabelStyle}"/>
@@ -111,7 +106,7 @@
                              Style="{StaticResource FormTextBoxStyle}"/>
                     <!--<TextBlock Grid.Row="4" 
           Text="{Binding CurrentVolunteer.Job}" />-->
-                    
+
                     <Label Grid.Row="2" Grid.Column="3"
                            Content="Max distance from call:" 
                            Style="{StaticResource FormLabelStyle}"/>
@@ -124,7 +119,7 @@
                             </Binding >
                         </TextBox.Text>
                     </TextBox>
-                             
+
                     <!--<Label Content="Active Volunteer?" Grid.Row="3" Grid.Column="3"  Margin="0,10,0,16"/>-->
                     <CheckBox Grid.Row="3" Grid.Column="4" Content="Active Volunteer?"
                               IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
@@ -139,12 +134,12 @@
         <Button Grid.Row="3" Content="Update" 
                 Click="Update_Click"
                 Style="{StaticResource MainButtonStyle}" Margin="270,10,270,20"/>
-        
+
         <Button Style="{StaticResource BackArrowButton}"
                 Click="BackButton_Click"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="10,10,0,0"
-                Panel.ZIndex="1"/>
+                Panel.ZIndex="1" Height="40" Grid.RowSpan="2" Width="40"/>
     </Grid>
 </Window>

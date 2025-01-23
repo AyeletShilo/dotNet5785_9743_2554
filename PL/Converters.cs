@@ -250,13 +250,13 @@ class ConvertCallTypeToPitcher : IValueConverter
         switch (callType)
         {
             case BO.CallType.Repairing:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/reapairing.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/Image/repairing.png"));
             case BO.CallType.Talking:
                 return new BitmapImage(new Uri("pack://application:,,,/Image/talking.png"));
             case BO.CallType.Cleaning:
                 return new BitmapImage(new Uri("pack://application:,,,/Image/cleaning.png"));
             case BO.CallType.TechnologyHelp:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/technologic.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/Image/tech.png"));
             case BO.CallType.Shopping:
                 return new BitmapImage(new Uri("pack://application:,,,/Image/Shopping.png"));
             default:
@@ -310,7 +310,7 @@ public class ConvertStatusToColor : IValueConverter
         switch (callType)
         {
             case BO.CallListStatus.Opened:
-                return (SolidColorBrush)Application.Current.FindResource("Color1");
+                return Brushes.Yellow /*(SolidColorBrush)Application.Current.FindResource("Color1")*/;
             case BO.CallListStatus.InTreatment:
                 return (SolidColorBrush)Application.Current.FindResource("Color2");
             case BO.CallListStatus.InTreatmentInRisk:

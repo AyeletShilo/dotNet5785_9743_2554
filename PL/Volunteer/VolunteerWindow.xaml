@@ -98,7 +98,8 @@
                            Style="{StaticResource FormLabelStyle}"/>
                         <TextBox Grid.Column="4" Grid.Row="2" 
                              Style="{StaticResource FormTextBoxStyle}"
-                             Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"/>
+                             Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" ScrollViewer.PanningMode="HorizontalOnly"/>
+
 
                         <Label Grid.Row="3" Grid.Column="3"
                            Content="Max Distance:" 
@@ -124,17 +125,14 @@
                                     </Binding.ValidationRules >
                                 </Binding >
                             </TextBox.Text>
-                            <!--<TextBox.ToolTip>
-                                <Binding Path="(Validation.Errors)[0].ErrorContent" RelativeSource="{RelativeSource Self}" />
-                            </TextBox.ToolTip>-->
                             <TextBox.ToolTip>
                                 <ToolTip Width="200" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
                                          Foreground="{StaticResource AyeletHardColor}">
                                     
-                                    <Border BorderBrush="Gray" BorderThickness="1" Padding="5">
+                                    <Border BorderThickness="1" Padding="5">
                                         <TextBlock TextWrapping="Wrap" Text="A strong password contains at least 8 characters,
                                          an uppercase letter, a lowercase letter, a special symbol,
-                                         and does not contain sequences of numbers or letters" FontSize="16"/>
+                                         and does not contain sequences of numbers or letters" FontSize="12" FontWeight="Light"/>
                                     </Border>
                                     </ToolTip>
                             </TextBox.ToolTip>
@@ -241,7 +239,16 @@
                         <TextBox Grid.Row="3" Grid.Column="1"
                              Text="{Binding CurrentVolunteer.InCall.CallAddress}" 
                              Style="{StaticResource FormTextBoxStyle}" 
-                             IsReadOnly="True"/>
+                             IsReadOnly="True">
+                            <TextBox.ToolTip>
+                                <ToolTip Width="Auto" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
+                                         Foreground="{StaticResource AyeletHardColor}">
+                                    <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
+                                        <TextBlock TextWrapping="Wrap" Text="{Binding CurrentVolunteer.InCall.CallAddress, Mode=OneWay}" FontSize="14"/>
+                                    </Border>
+                                </ToolTip>
+                            </TextBox.ToolTip>
+                        </TextBox>
 
                         <Label  Grid.Row="0" Grid.Column="3"
                             Content="Status:" 
@@ -263,7 +270,7 @@
                            Content="Open Time:" 
                            Style="{StaticResource FormLabelStyle}"/>
                         <TextBox Grid.Row="2" Grid.Column="4"
-                             Text="{Binding CurrentVolunteer.InCall.OpenTime}" 
+                             Text="{Binding CurrentVolunteer.InCall.OpenTime, StringFormat='{}{0:dd/MM/yy hh:mm}'}" 
                              Style="{StaticResource FormTextBoxStyle}" 
                              IsReadOnly="True"/>
 
@@ -271,7 +278,7 @@
                            Content="Entry Time:" 
                            Style="{StaticResource FormLabelStyle}"/>
                         <TextBox Grid.Row="3" Grid.Column="4"
-                             Text="{Binding CurrentVolunteer.InCall.EntryTime}" 
+                             Text="{Binding CurrentVolunteer.InCall.EntryTime, StringFormat='{}{0:dd/MM/yy hh:mm}'}" 
                              Style="{StaticResource FormTextBoxStyle}" 
                              IsReadOnly="True"/>
                     </Grid>

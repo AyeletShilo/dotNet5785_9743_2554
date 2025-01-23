@@ -118,7 +118,7 @@ namespace PL.Call
         private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (SelectedCall != null)
-                new CallDescriptionWindow(SelectedCall.Description).ShowDialog();
+                new CallDescriptionWindow(SelectedCall.Description, SelectedCall.CallType).ShowDialog();
         }
 
         /// <summary>

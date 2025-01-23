@@ -5,18 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Call"
         mc:Ignorable="d"
-        Title="Description" Height="450" Width="450"
+        Title="Description" Height="350" Width="450"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="{StaticResource CreamColor}">
    
     <Grid>
         <Grid.RowDefinitions>
-            
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Description" Style="{StaticResource FormGroupBoxStyle}" Margin="20">
+        <GroupBox Header="{Binding CallType}" Style="{StaticResource FormGroupBoxStyle}" Margin="20">
+            <TextBlock Text="{Binding Description}" Margin="20" TextWrapping="Wrap"/>
             <!--<Image Source="{Binding DescriptionType, Converter={StaticResource DesForImageKey}}"/>-->
         </GroupBox>
-        
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Description}" Margin="94,60,94,60"/>
+        <Image Source="{Binding CallType, Converter={StaticResource ConvertCallTypeToPitcherKey}}" Margin="120,171,120,19" Grid.RowSpan="2"/>
+
+
     </Grid>
 </Window>

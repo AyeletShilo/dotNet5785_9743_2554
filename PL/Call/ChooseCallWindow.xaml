@@ -59,14 +59,14 @@
                    CellStyle="{StaticResource CenteredDataGridCellStyle}">
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="2*" >
+                <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="Auto" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="FontWeight" Value="Bold"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="2*">
+                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="Auto">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="Background" Value="{Binding Path = CallType, Converter={StaticResource ConvertCallTypeToColorKey}}" />
@@ -74,10 +74,10 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="3*"/>
-                <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="2*"/>
-                <DataGridTextColumn Binding="{Binding MaxCloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="2*"/>
-                <DataGridTextColumn Binding="{Binding VolDistance}" Header="Distance" Width="3*"/>
+                <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="4*"/>
+                <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open at" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding MaxCloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="3*"/>
+                <DataGridTextColumn Binding="{Binding VolDistance}" Header="Distance" Width="2*"/>
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

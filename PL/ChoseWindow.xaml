@@ -8,9 +8,8 @@
         Title="Choose Window" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="{StaticResource CreamColor}">
-    <!--<Window.Background>
-        <ImageBrush ImageSource="C:\Users\Administrator\source\repos\newOne\PL\Image\Background (2).png"/>
-    </Window.Background>-->
+   
+    
     <Window.Resources>
         <!--<Style TargetType="Button">
             <Setter Property="FontSize" Value="12" />
@@ -37,7 +36,7 @@
                         Style="{StaticResource MainButtonStyle}"  Click="Volunteer_Click" Height="100"/>
                 <Button Content="Main window" Margin="10,5" Grid.Row="1" FontSize="50"
                         Style="{StaticResource MainButtonStyle}" Click="Button_AdminClick" Height="100"/>
-                <Image Source="/LOGO (3).png" Grid.Row="2"/>
+                <Image Source="/Image/LOGO (3).png" Grid.Row="2"/>
             </Grid>
 
         </Border>
