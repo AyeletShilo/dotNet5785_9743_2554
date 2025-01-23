@@ -1,21 +1,34 @@
 ﻿
+using System.Runtime.CompilerServices;
+
 namespace Dal;
 
 internal class Config
 {
     internal const int startNextCallId = 1;
     private static int NextCallId = startNextCallId;
-    internal static int nextCallId { get => NextCallId++; }
+
+    internal static int nextCallId 
+    {
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get => NextCallId++; 
+    }
 
 
     internal const int startNextAssignmentId = 1;
     private static int NextAssignmentId = startNextAssignmentId;
-    internal static int nextAssignmentId { get => NextAssignmentId++; }
+    internal static int nextAssignmentId 
+    {
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        get => NextAssignmentId++; 
+    }
 
     internal static DateTime Clock { get; set; } = DateTime.Now;
     internal static TimeSpan RiskRange { get; set; }
 
-   // private TimeSpan RiskRange= TimeSpan.Zero;
+    // private TimeSpan RiskRange= TimeSpan.Zero;
+
+    [MethodImpl(MethodImplOptions.Synchronized)]
     internal static void Reset()
     {
         NextCallId = startNextCallId;

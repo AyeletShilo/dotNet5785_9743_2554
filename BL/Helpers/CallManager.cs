@@ -337,57 +337,11 @@ private class LocationResult
     /// processing has not yet finished - and closes them with a completion type of "Expired":
     /// </summary>
     /// <param name="newClock">the time of the update</param>
-    //internal static void UpdateExpiredCalls(DateTime oldClock, DateTime newClock)
-    //{
-    //    var calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock);
-    //    bool assignUpdated = false;  //stage 5
-    //    Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
-    //    IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate);
-
-    //    if (callsToUp.Any())
-    //    {
-    //        foreach (var call in callsToUp)
-    //        {
-    //            if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
-    //            {
-    //                assignUpdated = true; //stage 5
-    //                s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
-    //                Observers.NotifyItemUpdated(call.Id); //stage 5
-    //                #region Are we need to update BO.Call??
-    //                //call.CallAssignments.Add(new BO.CallAssignInList
-    //                //{
-    //                //    VolunteerId = 0,
-    //                //    VolunteerName = null,
-    //                //    InterTime = newClock,
-    //                //    EndTime = newClock,
-    //                //    EndTreatment = EndTreatment.CancelExpired
-    //                //});
-    //                #endregion
-    //            }
-    //            else//if(call.CallAssignments.Last().EndTime==null)
-    //            {
-    //                assignUpdated = true;
-    //                DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); //Controlled Null
-    //                s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
-    //                Observers.NotifyItemUpdated(assignToUp.Id); //stage 5
-    //                Observers.NotifyItemUpdated(call.Id); //stage 5
-
-    //                //call.CallAssignments.Last().EndTime = newClock;
-    //                //call.CallAssignments.Last().EndTreatment = EndTreatment.CancelExpired;
-    //            }
-    //        }
-    //    }
-
-    //    bool timeChanged = oldClock != newClock; //stage 5
-    //    if (timeChanged || assignUpdated)
-    //        Observers.NotifyListUpdated(); //stage 5
-    //}
-
     internal static void UpdateExpiredCalls(DateTime oldClock, DateTime newClock)
     {
         var calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock);
         bool assignUpdated = false;
-        bool listUpdated = false;
+        //bool listUpdated = false;
 
         Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
         IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate);
@@ -397,14 +351,14 @@ private class LocationResult
             if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
             {
                 assignUpdated = true;
-                listUpdated = true;
+                //listUpdated = true;
                 s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
                 Observers.NotifyItemUpdated(call.Id);
             }
             else
             {
                 assignUpdated = true;
-                listUpdated = true;
+                //listUpdated = true;
                 DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id);
                 s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
                 Observers.NotifyItemUpdated(assignToUp.Id);
@@ -412,7 +366,7 @@ private class LocationResult
             }
         }
 
-        if (oldClock != newClock || listUpdated)
+        if (oldClock != newClock || assignUpdated)
         {
             Observers.NotifyListUpdated();
         }

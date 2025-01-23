@@ -27,7 +27,14 @@ public class BlXMLFileLoadCreateException : Exception
 }
 
 
+
 #region Bl Logic Exception
+
+[Serializable]
+public class BLTemporaryNotAvailableException : Exception
+{
+    public BLTemporaryNotAvailableException(string? message) : base(message) { }
+}
 
 [Serializable]
 public class BlIntegrityOfValuesException : Exception

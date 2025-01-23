@@ -124,7 +124,7 @@
                     Background="{StaticResource AyeletLightColor}"
                     CornerRadius="8"
                     Padding="5" Margin="0,0,20,20" Panel.ZIndex="1"
-                    Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}}">
+                    Visibility="{Binding CurrentVolunteer.InCall, Converter={StaticResource NullToVisibilityConverterKey}, Mode=TwoWay , NotifyOnValidationError=true,  ValidatesOnExceptions=true}">
                 <GroupBox Header="{Binding CurrentCall.Id, StringFormat='Current Call: {0} 📞'}" Margin="5" Padding="10" Grid.Row="1" Style="{StaticResource FormGroupBoxStyle}">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -154,11 +154,11 @@
                             </DockPanel>
                             <DockPanel Margin="0,10">
                                 <TextBlock Text="Open Time: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
-                                <TextBlock Text="{Binding CurrentCall.OpenTime}"/>
+                                <TextBlock Text="{Binding CurrentCall.OpenTime, StringFormat='{}{0:dd/MM/yy hh:mm}'}"/>
                             </DockPanel>
                             <DockPanel Margin="0,10">
                                 <TextBlock Text="Open Until: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
-                                <TextBlock Text="{Binding CurrentCall.MaxCloseTime}"/>
+                                <TextBlock Text="{Binding CurrentCall.MaxCloseTime, StringFormat='{}{0:dd/MM/yy hh:mm}'}"/>
                             </DockPanel>
                             <DockPanel Margin="0,10">
                                 <TextBlock Text="Status: " FontWeight="Bold" Style="{StaticResource TextBlockStyle}"/>
@@ -168,7 +168,7 @@
 
 
                         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,2">
-                            <TextBlock Text="Description:" FontWeight="Bold" Margin="20,10" Height="24"/>
+                            <TextBlock Text="Description:" FontWeight="Bold" Margin="20,10,20,0" Height="24"/>
                             <TextBlock Text="{Binding CurrentCall.Description}"
                                        TextWrapping="Wrap"
                                        Margin="20,0" Height="43"/>

@@ -78,6 +78,29 @@ public class ConvertUpdateDetails : IValueConverter
                 return false;
             default: return true;
         }
+
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException("ConvertBack is not implemented");
+    }
+}
+
+public class ConvertUpdateEnable : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        BO.CallStatus status = (BO.CallStatus)value;
+        switch (status)
+        {
+            case BO.CallStatus.Opened:
+                return true;
+            case BO.CallStatus.OpenInRisk:
+                return true;
+            default: return false;
+        }
+
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

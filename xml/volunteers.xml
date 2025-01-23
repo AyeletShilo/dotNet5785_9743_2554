@@ -113,20 +113,6 @@
     <MaxDistance>0.4633976975931031</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>279082648</Id>
-    <FullName>Nurit Lady</FullName>
-    <PhoneNumber>0505693270</PhoneNumber>
-    <Email>perach@g.jct.ac.il</Email>
-    <Password>76052@Pf</Password>
-    <Job>Volunteer</Job>
-    <Active>true</Active>
-    <Distance>Walking</Distance>
-    <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
-    <Latitude>31.7394234</Latitude>
-    <Longitude>35.1827337</Longitude>
-    <MaxDistance>0.1188426750951932</MaxDistance>
-  </Volunteer>
-  <Volunteer>
     <Id>362557803</Id>
     <FullName>Beti Bam</FullName>
     <PhoneNumber>0583479488</PhoneNumber>
@@ -183,20 +169,6 @@
     <MaxDistance />
   </Volunteer>
   <Volunteer>
-    <Id>216206953</Id>
-    <FullName>Jonathan Shapira</FullName>
-    <PhoneNumber>0538928359</PhoneNumber>
-    <Email>jShapira@walla.co.il</Email>
-    <Password>73566@Kl</Password>
-    <Job>Manager</Job>
-    <Active>true</Active>
-    <Distance>Car</Distance>
-    <VolAddress>Shmuel Hanavi 21, Jerusalem, Israel</VolAddress>
-    <Latitude>31.7882405</Latitude>
-    <Longitude>35.2259816</Longitude>
-    <MaxDistance />
-  </Volunteer>
-  <Volunteer>
     <Id>212873061</Id>
     <FullName>Amit Nakeh</FullName>
     <PhoneNumber>0588653456</PhoneNumber>
@@ -223,5 +195,33 @@
     <Latitude>31.7401008</Latitude>
     <Longitude>35.1966955</Longitude>
     <MaxDistance>3.2504</MaxDistance>
+  </Volunteer>
+  <Volunteer>
+    <Id>279082648</Id>
+    <FullName>Nurit Lady</FullName>
+    <PhoneNumber>0505693270</PhoneNumber>
+    <Email>perach@g.jct.ac.il</Email>
+    <Password>76052@Pf</Password>
+    <Job>Volunteer</Job>
+    <Active>true</Active>
+    <Distance>Walking</Distance>
+    <VolAddress>Dagan 5,Jerusalem, Israel</VolAddress>
+    <Latitude>31.7394234</Latitude>
+    <Longitude>35.1827337</Longitude>
+    <MaxDistance>0.1188</MaxDistance>
+  </Volunteer>
+  <Volunteer>
+    <Id>216206953</Id>
+    <FullName>Jonathan Shapira</FullName>
+    <PhoneNumber>0538928359</PhoneNumber>
+    <Email>jShapira@walla.co.il</Email>
+    <Password>73566@Kl</Password>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Car</Distance>
+    <VolAddress>Shmuel Hanavi 24, Jerusalem, Israel</VolAddress>
+    <Latitude>31.78870975</Latitude>
+    <Longitude>35.22614123757184</Longitude>
+    <MaxDistance />
   </Volunteer>
 </ArrayOfVolunteers>

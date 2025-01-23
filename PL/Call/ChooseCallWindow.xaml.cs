@@ -130,8 +130,9 @@ namespace PL.Call
             {
                 if (SelectedCall != null)
                     s_bl.Call.CallToTreatment(_id, SelectedCall.Id);
-                queryCallList();
-                _preWind.RefreshVolunteer();
+                Close();
+                //queryCallList();
+                //_preWind.RefreshVolunteer();
             }
             catch(BO.BlDoesNotExistException ex)
             {

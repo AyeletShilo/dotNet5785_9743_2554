@@ -392,4 +392,60 @@
     <EndTime>2026-02-19T19:10:17</EndTime>
     <EndTreatment>TakenCare</EndTreatment>
   </Assignment>
+  <Assignment>
+    <Id>60</Id>
+    <CallId>10</CallId>
+    <VolunteerId>212873061</VolunteerId>
+    <InterTime>2026-02-19T19:10:17</InterTime>
+    <EndTime>2026-02-19T19:10:17</EndTime>
+    <EndTreatment>TakenCare</EndTreatment>
+  </Assignment>
+  <Assignment>
+    <Id>61</Id>
+    <CallId>44</CallId>
+    <VolunteerId>212873061</VolunteerId>
+    <InterTime>2026-02-19T19:10:17</InterTime>
+    <EndTime>2026-02-19T19:10:17</EndTime>
+    <EndTreatment>SelfCancel</EndTreatment>
+  </Assignment>
+  <Assignment>
+    <Id>62</Id>
+    <CallId>44</CallId>
+    <VolunteerId>212873061</VolunteerId>
+    <InterTime>2026-02-19T19:10:17</InterTime>
+    <EndTime>2026-02-19T19:10:17</EndTime>
+    <EndTreatment>SelfCancel</EndTreatment>
+  </Assignment>
+  <Assignment>
+    <Id>63</Id>
+    <CallId>13</CallId>
+    <VolunteerId>212873061</VolunteerId>
+    <InterTime>2026-02-19T19:10:17</InterTime>
+    <EndTime>2026-02-19T19:10:17</EndTime>
+    <EndTreatment>SelfCancel</EndTreatment>
+  </Assignment>
+  <Assignment>
+    <Id>64</Id>
+    <CallId>40</CallId>
+    <VolunteerId>212873061</VolunteerId>
+    <InterTime>2026-02-19T19:10:17</InterTime>
+    <EndTime>2026-02-19T19:10:17</EndTime>
+    <EndTreatment>SelfCancel</EndTreatment>
+  </Assignment>
+  <Assignment>
+    <Id>65</Id>
+    <CallId>40</CallId>
+    <VolunteerId>212873061</VolunteerId>
+    <InterTime>2026-02-19T19:10:17</InterTime>
+    <EndTime>2026-02-19T19:10:17</EndTime>
+    <EndTreatment>SelfCancel</EndTreatment>
+  </Assignment>
+  <Assignment>
+    <Id>66</Id>
+    <CallId>44</CallId>
+    <VolunteerId>212873061</VolunteerId>
+    <InterTime>2026-02-19T19:10:17</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment xsi:nil="true" />
+  </Assignment>
 </ArrayOfAssignment>

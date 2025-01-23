@@ -18,6 +18,7 @@
         <local:OpenCallData x:Key="OpenCallsSortKey"/>
         <local:ConvertStatusToVisible x:Key="ConvertStatusToVisibleKey"/>
         <local:ConvertUpdateDetails x:Key = "ConvertUpdateDetailsKey" />
+        <local:ConvertUpdateEnable x:Key="ConvertUpdateEnableKey"/>
         <local:ConvertUpdateMaxTime x:Key = "ConvertUpdateMaxTimeKey" />
         <local:ConvertUpdateType x:Key = "ConvertUpdateTypeKey" />
         <local:ConvertActiveIsEnable x:Key="ConvertActiveIsEnableKey"/>
@@ -137,6 +138,10 @@
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background" Value="{StaticResource Greeny}"/>
                     <Setter Property="Foreground" Value="{StaticResource HardestGreenColor}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="LightGray"/>
+                    <Setter Property="Foreground" Value="{StaticResource Color5}"/>
                 </Trigger>
             </Style.Triggers>
         </Style>

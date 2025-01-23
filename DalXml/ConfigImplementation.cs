@@ -1,6 +1,7 @@
 ﻿
 using DalApi;
 using DalXml;
+using System.Runtime.CompilerServices;
 
 namespace Dal;
 
@@ -16,6 +17,7 @@ internal class ConfigImplementation : IConfig
         get => Config.RiskRange;
         set => Config.RiskRange = value;
     }
+
     public void Reset()
     {
         Config.Reset();

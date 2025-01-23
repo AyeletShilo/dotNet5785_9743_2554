@@ -9,6 +9,9 @@ public interface IAdmin
     void SetMaxRange(TimeSpan maxRange);
     DateTime GetClock();
     void ForwardClock(BO.TimeUnit unit);
+    void StartSimulator(int interval); //stage 7
+    void StopSimulator(); //stage 7
+
 
     #region Stage 5
     void AddConfigObserver(Action configObserver);

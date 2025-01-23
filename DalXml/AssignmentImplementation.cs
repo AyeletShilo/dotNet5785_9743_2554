@@ -3,9 +3,11 @@
 using DalApi;
 using DO;
 using global::DalXml;
+using System.Runtime.CompilerServices;
 
 internal class AssignmentImplementation : IAssignment
 {
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Create a new assignment in the xml file
     /// </summary>
@@ -19,6 +21,7 @@ internal class AssignmentImplementation : IAssignment
         XMLTools.SaveListToXMLSerializer(listA, Config.s_assignments_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Delete an assignment item in the xml file
     /// </summary>
@@ -32,6 +35,7 @@ internal class AssignmentImplementation : IAssignment
         XMLTools.SaveListToXMLSerializer(listA, Config.s_assignments_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Delete all the assignments in the xml file
     /// </summary>
@@ -40,6 +44,7 @@ internal class AssignmentImplementation : IAssignment
         XMLTools.SaveListToXMLSerializer(new List<Assignment>(), Config.s_assignments_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Return an assignment from the existing xml file according to the ID received
     /// </summary>
@@ -53,6 +58,7 @@ internal class AssignmentImplementation : IAssignment
         return item;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Return an assignment from the existing xml file according to a boolean function received
     /// </summary>
@@ -66,6 +72,7 @@ internal class AssignmentImplementation : IAssignment
         return item;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Receive a pointer to a Boolean function, that will operate on the elements of the xml file and return the list of all objects in the xml file for which the function returns True.
     /// </summary>
@@ -79,6 +86,7 @@ internal class AssignmentImplementation : IAssignment
         return filteredList;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Updates an existing assignment in the xml file with new data
     /// </summary>

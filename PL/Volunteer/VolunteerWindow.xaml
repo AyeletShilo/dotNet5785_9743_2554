@@ -9,7 +9,8 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
         Loaded="Window_Loaded"
-        Background="{StaticResource CreamColor}">
+        Background="{StaticResource CreamColor}"
+        Icon="/Image/ICON.ico">
 
     <Grid>
         <Border Padding="10,5" Background="{StaticResource AyeletLightColor}" Margin="20,20,20,20" CornerRadius="8">

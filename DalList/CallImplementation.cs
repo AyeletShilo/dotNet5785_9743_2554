@@ -5,9 +5,11 @@ using DO;
 using Microsoft.VisualBasic;
 using System.Collections.Generic;
 using System.Net.Mail;
+using System.Runtime.CompilerServices;
 
 internal class CallImplementation : ICall
 {
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Create(Call item)
     {
         int NewId = Config.nextCallId;
@@ -15,17 +17,20 @@ internal class CallImplementation : ICall
         DataSource.Calls?.Add(newItem);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Delete(int id)
     {
         Call item = DataSource.Calls?.Find(x => x.Id == id) ?? throw new DalDoesNotExistException($"Object of type Call with ID={id} does not exists");
         bool? x = DataSource.Calls?.Remove(item);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void DeleteAll()
     {
         DataSource.Calls?.Clear();
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Call? Read(int id)
     {
         //Call? item = DataSource.Calls?.Find(x => x.Id == id); //stage 1
@@ -33,17 +38,20 @@ internal class CallImplementation : ICall
         return item;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public Call? Read(Func<Call, bool> filter) //stage 2
     {
         Call? item = DataSource.Calls?.FirstOrDefault(filter);
         return item;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public IEnumerable<Call> ReadAll(Func<Call, bool>? filter = null) //stage 2
        => filter == null
             ? DataSource.Calls.Select(item => item)
             : DataSource.Calls.Where(filter);
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void Update(Call item)
     {
         Delete(item.Id);

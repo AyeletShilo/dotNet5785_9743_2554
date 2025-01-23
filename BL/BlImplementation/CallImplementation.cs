@@ -24,6 +24,7 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.BlCantHandleItException"></exception>
     public void CallToTreatment(int volId, int callId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         BO.Call call = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists");
         Func<DO.Assignment, bool>? predicate = assignment => assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel
                                                              && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin;
@@ -33,6 +34,8 @@ internal class CallImplementation : BlApi.ICall
         if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
         {
             _dal.Assignment.Create(new(0, callId, volId, AdminManager.Now, null, null));
+            CallManager.Observers.NotifyItemUpdated(call.Id);  //stage 5
+            CallManager.Observers.NotifyItemUpdated(volId);  //stage 5
             CallManager.Observers.NotifyListUpdated(); //stage 5
         }
         else
@@ -45,6 +48,7 @@ internal class CallImplementation : BlApi.ICall
     /// <param name="callToAdd"></param>
     public void Create(BO.Call callToAdd)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Call doCall = CallManager.CheckLogic(callToAdd); //can throw Ex
@@ -67,6 +71,7 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.BLCannotBeDeletedException"></exception>
     public void Delete(int callId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             BO.Call toDelete = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist");
@@ -291,6 +296,7 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the call you want to update does not exist in the database.</exception>
     public void Update(BO.Call callToUpdate)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Call doCall = CallManager.CheckLogic(callToUpdate); //can throw Ex
@@ -317,6 +323,7 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.BlCantUpdateException">Throws an exception when the call you want to update is not updatable.</exception>
     public void UpdateCancelTreatment(int volId, int assignmentId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
@@ -360,6 +367,7 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.BlCantUpdateException">Throws an exception when the call you want to update is not updatable</exception>
     public void UpdateEndTreatment(int volId, int assignmentId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex

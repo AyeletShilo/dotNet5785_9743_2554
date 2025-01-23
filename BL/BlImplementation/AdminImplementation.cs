@@ -14,16 +14,19 @@ internal class AdminImplementation : IAdmin
     /// Update the clock in one unit
     /// </summary>
     /// <param name="unit">unit to advance </param>
-    public void ForwardClock(TimeUnit unit) =>
-    AdminManager.UpdateClock(unit switch
+    public void ForwardClock(TimeUnit unit)
     {
-        TimeUnit.Minute => AdminManager.Now.AddMinutes(1),
-        TimeUnit.Hour => AdminManager.Now.AddHours(1),
-        TimeUnit.Day => AdminManager.Now.AddDays(1),
-        TimeUnit.Month => AdminManager.Now.AddMonths(1),
-        TimeUnit.Year => AdminManager.Now.AddYears(1),
-        _ => AdminManager.Now
-    });
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.UpdateClock(unit switch
+        {
+            TimeUnit.Minute => AdminManager.Now.AddMinutes(1),
+            TimeUnit.Hour => AdminManager.Now.AddHours(1),
+            TimeUnit.Day => AdminManager.Now.AddDays(1),
+            TimeUnit.Month => AdminManager.Now.AddMonths(1),
+            TimeUnit.Year => AdminManager.Now.AddYears(1),
+            _ => AdminManager.Now
+        });
+    }
 
     /// <summary>
     /// Return System clock
@@ -47,9 +50,8 @@ internal class AdminImplementation : IAdmin
     {
         try
         {
-            DalTest.Initialization.Do();
-            AdminManager.UpdateClock(AdminManager.Now);
-            AdminManager.MaxRange = AdminManager.MaxRange;
+            AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+            AdminManager.InitializeDB(); //stage 7
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -64,9 +66,9 @@ internal class AdminImplementation : IAdmin
     {
         try
         {
-            _dal.ResetDB();
-            AdminManager.UpdateClock(AdminManager.Now);
-            AdminManager.MaxRange = AdminManager.MaxRange;
+            AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+            AdminManager.ResetDB(); //stage 7
+
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
@@ -78,7 +80,20 @@ internal class AdminImplementation : IAdmin
     /// Update system risk range
     /// </summary>
     /// <param name="maxRange">new risk range</param>
-    public void SetMaxRange(TimeSpan riskRange) => _dal.Config.RiskRange = riskRange;
+    public void SetMaxRange(TimeSpan riskRange)
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        _dal.Config.RiskRange = riskRange;
+    }
+
+    public void StartSimulator(int interval)  //stage 7
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.Start(interval); //stage 7
+    }
+    public void StopSimulator()
+        => AdminManager.Stop(); //stage 7
+
 
     #region Stage 5
     public void AddClockObserver(Action clockObserver) =>

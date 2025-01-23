@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 
 internal class CallImplementation : ICall
 {
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     ///  Create a new call in the xml file
     /// </summary>
@@ -21,6 +21,7 @@ internal class CallImplementation : ICall
         XMLTools.SaveListToXMLSerializer<Call>(listC, Config.s_calls_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Delete a call item in the xml file
     /// </summary>
@@ -34,6 +35,7 @@ internal class CallImplementation : ICall
         XMLTools.SaveListToXMLSerializer<Call>(listC, Config.s_calls_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Delete all the calls in the xml file
     /// </summary>
@@ -42,6 +44,7 @@ internal class CallImplementation : ICall
         XMLTools.SaveListToXMLSerializer<Call>(new List<Call>(), Config.s_calls_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Return a call from the existing xml file according to the ID received
     /// </summary>
@@ -55,6 +58,7 @@ internal class CallImplementation : ICall
         return item;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Return a call from the existing xml file according to a boolean function received
     /// </summary>
@@ -68,6 +72,7 @@ internal class CallImplementation : ICall
         return item;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Receive a pointer to a Boolean function, that will operate on the elements of the xml file and return the list of all objects in the xml file for which the function returns True.
     /// </summary>
@@ -81,6 +86,7 @@ internal class CallImplementation : ICall
         return filteredList;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Updates an existing call in the xml file with new data
     /// </summary>

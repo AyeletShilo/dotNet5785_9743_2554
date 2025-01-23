@@ -103,7 +103,8 @@ namespace PL.Volunteer
             {
                 var nextWind = new VolunteerWindow(this,_adminId,SelectedVolunteer.Id);
                 nextWind.Show();
-                this.Hide();
+               
+                //this.Hide();
                 //new VolunteerWindow(SelectedVolunteer.Id).Show();
             }
         }
@@ -115,7 +116,7 @@ namespace PL.Volunteer
         {
             var nextWind = new VolunteerWindow(this, _adminId);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
             //new VolunteerWindow().Show();
         }
 

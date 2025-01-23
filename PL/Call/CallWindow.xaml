@@ -13,9 +13,9 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="93*"/>
-            <RowDefinition Height="86*"/>
-            <RowDefinition Height="29*"/>
+            <RowDefinition Height="109*"/>
+            <RowDefinition Height="71*"/>
+            <RowDefinition Height="28*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Padding="10" Margin="20,20,20,20" CornerRadius="8" Background="{StaticResource AyeletLightColor}">
             <GroupBox Header="Call Details" Style="{StaticResource FormGroupBoxStyle}" Margin="2">
@@ -31,7 +31,7 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
 
                     </Grid.RowDefinitions>
 
@@ -52,7 +52,7 @@
                                ItemsSource="{Binding Source={StaticResource TypeCallKey}}"
                                BorderBrush="Black" OpacityMask="#FF090909"/>
 
-  
+
 
                     <Label Content="Call Address:" 
                            Grid.Column="0" Grid.Row="2"
@@ -73,14 +73,14 @@
                     </TextBox>
                     <Label Content="Description:" 
                 Grid.Column="0" Grid.Row="3" 
-                Style="{StaticResource FormLabelStyle}"/>
+                Style="{StaticResource FormLabelStyle}" VerticalAlignment="Top" Margin="5"/>
                     <TextBox Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4"
                   Text="{Binding CurrentCall.Description, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
                   MaxLength="10" IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}"
-                  Style="{StaticResource FormTextBoxStyle}"
-                             TextWrapping="Wrap" 
+                  Style="{StaticResource FormTextBoxStyle}" VerticalContentAlignment="Top"
+                             TextWrapping="Wrap"  Height="70"
          AcceptsReturn="False"
-         VerticalScrollBarVisibility="Hidden">
+         VerticalScrollBarVisibility="Hidden" Margin="0,5">
                         <!--<TextBox.ToolTip>
                             <ToolTip Width="200" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
                                      Foreground="{StaticResource AyeletHardColor}">
@@ -96,14 +96,14 @@
                            Grid.Column="3" Grid.Row="0"
                            Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Grid.Column="3" Grid.Row="0"
-                             Text="{Binding CurrentCall.OpenTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
+                             Text="{Binding CurrentCall.OpenTime, StringFormat='{}{0:dd/MM/yy HH:mm}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
                              IsReadOnly ="True" Style="{StaticResource FormTextBoxStyle}" Grid.ColumnSpan="2" Height="30" Margin="126,5,0,0" VerticalAlignment="Top"/>
 
                     <Label Content="Max Time:" 
                            Grid.Column="3" Grid.Row="1" 
                            Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Grid.Column="4" Grid.Row="1" 
-                             Text="{Binding CurrentCall.MaxCloseTime,  StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
+                             Text="{Binding CurrentCall.MaxCloseTime,  StringFormat='{}{0:dd/MM/yy HH:mm}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
                              IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateMaxTimeKey}}"
                              Style="{StaticResource FormTextBoxStyle}"/>
 
@@ -138,8 +138,8 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn Binding="{Binding VolunteerName}" Header="volunteer name" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="entry Time" Width="*"/>
-                    <DataGridTextColumn Binding="{Binding EndTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="end Time" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yy}'}" Header="entry Time" Width="*"/>
+                    <DataGridTextColumn Binding="{Binding EndTime, StringFormat='{}{0:dd/MM/yy HH:mm}'}" Header="end Time" Width="*"/>
                     <DataGridTextColumn Binding="{Binding EndTreatment}" Header="treatment status" Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
@@ -147,15 +147,17 @@
         <Button Grid.Row="2"
                 Content="Update" 
                 Click="btnUpdate_Click"  
-                Margin="270,10"
-                Style="{StaticResource MainButtonStyle}"/>
+                Margin="270,10,270,10"
+                Style="{StaticResource MainButtonStyle}"
+                IsEnabled="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateEnableKey}, Mode=TwoWay}"/>
+
         <Button Style="{StaticResource BackArrowButton}"
                 Click="BackButton_Click"
                 HorizontalAlignment="Left"
                 Grid.Row="2"
                 Panel.ZIndex="1"
                 VerticalAlignment="Bottom"
-                Margin="15"/>
+                Margin="15,0,0,15" Height="40" Width="40"/>
 
     </Grid>
 </Window>

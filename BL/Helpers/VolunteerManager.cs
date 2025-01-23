@@ -109,10 +109,10 @@ internal static class VolunteerManager
             i++;
         for (; i < 8; i++)
         {
-            int digit = idString[i] - '0'; // המרת התו למספר
-            int multiplier = (i % 2 == 0) ? 1 : 2; // זוגי/אי-זוגי
+            int digit = idString[i] - '0'; // char to number
+            int multiplier = (i % 2 == 0) ? 1 : 2; // even or odd
             int product = digit * multiplier;
-            sum += (product > 9) ? product - 9 : product; // סכום הספרות
+            sum += (product > 9) ? product - 9 : product; // sum
         }
         if ((id % 10 != ((10 - (sum % 10)) % 10)))
             return false;

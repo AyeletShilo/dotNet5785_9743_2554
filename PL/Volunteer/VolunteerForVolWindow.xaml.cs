@@ -104,11 +104,19 @@ namespace PL.Volunteer
         private void VolunteerObserver() => RefreshVolunteer();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Volunteer.AddObserver(VolunteerObserver);
+        {
+            s_bl.Volunteer.AddObserver(VolunteerObserver);
+            s_bl.Volunteer.AddObserver(_id, VolunteerObserver);
+        }
+
 
         private void Window_Closed(object sender, EventArgs e)
-            => s_bl.Volunteer.RemoveObserver(VolunteerObserver);
+        {
+            s_bl.Volunteer.RemoveObserver(VolunteerObserver);
+            s_bl.Volunteer.RemoveObserver(_id, VolunteerObserver);
+        }
 
+        //private void Window_Updated(int _id, )
         #region buttons
 
         /// <summary>
@@ -118,7 +126,7 @@ namespace PL.Volunteer
         {
             var nextWind = new VolunteerDataWindow(_id, this);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
             //new VolunteerDataWindow(_id).Show();
 
         }
@@ -130,8 +138,8 @@ namespace PL.Volunteer
         {
             var nextWind = new ChooseCallWindow(_id, this);
             nextWind.Show();
-            this.Hide();
-            RefreshVolunteer();
+            //this.Hide();
+            //RefreshVolunteer();
             //new ChooseCallWindow(_id).Show();
         }
 

@@ -8,9 +8,11 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using System.Collections;
+using System.Runtime.CompilerServices;
 
 internal class VolunteerImplementation : IVolunteer
 {
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Receives an Xelement and returns the volunteer who is inside
     /// </summary>
@@ -36,7 +38,7 @@ internal class VolunteerImplementation : IVolunteer
         };
     }
 
-
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     ///  Create a new volunteer in the xml file
     /// </summary>
@@ -48,6 +50,7 @@ internal class VolunteerImplementation : IVolunteer
         XMLTools.SaveListToXMLElement(rootVolunteer,Config.s_volunteers_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Delete a volunteer item in the xml file
     /// </summary>
@@ -65,6 +68,7 @@ internal class VolunteerImplementation : IVolunteer
         XMLTools.SaveListToXMLElement(rootVolunteer,Config.s_volunteers_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Delete all the volunteers in the xml file
     /// </summary>
@@ -74,6 +78,7 @@ internal class VolunteerImplementation : IVolunteer
         XMLTools.SaveListToXMLElement(resetVol, Config.s_volunteers_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Return a volunteer from the existing xml file according to the ID received
     /// </summary>
@@ -85,6 +90,7 @@ internal class VolunteerImplementation : IVolunteer
         return volunteerElem is null ? null : getVolunteer(volunteerElem);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Return a volunteer from the existing xml file according to a boolean function received
     /// </summary>
@@ -95,6 +101,7 @@ internal class VolunteerImplementation : IVolunteer
         return XMLTools.LoadListFromXMLElement(Config.s_volunteers_xml).Elements().Select(v => getVolunteer(v)).FirstOrDefault(filter);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Receive a pointer to a Boolean function, that will operate on the elements of the xml file and return the list of all objects in the xml file for which the function returns True.
     /// </summary>
@@ -110,6 +117,7 @@ internal class VolunteerImplementation : IVolunteer
         
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Updates an existing volunteer in the xml file with new data
     /// </summary>
@@ -128,6 +136,7 @@ internal class VolunteerImplementation : IVolunteer
         XMLTools.SaveListToXMLElement(volunteersRootElem, Config.s_volunteers_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     /// <summary>
     /// Creates XElement with new volunteer from the receive volunteer
     /// </summary>

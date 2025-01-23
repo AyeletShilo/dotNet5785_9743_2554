@@ -16,6 +16,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlDoesAlreadyExistException">Throws an exception when the call you want to create already exists in the database.</exception>
     public void Create(BO.Volunteer boVolunteer)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             VolunteerManager.CheckFormat(boVolunteer);
@@ -57,6 +58,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlCannotBeDeletedException">An exception is thrown when the volunteer cannot be deleted.</exception>
     public void Delete(int id)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         var idVolunteer = Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does not exist");
         try
         {
@@ -176,6 +178,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the volunteer you want to update does not exist in the database</exception>
     public void Update(int id, BO.Volunteer volToUpdate)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Volunteer? updateVol = _dal.Volunteer.Read(id)!;
