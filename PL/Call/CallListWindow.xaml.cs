@@ -114,7 +114,7 @@ namespace PL.Call
             {
                 var nextWind = new CallWindow(this,SelectedCall.CallId);
                 nextWind.Show();
-                this.Hide();
+                //this.Hide();
                 //new CallWindow(SelectedCall.CallId).Show();
             }
         }
@@ -126,7 +126,7 @@ namespace PL.Call
         {
             var nextWind = new AddCall(this);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
             //new AddCall().Show();
         }
 

@@ -22,7 +22,7 @@ internal static class VolunteerManager
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
         if (volToCheck.PhoneNumber.Length != 10 || volToCheck.PhoneNumber[0] != '0' || volToCheck.PhoneNumber[1] != '5')
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
-        if (volToCheck.Password is not null && volToCheck.Password.Length < 8 )
+        if (volToCheck.Password is not null && volToCheck.Password.Length < 8)
             throw new BO.BlIntegrityOfValuesException("Error in Password format");
         if (volToCheck.MaxDis < 0/* || volToCheck.MaxDis == null*/)
             throw new BO.BlIntegrityOfValuesException("Error in Max Distance format");
@@ -61,7 +61,7 @@ internal static class VolunteerManager
         if (checkPass(volToCheck.Password) == false)
             throw new BO.BlIntegrityOfValuesException("Password is not strong");
 
-        if (volToCheck.Address != "" && volToCheck.Address!=null)
+        if (volToCheck.Address != "" && volToCheck.Address != null)
             CallManager.GetCoordinates(volToCheck.Address);
     }
 
@@ -91,7 +91,7 @@ internal static class VolunteerManager
             }
         }
 
-       return isA && isa && isa && isdigit && isSign && isSame && isAbc;
+        return isA && isa && isa && isdigit && isSign && isSame && isAbc;
     }
 
 
@@ -128,11 +128,15 @@ internal static class VolunteerManager
     /// <exception cref="BO.BlNullPropertyException">Throws an exception when the  call does not exist </exception>
     internal static BO.CallInProgress? VolCall(int id, string address)
     {
+        DO.Assignment? currentAss;
         Func<DO.Assignment, bool> func = item => item.VolunteerId == id;
-        DO.Assignment? currentAss = s_dal.Assignment.Read(func);
+        lock (AdminManager.BlMutex)
+            currentAss = s_dal.Assignment.Read(func);
         if (currentAss != null && currentAss.EndTime == null)/*?? throw new BO.BlNullPropertyException($"Assignment does not exist");*/
         {
-            DO.Call currentCall = s_dal.Call.Read(currentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
+            DO.Call currentCall;
+            lock (AdminManager.BlMutex)
+                currentCall = s_dal.Call.Read(currentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
             return new()
             {
                 Id = id,
@@ -158,7 +162,9 @@ internal static class VolunteerManager
     /// <returns> returns it as a data entity of type volunteer in list</returns>
     internal static IEnumerable<BO.VolunteerInList> ToVolunteerInList(IEnumerable<DO.Volunteer> oldVolunteer)
     {
-        IEnumerable<DO.Assignment> oldAssignments = s_dal.Assignment.ReadAll(null);
+        IEnumerable<DO.Assignment> oldAssignments;
+        lock (AdminManager.BlMutex)
+            oldAssignments = s_dal.Assignment.ReadAll(null);
         List<BO.VolunteerInList> volunteerInLists = new List<BO.VolunteerInList>();
         foreach (DO.Volunteer item in oldVolunteer)
         {
@@ -190,10 +196,20 @@ internal static class VolunteerManager
         if (volAddress is null || callAddress is null) return 0.0;
         Func<DO.Volunteer, bool> volPredicate = volunteer => volunteer.VolAddress == volAddress;
         Func<DO.Call, bool> callPredicate = call => call.CallAddress == callAddress;
-        double volLatitude = (double)s_dal.Volunteer.Read(volPredicate).Latitude;
-        double volLongitude = (double)s_dal.Volunteer.Read(volPredicate).Longitude;
-        double callLatitude = (double)s_dal.Call.Read(callPredicate).Latitude;
-        double callLongitude = (double)s_dal.Call.Read(callPredicate).Longitude;
+        DO.Call call;
+        DO.Volunteer vol;
+        lock (AdminManager.BlMutex)
+        {
+            call = s_dal.Call.Read(callPredicate);
+            vol = s_dal.Volunteer.Read(volPredicate);
+        }
+
+
+        double volLatitude = (double)vol.Latitude;
+        double volLongitude = (double)vol.Longitude;
+        double callLatitude = (double)call.Latitude;
+        double callLongitude = (double)call.Longitude;
+
 
         const double R = 6371; // רדיוס כדור הארץ בקילומטרים
 
@@ -213,8 +229,6 @@ internal static class VolunteerManager
         double distance = R * Math.Sqrt(x * x + y * y); // נוסחת פיתגורס
         return Math.Round(distance, 4);
     }
-
-
 }
 
 

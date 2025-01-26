@@ -150,7 +150,7 @@ namespace PL.Volunteer
         {
             var nextWind = new HistoryCallsWindow(_id, this);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
             //new HistoryCallsWindow(_id).Show();
         }
 

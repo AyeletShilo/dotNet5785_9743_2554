@@ -129,7 +129,7 @@ namespace PL
         {
             var nextWind = new VolunteerListWindow(this, adminId);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
             //new VolunteerListWindow().Show();
         }
 
@@ -140,7 +140,7 @@ namespace PL
         {
             var nextWind = new CallListWindow(this, adminId);
             nextWind.Show();
-            this.Hide();
+           // this.Hide();
             //new CallListWindow().Show();
         }
 
@@ -210,35 +210,35 @@ namespace PL
         {
             var nextWind = new CallListWindow(this, 0, BO.CallListStatus.Closed, false);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
            // new CallListWindow(this,0, BO.CallListStatus.Closed ,false).Show();
         }
         private void Treatment_Click(object sender, RoutedEventArgs e)
         {
             var nextWind = new CallListWindow(this, 0, BO.CallListStatus.InTreatment, false);
             nextWind.Show();
-            this.Hide();
+           // this.Hide();
             //new CallListWindow(this,0, BO.CallListStatus.InTreatment,false).Show();
         }
         private void Expired_Click(object sender, RoutedEventArgs e)
         {
             var nextWind = new CallListWindow(this, 0, BO.CallListStatus.Expired, false);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
             //new CallListWindow(this,0, BO.CallListStatus.Expired , false).Show();
         }
         private void OpenRisk_Click(object sender, RoutedEventArgs e)
         {
             var nextWind = new CallListWindow(this, 0, BO.CallListStatus.OpenInRisk, false);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
             //new CallListWindow(this,0, BO.CallListStatus.OpenInRisk , false).Show();
         }
         private void TreatmentRisk_Click(object sender, RoutedEventArgs e)
         {
             var nextWind = new CallListWindow(this, 0, BO.CallListStatus.InTreatmentInRisk, false);
             nextWind.Show();
-            this.Hide();
+           // this.Hide();
             //new CallListWindow(this,0, BO.CallListStatus.InTreatmentInRisk , false).Show();
         }
 

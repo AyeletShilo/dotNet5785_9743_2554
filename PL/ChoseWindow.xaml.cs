@@ -55,7 +55,7 @@ namespace PL
         {
             var nextWind = new VolunteerForVolWindow(this,_id);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
 
         }
 

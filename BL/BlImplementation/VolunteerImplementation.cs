@@ -36,8 +36,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
               new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, boVolunteer.Password, (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
               boVolunteer.Address, AddressCoordinate[0], AddressCoordinate[1], boVolunteer.MaxDis);
 
-
-            _dal.Volunteer.Create(doVolunteer); //can throw Ex
+            lock (AdminManager.BlMutex)
+                _dal.Volunteer.Create(doVolunteer); //can throw Ex
             VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
         }
         catch (DO.DalAlreadyExistException ex)
@@ -64,8 +64,8 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         {
             if (idVolunteer.HandleCalls != 0 || idVolunteer.InCall != null)
                 throw new BO.BlCannotBeDeletedException($"Volunteer with ID={id}cannot be deleted");
-
-            _dal.Volunteer.Delete(id); //can throw Ex
+            lock (AdminManager.BlMutex)
+                _dal.Volunteer.Delete(id); //can throw Ex
             VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
         }
         catch (DO.DalDoesNotExistException ex)
@@ -102,9 +102,14 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         try
         {
-            DO.Volunteer doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist"); //can throw Ex
-            Func<DO.Assignment, bool>? predicate = assignment => assignment.VolunteerId == id;
-            IEnumerable<DO.Assignment> volAssignments = _dal.Assignment.ReadAll(predicate);
+            DO.Volunteer doVolunteer;
+            IEnumerable<DO.Assignment> volAssignments;
+            lock (AdminManager.BlMutex)
+            {
+                 doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist"); //can throw Ex
+                Func<DO.Assignment, bool>? predicate = assignment => assignment.VolunteerId == id;
+                 volAssignments = _dal.Assignment.ReadAll(predicate);
+            }
             return new()
             {
                 Id = id,
@@ -141,7 +146,9 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         try
         {
-            IEnumerable<DO.Volunteer> oldVolunteer = _dal.Volunteer.ReadAll(null); //can throw Ex
+            IEnumerable<DO.Volunteer> oldVolunteer;
+            lock (AdminManager.BlMutex)
+                oldVolunteer = _dal.Volunteer.ReadAll(null); //can throw Ex
             IEnumerable<BO.VolunteerInList> volunteerInList = VolunteerManager.ToVolunteerInList(oldVolunteer);
 
             if (isActive != null)
@@ -181,7 +188,10 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
-            DO.Volunteer? updateVol = _dal.Volunteer.Read(id)!;
+            DO.Volunteer? updateVol;
+            DO.Volunteer? oldVolunteer;
+            lock (AdminManager.BlMutex)
+                updateVol = _dal.Volunteer.Read(id)!;
             if (id == volToUpdate.Id || GetMyJob(id, updateVol.Password) == BO.Role.Manager)
             {
                 VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
@@ -197,14 +207,15 @@ internal class VolunteerImplementation : BlApi.IVolunteer
                     addressCordinate[1] = 0;
                 }
 
-                DO.Volunteer? oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
+                lock (AdminManager.BlMutex)
+                   oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
                 if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id, updateVol.Password) != BO.Role.Manager)
                     throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 
                 DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, volToUpdate.Password, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
              volToUpdate.Address, addressCordinate[0], addressCordinate[1], volToUpdate.MaxDis);
-
-                _dal.Volunteer.Update(doVolunteer);//can throw Ex
+                lock (AdminManager.BlMutex)
+                    _dal.Volunteer.Update(doVolunteer);//can throw Ex
                 VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);  //stage 5
                 VolunteerManager.Observers.NotifyListUpdated();  //stage 5
 
