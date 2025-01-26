@@ -100,10 +100,18 @@ namespace PL.Call
              => queryCallList();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Call.AddObserver(callListObserver);
+        {
+            s_bl.Call.AddObserver(callListObserver);
+            s_bl.Volunteer.AddObserver(callListObserver);
+        }
+           
 
         private void Window_Closed(object sender, EventArgs e)
-            => s_bl.Call.RemoveObserver(callListObserver);
+        {
+            s_bl.Call.RemoveObserver(callListObserver);
+            s_bl.Volunteer.RemoveObserver(callListObserver);
+        }
+            
 
         /// <summary>
         /// Opening a calls's details window when clicking on a call in the list

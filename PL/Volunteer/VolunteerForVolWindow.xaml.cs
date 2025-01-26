@@ -27,6 +27,7 @@ namespace PL.Volunteer
             InitializeComponent();
             _id = id;
             _preWind = preWind;
+            FirstLet = CurrentVolunteer.FullName[0];
             try
             {
                 if (CurrentVolunteer!.InCall != null)
@@ -63,7 +64,7 @@ namespace PL.Volunteer
         public static readonly DependencyProperty CurrentCallProperty =
             DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(VolunteerForVolWindow), new PropertyMetadata(null));
 
-        public char FirstLet => CurrentVolunteer!.FullName[0];
+        public char FirstLet { get; set; }// = CurrentVolunteer.FullName[0];
         //{
         //    get { return CurrentVolunteer!.FullName[0]; }
         //}
@@ -93,7 +94,7 @@ namespace PL.Volunteer
                     CurrentCall = s_bl.Call.Read(CurrentVolunteer.InCall.CallId);
                     _distance = s_bl.Volunteer.Dis(CurrentVolunteer!.Address, CurrentCall.CallAddress).ToString();
                 }
-                char refresh = FirstLet;
+                FirstLet = CurrentVolunteer.FullName[0];
             }
             catch (Exception ex)
             {

@@ -361,16 +361,6 @@
     <MaxTime xsi:nil="true" />
   </Call>
   <Call>
-    <Id>40</Id>
-    <CallType>TechnologyHelp</CallType>
-    <CallAddress>Hanarkisim 15, Jerusalem, Israel</CallAddress>
-    <Latitude>31.7775</Latitude>
-    <Longitude>35.218</Longitude>
-    <OpenTime>2025-01-14T04:07:18.3370777+02:00</OpenTime>
-    <Description>Learning and helping with technology - connecting to social networks, installing the Internet, dealing with viruses, learning how to use it.</Description>
-    <MaxTime xsi:nil="true" />
-  </Call>
-  <Call>
     <Id>41</Id>
     <CallType>Talking</CallType>
     <CallAddress>Hapa'amon 2, Jerusalem, Israel</CallAddress>
@@ -478,6 +468,16 @@
     <Longitude>35.2255311</Longitude>
     <OpenTime>2025-01-16T12:38:17.9618621+02:00</OpenTime>
     <Description>An hour or more of conversation to relieve loneliness</Description>
+    <MaxTime xsi:nil="true" />
+  </Call>
+  <Call>
+    <Id>40</Id>
+    <CallType>Shopping</CallType>
+    <CallAddress>Al-Wad 15, Jerusalem, Israel</CallAddress>
+    <Latitude>31.804254</Latitude>
+    <Longitude>35.1137682</Longitude>
+    <OpenTime>2025-01-14T04:07:18.3370777+02:00</OpenTime>
+    <Description>Learning and helping with technology - connecting to social networks, installing the Internet, dealing with viruses, learning how to use it.</Description>
     <MaxTime xsi:nil="true" />
   </Call>
 </ArrayOfCall>

@@ -38,7 +38,7 @@ internal class CallImplementation : BlApi.ICall
             lock (AdminManager.BlMutex)
                 _dal.Assignment.Create(new(0, callId, volId, AdminManager.Now, null, null));
             CallManager.Observers.NotifyItemUpdated(call.Id);  //stage 5
-            CallManager.Observers.NotifyItemUpdated(volId);  //stage 5
+            VolunteerManager.Observers.NotifyItemUpdated(volId);  //stage 5
             CallManager.Observers.NotifyListUpdated(); //stage 5
         }
         else
@@ -384,8 +384,10 @@ internal class CallImplementation : BlApi.ICall
                            assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.CancelAdmin);
                     }
                     _dal.Assignment.Update(updateAssignment); //can throw Ex
-                    CallManager.Observers.NotifyItemUpdated(updateAssignment.Id);  //stage 5
+                    
+                    CallManager.Observers.NotifyItemUpdated(assignment.CallId);  //stage 5
                     CallManager.Observers.NotifyListUpdated();  //stage 5
+                    VolunteerManager.Observers.NotifyListUpdated(); //stage 5
                 }
                 else
                     throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled");
@@ -423,6 +425,7 @@ internal class CallImplementation : BlApi.ICall
                     _dal.Assignment.Update(updateAssignment); //can throw Ex
                     CallManager.Observers.NotifyItemUpdated(updateAssignment.Id);  //stage 5
                     CallManager.Observers.NotifyListUpdated();  //stage 5
+                    VolunteerManager.Observers.NotifyListUpdated(); //stage 5
                 }
                 else
                     throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed");
