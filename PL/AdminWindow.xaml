@@ -9,7 +9,7 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
         Background="{StaticResource CreamColor}"
         Closed="Window_Closed"
-        Loaded="ScreenLoaded">
+        Loaded="ScreenLoaded" Icon="/Image/BigIcon.ico">
 
     <Window.Resources>
         <Style x:Key="MaterialDropShadow" TargetType="Border">

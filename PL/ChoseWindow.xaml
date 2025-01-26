@@ -8,7 +8,7 @@
         Title="Choose Window" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Background="{StaticResource CreamColor}"
-        Icon="/Image/ICON.ico">
+        Icon="/Image/BigIcon.ico">
    
     
     <Window.Resources>

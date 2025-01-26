@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Login" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Icon="/Image/ICON.ico">
+        Icon="/Image/BigIcon.ico">
 
     <Window.Resources>
         <Style x:Key="LoginPasswordBoxStyle" TargetType="PasswordBox">

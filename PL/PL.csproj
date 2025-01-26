@@ -14,10 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="BigIcon.png" />
     <None Remove="Call\LOGO %282%29.png" />
     <None Remove="delete %281%29.png" />
     <None Remove="ICON.ico" />
+    <None Remove="Image\BigIcon.ico" />
     <None Remove="Image\cancel3.png" />
     <None Remove="Image\check.png" />
     <None Remove="Image\cleaning.png" />
@@ -39,7 +39,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="BigIcon.png" />
+    <Resource Include="Image\BigIcon.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Image\delete %281%29.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>

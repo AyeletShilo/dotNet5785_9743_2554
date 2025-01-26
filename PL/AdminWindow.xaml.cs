@@ -168,7 +168,7 @@ namespace PL
         }
 
         /// <summary>
-        /// Intialize data base
+        /// Initialize data base
         /// </summary>
         private void btnInitializeDB_Click(object sender, RoutedEventArgs e)
         {
@@ -202,7 +202,7 @@ namespace PL
         {
             var nextWind = new CallListWindow(this, 0, BO.CallListStatus.Opened, false);
             nextWind.Show();
-            this.Hide();
+            //this.Hide();
             //new CallListWindow(this,0, BO.CallListStatus.Opened, false).Show();
         }
 

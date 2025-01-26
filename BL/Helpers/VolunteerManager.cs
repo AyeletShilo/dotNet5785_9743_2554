@@ -137,6 +137,8 @@ internal static class VolunteerManager
             DO.Call currentCall;
             lock (AdminManager.BlMutex)
                 currentCall = s_dal.Call.Read(currentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
+           // Observers.NotifyItemUpdated(id);
+            //Observers.NotifyItemUpdated(currentCall.Id);
             return new()
             {
                 Id = id,

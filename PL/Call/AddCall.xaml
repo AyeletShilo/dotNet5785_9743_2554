@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="AddCall" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Background="{StaticResource CreamColor}">
+        Background="{StaticResource CreamColor}" Icon="/Image/BigIcon.ico">
 
 
     <Grid>

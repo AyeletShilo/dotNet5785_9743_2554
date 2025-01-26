@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Description" Height="350" Width="450"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Background="{StaticResource CreamColor}">
+        Background="{StaticResource CreamColor}" Icon="/Image/BigIcon.ico">
    
     <Grid>
         <Grid.RowDefinitions>

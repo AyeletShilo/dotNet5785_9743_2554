@@ -9,7 +9,7 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Closed="Window_Closed"
         Loaded="Window_Loaded"
-        Background="{StaticResource CreamColor}">
+        Background="{StaticResource CreamColor}" Icon="/Image/BigIcon.ico">
 
 
     <Grid>

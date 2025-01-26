@@ -448,4 +448,12 @@
     <EndTime xsi:nil="true" />
     <EndTreatment xsi:nil="true" />
   </Assignment>
+  <Assignment>
+    <Id>67</Id>
+    <CallId>13</CallId>
+    <VolunteerId>378898134</VolunteerId>
+    <InterTime>2026-02-19T19:10:17</InterTime>
+    <EndTime xsi:nil="true" />
+    <EndTreatment xsi:nil="true" />
+  </Assignment>
 </ArrayOfAssignment>

@@ -45,7 +45,7 @@ namespace PL
                     {
                         var nextWind = new ChoseWindow(this,_id);
                         nextWind.Show();
-                        this.Hide();
+                        //this.Hide();
 
                         //new ChoseWindow(_id).Show();
                         //Close();

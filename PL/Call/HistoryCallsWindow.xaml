@@ -9,7 +9,7 @@
         Closed="Window_Closed"
         Loaded="Window_Loaded"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
-        Background="{StaticResource CreamColor}">
+        Background="{StaticResource CreamColor}" Icon="/Image/BigIcon.ico">
 
 
     <Grid Margin="20">
@@ -55,14 +55,14 @@
                    CellStyle="{StaticResource CenteredDataGridCellStyle}">
             
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="*" >
+                <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="Auto" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="FontWeight" Value="Bold"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="*">
+                <DataGridTextColumn Binding="{Binding CallType}" Header="Call Type" Width="2*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="Background" Value="{Binding Path = CallType, Converter={StaticResource ConvertCallTypeToColorKey}}" />
@@ -70,11 +70,11 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="2*"/>
-                <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="*"/>
-                <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Start at" Width="*"/>
-                <DataGridTextColumn Binding="{Binding CloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm:ss}'}" Header="Close Time" Width="*"/>
-                <DataGridTextColumn Binding="{Binding EndTreatment}" Header="Close at" Width="*"/>
+                <DataGridTextColumn Binding="{Binding FullAddress}" Header="Call Address" Width="3*"/>
+                <DataGridTextColumn Binding="{Binding OpenTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Open Time" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding InterTime, StringFormat='{}{0:dd/MM/yyyy}'}" Header="Start at" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding CloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" Header="Close Time" Width="2*"/>
+                <DataGridTextColumn Binding="{Binding EndTreatment}" Header="Status" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
 

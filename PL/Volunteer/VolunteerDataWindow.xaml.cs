@@ -63,13 +63,13 @@ namespace PL.Volunteer
             try
             {
                 s_bl.Volunteer.Update(_id!, CurrentVolunteer!);
+                _preWind.Show();
+                this.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            _preWind.Show();
-            this. Close();
         }
 
 
