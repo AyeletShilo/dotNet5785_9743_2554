@@ -366,9 +366,10 @@ internal class CallImplementation : BlApi.ICall
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
+            DO.Assignment assignment;
             lock (AdminManager.BlMutex)
             {
-                DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
+                assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
                 DO.Volunteer volunteer = _dal.Volunteer.Read(volId) ?? throw new BO.BlDoesNotExistException($"volunteer with ID={volId} does not exists");
                 if ((volId == assignment.VolunteerId || volunteer.Job == DO.Role.Manager) && assignment.EndTime is null)
                 {
@@ -384,14 +385,14 @@ internal class CallImplementation : BlApi.ICall
                            assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.CancelAdmin);
                     }
                     _dal.Assignment.Update(updateAssignment); //can throw Ex
-                    
-                    CallManager.Observers.NotifyItemUpdated(assignment.CallId);  //stage 5
-                    CallManager.Observers.NotifyListUpdated();  //stage 5
-                    VolunteerManager.Observers.NotifyListUpdated(); //stage 5
                 }
                 else
                     throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled");
             }
+
+            CallManager.Observers.NotifyItemUpdated(assignment.CallId);  //stage 5
+            CallManager.Observers.NotifyListUpdated();  //stage 5
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -415,21 +416,22 @@ internal class CallImplementation : BlApi.ICall
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
+            DO.Assignment updateAssignment;
             lock (AdminManager.BlMutex)
             {
                 DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
                 if (volId == assignment.VolunteerId && assignment.EndTreatment == null)
                 {
-                    DO.Assignment updateAssignment = new(assignmentId, assignment.CallId, volId,
-                        assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.TakenCare);
+                    updateAssignment = new(assignmentId, assignment.CallId, volId,
+                    assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.TakenCare);
                     _dal.Assignment.Update(updateAssignment); //can throw Ex
-                    CallManager.Observers.NotifyItemUpdated(updateAssignment.Id);  //stage 5
-                    CallManager.Observers.NotifyListUpdated();  //stage 5
-                    VolunteerManager.Observers.NotifyListUpdated(); //stage 5
                 }
                 else
                     throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed");
             }
+            CallManager.Observers.NotifyItemUpdated(updateAssignment.Id);  //stage 5
+            CallManager.Observers.NotifyListUpdated();  //stage 5
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5
         }
         catch (DO.DalDoesNotExistException ex)
         {
