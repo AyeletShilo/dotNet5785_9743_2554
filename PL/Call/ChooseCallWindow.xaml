@@ -54,9 +54,10 @@
                    Margin="0,15,0,15"
                    ItemsSource="{Binding Path=OpenCallList}"
                    SelectedItem="{Binding SelectedCall}" 
-                   SelectionChanged="DataGrid_SelectionChanged"
+                   MouseLeftButtonUp="DataGrid_SelectionChanged"
                    Style="{StaticResource DataStyle}"
-                   CellStyle="{StaticResource CenteredDataGridCellStyle}">
+                   CellStyle="{StaticResource CenteredDataGridCellStyle}"
+                   >
 
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header=" Call Id" Width="Auto" >
@@ -81,9 +82,10 @@
                 <DataGridTemplateColumn Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Button Click="Choose_Call" 
-                                        Style="{StaticResource ChooseButton}"
-                                    Panel.ZIndex="1"/>
+                            <Button Click="Choose_Call"
+                                    Style="{StaticResource ChooseButton}"
+                                    Panel.ZIndex="1" 
+                                    Focusable="False"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

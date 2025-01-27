@@ -112,42 +112,7 @@ namespace PL.Call
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Call.RemoveObserver(callListObserver);
 
-        /// <summary>
-        /// Open call details when clicking a call in the list
-        /// </summary>
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (SelectedCall != null)
-                new CallDescriptionWindow(SelectedCall.Description, SelectedCall.CallType).ShowDialog();
-        }
-
-        /// <summary>
-        /// Choosing a call for treatment
-        /// </summary>
-        private void Choose_Call(object sender, EventArgs e)
-        {
-            try
-            {
-                if (SelectedCall != null)
-                    s_bl.Call.CallToTreatment(_id, SelectedCall.Id);
-                Close();
-                //queryCallList();
-                //_preWind.RefreshVolunteer();
-            }
-            catch(BO.BlDoesNotExistException ex)
-            {
-                MessageBox.Show($"Call with ID={SelectedCall.Id} does not exists\"");
-            }
-            catch (BO.BlDoesAlreadyExistException)
-            {
-                MessageBox.Show($"Assignment for call with ID={SelectedCall.Id} already exists\"");
-            }
-            catch (BO.BlCantHandleItException)
-            {
-                MessageBox.Show("Unable to assign");
-            }
-        }
-
+       
         /// <summary>
         /// Change of volunteer address
         /// </summary>
@@ -173,5 +138,41 @@ namespace PL.Call
             this.Close();
         }
 
+        /// <summary>
+        /// Open call details when clicking a call in the list
+        /// </summary>
+        private void DataGrid_SelectionChanged(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedCall != null)
+                new CallDescriptionWindow(SelectedCall.Description, SelectedCall.CallType).ShowDialog();
+        }
+
+
+        /// <summary>
+        /// Choosing a call for treatment
+        /// </summary>
+        private void Choose_Call(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (SelectedCall != null)
+                    s_bl.Call.CallToTreatment(_id, SelectedCall.Id);
+                Close();
+                //queryCallList();
+                //_preWind.RefreshVolunteer();
+            }
+            catch (BO.BlDoesNotExistException ex)
+            {
+                MessageBox.Show($"Call with ID={SelectedCall.Id} does not exists\"");
+            }
+            catch (BO.BlDoesAlreadyExistException)
+            {
+                MessageBox.Show($"Assignment for call with ID={SelectedCall.Id} already exists\"");
+            }
+            catch (BO.BlCantHandleItException)
+            {
+                MessageBox.Show("Unable to assign");
+            }
+        }
     }
 }
