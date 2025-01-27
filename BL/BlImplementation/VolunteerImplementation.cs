@@ -17,28 +17,22 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     public void Create(BO.Volunteer boVolunteer)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        VolunteerManager.CheckFormat(boVolunteer);
+
+        //double[] AddressCoordinate;
+        DO.Volunteer doVolunteer;
+        DO.Volunteer oldVol;
+            lock (AdminManager.BlMutex)
+                oldVol = _dal.Volunteer.Read(boVolunteer.Id)!;
+
+        doVolunteer = new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, boVolunteer.Password,
+                (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance, boVolunteer.Address, 0, 0, boVolunteer.MaxDis);
+
         try
         {
-            VolunteerManager.CheckFormat(boVolunteer);
-            VolunteerManager.CheckLogic(boVolunteer);
-
-            double[] AddressCoordinate;
-            if (boVolunteer.Address != "" && boVolunteer.Address != null)
-                AddressCoordinate = CallManager.GetCoordinates(boVolunteer.Address);
-            else
-            {
-                AddressCoordinate = new double[2];
-                AddressCoordinate[0] = 0;
-                AddressCoordinate[1] = 0;
-            }
-
-            DO.Volunteer doVolunteer =
-              new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, boVolunteer.Password, (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance,
-              boVolunteer.Address, AddressCoordinate[0], AddressCoordinate[1], boVolunteer.MaxDis);
-
             lock (AdminManager.BlMutex)
                 _dal.Volunteer.Create(doVolunteer); //can throw Ex
-            VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
+            
         }
         catch (DO.DalAlreadyExistException ex)
         {
@@ -47,6 +41,20 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         catch (DO.DalXMLFileLoadCreateException ex)
         {
             throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
+
+        VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
+        try
+        {
+            //compute the coordinates asynchronously without waiting for the results
+            _ = VolunteerManager.updateCoordinates(doVolunteer); //stage 7
+        }
+        catch (BO.BlIntegrityOfValuesException ex)
+        {
+            lock (AdminManager.BlMutex)
+                _dal.Volunteer.Update(oldVol);
+            VolunteerManager.Observers.NotifyListUpdated();  //stage 5
+            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
         }
     }
 
@@ -100,40 +108,43 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <exception cref="BO.BlDoesNotExistException">Throws an exception when the volunteer you want does not exist in the database</exception>
     public BO.Volunteer? Read(int id)
     {
-        try
-        {
-            DO.Volunteer doVolunteer;
-            IEnumerable<DO.Assignment> volAssignments;
-            lock (AdminManager.BlMutex)
-            {
-                 doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist"); //can throw Ex
-                Func<DO.Assignment, bool>? predicate = assignment => assignment.VolunteerId == id;
-                 volAssignments = _dal.Assignment.ReadAll(predicate);
-            }
-            return new()
-            {
-                Id = id,
-                FullName = doVolunteer.FullName,
-                PhoneNumber = doVolunteer.PhoneNumber,
-                Email = doVolunteer.Email,
-                Address = doVolunteer.VolAddress,
-                Password = doVolunteer.Password,
-                Latitude = doVolunteer.Latitude,
-                Longitude = doVolunteer.Longitude,
-                Job = (BO.Role)doVolunteer.Job,
-                IsActive = doVolunteer.Active,
-                MaxDis = doVolunteer.MaxDistance != null ? Math.Round(doVolunteer.MaxDistance.Value, 4) : null,
-                Distance = (BO.DisType)doVolunteer.Distance,
-                HandleCalls = volAssignments.Count(a => a.EndTreatment == DO.AssignmentEnum.TakenCare),
-                CancelCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelAdmin || a.EndTreatment == DO.AssignmentEnum.SelfCancel)),
-                ExpiredCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelExpired)),
-                InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress)
-            };
-        }
-        catch (DO.DalXMLFileLoadCreateException ex)
-        {
-            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
-        }
+        return VolunteerManager.Read(id);
+        #region draft
+        //try
+        //{
+        //    DO.Volunteer doVolunteer;
+        //    IEnumerable<DO.Assignment> volAssignments;
+        //    lock (AdminManager.BlMutex)
+        //    {
+        //         doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist"); //can throw Ex
+        //        Func<DO.Assignment, bool>? predicate = assignment => assignment.VolunteerId == id;
+        //         volAssignments = _dal.Assignment.ReadAll(predicate);
+        //    }
+        //    return new()
+        //    {
+        //        Id = id,
+        //        FullName = doVolunteer.FullName,
+        //        PhoneNumber = doVolunteer.PhoneNumber,
+        //        Email = doVolunteer.Email,
+        //        Address = doVolunteer.VolAddress,
+        //        Password = doVolunteer.Password,
+        //        Latitude = doVolunteer.Latitude,
+        //        Longitude = doVolunteer.Longitude,
+        //        Job = (BO.Role)doVolunteer.Job,
+        //        IsActive = doVolunteer.Active,
+        //        MaxDis = doVolunteer.MaxDistance != null ? Math.Round(doVolunteer.MaxDistance.Value, 4) : null,
+        //        Distance = (BO.DisType)doVolunteer.Distance,
+        //        HandleCalls = volAssignments.Count(a => a.EndTreatment == DO.AssignmentEnum.TakenCare),
+        //        CancelCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelAdmin || a.EndTreatment == DO.AssignmentEnum.SelfCancel)),
+        //        ExpiredCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelExpired)),
+        //        InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress)
+        //    };
+        //}
+        //catch (DO.DalXMLFileLoadCreateException ex)
+        //{
+        //    throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        //}
+        #endregion
     }
 
     /// <summary>
@@ -186,53 +197,66 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     public void Update(int id, BO.Volunteer volToUpdate)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        try
-        {
-            DO.Volunteer? updateVol;
-            DO.Volunteer? oldVolunteer;
-            lock (AdminManager.BlMutex)
+        DO.Volunteer? updateVol;
+        DO.Volunteer? oldVolunteer;
+        DO.Volunteer doVolunteer;
+
+        lock (AdminManager.BlMutex)
                 updateVol = _dal.Volunteer.Read(id)!;
-            if (id == volToUpdate.Id || GetMyJob(id, updateVol.Password) == BO.Role.Manager)
+        if (id == volToUpdate.Id || GetMyJob(id, updateVol.Password) == BO.Role.Manager)
+        {
+            VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
+
+            lock (AdminManager.BlMutex)
+                oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
+            if ((updateVol.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id, updateVol.Password) != BO.Role.Manager)
+                throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
+
+            if (volToUpdate.Address == null || volToUpdate.Address == " ")
             {
-                VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
-                VolunteerManager.CheckLogic(volToUpdate); //can throw Ex
-
-                double[] addressCordinate;
-                if (volToUpdate.Address != "" && volToUpdate.Address != null)
-                    addressCordinate = CallManager.GetCoordinates(volToUpdate.Address);
-                else
-                {
-                    addressCordinate = new double[2];
-                    addressCordinate[0] = 0;
-                    addressCordinate[1] = 0;
-                }
-
-                lock (AdminManager.BlMutex)
-                   oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
-                if ((oldVolunteer.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id, updateVol.Password) != BO.Role.Manager)
-                    throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
-
-                DO.Volunteer doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, volToUpdate.Password, (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance,
-             volToUpdate.Address, addressCordinate[0], addressCordinate[1], volToUpdate.MaxDis);
+                doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, volToUpdate.Password,
+                    (DO.Role)volToUpdate.Job, volToUpdate.IsActive, (DO.RangeType)volToUpdate.Distance, null, null, null, volToUpdate.MaxDis);
+            }
+            else
+            {
+                doVolunteer = new(volToUpdate.Id, volToUpdate.FullName, volToUpdate.PhoneNumber, volToUpdate.Email, volToUpdate.Password, (DO.Role)volToUpdate.Job, volToUpdate.IsActive,
+                    (DO.RangeType)volToUpdate.Distance, volToUpdate.Address, 0, 0, volToUpdate.MaxDis);
+            }
+            try
+            {
                 lock (AdminManager.BlMutex)
                     _dal.Volunteer.Update(doVolunteer);//can throw Ex
-                VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);  //stage 5
-                VolunteerManager.Observers.NotifyListUpdated();  //stage 5
-
+            }
+            catch (DO.DalDoesNotExistException ex)
+            {
+                throw new BO.BlDoesNotExistException($"Volunteer with ID={volToUpdate.Id} does Not exists", ex);
             }
 
-            else
-                throw new BO.BlCantUpdateException("You are not allowed to update this");
+            catch (DO.DalXMLFileLoadCreateException ex)
+            {
+                throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+            }
+            VolunteerManager.Observers.NotifyItemUpdated(doVolunteer.Id);  //stage 5
+            VolunteerManager.Observers.NotifyListUpdated();  //stage 5
         }
-        catch (DO.DalDoesNotExistException ex)
+        else
+            throw new BO.BlCantUpdateException("You are not allowed to update this");
+
+        VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
+        try
         {
-            throw new BO.BlDoesNotExistException($"Volunteer with ID={volToUpdate.Id} does Not exists", ex);
+            //compute the coordinates asynchronously without waiting for the results
+            _ = VolunteerManager.updateCoordinates(doVolunteer); //stage 7
+        }
+        catch (BO.BlIntegrityOfValuesException ex)
+        {
+            lock (AdminManager.BlMutex)
+                _dal.Volunteer.Update(oldVolunteer!);
+            VolunteerManager.Observers.NotifyListUpdated();  //stage 5
+            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
         }
 
-        catch (DO.DalXMLFileLoadCreateException ex)
-        {
-            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
-        }
+
     }
 
     public void UpdateAddress(BO.Volunteer vol, string? newAdd)

@@ -9,7 +9,7 @@ namespace Helpers;
 
 internal static class CallManager
 {
-    private static IDal s_dal = Factory.Get; //stage 4
+    private static IDal _dal = Factory.Get; //stage 4
     internal static ObserverManager Observers = new(); //stage 5 
     private static readonly BlApi.ICall callImplementation = new CallImplementation();
 
@@ -34,7 +34,7 @@ internal static class CallManager
             return CallStatus.InTreatment;
 
         lock (AdminManager.BlMutex)
-            if ((MaxCloseTime - AdminManager.Now) < s_dal.Config.RiskRange)
+            if ((MaxCloseTime - AdminManager.Now) < _dal.Config.RiskRange)
                 return CallStatus.OpenInRisk;
 
         return CallStatus.Opened;
@@ -52,7 +52,7 @@ internal static class CallManager
         if (currentAssignment.EndTreatment == null && currentAssignment != null)
         {
             lock (AdminManager.BlMutex)
-                if ((currentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange)
+                if ((currentCall.MaxTime - AdminManager.Now) < _dal.Config.RiskRange)
                     return CallListStatus.InTreatmentInRisk;
             return CallListStatus.InTreatment;
         }
@@ -65,20 +65,20 @@ internal static class CallManager
     /// <param name="toCheck">call to check</param>
     /// <returns>the corresponding call values ​​for the database</returns>
     /// <exception cref="BO.BlIntegrityOfValuesException">Throws an exception if one of the values ​​is logically incorrect</exception>
-    internal static DO.Call CheckLogic(BO.Call toCheck)
-    {
-        bool currentMaxTime = (toCheck.MaxCloseTime > AdminManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
+    //internal static DO.Call CheckLogic(BO.Call toCheck)
+    //{
+    //    bool currentMaxTime = (toCheck.MaxCloseTime > AdminManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
 
-        if (currentMaxTime == false)
-            throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
+    //    if (currentMaxTime == false)
+    //        throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
 
-        double[] AddressCoordinate = CallManager.GetCoordinates(toCheck.CallAddress);
+    //    double[] AddressCoordinate = CallManager.GetCoordinates(toCheck.CallAddress);
 
-        DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, AddressCoordinate[0],
-            AddressCoordinate[1], toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
+    //    DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, AddressCoordinate[0],
+    //        AddressCoordinate[1], toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
 
-        return DoCall;
-    }
+    //    return DoCall;
+    //}
 
     /// <summary>
     /// This method takes an address as input and returns an array with the latitude and longitude.
@@ -86,95 +86,106 @@ internal static class CallManager
     /// </summary>
     /// <param name="address">The address to be geocoded</param>
     /// <returns>A double array containing the latitude and longitude</returns>
-    internal static double[] GetCoordinates(string address)
+    //internal static double[] GetCoordinates(string address)
+    //{
+    //    // Checking if the address is null or empty
+    //    if (string.IsNullOrWhiteSpace(address))
+    //        throw new BO.BlNullPropertyException("Address cannot be empty or null." + nameof(address));
+
+    //    //Constructing the URL for the geocoding service with the provided address
+
+    //    string apiKey = "pk.902e35436f8c579a871d8158aee1bde2";
+    //    //string apiKey = "pk.9c3fc19e8792d781f9847563010296cd";
+    //    string url = $"https://us1.locationiq.com/v1/search?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
+    //    //string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
+
+    //    using (HttpClient client = new HttpClient())
+    //    {
+    //        // שליחת בקשה סינכרונית (חסימתית)
+    //        HttpResponseMessage response = client.GetAsync(url).Result;
+
+    //        // בדיקת מצב התשובה
+    //        if (!response.IsSuccessStatusCode)
+    //            throw new BO.BlIntegrityOfValuesException($"Error in request: {response.StatusCode}");
+
+    //        // קריאת התוכן כסטרינג
+    //        string jsonResponse = response.Content.ReadAsStringAsync().Result;
+
+    //        // פענוח התוכן מ-JSON
+    //        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    //        var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
+
+    //        // בדיקה אם נמצאו תוצאות
+    //        if (results == null || results.Length == 0)
+    //            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
+
+    //        // החזרת קואורדינטות
+    //        return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
+    //    }
+    //}
+
+    internal static void CheckFormat(BO.Call toCheck)
+    {
+        bool currentMaxTime = (toCheck.MaxCloseTime > AdminManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
+
+        if (currentMaxTime == false)
+            throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
+    }
+    internal static async Task updateCoordinates(DO.Call doCall)
+    {
+        double?[] AddressCoordinate = await CallManager.GetCoordinates(doCall.CallAddress);
+
+        if(AddressCoordinate is null)
+            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
+
+        //DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, (double)AddressCoordinate[0]!,
+        //    (double)AddressCoordinate[1]!, toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
+        //return DoCall;
+        lock (AdminManager.BlMutex)
+                _dal.Call.Update(
+                    new(doCall.Id, 
+                    doCall.CallType,
+                    doCall.CallAddress, 
+                    (double)AddressCoordinate[0]!, 
+                    (double)AddressCoordinate[1]!,
+                    doCall.OpenTime, 
+                    doCall.Description,
+                    doCall.MaxTime));
+    }
+    internal static async Task<double?[]> GetCoordinates(string address)
     {
         // Checking if the address is null or empty
         if (string.IsNullOrWhiteSpace(address))
             throw new BO.BlNullPropertyException("Address cannot be empty or null." + nameof(address));
 
         //Constructing the URL for the geocoding service with the provided address
+        string apiKey = "pk.902e35436f8c579a871d8158aee1bde2";
+        string url = $"https://us1.locationiq.com/v1/search?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
 
-
-        //string apiKey = "pk.9c3fc19e8792d781f9847563010296cd";
-        //string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&key={apiKey}";
-        string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
-
-        //// Creating a synchronous HTTP request
-        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-        request.Method = "GET";
-        //#pragma warning disable SYSLIB0014
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-        //        request.Method = "GET";
-        //#pragma warning restore SYSLIB0014
-
-        // Sending the request and getting the response synchronously
-        using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+        using (HttpClient client = new HttpClient())
         {
-            // Checking if the response status is OK
-            if (response.StatusCode != HttpStatusCode.OK)
+            // Sending asynchronous request
+            HttpResponseMessage response = await client.GetAsync(url);
+
+            // Checking the response status
+            if (!response.IsSuccessStatusCode)
                 throw new BO.BlIntegrityOfValuesException($"Error in request: {response.StatusCode}");
 
-            // Reading the response body as a string
-            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
-            {
-                string jsonResponse = reader.ReadToEnd();
+            // Reading the content asynchronously
+            string jsonResponse = await response.Content.ReadAsStringAsync();
 
-                // Deserializing the JSON response to extract location data
-                var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-                var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
+            // Deserializing the JSON content
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
 
-                // If no results are found, throwing an exception
-                if (results == null || results.Length == 0)
-                    throw new BO.BlIntegrityOfValuesException($"Wrong Address. No coordinates found for the given address.");
+            // Checking if results are found
+            if (results == null || results.Length == 0)
+                throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
 
-                // Returning the latitude and longitude as an array
-                return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
-            }
+            // Returning the coordinates
+            return new double?[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
         }
     }
-
-
-
-
-    //public static double[] GetCoordinates(string address)
-    //{
-
-    //    // URL לשירות Geocode.maps.co (שאינו דורש API Key)
-    //    string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
-
-    //    using (HttpClient client = new HttpClient())
-    //    {
-    //        // שליחת בקשה GET לשירות
-    //        HttpResponseMessage response = client.GetAsync(url).GetAwaiter().GetResult();
-
-    //        // בדיקת סטטוס התשובה
-    //        if (!response.IsSuccessStatusCode)
-    //        {
-    //            string errorResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-    //            Console.WriteLine($"Error Response: {errorResponse}");
-    //            throw new Exception($"Error in request: {response.StatusCode}");
-    //        }
-
-    //        // קריאת גוף התשובה כטקסט
-    //        string jsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-
-    //        // עיבוד התשובה ופרשנות JSON
-    //        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-    //        var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
-
-    //        // אם אין תוצאות
-    //        if (results == null || results.Length == 0)
-    //        {
-    //            throw new Exception("No coordinates found for the given address.");
-    //        }
-
-    //        // החזרת הקואורדינטות
-    //        return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
-    //    }
-    //}
-
-
-    // מחלקת עזר לפענוח JSON
 
 
 
@@ -201,7 +212,7 @@ internal static class CallManager
     {
         try
         {
-            //IEnumerable<DO.Volunteer> oldVolunteer = s_dal.Volunteer.ReadAll(null); //can throw Ex
+            //IEnumerable<DO.Volunteer> oldVolunteer = _dal.Volunteer.ReadAll(null); //can throw Ex
             List<BO.CallInList>? callInLists = new List<BO.CallInList>();
 
             foreach (DO.Call item in oldCalls)
@@ -239,7 +250,7 @@ internal static class CallManager
                 {
                     string? lastVolunteer;
                     lock (AdminManager.BlMutex)
-                        lastVolunteer = s_dal.Volunteer.Read(callAssignment.VolunteerId)!.FullName;
+                        lastVolunteer = _dal.Volunteer.Read(callAssignment.VolunteerId)!.FullName;
                     callInLists.Add(new()
                     {
                         Id = callAssignment.Id,
@@ -292,7 +303,7 @@ internal static class CallManager
     {
         string volAddress;
         lock (AdminManager.BlMutex)
-            volAddress = s_dal.Volunteer.Read(v => v.Id == volId).VolAddress;
+            volAddress = _dal.Volunteer.Read(v => v.Id == volId).VolAddress;
         return new()
         {
             Id = item.Id,
@@ -304,6 +315,207 @@ internal static class CallManager
             VolDistance = VolunteerManager.CalculateDis(volAddress, item.CallAddress)
         };
     }
+    #region stage 7
+    internal static IEnumerable<BO.OpenCallInList> GetOpenedCalls(int volId, BO.CallType? filter = null, BO.OpenCallData? sort = null)
+    {
+
+        lock (AdminManager.BlMutex)
+        {
+            DO.Volunteer vol;
+            IEnumerable<DO.Call> oldCalls;
+            lock (AdminManager.BlMutex)
+            {
+                vol = _dal.Volunteer.Read(volId) ?? throw new BO.BlDoesNotExistException($"There is no volunteer with ID:{volId}");
+                oldCalls = _dal.Call.ReadAll(null);
+            }
+            var openCalls = from item in oldCalls
+                            let tmpCall = Read(item.Id)
+                            where (tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened) && CallManager.CorrectDis(vol, item.Latitude, item.Longitude)
+                            select CallManager.ToOpenCall(item, volId); //can throw Ex
+
+
+            openCalls = null == filter ? openCalls : from call in openCalls
+                                                     where (BO.CallType)filter == call.CallType
+                                                     select call;
+
+            openCalls = null == sort ? openCalls.OrderBy(c => c.Id)
+                : openCalls.OrderBy<BO.OpenCallInList, object>(call => (sort switch
+                {
+                    BO.OpenCallData.Id => call.Id,
+                    BO.OpenCallData.CallType => call.CallType,
+                    BO.OpenCallData.Description => call.Description,
+                    BO.OpenCallData.CallAddress => call.FullAddress,
+                    BO.OpenCallData.OpenTime => call.OpenTime,
+                    BO.OpenCallData.MaxCloseTime => call.MaxCloseTime,
+                    BO.OpenCallData.VolDistance => call.VolDistance,
+                    _ => call.Id
+                }));
+
+            return openCalls;
+        }
+
+    }
+
+    internal static BO.Call Read(int callId)
+    {
+        lock (AdminManager.BlMutex)
+        {
+            var doCall = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist");
+
+            Func<DO.Assignment, bool> func = item => item.CallId == callId;
+
+            IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func); //read all assignment of this Call.
+            var callAssignments = new List<BO.CallAssignInList>();
+            if (dataAssignments.Count() != 0)
+            {
+                callAssignments = dataAssignments.Select(assign => new BO.CallAssignInList
+                {
+                    VolunteerId = assign.VolunteerId,
+                    VolunteerName = (assign.VolunteerId != 0) ? _dal.Volunteer.Read(assign.VolunteerId).FullName : null,
+                    InterTime = assign.InterTime,
+                    EndTime = assign.EndTime.HasValue ? assign.EndTime : null,
+                    EndTreatment = assign.EndTreatment.HasValue ? (BO.EndTreatment)assign.EndTreatment : null, /*BO.EndTreatment.None,*/
+
+                }).ToList();
+            }
+
+            var myStatus = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime) : BO.CallStatus.Opened;//הNULL מנוהל
+            return new()
+            {
+                Id = callId,
+                CallType = (BO.CallType)doCall.CallType,
+                Description = doCall.Description,
+                CallAddress = doCall.CallAddress,
+                Latitude = doCall.Latitude,
+                Longitude = doCall.Longitude,
+                OpenTime = doCall.OpenTime,
+                MaxCloseTime = doCall.MaxTime,
+                Status = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime) : BO.CallStatus.Opened, //הNULL מנוהל
+                CallAssignments = callAssignments
+            };
+        }
+    }
+    internal static void CallToTreatment(int volId, int callId)
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        BO.Call call = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists");
+        Func<DO.Assignment, bool>? predicate = assignment => assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel
+                                                             && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin;
+        IEnumerable<DO.Assignment> assignments;
+        lock (AdminManager.BlMutex)
+            assignments = _dal.Assignment.ReadAll(predicate).ToList();
+        if (assignments.Count() != 0)
+            throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists");
+        if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
+        {
+            lock (AdminManager.BlMutex)
+                _dal.Assignment.Create(new(0, callId, volId, AdminManager.Now, null, null));
+            CallManager.Observers.NotifyItemUpdated(call.Id);  //stage 5
+            VolunteerManager.Observers.NotifyItemUpdated(volId);  //stage 5
+            CallManager.Observers.NotifyListUpdated(); //stage 5
+        }
+        else
+            throw new BO.BlCantHandleItException($"Unable to assign");
+    }
+
+    internal static void UpdateEndTreatment(int volId, int assignmentId)
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        try
+        {
+            DO.Assignment updateAssignment;
+            lock (AdminManager.BlMutex)
+            {
+                DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
+                if (volId == assignment.VolunteerId && assignment.EndTreatment == null)
+                {
+                    updateAssignment = new(assignmentId, assignment.CallId, volId,
+                    assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.TakenCare);
+                    _dal.Assignment.Update(updateAssignment); //can throw Ex
+                }
+                else
+                    throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed");
+            }
+            CallManager.Observers.NotifyItemUpdated(updateAssignment.Id);  //stage 5
+            CallManager.Observers.NotifyListUpdated();  //stage 5
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists", ex);
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
+    }
+
+    internal static void GetAssignmentToEnd(int volId, int callId)
+    {
+        int assignId;
+        lock (AdminManager.BlMutex)
+        {
+            DO.Assignment assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment");
+            assignId = assignment.Id;
+        }
+        UpdateEndTreatment(volId, assignId);
+    }
+
+    internal static void UpdateCancelTreatment(int volId, int assignmentId)
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        try
+        {
+            DO.Assignment assignment;
+            lock (AdminManager.BlMutex)
+            {
+                assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
+                DO.Volunteer volunteer = _dal.Volunteer.Read(volId) ?? throw new BO.BlDoesNotExistException($"volunteer with ID={volId} does not exists");
+                if ((volId == assignment.VolunteerId || volunteer.Job == DO.Role.Manager) && assignment.EndTime is null)
+                {
+                    DO.Assignment updateAssignment;
+                    if (volId == assignment.VolunteerId)
+                    {
+                        updateAssignment = new(assignmentId, assignment.CallId, volId,
+                            assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.SelfCancel);
+                    }
+                    else
+                    {
+                        updateAssignment = new(assignmentId, assignment.CallId, volId,
+                           assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.CancelAdmin);
+                    }
+                    _dal.Assignment.Update(updateAssignment); //can throw Ex
+                }
+                else
+                    throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled");
+            }
+
+            CallManager.Observers.NotifyItemUpdated(assignment.CallId);  //stage 5
+            CallManager.Observers.NotifyListUpdated();  //stage 5
+            VolunteerManager.Observers.NotifyListUpdated(); //stage 5
+        }
+        catch (DO.DalDoesNotExistException ex)
+        {
+            throw new BO.BlDoesNotExistException($"item with ID: {assignmentId} does not exists", ex);
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
+    }
+
+    internal static void GetAssignmentToCancel(int volId, int callId)
+    {
+        int assignId;
+        lock (AdminManager.BlMutex)
+        {
+            DO.Assignment? assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment");
+            assignId = assignment.Id;
+        }
+        UpdateCancelTreatment(volId, assignId);
+    }
+
+    #endregion
     internal static bool CorrectDis(DO.Volunteer vol, double callLat, double callLon)
     {
         if (vol.MaxDistance == null)
@@ -350,7 +562,7 @@ internal static class CallManager
         DO.Assignment assignToUp;
 
         lock (AdminManager.BlMutex)
-            calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock).ToList();
+            calls = _dal.Call.ReadAll(m => m.MaxTime < newClock).ToList();
         //bool listUpdated = false;
 
         Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
@@ -363,7 +575,7 @@ internal static class CallManager
                 assignUpdated = true;
                 //listUpdated = true;
                 lock (AdminManager.BlMutex)
-                    s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
+                    _dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
                 Observers.NotifyItemUpdated(call.Id);
             }
             else
@@ -372,8 +584,8 @@ internal static class CallManager
                 //listUpdated = true;
                 lock (AdminManager.BlMutex)
                 {
-                    assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); ///קורא לראשונה או לאחרונה?אם לאחרונה צריך לשנות
-                    s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
+                    assignToUp = _dal.Assignment.Read(c => c.CallId == call.Id); ///קורא לראשונה או לאחרונה?אם לאחרונה צריך לשנות
+                    _dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
                 }
                 Observers.NotifyItemUpdated(assignToUp.Id);
                 Observers.NotifyItemUpdated(call.Id);

@@ -1,4 +1,5 @@
-﻿using BO;
+﻿//using BlApi;
+using BO;
 using DalApi;
 using System.Text.RegularExpressions;
 
@@ -7,7 +8,7 @@ namespace Helpers;
 
 internal static class VolunteerManager
 {
-    private static IDal s_dal = Factory.Get; //stage 4
+    private static IDal _dal = Factory.Get; //stage 4
     internal static ObserverManager Observers = new(); //stage 5 
 
     /// <summary>
@@ -28,6 +29,10 @@ internal static class VolunteerManager
             throw new BO.BlIntegrityOfValuesException("Error in Max Distance format");
         if (volToCheck.Id < 10000000 || volToCheck.Id > 999999999)
             throw new BO.BlIntegrityOfValuesException("Error in ID format");
+        if (checkId(volToCheck.Id) == false)
+            throw new BO.BlIntegrityOfValuesException("Error in ID integrity");
+        if (checkPass(volToCheck.Password) == false)
+            throw new BO.BlIntegrityOfValuesException("Password is not strong");
     }
 
     /// <summary>
@@ -51,18 +56,34 @@ internal static class VolunteerManager
     /// <summary>
     /// Checking that the volunteer's values ​​are logically correct
     /// </summary>
-    /// <param name="volToCheck">The volunteer whose values ​​are being tested</param>
+    /// <param name="doVolunteer">The volunteer whose values ​​are being tested</param>
     /// <exception cref="BO.BlIntegrityOfValuesException">>Throws an exception if there is a problem with the logic of one of the values</exception>
-    internal static void CheckLogic(BO.Volunteer volToCheck)
+    internal static async Task updateCoordinates(DO.Volunteer doVolunteer)
     {
-        if (checkId(volToCheck.Id) == false)
-            throw new BO.BlIntegrityOfValuesException("Error in ID integrity");
+        //if (checkId(volToCheck.Id) == false)
+        //    throw new BO.BlIntegrityOfValuesException("Error in ID integrity");
 
-        if (checkPass(volToCheck.Password) == false)
-            throw new BO.BlIntegrityOfValuesException("Password is not strong");
+        //if (checkPass(volToCheck.Password) == false)
+        //    throw new BO.BlIntegrityOfValuesException("Password is not strong");
 
-        if (volToCheck.Address != "" && volToCheck.Address != null)
-            CallManager.GetCoordinates(volToCheck.Address);
+        if (doVolunteer.VolAddress != "" && doVolunteer.VolAddress != null)
+        {
+
+            double?[] AddressCoordinate = await CallManager.GetCoordinates(doVolunteer.VolAddress);
+
+            if (AddressCoordinate is null)
+                throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
+
+            lock (AdminManager.BlMutex)
+                _dal.Volunteer.Update(new
+                    (doVolunteer.Id, doVolunteer.FullName,
+                    doVolunteer.PhoneNumber, doVolunteer.Email,
+                    doVolunteer.Password, doVolunteer.Job,
+                    doVolunteer.Active, doVolunteer.Distance, 
+                    doVolunteer.VolAddress, (double)AddressCoordinate[0]!,
+                    (double)AddressCoordinate[1]!, doVolunteer.MaxDistance));      
+        }
+
     }
 
     private static bool checkPass(string password)
@@ -131,14 +152,13 @@ internal static class VolunteerManager
         DO.Assignment? currentAss;
         Func<DO.Assignment, bool> func = item => item.VolunteerId == id;
         lock (AdminManager.BlMutex)
-            currentAss = s_dal.Assignment.Read(func);
+            currentAss = _dal.Assignment.Read(func);
         if (currentAss != null && currentAss.EndTime == null)/*?? throw new BO.BlNullPropertyException($"Assignment does not exist");*/
         {
             DO.Call currentCall;
             lock (AdminManager.BlMutex)
-                currentCall = s_dal.Call.Read(currentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
-           // Observers.NotifyItemUpdated(id);
-            //Observers.NotifyItemUpdated(currentCall.Id);
+                currentCall = _dal.Call.Read(currentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
+
             return new()
             {
                 Id = id,
@@ -150,7 +170,7 @@ internal static class VolunteerManager
                 MaxCloseTime = currentCall.MaxTime,
                 EntryTime = currentAss.InterTime,
                 VolDistance = CalculateDis(address, currentCall.CallAddress),
-                Status = (currentCall.MaxTime is null || (currentCall.MaxTime - AdminManager.Now) < s_dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
+                Status = (currentCall.MaxTime is null || (currentCall.MaxTime - AdminManager.Now) < _dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
             };
         }
         return null;
@@ -166,7 +186,7 @@ internal static class VolunteerManager
     {
         IEnumerable<DO.Assignment> oldAssignments;
         lock (AdminManager.BlMutex)
-            oldAssignments = s_dal.Assignment.ReadAll(null);
+            oldAssignments = _dal.Assignment.ReadAll(null);
         List<BO.VolunteerInList> volunteerInLists = new List<BO.VolunteerInList>();
         foreach (DO.Volunteer item in oldVolunteer)
         {
@@ -181,7 +201,7 @@ internal static class VolunteerManager
                 ExpiredCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.CancelExpired)),
                 CancelCalls = oldAssignments.Count(assignment => (assignment.VolunteerId == item.Id) && (assignment.EndTreatment == DO.AssignmentEnum.SelfCancel || assignment.EndTreatment == DO.AssignmentEnum.CancelAdmin)),
                 CallId = callId != null ? callId : null,
-                InTreatment = callId.HasValue ? (BO.CallInTreatment)s_dal.Call.Read(callId.Value)!.CallType : BO.CallInTreatment.None
+                InTreatment = callId.HasValue ? (BO.CallInTreatment)_dal.Call.Read(callId.Value)!.CallType : BO.CallInTreatment.None
             });
         };
         return volunteerInLists.AsEnumerable();
@@ -202,8 +222,8 @@ internal static class VolunteerManager
         DO.Volunteer vol;
         lock (AdminManager.BlMutex)
         {
-            call = s_dal.Call.Read(callPredicate);
-            vol = s_dal.Volunteer.Read(volPredicate);
+            call = _dal.Call.Read(callPredicate);
+            vol = _dal.Volunteer.Read(volPredicate);
         }
 
 
@@ -232,6 +252,45 @@ internal static class VolunteerManager
         return Math.Round(distance, 4);
     }
 
+    #region stage 7
+    internal static BO.Volunteer? Read(int id)
+    {
+        try
+        {
+            DO.Volunteer doVolunteer;
+            IEnumerable<DO.Assignment> volAssignments;
+            lock (AdminManager.BlMutex)
+            {
+                doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist"); //can throw Ex
+                Func<DO.Assignment, bool>? predicate = assignment => assignment.VolunteerId == id;
+                volAssignments = _dal.Assignment.ReadAll(predicate);
+            }
+            return new()
+            {
+                Id = id,
+                FullName = doVolunteer.FullName,
+                PhoneNumber = doVolunteer.PhoneNumber,
+                Email = doVolunteer.Email,
+                Address = doVolunteer.VolAddress,
+                Password = doVolunteer.Password,
+                Latitude = doVolunteer.Latitude,
+                Longitude = doVolunteer.Longitude,
+                Job = (BO.Role)doVolunteer.Job,
+                IsActive = doVolunteer.Active,
+                MaxDis = doVolunteer.MaxDistance != null ? Math.Round(doVolunteer.MaxDistance.Value, 4) : null,
+                Distance = (BO.DisType)doVolunteer.Distance,
+                HandleCalls = volAssignments.Count(a => a.EndTreatment == DO.AssignmentEnum.TakenCare),
+                CancelCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelAdmin || a.EndTreatment == DO.AssignmentEnum.SelfCancel)),
+                ExpiredCalls = volAssignments.Count(a => (a.EndTreatment == DO.AssignmentEnum.CancelExpired)),
+                InCall = VolunteerManager.VolCall(id, doVolunteer.VolAddress)
+            };
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
+    }
+    #endregion
 
     private static readonly Random s_rand = new();
     private static int s_simulatorCounter = 0;
@@ -244,33 +303,32 @@ internal static class VolunteerManager
         //volunteerInList= CallManager.ReadAll(/*volunteer => volunteer.Active == true*/).ToList();
         
         lock (AdminManager.BlMutex)
-            volList = s_dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList(); 
+            volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList(); 
         IEnumerable<BO.VolunteerInList> volunteersList =ToVolunteerInList(volList);
         foreach (BO.VolunteerInList volunteer in volunteersList)
         {
             if(volunteer.CallId == null)
             {
-
-                //DO.Volunteer vol;
-                //IEnumerable<DO.Call> oldCalls;
-                //lock (AdminManager.BlMutex)
-                //{
-                    
-                //    oldCalls = s_dal.Call.ReadAll(null);
-                //}
-                //var openCalls = from item in oldCalls
-                //                let tmpCall = Read(item.Id)
-                //                where (tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened) && CallManager.CorrectDis(volunteer, item.Latitude, item.Longitude)
-                //                select CallManager.ToOpenCall(item, volunteer.Id); //can throw Ex
+                if (s_rand.NextDouble() < 0.2)
+                    continue;
+                List<BO.OpenCallInList> opensCalls= CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
+                BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
+                CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
             }
             else
             {
-               DO.Call call= s_dal.Call.Read((int)volunteer.CallId);
-               if(CallManager.CorrectDis(volunteer, call.Latitude, call.Longitude))
-
-
-
-
+                var vol= Read(volunteer.Id);
+                if (vol.InCall.EntryTime < AdminManager.Now.AddDays(-7))
+                {
+                    CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.Id);
+                }
+                else
+                {
+                    if (s_rand.NextDouble() < 0.2)
+                    {
+                        CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.Id);
+                    }
+                }
             }
                 
         }
