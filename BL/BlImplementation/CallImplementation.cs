@@ -114,16 +114,15 @@ internal class CallImplementation : BlApi.ICall
             IEnumerable<BO.ClosedCallInList> closeCalls;
 
             lock (AdminManager.BlMutex)
-                assignmentForVol = _dal.Assignment.ReadAll(a => a.VolunteerId == volId);
+                assignmentForVol = _dal.Assignment.ReadAll(a => a.VolunteerId == volId).ToList();
             closeCalls = from assin in assignmentForVol
                          let tmpCall = Read(assin.CallId)
-                         where tmpCall.Status == BO.CallStatus.Closed
+                         where assin.EndTreatment == DO.AssignmentEnum.TakenCare
                          let callAssin = tmpCall.CallAssignments.LastOrDefault()
                          select CallManager.ToCloseCall(tmpCall, callAssin); //can throw Ex
 
 
             closeCalls = null == filter ? closeCalls : closeCalls.Where(call => (BO.CallType)filter == call.CallType);
-
             closeCalls = null == sort ? closeCalls.OrderBy(c => c.Id)
                 : closeCalls.OrderBy<BO.ClosedCallInList, object>(call => sort switch
                 {

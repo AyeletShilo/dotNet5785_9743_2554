@@ -149,6 +149,9 @@ internal static class AdminManager //stage 4
             //    _simulateTask = Task.Run(() => CallManager.SimulateCourseRegistrationAndGrade());
 
             //etc...
+            if (_simulateTask is null || _simulateTask.IsCompleted)//stage 7
+                _simulateTask = Task.Run(() => VolunteerManager.SimulateVolunteersActivity());
+
 
             try
             {

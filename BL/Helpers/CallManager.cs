@@ -94,7 +94,7 @@ internal static class CallManager
 
         //Constructing the URL for the geocoding service with the provided address
 
-        
+
         //string apiKey = "pk.9c3fc19e8792d781f9847563010296cd";
         //string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}&key={apiKey}";
         string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
@@ -139,49 +139,49 @@ internal static class CallManager
     //public static double[] GetCoordinates(string address)
     //{
 
-            //    // URL לשירות Geocode.maps.co (שאינו דורש API Key)
-            //    string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
+    //    // URL לשירות Geocode.maps.co (שאינו דורש API Key)
+    //    string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
 
-            //    using (HttpClient client = new HttpClient())
-            //    {
-            //        // שליחת בקשה GET לשירות
-            //        HttpResponseMessage response = client.GetAsync(url).GetAwaiter().GetResult();
+    //    using (HttpClient client = new HttpClient())
+    //    {
+    //        // שליחת בקשה GET לשירות
+    //        HttpResponseMessage response = client.GetAsync(url).GetAwaiter().GetResult();
 
-            //        // בדיקת סטטוס התשובה
-            //        if (!response.IsSuccessStatusCode)
-            //        {
-            //            string errorResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-            //            Console.WriteLine($"Error Response: {errorResponse}");
-            //            throw new Exception($"Error in request: {response.StatusCode}");
-            //        }
+    //        // בדיקת סטטוס התשובה
+    //        if (!response.IsSuccessStatusCode)
+    //        {
+    //            string errorResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+    //            Console.WriteLine($"Error Response: {errorResponse}");
+    //            throw new Exception($"Error in request: {response.StatusCode}");
+    //        }
 
-            //        // קריאת גוף התשובה כטקסט
-            //        string jsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+    //        // קריאת גוף התשובה כטקסט
+    //        string jsonResponse = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            //        // עיבוד התשובה ופרשנות JSON
-            //        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            //        var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
+    //        // עיבוד התשובה ופרשנות JSON
+    //        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    //        var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
 
-            //        // אם אין תוצאות
-            //        if (results == null || results.Length == 0)
-            //        {
-            //            throw new Exception("No coordinates found for the given address.");
-            //        }
+    //        // אם אין תוצאות
+    //        if (results == null || results.Length == 0)
+    //        {
+    //            throw new Exception("No coordinates found for the given address.");
+    //        }
 
-            //        // החזרת הקואורדינטות
-            //        return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
-            //    }
-            //}
-
-
-            // מחלקת עזר לפענוח JSON
+    //        // החזרת הקואורדינטות
+    //        return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
+    //    }
+    //}
 
 
+    // מחלקת עזר לפענוח JSON
 
-            /// <summary>
-            /// Class to represent the structure of the geocoding response (latitude and longitude)
-            /// </summary>
-private class LocationResult
+
+
+    /// <summary>
+    /// Class to represent the structure of the geocoding response (latitude and longitude)
+    /// </summary>
+    private class LocationResult
     {
         // Latitude as string in the JSON response
         public string Lat { get; set; }
@@ -208,7 +208,7 @@ private class LocationResult
             {
                 DO.Assignment? callAssignment = oldAssignment.LastOrDefault(a => a.CallId == item.Id);
 
-                
+
                 if (callAssignment is null || callAssignment.VolunteerId == 0)
                 {
 
@@ -221,7 +221,7 @@ private class LocationResult
                         _Status = BO.CallListStatus.Expired;
 
 
-                        callInLists.Add(new()
+                    callInLists.Add(new()
                     {
                         Id = null,
                         CallId = item.Id,
@@ -346,34 +346,40 @@ private class LocationResult
     internal static void UpdateExpiredCalls(DateTime oldClock, DateTime newClock)
     {
         bool assignUpdated = false;
+        IEnumerable<DO.Call> calls;
+        DO.Assignment assignToUp;
+
         lock (AdminManager.BlMutex)
+            calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock).ToList();
+        //bool listUpdated = false;
+
+        Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
+        IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate).ToList();
+
+        foreach (var call in callsToUp)
         {
-            var calls = s_dal.Call.ReadAll(m => m.MaxTime < newClock);
-            //bool listUpdated = false;
-
-            Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
-            IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate);
-
-            foreach (var call in callsToUp)
+            if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
             {
-                if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
-                {
-                    assignUpdated = true;
-                    //listUpdated = true;
+                assignUpdated = true;
+                //listUpdated = true;
+                lock (AdminManager.BlMutex)
                     s_dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
-                    Observers.NotifyItemUpdated(call.Id);
-                }
-                else
+                Observers.NotifyItemUpdated(call.Id);
+            }
+            else
+            {
+                assignUpdated = true;
+                //listUpdated = true;
+                lock (AdminManager.BlMutex)
                 {
-                    assignUpdated = true;
-                    //listUpdated = true;
-                    DO.Assignment assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id);
+                    assignToUp = s_dal.Assignment.Read(c => c.CallId == call.Id); ///קורא לראשונה או לאחרונה?אם לאחרונה צריך לשנות
                     s_dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
-                    Observers.NotifyItemUpdated(assignToUp.Id);
-                    Observers.NotifyItemUpdated(call.Id);
                 }
+                Observers.NotifyItemUpdated(assignToUp.Id);
+                Observers.NotifyItemUpdated(call.Id);
             }
         }
+
         if (oldClock != newClock || assignUpdated)
         {
             Observers.NotifyListUpdated();

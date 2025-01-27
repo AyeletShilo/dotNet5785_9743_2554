@@ -231,6 +231,51 @@ internal static class VolunteerManager
         double distance = R * Math.Sqrt(x * x + y * y); // נוסחת פיתגורס
         return Math.Round(distance, 4);
     }
+
+
+    private static readonly Random s_rand = new();
+    private static int s_simulatorCounter = 0;
+
+    internal static void SimulateVolunteersActivity()
+    {
+        Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";//?
+
+        IEnumerable<DO.Volunteer> volList;
+        //volunteerInList= CallManager.ReadAll(/*volunteer => volunteer.Active == true*/).ToList();
+        
+        lock (AdminManager.BlMutex)
+            volList = s_dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList(); 
+        IEnumerable<BO.VolunteerInList> volunteersList =ToVolunteerInList(volList);
+        foreach (BO.VolunteerInList volunteer in volunteersList)
+        {
+            if(volunteer.CallId == null)
+            {
+
+                //DO.Volunteer vol;
+                //IEnumerable<DO.Call> oldCalls;
+                //lock (AdminManager.BlMutex)
+                //{
+                    
+                //    oldCalls = s_dal.Call.ReadAll(null);
+                //}
+                //var openCalls = from item in oldCalls
+                //                let tmpCall = Read(item.Id)
+                //                where (tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened) && CallManager.CorrectDis(volunteer, item.Latitude, item.Longitude)
+                //                select CallManager.ToOpenCall(item, volunteer.Id); //can throw Ex
+            }
+            else
+            {
+               DO.Call call= s_dal.Call.Read((int)volunteer.CallId);
+               if(CallManager.CorrectDis(volunteer, call.Latitude, call.Longitude))
+
+
+
+
+            }
+                
+        }
+    }
+
 }
 
 
