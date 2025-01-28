@@ -2,6 +2,7 @@
 using System.Dynamic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 
 namespace PL.Volunteer
@@ -100,8 +101,15 @@ namespace PL.Volunteer
             CurrentVolunteer = s_bl.Volunteer.Read(id); 
         }
 
-
-        private void VolunteerObserver() => RefreshVolunteer();
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+        private void VolunteerObserver()
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    RefreshVolunteer();
+                });
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Volunteer.AddObserver(VolunteerObserver);
@@ -109,22 +117,6 @@ namespace PL.Volunteer
         private void Window_Closed(object sender, EventArgs e)
             => s_bl.Volunteer.RemoveObserver(VolunteerObserver);
 
-        //private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-
-        //}
-
-        //private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-
-        //}
-
-        //private void ShowDescription(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
-        //    //MessageBox.Show(CurrentVolunteer.InCall.Description);//בעיה במסך הוספה 
-        //}
-
-       
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             _preWind.Show();

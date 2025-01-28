@@ -1,4 +1,6 @@
-﻿using BO;
+﻿using BlApi;
+using BO;
+using PL;
 using PL.Call;
 using PL.Volunteer;
 using System.Security.Cryptography;
@@ -12,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL
 {
@@ -61,9 +64,27 @@ namespace PL
 
         public static readonly DependencyProperty CallsAmountProperty =
             DependencyProperty.Register("CallsAmount", typeof(IEnumerable<int>), typeof(AdminWindow));
+
+        public int Interval
+        {
+            get { return (int)GetValue(IntervalProperty); }
+
+            set { SetValue(IntervalProperty, value); }
+        }
+        public static readonly DependencyProperty IntervalProperty =
+            DependencyProperty.Register("Interval", typeof(int), typeof(AdminWindow));
+
+        public bool SimulatorRun
+        {
+            get { return (bool)GetValue(SimulatorRunProperty); }
+
+            set { SetValue(SimulatorRunProperty, value); }
+        }
+        public static readonly DependencyProperty SimulatorRunProperty =
+            DependencyProperty.Register("SimulatorRun", typeof(bool), typeof(AdminWindow));
         #endregion hui
 
-       
+
         #region Config area
         private void btnAddOneMinute_Click(object sender, RoutedEventArgs e)
         {
@@ -89,17 +110,45 @@ namespace PL
         {
             s_bl.Admin.SetMaxRange(RiskRange);
         }
+
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
         private void clockObserver()
         {
-            CurrentDate = s_bl.Admin.GetClock();
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    CurrentDate = s_bl.Admin.GetClock();
+                });
+
+            
         }
+
+        private volatile DispatcherOperation? _observerOperation2 = null; //stage 7
+
         private void configObserver()
         {
-            RiskRange = s_bl.Admin.GetMaxRange();
+            if (_observerOperation2 is null || _observerOperation2.Status == DispatcherOperationStatus.Completed)
+                _observerOperation2 = Dispatcher.BeginInvoke(() =>
+                {
+                    RiskRange = s_bl.Admin.GetMaxRange();
+                });
         }
         #endregion
 
+        private void btnSimulator_Click(object sender, RoutedEventArgs e)
+        {
+            if (SimulatorRun == false)
+            {
+                s_bl.Admin.StartSimulator(Interval); //stage 7
+                SimulatorRun = true;
+            }
+            else
+            {
+                s_bl.Admin.StopSimulator(); //stage 7
+                SimulatorRun = false;
+            }
 
+        }
         /// <summary>
         /// Screen loaded events
         /// </summary>

@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 
 namespace PL.Volunteer
@@ -85,8 +86,15 @@ namespace PL.Volunteer
 
         }
 
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
         private void volunteerListObserver()
-            => queryVolunteerList();
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    queryVolunteerList();
+                });  
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Volunteer.AddObserver(volunteerListObserver);
@@ -104,8 +112,6 @@ namespace PL.Volunteer
                 var nextWind = new VolunteerWindow(this,_adminId,SelectedVolunteer.Id);
                 nextWind.Show();
                
-                //this.Hide();
-                //new VolunteerWindow(SelectedVolunteer.Id).Show();
             }
         }
 
@@ -116,8 +122,6 @@ namespace PL.Volunteer
         {
             var nextWind = new VolunteerWindow(this, _adminId);
             nextWind.Show();
-            //this.Hide();
-            //new VolunteerWindow().Show();
         }
 
         /// <summary>

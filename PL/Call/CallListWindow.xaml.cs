@@ -15,6 +15,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.Call
 {
@@ -27,7 +28,7 @@ namespace PL.Call
         private Window _preWind;
 
         //constructor
-        public CallListWindow(Window preWind, int id = 0 , BO.CallListStatus status = BO.CallListStatus.None,bool isFilter = true)
+        public CallListWindow(Window preWind, int id = 0, BO.CallListStatus status = BO.CallListStatus.None, bool isFilter = true)
         {
             IsFilter = isFilter;
             InitializeComponent();
@@ -77,7 +78,7 @@ namespace PL.Call
         /// </summary>
         private void Sort_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CallSort= (BO.CallData)((ComboBox)sender).SelectedItem;
+            CallSort = (BO.CallData)((ComboBox)sender).SelectedItem;
             queryCallList();
         }
 
@@ -88,112 +89,123 @@ namespace PL.Call
         {
             if (CallFilter == BO.CallListStatus.None && CallSort == BO.CallData.CallId)
                 CallList = s_bl?.Call.ReadAll()!;
-            else if(CallFilter == BO.CallListStatus.None)
+            else if (CallFilter == BO.CallListStatus.None)
                 CallList = s_bl.Call.ReadAll(null, CallSort, null)!;
-            else if(CallSort == BO.CallData.CallId)
+            else if (CallSort == BO.CallData.CallId)
                 CallList = s_bl.Call.ReadAll(BO.CallData.Status, null, CallFilter)!;
             else
                 CallList = s_bl.Call.ReadAll(BO.CallData.Status, CallSort, CallFilter)!;
         }
 
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
         private void callListObserver()
-             => queryCallList();
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            s_bl.Call.AddObserver(callListObserver);
-            s_bl.Volunteer.AddObserver(callListObserver);
-        }
-           
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            s_bl.Call.RemoveObserver(callListObserver);
-            s_bl.Volunteer.RemoveObserver(callListObserver);
-        }
-            
-
-        /// <summary>
-        /// Opening a calls's details window when clicking on a call in the list
-        /// </summary>
-        private void lsvCallsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (SelectedCall != null)
-            {
-                var nextWind = new CallWindow(this,SelectedCall.CallId);
-                nextWind.Show();
-                //this.Hide();
-                //new CallWindow(SelectedCall.CallId).Show();
-            }
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    queryCallList();
+                });
         }
 
-        /// <summary>
-        /// Opening adding call window when clicking on a button
-        /// </summary>
-        private void lsvCallList_AddCall(object sender, RoutedEventArgs e)
+
+       
+    
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        s_bl.Call.AddObserver(callListObserver);
+        s_bl.Volunteer.AddObserver(callListObserver);
+    }
+
+
+    private void Window_Closed(object sender, EventArgs e)
+    {
+        s_bl.Call.RemoveObserver(callListObserver);
+        s_bl.Volunteer.RemoveObserver(callListObserver);
+    }
+
+
+    /// <summary>
+    /// Opening a calls's details window when clicking on a call in the list
+    /// </summary>
+    private void lsvCallsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (SelectedCall != null)
         {
-            var nextWind = new AddCall(this);
+            var nextWind = new CallWindow(this, SelectedCall.CallId);
             nextWind.Show();
             //this.Hide();
-            //new AddCall().Show();
-        }
-
-        /// <summary>
-        /// Deleting call when clicking on a button
-        /// </summary>
-        private void Delete_Call(object sender, EventArgs e)
-        {
-            var result = MessageBox.Show("Do you sure you want to delete this call?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result != MessageBoxResult.Yes) return;
-            try
-            {
-                int id = SelectedCall!.CallId;
-                s_bl.Call.Delete(id);
-            }
-            catch (BO.BlDoesNotExistException ex)
-            {
-                MessageBox.Show("call not exist");
-            }
-            catch (BO.BlCannotBeDeletedException ex)
-            {
-                MessageBox.Show("this call cannot be deleted");
-            }
-        }
-
-        /// <summary>
-        /// canceling call assignment when clicking on a button
-        /// </summary>
-        private void Cancel_Call(object sender, EventArgs e)
-        {
-            var result = MessageBox.Show("Do you sure you want to cancel the assignment for this call?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result != MessageBoxResult.Yes) return;
-            try
-            {
-                int? assignmentId = SelectedCall!.Id;
-                if (assignmentId is null)
-                {
-                    MessageBox.Show($"Assignment with ID: {assignmentId} cannot be canceled"); return;
-                }
-                int assId = (int)assignmentId;
-                int volId = VolunteerId;
-                s_bl.Call.UpdateCancelTreatment(volId, assId);
-            }
-            catch (BO.BlDoesNotExistException ex)
-            {
-                MessageBox.Show(/*"call not exist"*/ "this call assignment cannot be canceled");
-            }
-            catch (BO.BlCannotBeDeletedException ex)
-            {
-                MessageBox.Show("this call assignment cannot be canceled");
-            }
-
-        }
-
-        private void BackButton_Click(object sender, RoutedEventArgs e)
-        {
-            _preWind.Show();
-            this.Close();
+            //new CallWindow(SelectedCall.CallId).Show();
         }
     }
+
+    /// <summary>
+    /// Opening adding call window when clicking on a button
+    /// </summary>
+    private void lsvCallList_AddCall(object sender, RoutedEventArgs e)
+    {
+        var nextWind = new AddCall(this);
+        nextWind.Show();
+        //this.Hide();
+        //new AddCall().Show();
+    }
+
+    /// <summary>
+    /// Deleting call when clicking on a button
+    /// </summary>
+    private void Delete_Call(object sender, EventArgs e)
+    {
+        var result = MessageBox.Show("Do you sure you want to delete this call?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (result != MessageBoxResult.Yes) return;
+        try
+        {
+            int id = SelectedCall!.CallId;
+            s_bl.Call.Delete(id);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show("call not exist");
+        }
+        catch (BO.BlCannotBeDeletedException ex)
+        {
+            MessageBox.Show("this call cannot be deleted");
+        }
+    }
+
+    /// <summary>
+    /// canceling call assignment when clicking on a button
+    /// </summary>
+    private void Cancel_Call(object sender, EventArgs e)
+    {
+        var result = MessageBox.Show("Do you sure you want to cancel the assignment for this call?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        if (result != MessageBoxResult.Yes) return;
+        try
+        {
+            int? assignmentId = SelectedCall!.Id;
+            if (assignmentId is null)
+            {
+                MessageBox.Show($"Assignment with ID: {assignmentId} cannot be canceled"); return;
+            }
+            int assId = (int)assignmentId;
+            int volId = VolunteerId;
+            s_bl.Call.UpdateCancelTreatment(volId, assId);
+        }
+        catch (BO.BlDoesNotExistException ex)
+        {
+            MessageBox.Show(/*"call not exist"*/ "this call assignment cannot be canceled");
+        }
+        catch (BO.BlCannotBeDeletedException ex)
+        {
+            MessageBox.Show("this call assignment cannot be canceled");
+        }
+
+    }
+
+    private void BackButton_Click(object sender, RoutedEventArgs e)
+    {
+        _preWind.Show();
+        this.Close();
+    }
+}
 }
 

@@ -58,6 +58,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="164.015"/>
             <RowDefinition Height="270.025"/>
+            <RowDefinition Height="370.025"/>
         </Grid.RowDefinitions>
 
         <Button Style="{StaticResource BackArrowButton}"
@@ -260,14 +261,26 @@
                                  FontSize="16"/>
                     </TextBox.ToolTip>
                 </TextBox>
-                    <Button Content="Update Risk Range"
+                <Button Content="Update Risk Range"
                         Click="btnUpdateRiskRange_Click" 
                         Style="{StaticResource CheerfulButton}"/>
             </StackPanel>
+
+            
+
+        </Grid>
+        
+        <Grid Grid.Row="1" Margin="0,270,0,185" Grid.RowSpan="2">
+
+            <!--Simulator-->
+            <TextBox Text="{Binding Interval,Mode=TwoWay}" FontWeight="Bold" FontSize="20" Margin="10,54,461,92" />
+            <Button Content="Simulator"
+                    Click="btnSimulator_Click" 
+                    Style="{StaticResource CheerfulButton}" Margin="0,98,461,48"/>
         </Grid>
 
 
-        
+
 
 
 
