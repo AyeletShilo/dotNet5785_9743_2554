@@ -23,7 +23,7 @@ namespace PL.Volunteer
         /// <param name="id">Id of who open this window</param>
         public VolunteerWindow(Window preWind, int adminId,int id = 0)
         {
-            ButtonText = id == 0 ? "Add" : "Update";
+            UpdateText = id == 0 ? "Add" : "Update";
             InitializeComponent();
             _id = id;
             _adminId = adminId;
@@ -55,12 +55,12 @@ namespace PL.Volunteer
         /// <summary>
         /// DependencyProperty
         /// </summary>
-        public static readonly DependencyProperty ButtonTextProperty =
-            DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
-        public string ButtonText
+        public static readonly DependencyProperty UpdateTextProperty =
+            DependencyProperty.Register("UpdateTexttonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
+        public string UpdateText
         {
-            get { return (string)GetValue(ButtonTextProperty); }
-            set { SetValue(ButtonTextProperty, value); }
+            get { return (string)GetValue(UpdateTextProperty); }
+            set { SetValue(UpdateTextProperty, value); }
         }
 
         #endregion
@@ -72,12 +72,12 @@ namespace PL.Volunteer
         {
             try
             {
-                if (ButtonText == "Add")
+                if (UpdateText == "Add")
                 {
                     s_bl.Volunteer.Create(CurrentVolunteer!);
                     //MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                else if (ButtonText == "Update")
+                else if (UpdateText == "Update")
                 {
                     s_bl.Volunteer.Update(_adminId, CurrentVolunteer!);
                     //MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);

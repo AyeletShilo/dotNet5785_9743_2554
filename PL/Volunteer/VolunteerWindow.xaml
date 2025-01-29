@@ -286,7 +286,7 @@
                 </GroupBox>
 
                 <!-- Action Button -->
-                <Button Content="{Binding ButtonText}" Grid.Row="4" 
+                <Button Content="{Binding UpdateText}" Grid.Row="4" 
                     Style="{StaticResource MainButtonStyle}"
                     Click="btnAddUpdate_Click" Margin="270,10,270,10"/>
                 

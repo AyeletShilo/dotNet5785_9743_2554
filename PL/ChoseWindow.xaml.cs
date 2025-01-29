@@ -31,7 +31,7 @@ namespace PL
             adminWindow.Closed += (s, e) => _isOpen = false;
             //var nextWind = new AdminWindow(this);
             adminWindow.Show();
-            this.Hide();
+            //this.Hide();
         }
 
         /// <summary>
