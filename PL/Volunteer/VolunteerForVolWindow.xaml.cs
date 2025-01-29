@@ -1,6 +1,7 @@
 ﻿using PL.Call;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 
 namespace PL.Volunteer
@@ -102,7 +103,15 @@ namespace PL.Volunteer
             }
         }
 
-        private void VolunteerObserver() => RefreshVolunteer();
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+        private void VolunteerObserver()
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    RefreshVolunteer();
+                });
+        }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {

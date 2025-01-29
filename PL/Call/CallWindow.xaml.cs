@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.Call
 {
@@ -63,7 +64,7 @@ namespace PL.Call
             {
                 MessageBox.Show($"Xml error");
             }
-            catch(BlIntegrityOfValuesException ex3)
+            catch (BlIntegrityOfValuesException ex3)
             {
                 MessageBox.Show(ex3.Message);
             }
@@ -83,7 +84,16 @@ namespace PL.Call
             CurrentCall = s_bl.Call.Read(id);
         }
 
-        private void CallObserver() => RefreshCall();
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
+        private void CallObserver()
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+
+                    RefreshCall();
+                });
+        } 
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Call.AddObserver(CallObserver);

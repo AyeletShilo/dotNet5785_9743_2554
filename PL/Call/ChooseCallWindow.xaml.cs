@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PL.Call
 {
@@ -103,8 +104,18 @@ namespace PL.Call
             }
         }
 
+        private volatile DispatcherOperation? _observerOperation = null; //stage 7
         private void callListObserver()
-            => queryCallList();
+        {
+            if (_observerOperation is null || _observerOperation.Status == DispatcherOperationStatus.Completed)
+                _observerOperation = Dispatcher.BeginInvoke(() =>
+                {
+                    queryCallList();
+                });
+        }
+
+        
+        
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
             => s_bl.Call.AddObserver(callListObserver);
