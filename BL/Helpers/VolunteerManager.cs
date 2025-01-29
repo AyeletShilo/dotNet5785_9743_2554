@@ -297,44 +297,52 @@ internal static class VolunteerManager
 
     internal static void SimulateVolunteersActivity()
     {
+        
         Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";//?
-
-        IEnumerable<DO.Volunteer> volList;
-        //volunteerInList= CallManager.ReadAll(/*volunteer => volunteer.Active == true*/).ToList();
-
-        lock (AdminManager.BlMutex)
-            volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList();
-        IEnumerable<BO.VolunteerInList> volunteersList = ToVolunteerInList(volList);
-        foreach (BO.VolunteerInList volunteer in volunteersList)
+        try
         {
-            //lock (AdminManager.BlMutex)
-            if (volunteer.CallId == null)
+
+            IEnumerable<DO.Volunteer> volList;
+            //volunteerInList= CallManager.ReadAll(/*volunteer => volunteer.Active == true*/).ToList();
+
+            lock (AdminManager.BlMutex)
+                volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList();
+            IEnumerable<BO.VolunteerInList> volunteersList = ToVolunteerInList(volList);
+            foreach (BO.VolunteerInList volunteer in volunteersList)
             {
-                if (s_rand.NextDouble() < 0.2)
-                    continue;
-                List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
-                if (opensCalls.Count != 0)
+                //lock (AdminManager.BlMutex)
+                if (volunteer.CallId == null)
                 {
-                    BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
-                    CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
-                }
-            }
-            else
-            {
-                var vol = Read(volunteer.Id);
-                if (vol.InCall.EntryTime < AdminManager.Now.AddDays(-7))
-                {
-                    CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
+                    if (s_rand.NextDouble() < 0.2)
+                        continue;
+                    List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
+                    if (opensCalls.Count != 0)
+                    {
+                        BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
+                        CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
+                    }
                 }
                 else
                 {
-                    if (s_rand.NextDouble() < 0.2)
+                    var vol = Read(volunteer.Id);
+                    if (vol.InCall.EntryTime < AdminManager.Now.AddDays(-7))
                     {
-                        CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.CallId);
+                        CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
+                    }
+                    else
+                    {
+                        if (s_rand.NextDouble() < 0.2)
+                        {
+                            CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.CallId);
+                        }
                     }
                 }
-            }
 
+            }
+        }
+        catch(BLTemporaryNotAvailableException)
+        {
+            
         }
     }
 
