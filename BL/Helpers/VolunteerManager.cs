@@ -312,21 +312,24 @@ internal static class VolunteerManager
                 if (s_rand.NextDouble() < 0.2)
                     continue;
                 List<BO.OpenCallInList> opensCalls= CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
-                BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
-                CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
+                if (opensCalls.Count != 0)
+                {
+                    BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
+                    CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
+                }
             }
             else
             {
                 var vol= Read(volunteer.Id);
                 if (vol.InCall.EntryTime < AdminManager.Now.AddDays(-7))
                 {
-                    CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.Id);
+                    CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
                 }
                 else
                 {
                     if (s_rand.NextDouble() < 0.2)
                     {
-                        CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.Id);
+                        CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.CallId);
                     }
                 }
             }

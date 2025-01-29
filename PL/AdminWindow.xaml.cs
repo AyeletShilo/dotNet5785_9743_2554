@@ -304,10 +304,22 @@ namespace PL
             //new CallListWindow(this,0, BO.CallListStatus.InTreatmentInRisk , false).Show();
         }
 
+       
         private void queryCallList()
-            => CallsAmount = s_bl.Call.HowManyCalls();
+        {
+            CallsAmount = s_bl.Call.HowManyCalls();
+        }
+
+        private volatile DispatcherOperation? _observerOperation3 = null; //stage 7
         private void CallAmountObserver()
-            => queryCallList();
+        {
+            if (_observerOperation3 is null || _observerOperation3.Status == DispatcherOperationStatus.Completed)
+                _observerOperation3 = Dispatcher.BeginInvoke(() =>
+                {
+
+                    queryCallList();
+                });   
+        }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
