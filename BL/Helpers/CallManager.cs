@@ -135,22 +135,22 @@ internal static class CallManager
     {
         double?[] AddressCoordinate = await CallManager.GetCoordinates(doCall.CallAddress);
 
-        if(AddressCoordinate is null)
+        if (AddressCoordinate is null)
             throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
 
         //DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, (double)AddressCoordinate[0]!,
         //    (double)AddressCoordinate[1]!, toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
         //return DoCall;
         lock (AdminManager.BlMutex)
-                _dal.Call.Update(
-                    new(doCall.Id, 
-                    doCall.CallType,
-                    doCall.CallAddress, 
-                    (double)AddressCoordinate[0]!, 
-                    (double)AddressCoordinate[1]!,
-                    doCall.OpenTime, 
-                    doCall.Description,
-                    doCall.MaxTime));
+            _dal.Call.Update(
+                new(doCall.Id,
+                doCall.CallType,
+                doCall.CallAddress,
+                (double)AddressCoordinate[0]!,
+                (double)AddressCoordinate[1]!,
+                doCall.OpenTime,
+                doCall.Description,
+                doCall.MaxTime));
     }
     internal static async Task<double?[]> GetCoordinates(string address)
     {
@@ -318,7 +318,6 @@ internal static class CallManager
     #region stage 7
     internal static IEnumerable<BO.OpenCallInList> GetOpenedCalls(int volId, BO.CallType? filter = null, BO.OpenCallData? sort = null)
     {
-
         lock (AdminManager.BlMutex)
         {
             DO.Volunteer vol;
@@ -419,7 +418,6 @@ internal static class CallManager
 
     internal static void UpdateEndTreatment(int volId, int assignmentId)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Assignment updateAssignment;
@@ -462,7 +460,6 @@ internal static class CallManager
 
     internal static void UpdateCancelTreatment(int volId, int assignmentId)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         try
         {
             DO.Assignment assignment;
@@ -596,6 +593,4 @@ internal static class CallManager
             Observers.NotifyListUpdated();
         }
     }
-
-
 }

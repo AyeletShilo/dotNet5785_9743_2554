@@ -102,7 +102,7 @@
                 <!--clock-->
                 <Label  Grid.Row="0" 
                         Style="{StaticResource BaseLabel}"
-                        Content="{Binding CurrentDate}" 
+                        Content="{Binding CurrentDate, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" 
                         FontFamily="Comic Sans MS"
                         FontSize="30"
                         Foreground="{StaticResource AyeletHardColor}"
@@ -155,64 +155,13 @@
         <!--general grid-->
         <Grid Grid.Row="1" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="157*"/>
-                <ColumnDefinition Width="490*"/>
-                <ColumnDefinition Width="157*"/>
+                <ColumnDefinition Width="170*"/>
+                <ColumnDefinition Width="470*"/>
+                <ColumnDefinition Width="150*"/>
             </Grid.ColumnDefinitions>
 
-
-            <Grid Grid.Column="1" Margin="10,3,3,3">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="4*"/>
-                    <!--<RowDefinition Height="3*"/>-->
-                </Grid.RowDefinitions>
-
-                <!--<Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0" Margin="20" Panel.ZIndex="2">
-
-                        Simulator
-                        <TextBox Text="{Binding Interval,Mode=TwoWay}" FontWeight="Bold" FontSize="20" Margin="0" 
-                                 Style="{StaticResource FormTextBoxStyle}" HorizontalContentAlignment="Center" Width="130" Height="40"
-                                 IsReadOnly="{Binding SimulatorRun}">
-                            <TextBox.ToolTip>
-                                <ToolTip Content="" 
-                                         Background="{StaticResource CreamColor}"
-                                         BorderBrush="{StaticResource AyeletHardColor}"
-                                         Foreground="{StaticResource AyeletHardColor}"
-                                         FontSize="16"/>
-                            </TextBox.ToolTip>
-                        </TextBox>
-                        <Button Content="{Binding ButtonText, Mode=TwoWay}"
-                                Click="btnSimulator_Click" 
-                                Style="{StaticResource CheerfulButton}"
-                                Margin="0"/>
-                    </StackPanel>
-
-                    <StackPanel Grid.Column="1" Margin="20">
-                        RiskRange
-                        <TextBox  Text="{Binding RiskRange, Converter={StaticResource TimeSpanToDaysConverterKey}}" FontWeight="Bold" FontSize="20"
-                                   Style="{StaticResource FormTextBoxStyle}" HorizontalContentAlignment="Center" Width="130" Height="40">
-                            <TextBox.ToolTip>
-                                <ToolTip Content="In days format" 
-                                         Background="{StaticResource CreamColor}"
-                                         BorderBrush="{StaticResource AyeletHardColor}"
-                                         Foreground="{StaticResource AyeletHardColor}"
-                                         FontSize="16"/>
-                            </TextBox.ToolTip>
-                        </TextBox>
-                        <Button Content="Update Risk Range"
-                                Click="btnUpdateRiskRange_Click" 
-                                Style="{StaticResource CheerfulButton}"/>
-                    </StackPanel>
-                </Grid>-->
-
-                <Image Source="/Image/LOGO (3).png" Grid.Row="0"/>
-
-            </Grid>
+            <Image Source="/Image/LOGO (3).png" Grid.Column="1" Margin="10,3,3,3"/>
+            
             <!--main buttons-->
             <UniformGrid Grid.Column="0" Rows="2" Margin="5,10,0,5">
                 <Button Content="InitializeDB"
@@ -242,10 +191,9 @@
                         Style="{StaticResource DataButtons}"
                         FontSize="23" Margin = "5"/>
             </UniformGrid>
-
-
         </Grid>
-        <Image HorizontalAlignment="Left"  VerticalAlignment="Bottom"
+        
+        <Image HorizontalAlignment="Left"  VerticalAlignment="Bottom" Panel.ZIndex="1"
         Height="226" Margin="69,0,0,10" Grid.Row="2" Width="226" Source="/Volunteer/Images/GrandMa.png" RenderTransformOrigin="0.5,0.5">
             <Image.RenderTransform>
                 <TransformGroup>
@@ -259,7 +207,7 @@
         <Grid Grid.Row="2" Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="103*"/>

@@ -359,7 +359,7 @@ internal class CallImplementation : BlApi.ICall
         DO.Call oldCall;
         lock (AdminManager.BlMutex)
             oldCall = _dal.Call.Read(callToUpdate.Id)!;
-        
+
         DO.Call doCall = new(callToUpdate.Id, (DO.TypeOfCall)callToUpdate.CallType, callToUpdate.CallAddress, 0, 0, callToUpdate.OpenTime, callToUpdate.Description, callToUpdate.MaxCloseTime); //CallManager.CheckLogic(callToUpdate); //can throw Ex
         try
         {
@@ -382,7 +382,7 @@ internal class CallImplementation : BlApi.ICall
             //compute the coordinates asynchronously without waiting for the results
             _ = CallManager.updateCoordinates(doCall); //stage 7
         }
-        catch(BO.BlIntegrityOfValuesException ex)
+        catch (BO.BlIntegrityOfValuesException ex)
         {
             lock (AdminManager.BlMutex)
                 _dal.Call.Update(oldCall);
@@ -456,6 +456,7 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.BlCantUpdateException">Throws an exception when the call you want to update is not updatable</exception>
     public void UpdateEndTreatment(int volId, int assignmentId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.UpdateEndTreatment(volId, assignmentId);
         #region draft
         //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
@@ -527,5 +528,4 @@ internal class CallImplementation : BlApi.ICall
     public void RemoveObserver(int id, Action observer) =>
     CallManager.Observers.RemoveObserver(id, observer); //stage 5
     #endregion Stage 5
-
 }

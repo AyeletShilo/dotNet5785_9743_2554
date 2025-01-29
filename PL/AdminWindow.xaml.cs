@@ -34,6 +34,7 @@ namespace PL
         {
             adminId = id;
             ButtonText = "Start Simulator";
+            Interval = 1440;
             InitializeComponent();
             queryCallList();
             _preWind = preWind;
@@ -320,7 +321,7 @@ namespace PL
                     queryCallList();
                 });   
         }
-
+        #endregion
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             s_bl.Admin.StopSimulator();
@@ -329,6 +330,6 @@ namespace PL
             this.Close();
         }
     }
-    #endregion
 
+   
 }

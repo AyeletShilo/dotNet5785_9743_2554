@@ -79,9 +79,9 @@ internal static class VolunteerManager
                     (doVolunteer.Id, doVolunteer.FullName,
                     doVolunteer.PhoneNumber, doVolunteer.Email,
                     doVolunteer.Password, doVolunteer.Job,
-                    doVolunteer.Active, doVolunteer.Distance, 
+                    doVolunteer.Active, doVolunteer.Distance,
                     doVolunteer.VolAddress, (double)AddressCoordinate[0]!,
-                    (double)AddressCoordinate[1]!, doVolunteer.MaxDistance));      
+                    (double)AddressCoordinate[1]!, doVolunteer.MaxDistance));
         }
 
     }
@@ -301,17 +301,18 @@ internal static class VolunteerManager
 
         IEnumerable<DO.Volunteer> volList;
         //volunteerInList= CallManager.ReadAll(/*volunteer => volunteer.Active == true*/).ToList();
-        
+
         lock (AdminManager.BlMutex)
-            volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList(); 
-        IEnumerable<BO.VolunteerInList> volunteersList =ToVolunteerInList(volList);
+            volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList();
+        IEnumerable<BO.VolunteerInList> volunteersList = ToVolunteerInList(volList);
         foreach (BO.VolunteerInList volunteer in volunteersList)
         {
-            if(volunteer.CallId == null)
+            //lock (AdminManager.BlMutex)
+            if (volunteer.CallId == null)
             {
                 if (s_rand.NextDouble() < 0.2)
                     continue;
-                List<BO.OpenCallInList> opensCalls= CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
+                List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
                 if (opensCalls.Count != 0)
                 {
                     BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
@@ -320,7 +321,7 @@ internal static class VolunteerManager
             }
             else
             {
-                var vol= Read(volunteer.Id);
+                var vol = Read(volunteer.Id);
                 if (vol.InCall.EntryTime < AdminManager.Now.AddDays(-7))
                 {
                     CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
@@ -333,7 +334,7 @@ internal static class VolunteerManager
                     }
                 }
             }
-                
+
         }
     }
 

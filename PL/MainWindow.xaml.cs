@@ -148,6 +148,10 @@ namespace PL
 
         }
 
+        public void MainWindow_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 
 }
