@@ -397,7 +397,6 @@ internal static class CallManager
     }
     internal static void CallToTreatment(int volId, int callId)
     {
-        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         BO.Call call = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists");
         Func<DO.Assignment, bool>? predicate = assignment => assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel
                                                              && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin;

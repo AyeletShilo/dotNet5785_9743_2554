@@ -24,6 +24,7 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.BlCantHandleItException"></exception>
     public void CallToTreatment(int volId, int callId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CallToTreatment(volId, callId);
         #region draft
         //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
@@ -401,6 +402,7 @@ internal class CallImplementation : BlApi.ICall
     /// <exception cref="BO.BlCantUpdateException">Throws an exception when the call you want to update is not updatable.</exception>
     public void UpdateCancelTreatment(int volId, int assignmentId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.UpdateCancelTreatment(volId, assignmentId);
         #region draft
         //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
