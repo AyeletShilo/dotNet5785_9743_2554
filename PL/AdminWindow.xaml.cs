@@ -33,6 +33,7 @@ namespace PL
         public AdminWindow(Window preWind ,int id)
         {
             adminId = id;
+            ButtonText = "Start Simulator";
             InitializeComponent();
             queryCallList();
             _preWind = preWind;
@@ -82,7 +83,15 @@ namespace PL
         }
         public static readonly DependencyProperty SimulatorRunProperty =
             DependencyProperty.Register("SimulatorRun", typeof(bool), typeof(AdminWindow));
-        #endregion hui
+
+        public static readonly DependencyProperty ButtonTextProperty =
+            DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
+        public string ButtonText
+        {
+            get { return (string)GetValue(ButtonTextProperty); }
+            set { SetValue(ButtonTextProperty, value); }
+        }
+        #endregion 
 
 
         #region Config area
@@ -141,11 +150,13 @@ namespace PL
             {
                 s_bl.Admin.StartSimulator(Interval); //stage 7
                 SimulatorRun = true;
+                ButtonText = "Stop Simulator";
             }
             else
             {
                 s_bl.Admin.StopSimulator(); //stage 7
                 SimulatorRun = false;
+                ButtonText = "Start Simulator";
             }
 
         }
@@ -166,6 +177,8 @@ namespace PL
         /// </summary>
         private void Window_Closed(object sender, /*Routed*/EventArgs e)
         {
+            s_bl.Admin.StopSimulator();
+            SimulatorRun= false;
             s_bl.Admin.RemoveClockObserver(clockObserver);
             s_bl.Admin.RemoveConfigObserver(configObserver);
             s_bl.Call.RemoveObserver(CallAmountObserver);
@@ -298,6 +311,8 @@ namespace PL
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            s_bl.Admin.StopSimulator();
+            SimulatorRun = false;
             _preWind.Show();
             this.Close();
         }

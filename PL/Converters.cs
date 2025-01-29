@@ -490,4 +490,24 @@ public class TimeSpanToDaysConverter : IValueConverter
     }
 }
 
+public class SimulatorChengeConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is TimeSpan timeSpan)
+        {
+            return timeSpan.TotalDays.ToString("0");
+        }
+        return "0";
+    }
 
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+
+        if (double.TryParse(value.ToString(), out double days))
+        {
+            return TimeSpan.FromDays(days);
+        }
+        return TimeSpan.Zero;
+    }
+}

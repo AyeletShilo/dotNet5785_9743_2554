@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="AdminWindow" Height="640" Width="800"
+        Title="Admin Window" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}" 
         Background="{StaticResource CreamColor}"
         Closed="Window_Closed"
@@ -31,6 +31,12 @@
             <Setter Property="FontSize" Value="20"/>
             <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource AyeletLightColor}"/>
+                    <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style x:Key="AmountButtons" TargetType="Button" BasedOn="{StaticResource RoundedButton}">
             <Setter Property="Background" Value="{StaticResource CreamColor}"/>
@@ -39,14 +45,26 @@
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Foreground" Value="{StaticResource HardestGreenColor}"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Greeny}"/>
+                    <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style x:Key="DataButtons" TargetType="Button" BasedOn="{StaticResource RoundedButton}">
-            <Setter Property="Background" Value="{StaticResource AyeletColor}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource CreamColor}"/>
+            <Setter Property="Background" Value="{StaticResource AyeletLightColor}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AyeletHardColor}"/>
             <Setter Property="FontFamily" Value="Ariel"/>
-            <Setter Property="FontSize" Value="28"/>
-            <Setter Property="Foreground" Value="{StaticResource CreamColor}"/>
+            <Setter Property="FontSize" Value="26"/>
+            <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
             <Setter Property="FontWeight" Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Greeny}"/>
+                    <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
 
@@ -56,9 +74,9 @@
     <!--Config-->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="164.015"/>
-            <RowDefinition Height="270.025"/>
-            <RowDefinition Height="370.025"/>
+            <RowDefinition Height="Auto" MinHeight="177"/>
+            <RowDefinition Height="265*"/>
+            <RowDefinition Height="185*"/>
         </Grid.RowDefinitions>
 
         <Button Style="{StaticResource BackArrowButton}"
@@ -66,303 +84,300 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="10,10,0,0"
-                Panel.ZIndex="1"/>
-        
-        <!--Time Defination-->
-        <Border Grid.Row="0" 
-        Background="{StaticResource Greeny}"
-        CornerRadius="25" 
-        Padding="10"
-        Margin="125,20,125,20">
-            <!--Effect="{StaticResource MaterialDropShadow}">-->
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <!--clock-->
-                <Label  Grid.Row="0" 
+                Panel.ZIndex="1" Height="40" Width="40"/>
+
+        <!--<StackPanel >
+            -->
+        <!--RiskRange-->
+        <!--
+            <TextBox  Text="{Binding RiskRange, Converter={StaticResource TimeSpanToDaysConverterKey}}" FontWeight="Bold" FontSize="20" >
+                <TextBox.ToolTip>
+                    <ToolTip Content="In days format" 
+                      Background="{StaticResource CreamColor}"
+                      BorderBrush="{StaticResource AyeletHardColor}"
+                      Foreground="{StaticResource AyeletHardColor}"
+                      FontSize="16"/>
+                </TextBox.ToolTip>
+            </TextBox>
+            <Button Content="Update Risk Range"
+             Click="btnUpdateRiskRange_Click" 
+             Style="{StaticResource CheerfulButton}"/>
+        </StackPanel>-->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <!--<ColumnDefinition Width="*"/>-->
+            </Grid.ColumnDefinitions>
+
+            <!--Time Defination-->
+            <Border Grid.Row="0" 
+                    Background="{StaticResource Greeny}"
+                    CornerRadius="25" 
+                    Padding="10"
+                    Margin="100,20,100,20">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="3*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <!--clock-->
+                    <Label  Grid.Row="0" 
                         Style="{StaticResource BaseLabel}"
                         Content="{Binding CurrentDate}" 
                         FontFamily="Comic Sans MS"
                         FontSize="30"
-                        Foreground="White"
+                        Foreground="{StaticResource AyeletHardColor}"
                         FontWeight="Bold"
                         Margin="0,0,0,5"/>
-                <!--ForWard Clock-->
+                    <!--ForWard Clock-->
+                    <Grid Grid.Row="1" Margin="15,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="0"
+                            Content="+Year" 
+                            Click="btnAddOneYear_Click"
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch" 
+                            IsEnabled="{Binding SimulatorRun, Converter={StaticResource IntervalConverterKey}, Mode=TwoWay}"/>
+                        <Button Grid.Column="1"
+                            Content="+Month" 
+                            Click="btnAddOneMonth_Click"                            
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"
+                            IsEnabled="{Binding SimulatorRun, Converter={StaticResource IntervalConverterKey}, Mode=TwoWay}"/>
+                        <Button Grid.Column="2"
+                            Content="+Day " 
+                            Click="btnAddOneDay_Click"
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"
+                            IsEnabled="{Binding SimulatorRun, Converter={StaticResource IntervalConverterKey}, Mode=TwoWay}"/>
+                        <Button Grid.Column="3"
+                            Content="+Hour" 
+                            Click="btnAddOneHour_Click"
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding SimulatorRun, Converter={StaticResource IntervalConverterKey}, Mode=TwoWay}"/>
+                        <Button Grid.Column="4"
+                            Content="+Minute" 
+                            Click="btnAddOneMinute_Click"
+                            Style="{StaticResource TimeButton}"
+                            HorizontalAlignment="Stretch"
+                                IsEnabled="{Binding SimulatorRun, Converter={StaticResource IntervalConverterKey}, Mode=TwoWay}"/>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!--general grid-->
+        <Grid Grid.Row="1" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="157*"/>
+                <ColumnDefinition Width="490*"/>
+                <ColumnDefinition Width="157*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <Grid Grid.Column="1" Margin="10,3,3,3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="3*"/>
+                </Grid.RowDefinitions>
+
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Margin="20" Panel.ZIndex="2">
 
-                    <Button Grid.Column="0"
-                            Content="+Year" 
-                            Click="btnAddOneYear_Click"
-                            Style="{StaticResource TimeButton}"
-                            HorizontalAlignment="Stretch"/>
-                    <Button Grid.Column="1"
-                            Content="+Month" 
-                            Click="btnAddOneMonth_Click"                            
-                            Style="{StaticResource TimeButton}"
-                            HorizontalAlignment="Stretch"/>
-                    <Button Grid.Column="2"
-                            Content="+Day " 
-                            Click="btnAddOneDay_Click"
-                            Style="{StaticResource TimeButton}"
-                            HorizontalAlignment="Stretch"/>
-                    <Button Grid.Column="3"
-                            Content="+Hour" 
-                            Click="btnAddOneHour_Click"
-                            Style="{StaticResource TimeButton}"
-                            HorizontalAlignment="Stretch"/>
-                    <Button Grid.Column="4"
-                            Content="+Minute" 
-                            Click="btnAddOneMinute_Click"
-                            Style="{StaticResource TimeButton}"
-                            HorizontalAlignment="Stretch"/>
+                        <!--Simulator-->
+                        <TextBox Text="{Binding Interval,Mode=TwoWay}" FontWeight="Bold" FontSize="20" Margin="0" 
+                                 Style="{StaticResource FormTextBoxStyle}" HorizontalContentAlignment="Center" Width="130" Height="40"
+                                 IsReadOnly="{Binding SimulatorRun}">
+                            <TextBox.ToolTip>
+                                <ToolTip Content="---------" 
+                                         Background="{StaticResource CreamColor}"
+                                         BorderBrush="{StaticResource AyeletHardColor}"
+                                         Foreground="{StaticResource AyeletHardColor}"
+                                         FontSize="16"/>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                        <Button Content="{Binding ButtonText, Mode=TwoWay}"
+                                Click="btnSimulator_Click" 
+                                Style="{StaticResource CheerfulButton}"
+                                Margin="0"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="20">
+                        <!--RiskRange-->
+                        <TextBox  Text="{Binding RiskRange, Converter={StaticResource TimeSpanToDaysConverterKey}}" FontWeight="Bold" FontSize="20"
+                                   Style="{StaticResource FormTextBoxStyle}" HorizontalContentAlignment="Center" Width="130" Height="40">
+                            <TextBox.ToolTip>
+                                <ToolTip Content="In days format" 
+                                         Background="{StaticResource CreamColor}"
+                                         BorderBrush="{StaticResource AyeletHardColor}"
+                                         Foreground="{StaticResource AyeletHardColor}"
+                                         FontSize="16"/>
+                            </TextBox.ToolTip>
+                        </TextBox>
+                        <Button Content="Update Risk Range"
+                                Click="btnUpdateRiskRange_Click" 
+                                Style="{StaticResource CheerfulButton}"/>
+                    </StackPanel>
                 </Grid>
+
+                <Image Source="/Image/LOGO (3).png" Grid.Row="0"/>
+
             </Grid>
-        </Border>
-        <Grid Grid.Row="1" Margin="0,0,0,0">
+            <!--main buttons-->
+            <UniformGrid Grid.Column="0" Rows="2" Margin="5,10,0,70">
+                <Button Content="InitializeDB"
+                        Click ="btnInitializeDB_Click" 
+                        Style="{StaticResource DataButtons}"
+                        Margin="5"
+                        IsEnabled="{Binding SimulatorRun, Converter={StaticResource IntervalConverterKey}, Mode=TwoWay}"/>
+                <Button Content="ResetDB" 
+                        Click="btnResetDB_Click" 
+                        Style="{StaticResource DataButtons}"
+                        Margin="5"
+                        IsEnabled="{Binding SimulatorRun, Converter={StaticResource IntervalConverterKey}, Mode=TwoWay}"/>
+            </UniformGrid>
+            <UniformGrid Grid.Column="2" Rows="2"  Margin="5,10,0,70">
+                <Button Click="btnVolunteer_Click"
+                        Style="{StaticResource DataButtons}"
+                        Margin="5">
+                    <TextBlock TextAlignment="Center">
+                        <Run>Handle</Run>
+                        <LineBreak/>
+                        <Run>Volunteers</Run>
+                    </TextBlock>
+                </Button>
+
+                <Button Content = "Handle Calls"
+                        Click = "btnCall_Click"  
+                        Style="{StaticResource DataButtons}"
+                        FontSize="23" Margin = "5"/>
+            </UniformGrid>
+
+
+        </Grid>
+        <Image HorizontalAlignment="Left"  VerticalAlignment="Bottom"
+        Height="226" Margin="69,0,0,10" Grid.Row="1" Grid.RowSpan="2" Width="226" Source="/Volunteer/Images/GrandMa.png" RenderTransformOrigin="0.5,0.5">
+            <Image.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform ScaleX="-1"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Image.RenderTransform>
+        </Image>
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="333"/>
-                <ColumnDefinition Width="467"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="1">
+            <!--`call by status-->
+            <Border  Grid.Column="1"
+                     Background="{StaticResource AyeletColor}"
+                     CornerRadius="15" 
+                     Padding="2"
+                     Margin="20,60,20,20">
+
+                <UniformGrid Columns="3" Grid.Column="1" HorizontalAlignment="Stretch">
+                    <Button Click="Opened_Click" 
+                        Content="{Binding CallsAmount[0], Mode=TwoWay}" 
+                        ContentStringFormat="⚡Opened Calls: {0}"
+                        Style="{StaticResource AmountButtons}"
+                        Margin="5,2,0,2"
+                        Width="Auto" Height="Auto"/>
+
+                    <Button  Click="Treatment_Click"
+                         Content="{Binding CallsAmount[1], Mode=TwoWay}"
+                         ContentStringFormat="🔧 In treatment: {0}" 
+                         Style="{StaticResource AmountButtons}"
+                         Margin="5,2,0,2"
+                         Height="Auto"/>
+
+                    <Button  Click="Closed_Click"
+                         Content="{Binding CallsAmount[2], Mode=TwoWay}"
+                         ContentStringFormat="✅ Closed: {0}"
+                         Style="{StaticResource AmountButtons}"
+                         Margin="5,2,0,2"
+                         Height="Auto"/>
+
+                    <Button Click="Expired_Click" 
+                        Content="{Binding CallsAmount[3], Mode=TwoWay}" 
+                        ContentStringFormat="⏰ Expired Calls: {0}"
+                        Style="{StaticResource AmountButtons}"
+                        Margin="5,2,0,2"
+                        Width="Auto" Height="Auto"/>
+
+                    <Button  Click="OpenRisk_Click"
+                         Content="{Binding CallsAmount[4], Mode=TwoWay}"
+                         ContentStringFormat="⚡⚠️ Open in risk: {0}" 
+                         Style="{StaticResource AmountButtons}"
+                         Margin="5,2,0,2"
+                         Height="Auto"/>
+
+                    <Button  Click="TreatmentRisk_Click"
+                         Content="{Binding CallsAmount[5], Mode=TwoWay}"
+                         ContentStringFormat="🔧⚠️ In treatment in risk: {0}"
+                         Style="{StaticResource AmountButtons}"
+                         Margin="5,2,0,2"
+                         Height="Auto"/>
+                </UniformGrid>
+            </Border>
+
+
+            <!--main buttons-->
+            <!--<Grid Grid.Column="1" Margin="3,40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="106.01"/>
-                    <RowDefinition Height="164.015"/>
+                    <RowDefinition Height="*"/>
+                    -->
+            <!--<RowDefinition Height="*"/>-->
+            <!--
                 </Grid.RowDefinitions>
-
-                <Border Grid.Column="1" Grid.Row="0"
-                    Background="{StaticResource AyeletLightColor}"
-                    CornerRadius="15" 
-                    Padding="5"
-                    Margin="5,0,10,5">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                        <UniformGrid Columns="1" Grid.Column="0">
-                            <Button Click="Opened_Click" 
-                                 Content="{Binding CallsAmount[0], Mode=TwoWay}" 
-                                 ContentStringFormat="⚡Opened Calls: {0}"
-                                 Style="{StaticResource AmountButtons}"
-                                 Margin="5,5,0,0"
-                                Width="Auto" Height="Auto"/>
-
-                            <Button  Click="Treatment_Click"
-                                 Content="{Binding CallsAmount[1], Mode=TwoWay}"
-                                 ContentStringFormat="🔧 In treatment: {0}" 
-                                 Style="{StaticResource AmountButtons}"
-                                 Margin="5,5,0,0"
-                                 Height="Auto"/>
-
-                            <Button  Click="Closed_Click"
-                                     Content="{Binding CallsAmount[2], Mode=TwoWay}"
-                                     ContentStringFormat="✅ Closed: {0}"
-                                     Style="{StaticResource AmountButtons}"
-                                     Margin="5,5,0,0"
-                                     Height="Auto"/>
-                        </UniformGrid>
-                        <UniformGrid Columns="1" Grid.Column="1">
-                            <Button Click="Expired_Click" 
-                                    Content="{Binding CallsAmount[3], Mode=TwoWay}" 
-                                    ContentStringFormat="⏰ Expired Calls: {0}"
-                                    Style="{StaticResource AmountButtons}"
-                                    Margin="5,5,0,0"
-                                    Width="Auto" Height="Auto"/>
-
-                            <Button  Click="OpenRisk_Click"
-                                     Content="{Binding CallsAmount[4], Mode=TwoWay}"
-                                     ContentStringFormat="⚡⚠️ Open in risk: {0}" 
-                                     Style="{StaticResource AmountButtons}"
-                                     Margin="5,5,0,0"
-                                     Height="Auto"/>
-
-                            <Button  Click="TreatmentRisk_Click"
-                                     Content="{Binding CallsAmount[5], Mode=TwoWay}"
-                                     ContentStringFormat="🔧⚠️ In treatment in risk: {0}"
-                                     Style="{StaticResource AmountButtons}"
-                                     Margin="5,5,0,0"
-                                     Height="Auto"/>
-                        </UniformGrid>
-                        <!--<StackPanel Grid.Column="0" Margin="5,0,0,5" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                        <Button Click="Opened_Click" 
-                                Content="{Binding CallsAmount[0], Mode=TwoWay}" 
-                                ContentStringFormat="⚡Opened Calls: {0}"
-                                Style="{StaticResource AmountButtons}"
-                                Margin="5,5,0,0"
-                                Width="Auto" Height="Auto"/>
-
-                        <Button  Click="Treatment_Click"
-                                 Content="{Binding CallsAmount[1], Mode=TwoWay}"
-                                 ContentStringFormat="🔧 In treatment: {0}" 
-                                 Style="{StaticResource AmountButtons}"
-                                 Margin="5,5,0,0"
-                                 Height="Auto"/>
-
-                        <Button  Click="Closed_Click"
-                                 Content="{Binding CallsAmount[2], Mode=TwoWay}"
-                                 ContentStringFormat="✅ Closed: {0}"
-                                 Style="{StaticResource AmountButtons}"
-                                 Margin="5,5,0,0"
-                                 Height="Auto"/>
-                    </StackPanel>-->
-                    </Grid>
-                </Border>
-                <Grid Grid.Row="1" Margin="0,0,10,10">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Button Content="InitializeDB"
-                            Grid.Column="0" Grid.Row="0"
-                            Click ="btnInitializeDB_Click" 
-                            Style="{StaticResource DataButtons}"
-                            Margin="10,5,10,5"/>
-                    <Button Content="Handle Volunteers" 
-                            Grid.Column="1" Grid.Row="1"
-                            Click="btnVolunteer_Click"
-                            Style="{StaticResource DataButtons}"
-                            FontSize="24" 
-                            Margin="10,5,10,5" />
-                    <Button Content="ResetDB" 
-                            Grid.Column="1" Grid.Row="0"
-                            Click="btnResetDB_Click" 
-                            Style="{StaticResource DataButtons}"
-                            Margin="10,5,10,5"/>
-                    <Button Content = "Handle Calls"
-                            Grid.Column="0" Grid.Row="1"
-                            Click = "btnCall_Click"  
-                            Style="{StaticResource DataButtons}"
-                            Margin = "10,5,10,5"/>
-
-                </Grid>
-               
-            </Grid>
-            <StackPanel >
-                <!--RiskRange-->
-                <TextBox  Text="{Binding RiskRange, Converter={StaticResource TimeSpanToDaysConverterKey}}" FontWeight="Bold" FontSize="20" >
-                    <TextBox.ToolTip>
-                        <ToolTip Content="In days format" 
-                                 Background="{StaticResource CreamColor}"
-                                 BorderBrush="{StaticResource AyeletHardColor}"
-                                 Foreground="{StaticResource AyeletHardColor}"
-                                 FontSize="16"/>
-                    </TextBox.ToolTip>
-                </TextBox>
-                <Button Content="Update Risk Range"
-                        Click="btnUpdateRiskRange_Click" 
-                        Style="{StaticResource CheerfulButton}"/>
-            </StackPanel>
-
-            
+                <Button Content="InitializeDB"
+                Grid.Column="0" Grid.Row="0"
+                Click ="btnInitializeDB_Click" 
+                Style="{StaticResource DataButtons}"
+                Margin="5"/>
+                <Button Grid.Column="2" Grid.Row="0"
+                Click="btnVolunteer_Click"
+                Style="{StaticResource DataButtons}"
+                Margin="5">
+                    <TextBlock TextAlignment="Center">
+            <Run>Handle</Run>
+            <LineBreak/>
+            <Run>Volunteers</Run>
+                    </TextBlock>
+                </Button>
+                <Button Content="ResetDB" 
+                Grid.Column="1" Grid.Row="0"
+                Click="btnResetDB_Click" 
+                Style="{StaticResource DataButtons}"
+                Margin="5"/>
+                <Button Content = "Handle Calls"
+                Grid.Column="3" Grid.Row="0"
+                Click = "btnCall_Click"  
+                Style="{StaticResource DataButtons}"
+               FontSize="20" Margin = "5"/>
+            </Grid>-->
 
         </Grid>
-        
-        <Grid Grid.Row="1" Margin="0,270,0,185" Grid.RowSpan="2">
-
-            <!--Simulator-->
-            <TextBox Text="{Binding Interval,Mode=TwoWay}" FontWeight="Bold" FontSize="20" Margin="10,54,461,92" />
-            <Button Content="Simulator"
-                    Click="btnSimulator_Click" 
-                    Style="{StaticResource CheerfulButton}" Margin="0,98,461,48"/>
-        </Grid>
-
-
-
-
-
-
-
     </Grid>
 </Window>
-
-
-
-<!--<Grid Grid.Row="1" Margin="662,47,0,0">
-
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <Button Click="Opened_Click" Content="{Binding CallsAmount[0]}" ContentStringFormat="sghs {0}" />
-            -->
-<!--<Button Grid.Row="0" Grid.Column="0" Click="Opened_Click">
-                <Button.Content>
-                    <TextBlock>
-                        <Run Text="⚡Opened Calls: "/>
-                        <Run Text="{Binding CallsAmount[0],Mode=TwoWay}"/>
-                    </TextBlock>
-                </Button.Content>
-            </Button>-->
-<!--<Button Grid.Row="1" Grid.Column="0"  Click="Tretment_Click">
-                <Button.Content>
-                    <TextBlock>
-            <Run Text="🔧 In treatment: "/>
-            <Run Text="{Binding CallsAmount[1], Mode=TwoWay}"/>
-                    </TextBlock>
-                </Button.Content>
-            </Button>-->
-<!--
-
-            <Button Grid.Row="2" Grid.Column="0"  Click="Closed_Click">
-                <Button.Content>
-                    <TextBlock>
-                        <Run Text="✅ Closed: "/>
-                        <Run Text="{Binding CallsAmount[2], Mode=TwoWay}"/>
-                    </TextBlock>
-                </Button.Content>
-            </Button>
-            <Button Grid.Row="3" Grid.Column="0"  Click="Expired_Click">
-                <Button.Content>
-                    <TextBlock>
-            <Run Text="⏰ Expired: "/>
-            <Run Text="{Binding CallsAmount[3], Mode=TwoWay}"/>
-                    </TextBlock>
-                </Button.Content>
-            </Button>
-            <Button Grid.Row="4" Grid.Column="0"  Click="OpenRisk_Click">
-                <Button.Content>
-                    <TextBlock>
-                        <Run Text=" ⚡⚠️ Open in risk: "/>
-                        <Run Text="{Binding CallsAmount[4], Mode=TwoWay}"/>
-                    </TextBlock>
-                </Button.Content>
-            </Button>
-            <Button Grid.Row="5" Grid.Column="0"  Click="TretmentRisk_Click">
-                <Button.Content>
-                    <TextBlock>
-             <Run Text=" 🔧⚠️ In treatment in risk: "/>
-             <Run Text="{Binding CallsAmount[5], Mode=TwoWay}"/>
-                    </TextBlock>
-                </Button.Content>
-            </Button>
-
-        </Grid>-->
-<!--<Label Content="Amount of call according status:" HorizontalAlignment="Left" Margin="604,24,0,0" Grid.Row="1" VerticalAlignment="Top" Width="186" FontSize="11" Height="25"/>-->
-<!--Clock-->
-<!--
-        <Grid Grid.Row="1" Margin="205,0,215,10">
-
-            <Button Content="Add One Minute" Click="btnAddOneMinute_Click" HorizontalAlignment="Stretch" Margin="0,80,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Hour" Click="btnAddOneHour_Click" HorizontalAlignment="Stretch" Margin="0,100,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Day " Click="btnAddOneDay_Click" HorizontalAlignment="Stretch" Margin="0,120,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Month" Click="btnAddOneMonth_Click" HorizontalAlignment="Stretch" Margin="0,140,0,0" VerticalAlignment="Top"/>
-            <Button Content="Add One Year" Click="btnAddOneYear_Click" HorizontalAlignment="Stretch" Margin="0,160,0,0" VerticalAlignment="Top"/>
-        </Grid>-->

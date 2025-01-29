@@ -24,6 +24,7 @@
     <None Remove="Image\edit %282%29.png" />
     <None Remove="Image\editHope.png" />
     <None Remove="Image\GrandMa.svg" />
+    <None Remove="Image\grandpaGrandma.png" />
     <None Remove="Image\repairing.png" />
     <None Remove="Image\shopping.png" />
     <None Remove="Image\talking.png" />
@@ -49,6 +50,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\edit (2).png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Image\grandpaGrandma.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Image\ICON.ico">

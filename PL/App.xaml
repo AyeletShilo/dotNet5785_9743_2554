@@ -35,6 +35,7 @@
         <local:TimeSpanToDateConverter x:Key="TimeSpanToDateConverterKey"/>
         <local:TimeSpanToDaysConverter x:Key="TimeSpanToDaysConverterKey"/>
         <local:CallMultiConverter x:Key="CallMultiConverterKey"/>
+        <local:IntervalConverter x:Key="IntervalConverterKey"/>
 
 
         <!--#region Colors-->
