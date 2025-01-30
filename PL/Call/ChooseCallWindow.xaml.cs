@@ -1,4 +1,5 @@
-﻿using DalApi;
+﻿using BO;
+using DalApi;
 using PL.Volunteer;
 using System;
 using System.Collections.Generic;
@@ -135,6 +136,10 @@ namespace PL.Call
                 Volunteer = s_bl.Volunteer.Read(_id)!;
                 queryCallList();
             }
+            catch (BLTemporaryNotAvailableException)
+            {
+                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -183,6 +188,14 @@ namespace PL.Call
             catch (BO.BlCantHandleItException)
             {
                 MessageBox.Show("Unable to assign");
+            }
+            catch (BLTemporaryNotAvailableException)
+            {
+                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
     }

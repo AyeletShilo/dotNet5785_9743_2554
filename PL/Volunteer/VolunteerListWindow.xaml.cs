@@ -144,6 +144,14 @@ namespace PL.Volunteer
             {
                 MessageBox.Show("You can't delete this volunteer", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (BLTemporaryNotAvailableException)
+            {
+                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

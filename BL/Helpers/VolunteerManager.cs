@@ -389,10 +389,12 @@ internal static class VolunteerManager
         {
             
         }
-        catch
+        
+        catch (Exception ex)
         {
-
+            
         }
+        
     }
 
 }

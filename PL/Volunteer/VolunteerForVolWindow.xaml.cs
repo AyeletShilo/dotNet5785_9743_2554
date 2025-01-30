@@ -1,4 +1,5 @@
-﻿using PL.Call;
+﻿using BO;
+using PL.Call;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -179,13 +180,16 @@ namespace PL.Volunteer
                     s_bl.Call.GetAssignmentToEnd(_id, CurrentCall.Id);
                     RefreshVolunteer();
                 }
+                catch (BLTemporaryNotAvailableException)
+                {
+                    MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
-
         /// <summary>
         /// End call handling button
         /// </summary>
@@ -198,9 +202,13 @@ namespace PL.Volunteer
                     s_bl.Call.GetAssignmentToCancel(CurrentVolunteer.Id, CurrentCall.Id);
                     RefreshVolunteer();
                 }
+                catch (BLTemporaryNotAvailableException)
+                {
+                    MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

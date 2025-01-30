@@ -68,10 +68,15 @@ namespace PL.Call
             {
                 MessageBox.Show(ex3.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            catch (BLTemporaryNotAvailableException)
+            {
+                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
+            }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message + "Please try again", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            
         }
 
         /// <summary>

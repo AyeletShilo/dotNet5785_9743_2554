@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,6 +67,10 @@ namespace PL.Volunteer
                 s_bl.Volunteer.Update(_id!, CurrentVolunteer!);
                 _preWind.Show();
                 this.Close();
+            }
+            catch (BLTemporaryNotAvailableException)
+            {
+                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
             }
             catch (Exception ex)
             {

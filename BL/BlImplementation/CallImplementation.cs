@@ -343,7 +343,7 @@ internal class CallImplementation : BlApi.ICall
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
-            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex); //לאן זורק
         }
     }
 

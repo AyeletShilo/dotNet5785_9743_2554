@@ -67,13 +67,17 @@ namespace PL.Call
                 _preWind.Show();//?
                 this.Close();
             }
-            catch (BO.BlXMLFileLoadCreateException ex1)
-            {
-                MessageBox.Show($"Xml Error");
-            }
             catch (BlIntegrityOfValuesException ex3)
             {
                 MessageBox.Show($"Error in integrity");
+            }
+            catch(BLTemporaryNotAvailableException ex4)
+            {
+                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

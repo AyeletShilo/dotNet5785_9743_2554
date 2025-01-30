@@ -449,6 +449,7 @@ internal static class CallManager
             }
 
             CallManager.Observers.NotifyItemUpdated(assignment.CallId);  //stage 5
+            VolunteerManager.Observers.NotifyItemUpdated(assignment.VolunteerId);
             CallManager.Observers.NotifyListUpdated();  //stage 5
             VolunteerManager.Observers.NotifyListUpdated(); //stage 5
         }
@@ -515,42 +516,49 @@ internal static class CallManager
     /// <param name="newClock">the time of the update</param>
     internal static void UpdateExpiredCalls(DateTime oldClock, DateTime newClock)
     {
-        bool assignUpdated = false;
-        List<DO.Call> calls;
-        DO.Assignment assignToUp;
-
-        lock (AdminManager.BlMutex)
-            calls = _dal.Call.ReadAll(m => m.MaxTime < newClock).ToList();
-        //bool listUpdated = false;
-
-        Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
-        List<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate).ToList();
-
-        foreach (var call in callsToUp)
+        try
         {
-            if (call.CallAssignments == null || call.CallAssignments.Last().EndTime != null)
+            bool assignUpdated = false;
+            List<DO.Call> calls;
+            DO.Assignment assignToUp;
+
+            lock (AdminManager.BlMutex)
+                calls = _dal.Call.ReadAll(m => m.MaxTime < newClock).ToList();
+            //bool listUpdated = false;
+
+            Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
+            List<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate).ToList();
+
+            foreach (var call in callsToUp)
             {
-                assignUpdated = true;
-                lock (AdminManager.BlMutex)
-                    _dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
-                Observers.NotifyItemUpdated(call.Id);
-            }
-            else
-            {
-                assignUpdated = true;
-                lock (AdminManager.BlMutex)
+                if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
                 {
-                    assignToUp = _dal.Assignment.Read(c => c.CallId == call.Id)!; ///picks the last- according to dal func
-                    _dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
+                    assignUpdated = true;
+                    lock (AdminManager.BlMutex)
+                        _dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
+                    Observers.NotifyItemUpdated(call.Id);
                 }
-                Observers.NotifyItemUpdated(assignToUp.Id);
-                Observers.NotifyItemUpdated(call.Id);
+                else
+                {
+                    assignUpdated = true;
+                    lock (AdminManager.BlMutex)
+                    {
+                        assignToUp = _dal.Assignment.Read(c => c.CallId == call.Id)!; ///picks the last- according to dal func
+                        _dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
+                    }
+                    Observers.NotifyItemUpdated(assignToUp.Id);
+                    Observers.NotifyItemUpdated(call.Id);
+                }
+            }
+
+            if (oldClock != newClock || assignUpdated)
+            {
+                Observers.NotifyListUpdated();
             }
         }
-
-        if (oldClock != newClock || assignUpdated)
+        catch (BLTemporaryNotAvailableException)
         {
-            Observers.NotifyListUpdated();
+
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using BO;
+using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Windows;
 using System.Windows.Controls;
@@ -84,6 +85,10 @@ namespace PL.Volunteer
                 }
                 _preWind.Show();//?
                 this.Close();
+            }
+            catch (BLTemporaryNotAvailableException)
+            {
+                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
             }
             catch (Exception ex)
             {
