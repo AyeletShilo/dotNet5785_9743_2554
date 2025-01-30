@@ -138,11 +138,11 @@ namespace PL.Volunteer
             }
             catch (BO.BlDoesNotExistException ex)
             {
-                MessageBox.Show("Volunteer not exist");
+                MessageBox.Show("Volunteer not exist", "Exception",MessageBoxButton.OK,MessageBoxImage.Error);
             }
             catch(BO.BlCannotBeDeletedException ex)
             {
-                MessageBox.Show("this volunteer cannot be deleted");
+                MessageBox.Show("You can't delete this volunteer", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

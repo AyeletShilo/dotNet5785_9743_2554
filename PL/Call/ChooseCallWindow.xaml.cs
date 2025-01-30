@@ -174,11 +174,11 @@ namespace PL.Call
             }
             catch (BO.BlDoesNotExistException ex)
             {
-                MessageBox.Show($"Call with ID={SelectedCall.Id} does not exists\"");
+                MessageBox.Show($"Call with ID={SelectedCall!.Id} does not exists\"", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (BO.BlDoesAlreadyExistException)
             {
-                MessageBox.Show($"Assignment for call with ID={SelectedCall.Id} already exists\"");
+                MessageBox.Show($"Assignment for call with ID={SelectedCall!.Id} already exists\"", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (BO.BlCantHandleItException)
             {

@@ -33,7 +33,7 @@ namespace PL
         public AdminWindow(Window preWind ,int id)
         {
             adminId = id;
-            ButtonText = "Start Simulator";
+            //ButtonText = "Start Simulator";
             Interval = 1440;
             InitializeComponent();
             queryCallList();
@@ -86,7 +86,7 @@ namespace PL
             DependencyProperty.Register("SimulatorRun", typeof(bool), typeof(AdminWindow));
 
         public static readonly DependencyProperty ButtonTextProperty =
-            DependencyProperty.Register("ButtonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("ButtonText", typeof(string), typeof(AdminWindow), new PropertyMetadata("Start Simulator"));
         public string ButtonText
         {
             get { return (string)GetValue(ButtonTextProperty); }

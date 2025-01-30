@@ -25,7 +25,7 @@ internal static class VolunteerManager
             throw new BO.BlIntegrityOfValuesException("Error in PhoneNumber format");
         if (volToCheck.Password is not null && volToCheck.Password.Length < 8)
             throw new BO.BlIntegrityOfValuesException("Error in Password format");
-        if (volToCheck.MaxDis < 0/* || volToCheck.MaxDis == null*/)
+        if (volToCheck.MaxDis < 0)
             throw new BO.BlIntegrityOfValuesException("Error in Max Distance format");
         if (volToCheck.Id < 10000000 || volToCheck.Id > 999999999)
             throw new BO.BlIntegrityOfValuesException("Error in ID format");
@@ -147,7 +147,7 @@ internal static class VolunteerManager
     /// <param name="address">volunteer Address</param>
     /// <returns>returns the call the volunteer handle</returns>
     /// <exception cref="BO.BlNullPropertyException">Throws an exception when the  call does not exist </exception>
-    internal static BO.CallInProgress? VolCall(int id, string address)
+    internal static BO.CallInProgress? VolCall(int id, string? address)
     {
         DO.Assignment? currentAss;
         Func<DO.Assignment, bool> func = item => item.VolunteerId == id;
@@ -161,7 +161,7 @@ internal static class VolunteerManager
 
             return new()
             {
-                Id = id,
+                Id = currentAss.Id,
                 CallId = currentCall.Id,
                 CallType = (BO.CallType)currentCall.CallType,
                 Description = currentCall.Description,
@@ -222,15 +222,15 @@ internal static class VolunteerManager
         DO.Volunteer vol;
         lock (AdminManager.BlMutex)
         {
-            call = _dal.Call.Read(callPredicate);
-            vol = _dal.Volunteer.Read(volPredicate);
+            call = _dal.Call.Read(callPredicate)!;
+            vol = _dal.Volunteer.Read(volPredicate)!;
         }
 
 
-        double volLatitude = (double)vol.Latitude;
-        double volLongitude = (double)vol.Longitude;
-        double callLatitude = (double)call.Latitude;
-        double callLongitude = (double)call.Longitude;
+        double volLatitude = (double)vol.Latitude!;
+        double volLongitude = (double)vol.Longitude!;
+        double callLatitude = (double)call.Latitude!;
+        double callLongitude = (double)call.Longitude!;
 
 
         const double R = 6371; // רדיוס כדור הארץ בקילומטרים
@@ -290,6 +290,41 @@ internal static class VolunteerManager
             throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
     }
+
+    internal static IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerData? sort = null, BO.CallInTreatment? filter = BO.CallInTreatment.None)
+    {
+        try
+        {
+            IEnumerable<DO.Volunteer> oldVolunteer;
+            lock (AdminManager.BlMutex)
+                oldVolunteer = _dal.Volunteer.ReadAll(null); //can throw Ex
+            IEnumerable<BO.VolunteerInList> volunteerInList = VolunteerManager.ToVolunteerInList(oldVolunteer);
+
+            if (isActive != null)
+            {
+                volunteerInList = volunteerInList.Where(volunteer => volunteer.IsActive == isActive);
+            }
+            volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter : v.InTreatment != null);
+            volunteerInList = sort == null ? volunteerInList.OrderBy(v => v.Id)
+                : volunteerInList.OrderBy<BO.VolunteerInList, object>(v => sort switch
+                {
+                    BO.VolunteerData.Id => v.Id,
+                    BO.VolunteerData.FullName => v.FullName,
+                    BO.VolunteerData.IsActive => v.IsActive,
+                    BO.VolunteerData.HandleCalls => v.HandleCalls,
+                    BO.VolunteerData.CancelCalls => v.CancelCalls,
+                    BO.VolunteerData.ExpiredCalls => v.ExpiredCalls,
+                    BO.VolunteerData.CallId => v.CallId,
+                    BO.VolunteerData.InTreatment => v.InTreatment,
+                    _=> v.Id
+                });
+            return volunteerInList;
+        }
+        catch (DO.DalXMLFileLoadCreateException ex)
+        {
+            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        }
+    }
     #endregion
 
     private static readonly Random s_rand = new();
@@ -301,48 +336,60 @@ internal static class VolunteerManager
         Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";//?
         try
         {
-
-            IEnumerable<DO.Volunteer> volList;
+            List<BO.VolunteerInList> volunteersList= ReadAll().ToList();
+            //List<DO.Volunteer> volList;
             //volunteerInList= CallManager.ReadAll(/*volunteer => volunteer.Active == true*/).ToList();
 
-            lock (AdminManager.BlMutex)
-                volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList();
-            IEnumerable<BO.VolunteerInList> volunteersList = ToVolunteerInList(volList);
-            foreach (BO.VolunteerInList volunteer in volunteersList)
-            {
-                //lock (AdminManager.BlMutex)
-                if (volunteer.CallId == null)
+            ////read all the volunteers from dal to list.
+            //lock (AdminManager.BlMutex)
+            //    volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList();
+
+            ////if there is any volunteer
+            //if (volList.Count()!=0)
+            //{
+            //    //Converts volunteers from DAL to BO
+            //    List<BO.VolunteerInList> volunteersList = ToVolunteerInList(volList).ToList();
+
+                
+                foreach (BO.VolunteerInList volunteer in volunteersList)
                 {
-                    if (s_rand.NextDouble() < 0.2)
-                        continue;
-                    List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
-                    if (opensCalls.Count != 0)
-                    {
-                        BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
-                        CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
-                    }
-                }
-                else
-                {
-                    var vol = Read(volunteer.Id);
-                    if (vol.InCall.EntryTime < AdminManager.Now.AddDays(-7))
-                    {
-                        CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
-                    }
-                    else
+                    //lock (AdminManager.BlMutex)
+                    if (volunteer.CallId == null)
                     {
                         if (s_rand.NextDouble() < 0.2)
+                            continue;
+                        List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
+                        if (opensCalls.Count != 0)
                         {
-                            CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.CallId);
+                            BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
+                            CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
+                        }
+                    }
+                    else if(volunteer.CallId!=null)
+                    {
+                        BO.Volunteer vol = Read(volunteer.Id)!;
+                        if (vol.InCall!.EntryTime < AdminManager.Now.AddDays(-7))
+                        {
+                            CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
+                        }
+                        else
+                        {
+                            if (s_rand.NextDouble() < 0.2)
+                            {
+                                CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.CallId);
+                            }
                         }
                     }
                 }
-
-            }
+            
         }
         catch(BLTemporaryNotAvailableException)
         {
             
+        }
+        catch
+        {
+
         }
     }
 

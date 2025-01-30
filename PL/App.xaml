@@ -58,21 +58,6 @@
 
         <!--#endregion-->
         
-        
-        <!--<Style x:Key="LabelStyle" TargetType="Label">
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="#7D2216"/>
-            <Setter Property="HorizontalAlignment" Value ="Center"/>
-        </Style>-->
-        <!--<Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="FontSize" Value="16" />
-            <Setter Property="FontFamily" Value= "Sylfaen"/>
-            <Setter Property="FontWeight" Value="Light"/>
-            <Setter Property="Background" Value="#FF7AD1B1"/>
-            <Setter Property="Foreground" Value="#FF952828"/>
-        </Style>-->
 
         <!-- nessecery -->
         <Style x:Key="BaseLabel" TargetType="Label">
@@ -86,22 +71,7 @@
             <Setter Property="Margin" Value="5"/>
         </Style>
 
-        <!-- Header Label Style -->
-        <!--<Style x:Key="HeaderLabel" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
-    <Setter Property="FontFamily" Value="Comic Sans MS"/>
-    <Setter Property="FontSize" Value="24"/>
-    <Setter Property="Foreground" Value="{StaticResource PrimaryColor}"/>
-    <Setter Property="FontWeight" Value="Bold"/>
-</Style>-->
-
-        <!--<Style x:Key="TextBoxStyle" TargetType="TextBox">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-        </Style>-->
-
-        <!--Neccesery-->
+       <!--Neccesery-->
         <Style x:Key="TextBlockStyle" TargetType="TextBlock">
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="FontFamily" Value="Guttman Miryam"/>
@@ -188,10 +158,6 @@
             </Setter>
         </Style>
 
-       
-
-      
-
         <Style x:Key="RoundedButton" TargetType="Button">
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
@@ -238,8 +204,6 @@
             </Style.Triggers>
         </Style>
 
-        
-        
         <Style x:Key="BackArrowButton" TargetType="Button">
             <Setter Property="Width" Value="40"/>
             <Setter Property="Height" Value="40"/>
@@ -278,21 +242,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <!--<Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#4CAF50"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="BorderBrush" Value="#388E3C"/>
-        </Style>
-
-        <Style x:Key="DangerButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#F44336"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="10"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="BorderBrush" Value="#D32F2F"/>
-        </Style>-->
         
         <Style x:Key="BasePhotoButton" TargetType="Button">
             <Setter Property="Width" Value="30"/>
@@ -301,6 +250,7 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
+        
         <Style x:Key="DeleteButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -321,7 +271,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
         
         <Style x:Key="ChooseButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
             <Setter Property="Template">
@@ -361,6 +310,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+        
         <Style x:Key="EditButton" TargetType="Button" BasedOn="{StaticResource BasePhotoButton}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -398,7 +348,6 @@
         </Style>
 
         <Style x:Key="CenteredDataGridCellStyle" TargetType="DataGridCell">
-           
         </Style>
         <Style TargetType="DataGridColumnHeader">
             <Setter Property="Background" Value="{StaticResource Greeny}"/>
@@ -406,19 +355,8 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="Padding" Value="10,5"/>
-            <!--<Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Stretch"/>-->
         </Style>
-        <!--<Style TargetType="DataGridRow">
-            <Style.Triggers>
-                <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="Background" Value="{StaticResource CreamColor}"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>-->
-
+       
         <!-- Animated Button Style -->
         <Style x:Key="CheerfulButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource AyeletLightColor}"/>

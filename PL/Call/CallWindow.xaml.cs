@@ -58,15 +58,15 @@ namespace PL.Call
             }
             catch (BO.BlDoesNotExistException ex1)
             {
-                MessageBox.Show($"Call with ID={CurrentCall.Id} does Not exists");
+                MessageBox.Show($"Call with ID={CurrentCall!.Id} does Not exists", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (BO.BlXMLFileLoadCreateException ex2)
             {
-                MessageBox.Show($"Xml error");
+                MessageBox.Show($"Xml error", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (BlIntegrityOfValuesException ex3)
             {
-                MessageBox.Show(ex3.Message);
+                MessageBox.Show(ex3.Message, "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex)
             {

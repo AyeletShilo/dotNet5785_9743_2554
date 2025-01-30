@@ -56,74 +56,15 @@ internal static class CallManager
                     return CallListStatus.InTreatmentInRisk;
             return CallListStatus.InTreatment;
         }
-        return (BO.CallListStatus)MakeStatus(currentAssignment, currentCall.MaxTime);
+        return (BO.CallListStatus)MakeStatus(currentAssignment!, currentCall.MaxTime);
     }
 
     /// <summary>
-    /// Checks whether the call values ​​are logically correct
+    /// Checks whether the call values are logically correct
     /// </summary>
     /// <param name="toCheck">call to check</param>
-    /// <returns>the corresponding call values ​​for the database</returns>
-    /// <exception cref="BO.BlIntegrityOfValuesException">Throws an exception if one of the values ​​is logically incorrect</exception>
-    //internal static DO.Call CheckLogic(BO.Call toCheck)
-    //{
-    //    bool currentMaxTime = (toCheck.MaxCloseTime > AdminManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
-
-    //    if (currentMaxTime == false)
-    //        throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
-
-    //    double[] AddressCoordinate = CallManager.GetCoordinates(toCheck.CallAddress);
-
-    //    DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, AddressCoordinate[0],
-    //        AddressCoordinate[1], toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
-
-    //    return DoCall;
-    //}
-
-    /// <summary>
-    /// This method takes an address as input and returns an array with the latitude and longitude.
-    /// The request is synchronous, meaning it waits for the response before continuing.
-    /// </summary>
-    /// <param name="address">The address to be geocoded</param>
-    /// <returns>A double array containing the latitude and longitude</returns>
-    //internal static double[] GetCoordinates(string address)
-    //{
-    //    // Checking if the address is null or empty
-    //    if (string.IsNullOrWhiteSpace(address))
-    //        throw new BO.BlNullPropertyException("Address cannot be empty or null." + nameof(address));
-
-    //    //Constructing the URL for the geocoding service with the provided address
-
-    //    string apiKey = "pk.902e35436f8c579a871d8158aee1bde2";
-    //    //string apiKey = "pk.9c3fc19e8792d781f9847563010296cd";
-    //    string url = $"https://us1.locationiq.com/v1/search?key={apiKey}&q={Uri.EscapeDataString(address)}&format=json";
-    //    //string url = $"https://geocode.maps.co/search?q={Uri.EscapeDataString(address)}";
-
-    //    using (HttpClient client = new HttpClient())
-    //    {
-    //        // שליחת בקשה סינכרונית (חסימתית)
-    //        HttpResponseMessage response = client.GetAsync(url).Result;
-
-    //        // בדיקת מצב התשובה
-    //        if (!response.IsSuccessStatusCode)
-    //            throw new BO.BlIntegrityOfValuesException($"Error in request: {response.StatusCode}");
-
-    //        // קריאת התוכן כסטרינג
-    //        string jsonResponse = response.Content.ReadAsStringAsync().Result;
-
-    //        // פענוח התוכן מ-JSON
-    //        var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-    //        var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
-
-    //        // בדיקה אם נמצאו תוצאות
-    //        if (results == null || results.Length == 0)
-    //            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
-
-    //        // החזרת קואורדינטות
-    //        return new double[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
-    //    }
-    //}
-
+    /// <returns>the corresponding call values for the database</returns>
+    /// <exception cref="BO.BlIntegrityOfValuesException">Throws an exception if one of the values is logically incorrect</exception>
     internal static void CheckFormat(BO.Call toCheck)
     {
         bool currentMaxTime = (toCheck.MaxCloseTime > AdminManager.Now && toCheck.MaxCloseTime > toCheck.OpenTime) || toCheck.MaxCloseTime == null;
@@ -131,6 +72,13 @@ internal static class CallManager
         if (currentMaxTime == false)
             throw new BO.BlIntegrityOfValuesException("""Error in value "MaxTime" integrity""");
     }
+
+    /// <summary>
+    /// call the async func to calculate the coordinate of the address and update it into the xml.
+    /// </summary>
+    /// <param name="doCall">call of dal</param>
+    /// <returns></returns>
+    /// <exception cref="BO.BlIntegrityOfValuesException"></exception>
     internal static async Task updateCoordinates(DO.Call doCall)
     {
         double?[] AddressCoordinate = await CallManager.GetCoordinates(doCall.CallAddress);
@@ -152,6 +100,13 @@ internal static class CallManager
                 doCall.Description,
                 doCall.MaxTime));
     }
+
+    /// <summary>
+    /// This method takes an address as input and returns an array with the latitude and longitude.
+    /// The request is asynchronous, meaning it doesn't waits for the response before continuing.
+    /// </summary>
+    /// <param name="address">The address to be geocoded</param>
+    /// <returns>A double array containing the latitude and longitude</returns>
     internal static async Task<double?[]> GetCoordinates(string address)
     {
         // Checking if the address is null or empty
@@ -183,7 +138,7 @@ internal static class CallManager
                 throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
 
             // Returning the coordinates
-            return new double?[] { double.Parse(results[0].Lat), double.Parse(results[0].Lon) };
+            return new double?[] { double.Parse(results[0].Lat!), double.Parse(results[0].Lon!) };
         }
     }
 
@@ -195,9 +150,9 @@ internal static class CallManager
     private class LocationResult
     {
         // Latitude as string in the JSON response
-        public string Lat { get; set; }
+        public string? Lat { get; set; }
         // Longitude as string in the JSON response
-        public string Lon { get; set; }
+        public string? Lon { get; set; }
     }
 
     /// <summary>
@@ -248,9 +203,15 @@ internal static class CallManager
 
                 else
                 {
-                    string? lastVolunteer;
+                    string? lastVolunteer = null;
+                    DO.Volunteer? lastVol;
                     lock (AdminManager.BlMutex)
-                        lastVolunteer = _dal.Volunteer.Read(callAssignment.VolunteerId)!.FullName;
+                        lastVol = _dal.Volunteer.Read(callAssignment.VolunteerId);
+
+                    if (lastVol != null)
+                    {
+                        lastVolunteer = lastVol!.FullName;
+                    }
                     callInLists.Add(new()
                     {
                         Id = callAssignment.Id,
@@ -301,9 +262,9 @@ internal static class CallManager
     /// <returns> open call in list</returns>
     internal static BO.OpenCallInList ToOpenCall(DO.Call item, int volId)
     {
-        string volAddress;
+        string? volAddress;
         lock (AdminManager.BlMutex)
-            volAddress = _dal.Volunteer.Read(v => v.Id == volId).VolAddress;
+            volAddress = _dal.Volunteer.Read(v => v.Id == volId)!.VolAddress;
         return new()
         {
             Id = item.Id,
@@ -365,12 +326,13 @@ internal static class CallManager
 
             IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func); //read all assignment of this Call.
             var callAssignments = new List<BO.CallAssignInList>();
+
             if (dataAssignments.Count() != 0)
             {
                 callAssignments = dataAssignments.Select(assign => new BO.CallAssignInList
                 {
                     VolunteerId = assign.VolunteerId,
-                    VolunteerName = (assign.VolunteerId != 0) ? _dal.Volunteer.Read(assign.VolunteerId).FullName : null,
+                    VolunteerName = (assign.VolunteerId != 0) ? _dal.Volunteer.Read(assign.VolunteerId)?.FullName : null,
                     InterTime = assign.InterTime,
                     EndTime = assign.EndTime.HasValue ? assign.EndTime : null,
                     EndTreatment = assign.EndTreatment.HasValue ? (BO.EndTreatment)assign.EndTreatment : null, /*BO.EndTreatment.None,*/
@@ -525,11 +487,11 @@ internal static class CallManager
             // המרת מעלות לרדיאנים
             double ToRadians(double angle) => Math.PI * angle / 180.0;
 
-            double phi1 = ToRadians((double)vol.Latitude);
+            double phi1 = ToRadians((double)vol.Latitude!);
             double phi2 = ToRadians(callLat);
 
             double deltaLat = ToRadians(callLat - (double)vol.Latitude);
-            double deltaLon = ToRadians(callLon - (double)vol.Longitude);
+            double deltaLon = ToRadians(callLon - (double)vol.Longitude!);
 
             // חישוב המרחק בקירוב לשטח מישורי
             double x = deltaLon * Math.Cos((phi1 + phi2) / 2);
@@ -554,7 +516,7 @@ internal static class CallManager
     internal static void UpdateExpiredCalls(DateTime oldClock, DateTime newClock)
     {
         bool assignUpdated = false;
-        IEnumerable<DO.Call> calls;
+        List<DO.Call> calls;
         DO.Assignment assignToUp;
 
         lock (AdminManager.BlMutex)
@@ -562,14 +524,13 @@ internal static class CallManager
         //bool listUpdated = false;
 
         Func<BO.Call, bool> predicate = c => c.Status == CallStatus.InTreatment || c.Status == CallStatus.Opened || c.Status == CallStatus.OpenInRisk;
-        IEnumerable<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate).ToList();
+        List<BO.Call> callsToUp = calls.Select(c => callImplementation.Read(c.Id)).Where(predicate).ToList();
 
         foreach (var call in callsToUp)
         {
-            if (call.CallAssignments.Count == 0 || call.CallAssignments.Last().EndTime != null)
+            if (call.CallAssignments == null || call.CallAssignments.Last().EndTime != null)
             {
                 assignUpdated = true;
-                //listUpdated = true;
                 lock (AdminManager.BlMutex)
                     _dal.Assignment.Create(new(0, call.Id, 0, newClock, newClock, DO.AssignmentEnum.CancelExpired));
                 Observers.NotifyItemUpdated(call.Id);
@@ -577,10 +538,9 @@ internal static class CallManager
             else
             {
                 assignUpdated = true;
-                //listUpdated = true;
                 lock (AdminManager.BlMutex)
                 {
-                    assignToUp = _dal.Assignment.Read(c => c.CallId == call.Id); ///קורא לראשונה או לאחרונה?אם לאחרונה צריך לשנות
+                    assignToUp = _dal.Assignment.Read(c => c.CallId == call.Id)!; ///picks the last- according to dal func
                     _dal.Assignment.Update(new(assignToUp.Id, assignToUp.CallId, assignToUp.VolunteerId, assignToUp.InterTime, newClock, DO.AssignmentEnum.CancelExpired));
                 }
                 Observers.NotifyItemUpdated(assignToUp.Id);

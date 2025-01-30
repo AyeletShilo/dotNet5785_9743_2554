@@ -155,36 +155,39 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     /// <returns>list of volunteers</returns>
     public IEnumerable<BO.VolunteerInList> ReadAll(bool? isActive = null, BO.VolunteerData? sort = null, BO.CallInTreatment? filter = BO.CallInTreatment.None)
     {
-        try
-        {
-            IEnumerable<DO.Volunteer> oldVolunteer;
-            lock (AdminManager.BlMutex)
-                oldVolunteer = _dal.Volunteer.ReadAll(null); //can throw Ex
-            IEnumerable<BO.VolunteerInList> volunteerInList = VolunteerManager.ToVolunteerInList(oldVolunteer);
+        return VolunteerManager.ReadAll(isActive, sort, filter);
+        #region draft
+        //try
+        //{
+        //    IEnumerable<DO.Volunteer> oldVolunteer;
+        //    lock (AdminManager.BlMutex)
+        //        oldVolunteer = _dal.Volunteer.ReadAll(null); //can throw Ex
+        //    IEnumerable<BO.VolunteerInList> volunteerInList = VolunteerManager.ToVolunteerInList(oldVolunteer);
 
-            if (isActive != null)
-            {
-                volunteerInList = volunteerInList.Where(volunteer => volunteer.IsActive == isActive);
-            }
-            volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter : v.InTreatment != null);
-            volunteerInList = sort == null ? volunteerInList.OrderBy(v => v.Id)
-                : volunteerInList.OrderBy<BO.VolunteerInList, object>(v => sort switch
-                {
-                    BO.VolunteerData.Id => v.Id,
-                    BO.VolunteerData.FullName => v.FullName,
-                    BO.VolunteerData.IsActive => v.IsActive,
-                    BO.VolunteerData.HandleCalls => v.HandleCalls,
-                    BO.VolunteerData.CancelCalls => v.CancelCalls,
-                    BO.VolunteerData.ExpiredCalls => v.ExpiredCalls,
-                    BO.VolunteerData.CallId => v.CallId,
-                    BO.VolunteerData.InTreatment => v.InTreatment,
-                });
-            return volunteerInList;
-        }
-        catch (DO.DalXMLFileLoadCreateException ex)
-        {
-            throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
-        }
+        //    if (isActive != null)
+        //    {
+        //        volunteerInList = volunteerInList.Where(volunteer => volunteer.IsActive == isActive);
+        //    }
+        //    volunteerInList = volunteerInList.Where(v => filter != BO.CallInTreatment.None ? v.InTreatment == filter : v.InTreatment != null);
+        //    volunteerInList = sort == null ? volunteerInList.OrderBy(v => v.Id)
+        //        : volunteerInList.OrderBy<BO.VolunteerInList, object>(v => sort switch
+        //        {
+        //            BO.VolunteerData.Id => v.Id,
+        //            BO.VolunteerData.FullName => v.FullName,
+        //            BO.VolunteerData.IsActive => v.IsActive,
+        //            BO.VolunteerData.HandleCalls => v.HandleCalls,
+        //            BO.VolunteerData.CancelCalls => v.CancelCalls,
+        //            BO.VolunteerData.ExpiredCalls => v.ExpiredCalls,
+        //            BO.VolunteerData.CallId => v.CallId,
+        //            BO.VolunteerData.InTreatment => v.InTreatment,
+        //        });
+        //    return volunteerInList;
+        //}
+        //catch (DO.DalXMLFileLoadCreateException ex)
+        //{
+        //    throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        //}
+        #endregion
     }
 
     /// <summary>
@@ -198,7 +201,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         DO.Volunteer? updateVol;
-        DO.Volunteer? oldVolunteer;
+        DO.Volunteer oldVolunteer;
         DO.Volunteer doVolunteer;
 
         lock (AdminManager.BlMutex)
@@ -208,7 +211,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
 
             lock (AdminManager.BlMutex)
-                oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
+                oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID:{volToUpdate.Id} doesn't exist");
             if ((updateVol.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id, updateVol.Password) != BO.Role.Manager)
                 throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 

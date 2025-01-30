@@ -67,8 +67,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
-
     </Window.Resources>
 
 
@@ -100,14 +98,17 @@
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <!--clock-->
-                <Label  Grid.Row="0" 
-                        Style="{StaticResource BaseLabel}"
-                        Content="{Binding CurrentDate, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" 
+                <DockPanel Grid.Row="0" HorizontalAlignment="Center">
+                    <TextBlock  Grid.Row="0" 
+                        HorizontalAlignment="Left"
+                        Text="{Binding CurrentDate, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"
                         FontFamily="Comic Sans MS"
                         FontSize="30"
                         Foreground="{StaticResource AyeletHardColor}"
                         FontWeight="Bold"
-                        Margin="0,0,0,5"/>
+                        Margin="0,0,0,5">
+                    </TextBlock>
+                </DockPanel>
                 <!--ForWard Clock-->
                 <Grid Grid.Row="1" Margin="15,0">
                     <Grid.ColumnDefinitions>
@@ -157,7 +158,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="170*"/>
                 <ColumnDefinition Width="470*"/>
-                <ColumnDefinition Width="150*"/>
+                <ColumnDefinition Width="170*"/>
             </Grid.ColumnDefinitions>
 
             <Image Source="/Image/LOGO (3).png" Grid.Column="1" Margin="10,3,3,3"/>
@@ -204,6 +205,8 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
+        
+        <!--bottom grid-->
         <Grid Grid.Row="2" Margin="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -213,6 +216,8 @@
                 <RowDefinition Height="103*"/>
                 <RowDefinition Height="139*"/>
             </Grid.RowDefinitions>
+            
+            
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -302,6 +307,7 @@
                     <Button  Click="TreatmentRisk_Click"
                          Content="{Binding CallsAmount[5], Mode=TwoWay}"
                          ContentStringFormat="🔧⚠️ In treatment in risk: {0}"
+                             FontSize="12"
                          Style="{StaticResource AmountButtons}"
                          Margin="5,2,0,2"
                          Height="Auto"/>
