@@ -353,8 +353,10 @@ internal static class VolunteerManager
                 
                 foreach (BO.VolunteerInList volunteer in volunteersList)
                 {
-                    //lock (AdminManager.BlMutex)
-                    if (volunteer.CallId == null)
+                BO.Volunteer vol = Read(volunteer.Id)!;
+
+                //lock (AdminManager.BlMutex)
+                if (vol.InCall == null)
                     {
                         if (s_rand.NextDouble() < 0.2)
                             continue;
@@ -365,9 +367,9 @@ internal static class VolunteerManager
                             CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
                         }
                     }
-                    else if(volunteer.CallId!=null)
+                    else
                     {
-                        BO.Volunteer vol = Read(volunteer.Id)!;
+                        //BO.Volunteer vol = Read(volunteer.Id)!;
                         if (vol.InCall!.EntryTime < AdminManager.Now.AddDays(-7))
                         {
                             CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
@@ -381,8 +383,8 @@ internal static class VolunteerManager
                         }
                     }
                 }
-            
-        }
+
+    }
         catch(BLTemporaryNotAvailableException)
         {
             

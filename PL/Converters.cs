@@ -180,7 +180,7 @@ public class MultiToIsEnabledConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-        return (values[0] == null || (string)values[1] == "Add") ? Visibility.Hidden : Visibility.Visible;
+        return (values[0] == null || values[1] == null || (string)values[1] == "Add") ? Visibility.Hidden : Visibility.Visible;
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
@@ -194,7 +194,7 @@ public class CallMultiConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-        
+
         if (values[0] != null || (bool)values[1] == false)
             return false;
         return true;
@@ -454,7 +454,7 @@ public class TimeSpanToDateConverter : IValueConverter
             DateTime resultDate = baseDate.Add(timeSpan);
 
             return resultDate.ToString("dd/MM/yy HH:mm", culture);
-           
+
         }
         return string.Empty;
     }
@@ -474,14 +474,14 @@ public class TimeSpanToDaysConverter : IValueConverter
     {
         if (value is TimeSpan timeSpan)
         {
-            return timeSpan.TotalDays.ToString("0"); 
+            return timeSpan.TotalDays.ToString("0");
         }
-        return "0"; 
+        return "0";
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        
+
         if (double.TryParse(value.ToString(), out double days))
         {
             return TimeSpan.FromDays(days);

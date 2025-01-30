@@ -149,15 +149,15 @@ namespace PL
         {
             if (SimulatorRun == false)
             {
+                ButtonText = "Stop Simulator";
                 s_bl.Admin.StartSimulator(Interval); //stage 7
                 SimulatorRun = true;
-                ButtonText = "Stop Simulator";
             }
             else
             {
+                ButtonText = "Start Simulator";
                 s_bl.Admin.StopSimulator(); //stage 7
                 SimulatorRun = false;
-                ButtonText = "Start Simulator";
             }
 
         }

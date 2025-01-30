@@ -15,8 +15,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="67*"/>
-            <RowDefinition Height="Auto" MinHeight="314"/>
-            <RowDefinition Height="151*"/>
+            <RowDefinition Height="Auto" MinHeight="465.002"/>
+            <!--<RowDefinition Height="0*"/>-->
             <RowDefinition Height="92*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="1" Padding="10" Background="{StaticResource AyeletLightColor}" Margin="30,30,30,30" CornerRadius="8">
@@ -27,11 +27,15 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="4.5*"/>
                         <ColumnDefinition Width="7.5*"/>
-                        <ColumnDefinition Width="*"/>
+                        <!--<ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="4.5*"/>
-                        <ColumnDefinition Width="7.5*"/>
+                        <ColumnDefinition Width="7.5*"/>-->
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>
@@ -72,10 +76,10 @@
                         </TextBox.Text>
                     </TextBox>
 
-                    <Label Grid.Row="0" Grid.Column="3"
+                    <Label Grid.Row="3" Grid.Column="0"
                            Content="Password:" 
                            Style="{StaticResource FormLabelStyle}"/>
-                    <TextBox Grid.Row="0" Grid.Column="4" Style="{StaticResource FormTextBoxStyle}">
+                    <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource FormTextBoxStyle}">
                         <TextBox.Text>
                             <Binding Path= "CurrentVolunteer.Password" Mode= "TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" ValidatesOnDataErrors="true" >
                                 <Binding.ValidationRules>
@@ -98,19 +102,19 @@
 
                     </TextBox>
 
-                    <Label Grid.Row="1" Grid.Column="3"
+                    <Label Grid.Row="4" Grid.Column="0"
                            Content="Address:" 
                            Style="{StaticResource FormLabelStyle}"/>
-                    <TextBox Grid.Row="1" Grid.Column="4" 
+                    <TextBox Grid.Row="4" Grid.Column="1" 
                              Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true }" 
                              Style="{StaticResource FormTextBoxStyle}"/>
                     <!--<TextBlock Grid.Row="4" 
           Text="{Binding CurrentVolunteer.Job}" />-->
 
-                    <Label Grid.Row="2" Grid.Column="3"
+                    <Label Grid.Row="5" Grid.Column="0"
                            Content="Max distance from call:" 
                            Style="{StaticResource FormLabelStyle}"/>
-                    <TextBox Grid.Row="2" Grid.Column="4" Style="{StaticResource FormTextBoxStyle}">
+                    <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource FormTextBoxStyle}">
                         <TextBox.Text>
                             <Binding Path= "CurrentVolunteer.MaxDis" Mode= "TwoWay" NotifyOnValidationError="true" ValidatesOnExceptions="true" ValidatesOnDataErrors="true" >
                                 <Binding.ValidationRules>
@@ -121,7 +125,7 @@
                     </TextBox>
 
                     <!--<Label Content="Active Volunteer?" Grid.Row="3" Grid.Column="3"  Margin="0,10,0,16"/>-->
-                    <CheckBox Grid.Row="3" Grid.Column="4" Content="Active Volunteer?"
+                    <CheckBox Grid.Row="6" Grid.Column="1" Content="Active Volunteer?" Margin="5,10,0,0"
                               IsChecked="{Binding CurrentVolunteer.IsActive, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
                               IsEnabled="{Binding CurrentVolunteer.InCall, Converter={StaticResource ConvertActiveIsEnableKey}}"
                               Style="{StaticResource FormCheckBoxStyle}"/>
@@ -140,6 +144,6 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Margin="10,10,0,0"
-                Panel.ZIndex="1" Height="40" Grid.RowSpan="2" Width="40"/>
+                Panel.ZIndex="1" Height="40" Width="40"/>
     </Grid>
 </Window>

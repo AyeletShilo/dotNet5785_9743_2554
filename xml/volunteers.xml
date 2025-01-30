@@ -219,9 +219,9 @@
     <Job>Manager</Job>
     <Active>true</Active>
     <Distance>Walking</Distance>
-    <VolAddress>Shmuel Hanavi 20, Jerusalem, Israel</VolAddress>
-    <Latitude>31.8017</Latitude>
-    <Longitude>35.2171</Longitude>
+    <VolAddress>Afti 30, Jerusalem, Israel</VolAddress>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
     <MaxDistance />
   </Volunteer>
 </ArrayOfVolunteers>

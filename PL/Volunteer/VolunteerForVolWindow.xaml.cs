@@ -28,7 +28,7 @@ namespace PL.Volunteer
             InitializeComponent();
             _id = id;
             _preWind = preWind;
-            FirstLet = CurrentVolunteer.FullName[0];
+            FirstLet = CurrentVolunteer!.FullName[0];
             try
             {
                 if (CurrentVolunteer!.InCall != null)
@@ -65,10 +65,13 @@ namespace PL.Volunteer
         public static readonly DependencyProperty CurrentCallProperty =
             DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(VolunteerForVolWindow), new PropertyMetadata(null));
 
-        public char FirstLet { get; set; }// = CurrentVolunteer.FullName[0];
-        //{
-        //    get { return CurrentVolunteer!.FullName[0]; }
-        //}
+        public char FirstLet 
+        {
+            get { return (Char)GetValue(FirstLetProperty); }
+            set { SetValue(FirstLetProperty, value); }
+        }
+        public static readonly DependencyProperty FirstLetProperty =
+            DependencyProperty.Register("FirstLet", typeof(Char), typeof(VolunteerForVolWindow), new PropertyMetadata(null));
         public string? Distance => _distance;
         //{
         //    get { return _distance; }
