@@ -230,7 +230,7 @@
                   Style="{StaticResource FormTextBoxStyle}" HorizontalContentAlignment="Center" Width="130" Height="40"
                   IsReadOnly="{Binding SimulatorRun}">
                         <TextBox.ToolTip>
-                            <ToolTip Content="---------" 
+                            <ToolTip Content="System clock progress (in minutes)" 
                           Background="{StaticResource CreamColor}"
                           BorderBrush="{StaticResource AyeletHardColor}"
                           Foreground="{StaticResource AyeletHardColor}"

@@ -34,7 +34,7 @@ namespace PL
         {
             adminId = id;
             //ButtonText = "Start Simulator";
-            Interval = 1440;
+            Interval = 720;
             InitializeComponent();
             queryCallList();
             _preWind = preWind;
@@ -219,7 +219,7 @@ namespace PL
             try
             {
                 s_bl.Admin.ResetDB();
-                Interval = 1440;
+                Interval = 720;
                 queryCallList();
 
             }
@@ -245,7 +245,7 @@ namespace PL
             try
             {
                 s_bl.Admin.InitializeDB();
-                Interval = 1440;
+                Interval = 720;
                 queryCallList();
             }
             catch (Exception ex)
@@ -260,7 +260,7 @@ namespace PL
         private void CloseAllWindowsExceptMain()
         {
             foreach (Window window in Application.Current.Windows.Cast<Window>().ToList())
-                if (window != this)
+                if (window != this && window.GetType() != typeof(MainWindow))
                     window.Close();
         }
 
