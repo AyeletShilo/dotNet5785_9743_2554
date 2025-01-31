@@ -189,7 +189,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         DO.Volunteer? updateVol;
-        DO.Volunteer oldVolunteer;
+        DO.Volunteer? oldVolunteer;
         DO.Volunteer doVolunteer;
 
         lock (AdminManager.BlMutex)
@@ -199,7 +199,9 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
 
             lock (AdminManager.BlMutex)
-                oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID:{volToUpdate.Id} doesn't exist");
+                oldVolunteer = _dal.Volunteer.Read(volToUpdate.Id);
+            if (oldVolunteer == null)
+                throw new BO.BlDoesNotExistException($"Volunteer with ID:{volToUpdate.Id} doesn't exist");
             if ((updateVol.Job != (DO.Role)volToUpdate.Job) && GetMyJob(id, updateVol.Password) != BO.Role.Manager)
                 throw new BO.BlCantUpdateException($"Volunteer with ID:{oldVolunteer.Id} not allowed to update this");
 

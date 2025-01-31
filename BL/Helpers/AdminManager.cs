@@ -63,14 +63,14 @@ internal static class AdminManager //stage 4
     /// Method to perform application's clock from any BL class as may be required
     /// </summary>
     /// <param name="newClock">updated clock value</param>
-    //internal static void UpdateClock(DateTime newClock) //stage 4-7
-    //{
-    //    // new Thread(() => { // stage 7 - not sure - still under investigation - see stage 7 instructions after it will be released        
-    //    updateClock(newClock);//stage 4-6
-    //    // }).Start(); // stage 7 as above
-    //}
+    internal static void UpdateClock(DateTime newClock) //stage 4-7
+    {
+        // new Thread(() => { // stage 7 - not sure - still under investigation - see stage 7 instructions after it will be released        
+        updateClock(newClock);//stage 4-6
+        // }).Start(); // stage 7 as above
+    }
 
-    internal static void UpdateClock(DateTime newClock) // prepared for stage 7 as DRY to eliminate needless repetition
+    private static void updateClock(DateTime newClock) // prepared for stage 7 as DRY to eliminate needless repetition
     {
         var oldClock = s_dal.Config.Clock; //stage 4
         s_dal.Config.Clock = newClock; //stage 4

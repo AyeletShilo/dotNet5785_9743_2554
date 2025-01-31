@@ -155,10 +155,14 @@ internal static class VolunteerManager
             currentAss = _dal.Assignment.Read(func);
         if (currentAss != null && currentAss.EndTime == null)/*?? throw new BO.BlNullPropertyException($"Assignment does not exist");*/
         {
-            DO.Call currentCall;
+            DO.Call? currentCall;
             lock (AdminManager.BlMutex)
-                currentCall = _dal.Call.Read(currentAss.CallId) ?? throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
+                currentCall = _dal.Call.Read(currentAss.CallId);
+            if (currentCall == null) throw new BO.BlNullPropertyException($"Call with ID: {currentAss.CallId} does not exist");
 
+            TimeSpan riskRange;
+            lock (AdminManager.BlMutex)
+                riskRange = _dal.Config.RiskRange;
             return new()
             {
                 Id = currentAss.Id,
@@ -170,7 +174,7 @@ internal static class VolunteerManager
                 MaxCloseTime = currentCall.MaxTime,
                 EntryTime = currentAss.InterTime,
                 VolDistance = CalculateDis(address, currentCall.CallAddress),
-                Status = (currentCall.MaxTime is null || (currentCall.MaxTime - AdminManager.Now) < _dal.Config.RiskRange) ? Status.InTreatment : Status.InRiskTreatment
+                Status = (currentCall.MaxTime is null || (currentCall.MaxTime - AdminManager.Now) < riskRange) ? Status.InTreatment : Status.InRiskTreatment
             };
         }
         return null;
@@ -257,14 +261,16 @@ internal static class VolunteerManager
     {
         try
         {
-            DO.Volunteer doVolunteer;
+            DO.Volunteer? doVolunteer;
             IEnumerable<DO.Assignment> volAssignments;
+
             lock (AdminManager.BlMutex)
-            {
-                doVolunteer = _dal.Volunteer.Read(id) ?? throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist"); //can throw Ex
-                Func<DO.Assignment, bool>? predicate = assignment => assignment.VolunteerId == id;
+                doVolunteer = _dal.Volunteer.Read(id);
+            if (doVolunteer == null) throw new BO.BlDoesNotExistException($"Volunteer with ID={id} does Not exist"); //can throw Ex
+            Func<DO.Assignment, bool>? predicate = assignment => assignment.VolunteerId == id;
+            lock (AdminManager.BlMutex)
                 volAssignments = _dal.Assignment.ReadAll(predicate);
-            }
+
             return new()
             {
                 Id = id,
@@ -332,7 +338,7 @@ internal static class VolunteerManager
 
     internal static void SimulateVolunteersActivity()
     {
-        
+
         Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";//?
         try
         {
@@ -350,51 +356,51 @@ internal static class VolunteerManager
             //    //Converts volunteers from DAL to BO
             //    List<BO.VolunteerInList> volunteersList = ToVolunteerInList(volList).ToList();
 
-                
-                foreach (BO.VolunteerInList volunteer in volunteersList)
-                {
+
+            foreach (BO.VolunteerInList volunteer in volunteersList)
+            {
                 BO.Volunteer vol = Read(volunteer.Id)!;
 
                 //lock (AdminManager.BlMutex)
                 if (vol.InCall == null)
+                {
+                    if (s_rand.NextDouble() < 0.2)
+                        continue;
+                    List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
+                    if (opensCalls.Count != 0)
                     {
-                        if (s_rand.NextDouble() < 0.2)
-                            continue;
-                        List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
-                        if (opensCalls.Count != 0)
-                        {
-                            BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
-                            CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
-                        }
+                        BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
+                        CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
+                    }
+                }
+                else
+                {
+                    //BO.Volunteer vol = Read(volunteer.Id)!;
+                    if (vol.InCall!.EntryTime < AdminManager.Now.AddDays(-7))
+                    {
+                        CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
                     }
                     else
                     {
-                        //BO.Volunteer vol = Read(volunteer.Id)!;
-                        if (vol.InCall!.EntryTime < AdminManager.Now.AddDays(-7))
+                        if (s_rand.NextDouble() < 0.2)
                         {
-                            CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
-                        }
-                        else
-                        {
-                            if (s_rand.NextDouble() < 0.2)
-                            {
-                                CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.CallId);
-                            }
+                            CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.CallId);
                         }
                     }
                 }
+            }
 
-    }
+        }
         catch(BLTemporaryNotAvailableException)
         {
             
         }
-        
+
         catch (Exception ex)
         {
-            
+           
         }
-        
+
     }
 
 }

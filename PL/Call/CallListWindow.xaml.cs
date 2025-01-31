@@ -193,7 +193,7 @@ namespace PL.Call
                 int? assignmentId = SelectedCall!.Id;
                 if (assignmentId is null)
                 {
-                    MessageBox.Show($"Assignment with ID: {assignmentId} cannot be canceled"); return;
+                    MessageBox.Show($"Assignment cannot be canceled"); return;
                 }
                 int assId = (int)assignmentId;
                 int volId = VolunteerId;

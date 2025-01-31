@@ -219,6 +219,9 @@ namespace PL
             try
             {
                 s_bl.Admin.ResetDB();
+                Interval = 1440;
+                queryCallList();
+
             }
             catch (Exception ex)
             {
@@ -242,6 +245,8 @@ namespace PL
             try
             {
                 s_bl.Admin.InitializeDB();
+                Interval = 1440;
+                queryCallList();
             }
             catch (Exception ex)
             {
