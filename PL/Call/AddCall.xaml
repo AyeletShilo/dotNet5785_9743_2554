@@ -46,13 +46,23 @@
                            Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Grid.Column="1" Grid.Row="1"
                              Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                             Style="{StaticResource FormTextBoxStyle}"/>
+                             Style="{StaticResource FormTextBoxStyle}" BorderBrush="{Binding CurrentCall.Latitude, Converter={StaticResource AddressToColorConverterKey}}" >
+                        <TextBox.ToolTip>
+                            <ToolTip Width="Auto" Height="Auto" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
+             Foreground="{StaticResource AyeletHardColor}">
+
+                                <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
+                                    <TextBlock TextWrapping="NoWrap" Text="{Binding CurrentCall.Latitude, Converter={StaticResource AddressToToolTipConverterKey}}" FontSize="14"/>
+                                </Border>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
 
                     <Label Content="Max Time:" 
                            Grid.Column="0" Grid.Row="2"
                            Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
-                        Text="{Binding CurrentCall.MaxCloseTime, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
+                        Text="{Binding CurrentCall.MaxCloseTime, StringFormat='{} dd/MM/yyyy HH:mm', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
                         IsReadOnly ="false" Style="{StaticResource FormTextBoxStyle}"/>
                     <StackPanel Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" Margin="10">
                         <Label Content="Description:" 

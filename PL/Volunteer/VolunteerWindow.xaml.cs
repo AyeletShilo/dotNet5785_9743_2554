@@ -57,7 +57,7 @@ namespace PL.Volunteer
         /// DependencyProperty
         /// </summary>
         public static readonly DependencyProperty UpdateTextProperty =
-            DependencyProperty.Register("UpdateTexttonText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
+            DependencyProperty.Register("UpdateText", typeof(string), typeof(VolunteerWindow), new PropertyMetadata(string.Empty));
         public string UpdateText
         {
             get { return (string)GetValue(UpdateTextProperty); }

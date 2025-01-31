@@ -57,11 +57,13 @@ internal class CallImplementation : BlApi.ICall
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CheckFormat(callToAdd);
+        if (callToAdd.CallAddress == "")
+            throw new BO.BlIntegrityOfValuesException("Address must have a value.");
         DO.Call oldCall;
         lock (AdminManager.BlMutex)
             oldCall = _dal.Call.Read(callToAdd.Id)!;
         //DO.Call doCall = CallManager.CheckLogic(callToAdd); //can throw Ex
-        DO.Call doCall = new(callToAdd.Id, (DO.TypeOfCall)callToAdd.CallType, callToAdd.CallAddress, 0, 0, callToAdd.OpenTime, callToAdd.Description, callToAdd.MaxCloseTime); //CallManager.CheckLogic(callToUpdate); //can throw Ex
+        DO.Call doCall = new(callToAdd.Id, (DO.TypeOfCall)callToAdd.CallType, callToAdd.CallAddress, 0, 0, AdminManager.Now, callToAdd.Description, callToAdd.MaxCloseTime); //CallManager.CheckLogic(callToUpdate); //can throw Ex
         try
         {
             lock (AdminManager.BlMutex)
@@ -517,6 +519,11 @@ internal class CallImplementation : BlApi.ICall
         //UpdateCancelTreatment(volId, assignId);
         #endregion
     }
+
+    //public void CheckedAddress(BO.Call callToUpdate)
+    //{
+
+    //}
 
     #region Stage 5
     public void AddObserver(Action listObserver) =>

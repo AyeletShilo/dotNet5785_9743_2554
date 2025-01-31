@@ -60,13 +60,14 @@
                     <TextBox Grid.Column="1" Grid.Row="2" 
                              Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
                              IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}" 
-                             Style="{StaticResource FormTextBoxStyle}">
+                             Style="{StaticResource FormTextBoxStyle}" BorderBrush="{Binding CurrentCall.Latitude, Converter={StaticResource AddressToColorConverterKey}}"  
+                             TextChanged="TextBox_TextChanged">
                         <TextBox.ToolTip>
                             <ToolTip Width="Auto" Height="Auto" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
                                      Foreground="{StaticResource AyeletHardColor}">
-
+                                
                                 <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
-                                    <TextBlock TextWrapping="NoWrap" Text="{Binding CurrentCall.CallAddress, Mode=OneWay}" FontSize="14"/>
+                                    <TextBlock TextWrapping="NoWrap" Text="{Binding CurrentCall.Latitude, Converter={StaticResource AddressToToolTipConverterKey}}" FontSize="14"/>
                                 </Border>
                             </ToolTip>
                         </TextBox.ToolTip>

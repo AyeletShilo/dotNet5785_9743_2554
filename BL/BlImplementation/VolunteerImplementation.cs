@@ -21,9 +21,6 @@ internal class VolunteerImplementation : BlApi.IVolunteer
 
         //double[] AddressCoordinate;
         DO.Volunteer doVolunteer;
-        DO.Volunteer oldVol;
-            lock (AdminManager.BlMutex)
-                oldVol = _dal.Volunteer.Read(boVolunteer.Id)!;
 
         doVolunteer = new(boVolunteer.Id, boVolunteer.FullName, boVolunteer.PhoneNumber, boVolunteer.Email, boVolunteer.Password,
                 (DO.Role)boVolunteer.Job, boVolunteer.IsActive, (DO.RangeType)boVolunteer.Distance, boVolunteer.Address, 0, 0, boVolunteer.MaxDis);
@@ -32,7 +29,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         {
             lock (AdminManager.BlMutex)
                 _dal.Volunteer.Create(doVolunteer); //can throw Ex
-            
+
         }
         catch (DO.DalAlreadyExistException ex)
         {
@@ -44,18 +41,9 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         }
 
         VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
-        try
-        {
-            //compute the coordinates asynchronously without waiting for the results
-            _ = VolunteerManager.updateCoordinates(doVolunteer); //stage 7
-        }
-        catch (BO.BlIntegrityOfValuesException ex)
-        {
-            lock (AdminManager.BlMutex)
-                _dal.Volunteer.Update(oldVol);
-            VolunteerManager.Observers.NotifyListUpdated();  //stage 5
-            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
-        }
+
+        //compute the coordinates asynchronously without waiting for the results
+        _ = VolunteerManager.updateCoordinates(doVolunteer); //stage 7
     }
 
     /// <summary>
@@ -205,7 +193,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         DO.Volunteer doVolunteer;
 
         lock (AdminManager.BlMutex)
-                updateVol = _dal.Volunteer.Read(id)!;
+            updateVol = _dal.Volunteer.Read(id)!;
         if (id == volToUpdate.Id || GetMyJob(id, updateVol.Password) == BO.Role.Manager)
         {
             VolunteerManager.CheckFormat(volToUpdate); //can throw Ex
@@ -246,18 +234,9 @@ internal class VolunteerImplementation : BlApi.IVolunteer
             throw new BO.BlCantUpdateException("You are not allowed to update this");
 
         VolunteerManager.Observers.NotifyListUpdated(); //stage 5    
-        try
-        {
-            //compute the coordinates asynchronously without waiting for the results
-            _ = VolunteerManager.updateCoordinates(doVolunteer); //stage 7
-        }
-        catch (BO.BlIntegrityOfValuesException ex)
-        {
-            lock (AdminManager.BlMutex)
-                _dal.Volunteer.Update(oldVolunteer!);
-            VolunteerManager.Observers.NotifyListUpdated();  //stage 5
-            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
-        }
+
+        //compute the coordinates asynchronously without waiting for the results
+        _ = VolunteerManager.updateCoordinates(doVolunteer, oldVolunteer.VolAddress, oldVolunteer.Latitude, oldVolunteer.Longitude); //stage 7
 
 
     }
@@ -285,7 +264,7 @@ internal class VolunteerImplementation : BlApi.IVolunteer
         char a = (char)(s_rand.Next(97, 122));
         int index = s_rand.Next(0, 20);
         string sign = "!@#$%^*(),.?\"':{}|<>";
-        password= password + sign[index] + A + a;
+        password = password + sign[index] + A + a;
         return new string(password.OrderBy(x => s_rand.Next()).ToArray());
     }
     #region Stage 5

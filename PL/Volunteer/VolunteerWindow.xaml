@@ -48,7 +48,7 @@
                         <TextBox Grid.Column="1" Grid.Row="0" 
                              Style="{StaticResource FormTextBoxStyle}"
                              Text="{Binding CurrentVolunteer.Id, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}"
-                             IsReadOnly="{Binding ButtonText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
+                             IsReadOnly="{Binding UpdateText, Converter={StaticResource ConvertUpdateToTrueKey}}"/>
 
                         <Label Grid.Row="1" Grid.Column="0"
                            Content="Full Name:" 
@@ -148,7 +148,7 @@
                     </Grid>
                 </GroupBox>
                 <GroupBox Header="Total calls" Grid.Row="2" Style="{StaticResource FormGroupBoxStyle}"
-                      Visibility="{Binding ButtonText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="2,3,2,3">
+                      Visibility="{Binding UpdateText, Converter={StaticResource ConvertUpdateToVisibleKey}}" Margin="2,3,2,3">
                     <Grid Margin="2.5,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -181,7 +181,7 @@
                     <GroupBox.Visibility>
                         <MultiBinding Converter="{StaticResource MultiToIsEnabledConverterKey}">
                             <Binding Path="CurrentVolunteer.InCall" />
-                            <Binding Path="ButtonText" />
+                            <Binding Path="UpdateText" />
                         </MultiBinding>
                     </GroupBox.Visibility>
                     <Grid Margin="2.5">

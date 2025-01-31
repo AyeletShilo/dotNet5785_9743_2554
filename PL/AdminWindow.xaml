@@ -56,7 +56,7 @@
         <Style x:Key="DataButtons" TargetType="Button" BasedOn="{StaticResource RoundedButton}">
             <Setter Property="Background" Value="{StaticResource AyeletLightColor}"/>
             <Setter Property="BorderBrush" Value="{StaticResource AyeletHardColor}"/>
-            <Setter Property="FontFamily" Value="Ariel"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontSize" Value="26"/>
             <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
             <Setter Property="FontWeight" Value="Bold"/>

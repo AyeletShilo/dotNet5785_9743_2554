@@ -79,12 +79,12 @@
                         <Binding Path="LeftTime" Converter="{StaticResource TimeSpanToStringConverterKey}" />
                     </DataGridTextColumn.Binding>
                 </DataGridTextColumn>
-                <DataGridTextColumn  Header="Complate At" Width="*">
+                <DataGridTextColumn  Header="Complate At" Width="3*">
                     <DataGridTextColumn.Binding>
                         <Binding Path="CompletionTime" Converter="{StaticResource TimeSpanToDateConverterKey}" />
                     </DataGridTextColumn.Binding>
                 </DataGridTextColumn>
-                <DataGridTextColumn Binding="{Binding Status}" Header="Status" Width="auto">
+                <DataGridTextColumn Binding="{Binding Status}" Header="Status" Width="2*">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="Background" Value="{Binding Path = Status, Converter={StaticResource ConvertStatusToColorKey}}" />
@@ -93,7 +93,7 @@
                 </DataGridTextColumn>
                 <DataGridTextColumn Binding="{Binding TotalAssignments}" Header="Assignments" Width="auto"/>
                 <DataGridTextColumn Binding="{Binding LastVolunteer}" Header="Last Volunteer" Width="auto"/>
-                <DataGridTemplateColumn Width="auto">
+                <DataGridTemplateColumn Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Click="Delete_Call"

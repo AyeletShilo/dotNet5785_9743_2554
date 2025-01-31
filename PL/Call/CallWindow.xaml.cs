@@ -52,9 +52,12 @@ namespace PL.Call
         {
             try
             {
-                s_bl.Call.Update(CurrentCall!);
-                _preWind.Show(); //?
-                this.Close();
+                if (CurrentCall!.CallAddress != "Wrong address" && CurrentCall.CallAddress != "Not In Range")
+                {
+                    s_bl.Call.Update(CurrentCall!);
+                    //_preWind.Show(); //?
+                    //this.Close();
+                }
             }
             catch (BO.BlDoesNotExistException ex1)
             {
@@ -115,6 +118,11 @@ namespace PL.Call
         {
             _preWind.Show();
             this.Close();
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            
         }
     }
 }

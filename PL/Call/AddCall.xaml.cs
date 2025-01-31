@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PL.Call
 {
@@ -69,7 +70,7 @@ namespace PL.Call
             }
             catch (BlIntegrityOfValuesException ex3)
             {
-                MessageBox.Show($"Error in integrity");
+                MessageBox.Show( ex3.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch(BLTemporaryNotAvailableException ex4)
             {

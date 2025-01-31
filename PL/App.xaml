@@ -36,6 +36,8 @@
         <local:TimeSpanToDaysConverter x:Key="TimeSpanToDaysConverterKey"/>
         <local:CallMultiConverter x:Key="CallMultiConverterKey"/>
         <local:IntervalConverter x:Key="IntervalConverterKey"/>
+        <local:AddressToColorConverter x:Key="AddressToColorConverterKey"/>
+        <local:AddressToToolTipConverter x:Key="AddressToToolTipConverterKey"/>
 
 
         <!--#region Colors-->
@@ -345,6 +347,7 @@
             <Setter Property="Foreground" Value="{StaticResource AyeletHardColor}"/>
             <Setter Property="FontFamily" Value="Trebuchet MS"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
         </Style>
 
         <Style x:Key="CenteredDataGridCellStyle" TargetType="DataGridCell">

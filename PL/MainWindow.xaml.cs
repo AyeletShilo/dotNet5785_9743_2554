@@ -54,7 +54,7 @@ namespace PL
                     {
                         var nextWind = new VolunteerForVolWindow(this, _id);
                         nextWind.Show();
-                        this.Hide();
+                        //this.Hide();
                         //new VolunteerForVolWindow(this,_id).Show();
                         //Close();
                     }
@@ -120,7 +120,7 @@ namespace PL
                     {
                         var nextWind = new ChoseWindow(this, _id);
                         nextWind.Show();
-                        this.Hide();
+                        //this.Hide();
                         //new ChoseWindow(_id).Show();
                         //Close();
                     }
@@ -128,7 +128,7 @@ namespace PL
                     {
                         var nextWind = new VolunteerForVolWindow(this, _id);
                         nextWind.Show();
-                        this.Hide();
+                        //this.Hide();
                         //new VolunteerForVolWindow(this,_id).Show();
                         //Close();
                     }
@@ -150,7 +150,7 @@ namespace PL
 
         public void MainWindow_Closed(object sender, EventArgs e)
         {
-            Application.Current.Shutdown();
+            //Application.Current.Shutdown();
         }
     }
 
