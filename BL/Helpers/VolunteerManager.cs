@@ -58,21 +58,32 @@ internal static class VolunteerManager
     /// </summary>
     /// <param name="doVolunteer">The volunteer whose values ​​are being tested</param>
     /// <exception cref="BO.BlIntegrityOfValuesException">>Throws an exception if there is a problem with the logic of one of the values</exception>
-    internal static async Task updateCoordinates(DO.Volunteer doVolunteer)
+    internal static async Task updateCoordinates(DO.Volunteer doVolunteer, string? address = null, double? lat = null, double? lon = null)
     {
-        //if (checkId(volToCheck.Id) == false)
-        //    throw new BO.BlIntegrityOfValuesException("Error in ID integrity");
-
-        //if (checkPass(volToCheck.Password) == false)
-        //    throw new BO.BlIntegrityOfValuesException("Password is not strong");
-
         if (doVolunteer.VolAddress != "" && doVolunteer.VolAddress != null)
         {
 
             double?[] AddressCoordinate = await CallManager.GetCoordinates(doVolunteer.VolAddress);
 
             if (AddressCoordinate is null)
-                throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
+                lock (AdminManager.BlMutex)
+                    _dal.Volunteer.Update(new
+                        (doVolunteer.Id, doVolunteer.FullName,
+                        doVolunteer.PhoneNumber, doVolunteer.Email,
+                        doVolunteer.Password, doVolunteer.Job,
+                        doVolunteer.Active, doVolunteer.Distance,
+                        address, lat,
+                        lon, doVolunteer.MaxDistance));
+
+            //if ((AddressCoordinate![0] < 31.45 && AddressCoordinate[0] > 32) || (AddressCoordinate[1] < 34.85 && AddressCoordinate[1] > 35.4))
+            //    lock (AdminManager.BlMutex)
+            //        _dal.Volunteer.Update(new
+            //            (doVolunteer.Id, doVolunteer.FullName,
+            //            doVolunteer.PhoneNumber, doVolunteer.Email,
+            //            doVolunteer.Password, doVolunteer.Job,
+            //            doVolunteer.Active, doVolunteer.Distance,
+            //            "Not In Range", -1,
+            //            -1, doVolunteer.MaxDistance));
 
             lock (AdminManager.BlMutex)
                 _dal.Volunteer.Update(new
@@ -86,7 +97,8 @@ internal static class VolunteerManager
 
     }
 
-    private static bool checkPass(string password)
+
+        private static bool checkPass(string password)
     {
         bool isA = password.Any(char.IsUpper);
         bool isa = password.Any(char.IsLower);
@@ -230,16 +242,13 @@ internal static class VolunteerManager
             vol = _dal.Volunteer.Read(volPredicate)!;
         }
 
-
         double volLatitude = (double)vol.Latitude!;
         double volLongitude = (double)vol.Longitude!;
         double callLatitude = (double)call.Latitude!;
         double callLongitude = (double)call.Longitude!;
 
 
-        const double R = 6371; // רדיוס כדור הארץ בקילומטרים
-
-        // המרת מעלות לרדיאנים
+        const double R = 6371;
         double ToRadians(double angle) => Math.PI * angle / 180.0;
 
         double phi1 = ToRadians(volLatitude);
@@ -248,13 +257,13 @@ internal static class VolunteerManager
         double deltaLat = ToRadians(callLatitude - volLatitude);
         double deltaLon = ToRadians(callLongitude - volLongitude);
 
-        // חישוב המרחק בקירוב לשטח מישורי
         double x = deltaLon * Math.Cos((phi1 + phi2) / 2);
         double y = deltaLat;
 
-        double distance = R * Math.Sqrt(x * x + y * y); // נוסחת פיתגורס
+        double distance = R * Math.Sqrt(x * x + y * y);
         return Math.Round(distance, 4);
     }
+
 
     #region stage 7
     internal static BO.Volunteer? Read(int id)
@@ -339,70 +348,132 @@ internal static class VolunteerManager
     internal static void SimulateVolunteersActivity()
     {
 
-        Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";//?
-        try
+        Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";
+
+        LinkedList<int> volunteersToUpdate = new(); //stage 7
+        List<BO.VolunteerInList> volunteersList;
+        //try
+        //{
+        lock (AdminManager.BlMutex) //stage 7
+
+            volunteersList = ReadAll(true).ToList();
+
+
+
+        foreach (BO.VolunteerInList volunteer in volunteersList)
         {
-            List<BO.VolunteerInList> volunteersList= ReadAll().ToList();
-            //List<DO.Volunteer> volList;
-            //volunteerInList= CallManager.ReadAll(/*volunteer => volunteer.Active == true*/).ToList();
-
-            ////read all the volunteers from dal to list.
-            //lock (AdminManager.BlMutex)
-            //    volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList();
-
-            ////if there is any volunteer
-            //if (volList.Count()!=0)
-            //{
-            //    //Converts volunteers from DAL to BO
-            //    List<BO.VolunteerInList> volunteersList = ToVolunteerInList(volList).ToList();
+            BO.Volunteer boVolunteer = Read(volunteer.Id)!;
+            int volunteerId = 0;
 
 
-            foreach (BO.VolunteerInList volunteer in volunteersList)
+            if (boVolunteer.InCall == null)
             {
-                BO.Volunteer vol = Read(volunteer.Id)!;
-
-                //lock (AdminManager.BlMutex)
-                if (vol.InCall == null)
+                if (s_rand.NextDouble() < 0.2)
+                    continue;
+                List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
+                if (opensCalls.Count != 0)
                 {
-                    if (s_rand.NextDouble() < 0.2)
-                        continue;
-                    List<BO.OpenCallInList> opensCalls = CallManager.GetOpenedCalls(volunteer.Id, null, null).ToList();
-                    if (opensCalls.Count != 0)
-                    {
-                        BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
-                        CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
-                    }
+                    BO.OpenCallInList chosenCall = opensCalls[s_rand.Next(opensCalls.Count)];
+                    CallManager.CallToTreatment(volunteer.Id, chosenCall.Id);
+                    volunteerId = boVolunteer.Id;
+                }
+            }
+            else
+            {
+                //BO.Volunteer boVolunteer = Read(volunteer.Id)!;
+                if (boVolunteer.InCall!.EntryTime < AdminManager.Now.AddDays(-7))
+                {
+                    CallManager.GetAssignmentToEnd(boVolunteer.Id, boVolunteer.InCall.CallId);
+                    volunteerId = boVolunteer.Id;
                 }
                 else
                 {
-                    //BO.Volunteer vol = Read(volunteer.Id)!;
-                    if (vol.InCall!.EntryTime < AdminManager.Now.AddDays(-7))
+                    if (s_rand.NextDouble() < 0.2)
                     {
-                        CallManager.GetAssignmentToEnd(vol.Id, vol.InCall.CallId);
-                    }
-                    else
-                    {
-                        if (s_rand.NextDouble() < 0.2)
-                        {
-                            CallManager.GetAssignmentToCancel(vol.Id, vol.InCall.CallId);
-                        }
+                        CallManager.GetAssignmentToCancel(boVolunteer.Id, boVolunteer.InCall.CallId);
+                        volunteerId = boVolunteer.Id;
                     }
                 }
             }
+            if (volunteerId != 0)
+                volunteersToUpdate.AddLast(boVolunteer.Id);
+
 
         }
-        catch(BLTemporaryNotAvailableException)
-        {
-            
-        }
 
-        catch (Exception ex)
-        {
-           
-        }
+        foreach (int id in volunteersToUpdate)
+            Observers.NotifyItemUpdated(id);
+        #region draft
+        //List<DO.Volunteer> volList;
+        //volunteerInList= CallManager.ReadAll(/*volunteer => volunteer.Active == true*/).ToList();
 
+        ////read all the volunteers from dal to list.
+        //lock (AdminManager.BlMutex)
+        //    volList = _dal.Volunteer.ReadAll(volunteer => volunteer.Active == true).ToList();
+
+        ////if there is any volunteer
+        //if (volList.Count()!=0)
+        //{
+        //    //Converts volunteers from DAL to BO
+        //    List<BO.VolunteerInList> volunteersList = ToVolunteerInList(volList).ToList();
+        //}
+        //    catch(BLTemporaryNotAvailableException)
+        //    {
+
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+
+        //    }
+        #endregion
     }
-
 }
 
+//}
+//internal static void SimulateCourseRegistrationAndGrade() //stage 7
+//{
+//    Thread.CurrentThread.Name = $"Simulator{++s_simulatorCounter}";
+
+//    LinkedList<int> studentsToUpdate = new(); //stage 7
+//    List<DO.Student> doStudList;
+
+//    lock (AdminManager.BlMutex) //stage 7
+//        doStudList = s_dal.Student.ReadAll(st => st.IsActive == true).ToList();
+
+//    foreach (var doStudent in doStudList)
+//    {
+//        int studentId = 0;
+//        lock (AdminManager.BlMutex) //stage 7
+//        {
+//            BO.Year studentYear = GetStudentCurrentYear(doStudent.RegistrationDate);
+//            var coursesNotRegistered = CourseManager.GetUnRegisteredCoursesForStudent(doStudent.Id, studentYear);
+
+//            int cntNotRegCourses = coursesNotRegistered.Count();
+//            if (cntNotRegCourses != 0)
+//            {
+//                int courseId = coursesNotRegistered.Skip(s_rand.Next(0, cntNotRegCourses)).First()!.Id;
+//                LinkManager.LinkStudentToCourse(doStudent.Id, courseId);
+//                studentId = doStudent.Id;
+//            }
+
+//            //simulate setting grade of course for selected student
+//            var coursesRegistered =
+//                s_dal.Course.ReadAll(course => LinkManager.IsStudentLinkedToCourse(doStudent.Id, course.Id) && course.InYear == (DO.Year)studentYear);
+//            int cntRegCourses = coursesRegistered.Count();
+//            if (cntRegCourses != 0)
+//            {
+//                int courseId = coursesRegistered.Skip(s_rand.Next(0, cntRegCourses)).First()!.Id;
+//                LinkManager.UpdateCourseGradeForStudent(doStudent.Id, courseId, Math.Round(s_rand.NextDouble() * 100, 2));
+//                studentId = doStudent.Id;
+//            }
+
+//            if (studentId != 0)
+//                studentsToUpdate.AddLast(doStudent.Id);
+//        } //lock
+//    }
+
+//    foreach (int id in studentsToUpdate)
+//        Observers.NotifyItemUpdated(id);
+//}
 

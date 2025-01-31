@@ -87,12 +87,34 @@ internal static class CallManager
     {
         double?[] AddressCoordinate = await CallManager.GetCoordinates(doCall.CallAddress);
 
-        if (AddressCoordinate is null)
-            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
+        if (AddressCoordinate[0] is null)
+        {
+            lock (AdminManager.BlMutex)
+                _dal.Call.Update(
+                    new(doCall.Id,
+                    doCall.CallType,
+                    doCall.CallAddress/*"Wrong address"*/,
+                    -1, -1,
+                    doCall.OpenTime,
+                    doCall.Description,
+                    doCall.MaxTime));
+            return;
+        }
 
-        //DO.Call DoCall = new(toCheck.Id, (DO.TypeOfCall)toCheck.CallType, toCheck.CallAddress, (double)AddressCoordinate[0]!,
-        //    (double)AddressCoordinate[1]!, toCheck.OpenTime, toCheck.Description, toCheck.MaxCloseTime);
-        //return DoCall;
+        if ((AddressCoordinate![0] < 31.45 || AddressCoordinate[0] > 32) || (AddressCoordinate[1] < 34.85 || AddressCoordinate[1] > 35.4))
+        {
+            lock (AdminManager.BlMutex)
+                _dal.Call.Update(
+                    new(doCall.Id,
+                    doCall.CallType,
+                    doCall.CallAddress /*+ "Not In Range"*/,
+                    -2, -2,
+                    doCall.OpenTime,
+                    doCall.Description,
+                    doCall.MaxTime));
+            return;
+        }
+
         lock (AdminManager.BlMutex)
             _dal.Call.Update(
                 new(doCall.Id,
@@ -128,7 +150,7 @@ internal static class CallManager
 
             // Checking the response status
             if (!response.IsSuccessStatusCode)
-                throw new BO.BlIntegrityOfValuesException($"Error in request: {response.StatusCode}");
+                return new double?[] { null, null };
 
             // Reading the content asynchronously
             string jsonResponse = await response.Content.ReadAsStringAsync();
@@ -138,13 +160,14 @@ internal static class CallManager
             var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
 
             // Checking if results are found
-            if (results == null || results.Length == 0)
-                throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
+            if (results == null || results.Length != 1)
+                return new double?[] { -1, -1 };
 
             // Returning the coordinates
             return new double?[] { double.Parse(results[0].Lat!), double.Parse(results[0].Lon!) };
         }
     }
+
 
 
 
@@ -500,30 +523,19 @@ internal static class CallManager
             return true;
         if (vol.VolAddress != null)
         {
-            //double lat = (double)vol.Latitude - callLat;
-            //double lon = (double)vol.Longitude - callLon;
-            const double R = 6371; // רדיוס כדור הארץ בקילומטרים
-
-            // המרת מעלות לרדיאנים
+            const double R = 6371;
             double ToRadians(double angle) => Math.PI * angle / 180.0;
-
             double phi1 = ToRadians((double)vol.Latitude!);
             double phi2 = ToRadians(callLat);
 
             double deltaLat = ToRadians(callLat - (double)vol.Latitude);
             double deltaLon = ToRadians(callLon - (double)vol.Longitude!);
 
-            // חישוב המרחק בקירוב לשטח מישורי
             double x = deltaLon * Math.Cos((phi1 + phi2) / 2);
             double y = deltaLat;
 
             double distance = R * Math.Sqrt(x * x + y * y);
             return distance <= vol.MaxDistance;
-            //lat = Math.Pow(lat, 2);
-            //lon = Math.Pow(lon, 2);
-            //lat += lon;
-            //lat = Math.Sqrt(lat);
-            //return lat <= vol.MaxDistance;
         }
         return true;
     }
