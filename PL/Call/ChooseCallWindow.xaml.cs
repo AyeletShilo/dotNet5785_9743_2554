@@ -126,19 +126,33 @@ namespace PL.Call
                 });
         }
 
+        private volatile DispatcherOperation? _observerOperation1 = null; //stage 7
+        private void VolunteerObserver()
+        {
+            if (_observerOperation1 is null || _observerOperation1.Status == DispatcherOperationStatus.Completed)
+                _observerOperation1 = Dispatcher.BeginInvoke(() =>
+                {
+                    int id = Volunteer!.Id;
+                    Volunteer = null;
+                    Volunteer = s_bl.Volunteer.Read(id);
+                });
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             s_bl.Call.AddObserver(callListObserver);
             s_bl.Volunteer.AddObserver(_id, callListObserver);
+            s_bl.Volunteer.AddObserver(_id, VolunteerObserver);
         }
-            
+
 
         private void Window_Closed(object sender, EventArgs e)
         {
-           s_bl.Call.RemoveObserver(callListObserver);
+            s_bl.Call.RemoveObserver(callListObserver);
             s_bl.Volunteer.RemoveObserver(_id, callListObserver);
+            s_bl.Volunteer.AddObserver(_id, VolunteerObserver);
         }
-            
+
 
         private  void AddressTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
