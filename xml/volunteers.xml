@@ -155,20 +155,6 @@
     <MaxDistance>2.9292223142696616</MaxDistance>
   </Volunteer>
   <Volunteer>
-    <Id>307888586</Id>
-    <FullName>Dina Barzily</FullName>
-    <PhoneNumber>0502550438</PhoneNumber>
-    <Email>barzilay@g.jct.ac.il</Email>
-    <Password>496351@Dd</Password>
-    <Job>Volunteer</Job>
-    <Active>true</Active>
-    <Distance>Air</Distance>
-    <VolAddress>Rivka 118,Jerusalem, Israel</VolAddress>
-    <Latitude>31.7731</Latitude>
-    <Longitude>35.2123</Longitude>
-    <MaxDistance>1.490623433549837</MaxDistance>
-  </Volunteer>
-  <Volunteer>
     <Id>351314117</Id>
     <FullName>Moise Kattan</FullName>
     <PhoneNumber>0536833395</PhoneNumber>
@@ -223,5 +209,19 @@
     <Latitude>0</Latitude>
     <Longitude>0</Longitude>
     <MaxDistance />
+  </Volunteer>
+  <Volunteer>
+    <Id>307888586</Id>
+    <FullName>Dina Barzily</FullName>
+    <PhoneNumber>0502550438</PhoneNumber>
+    <Email>barzilay@g.jct.ac.il</Email>
+    <Password>496351@Db</Password>
+    <Job>Manager</Job>
+    <Active>true</Active>
+    <Distance>Air</Distance>
+    <VolAddress>Rivka 118,Jerusalem, Israel</VolAddress>
+    <Latitude>-1</Latitude>
+    <Longitude>-1</Longitude>
+    <MaxDistance>1.4906</MaxDistance>
   </Volunteer>
 </ArrayOfVolunteers>

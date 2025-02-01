@@ -133,8 +133,16 @@ namespace PL.Volunteer
             if (result != MessageBoxResult.Yes) return;
             try
             {
-                int id = SelectedVolunteer!.Id;
-                s_bl.Volunteer.Delete(id);
+               int id = SelectedVolunteer!.Id;
+               if(id == _adminId)
+               {
+                    var result2 = MessageBox.Show("Do you sure you want to yourself?", "Click to confirm:", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (result2 != MessageBoxResult.Yes) return;
+                    s_bl.Volunteer.Delete(id);
+                    Application.Current.Shutdown();
+               }
+               else
+                    s_bl.Volunteer.Delete(id);
             }
             catch (BO.BlDoesNotExistException ex)
             {
