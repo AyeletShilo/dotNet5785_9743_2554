@@ -100,16 +100,15 @@
             </Grid.ColumnDefinitions>
             <DockPanel Grid.Column="1">
                 <TextBox Text="{Binding Volunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true, UpdateSourceTrigger=LostFocus}" 
-                         
-                         
                          Background="Transparent"
-                         BorderBrush="{StaticResource AyeletHardColor}"
-                         FontFamily="Trebuchet MS"
-                         FontSize="14"
+                         FontFamily="Ariel"
+                         FontSize="20" 
+                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                          Foreground="{StaticResource AyeletColor}"
-                         DockPanel.Dock="Top" Height="41"/>
-                <!--TextChanged="Address_TextChanged"-->
-                
+                         DockPanel.Dock="Top" Height="41"
+                         LostFocus="AddressTextBox_LostFocus"
+                         BorderBrush="{Binding EnableUp, Converter={StaticResource AddressToColorConverterKey}, Mode=TwoWay}"/>
+
                 <Button Content="Change Address" 
                         Click="Address_Click"
                         Style="{StaticResource CheerfulButton}"

@@ -64,6 +64,15 @@ namespace PL.Volunteer
             set { SetValue(UpdateTextProperty, value); }
         }
 
+        public bool EnableUp
+        {
+            get { return (bool)GetValue(EnableUpProperty); }
+            set { SetValue(EnableUpProperty, value); }
+        }
+
+        public static readonly DependencyProperty EnableUpProperty =
+            DependencyProperty.Register("EnableUp", typeof(bool), typeof(VolunteerWindow), new PropertyMetadata(true));
+
         #endregion
 
         /// <summary>
@@ -71,28 +80,67 @@ namespace PL.Volunteer
         /// </summary>
         private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (EnableUp)
             {
-                if (UpdateText == "Add")
+                try
                 {
-                    s_bl.Volunteer.Create(CurrentVolunteer!);
-                    //MessageBox.Show("Volunteer added successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if (UpdateText == "Add")
+                    {
+                        s_bl.Volunteer.Create(CurrentVolunteer!);
+                    }
+                    else if (UpdateText == "Update")
+                    {
+                        s_bl.Volunteer.Update(_adminId, CurrentVolunteer!);
+                    }
+                    _preWind.Show();
+                    this.Close();
                 }
-                else if (UpdateText == "Update")
+                catch (BLTemporaryNotAvailableException)
                 {
-                    s_bl.Volunteer.Update(_adminId, CurrentVolunteer!);
-                    //MessageBox.Show("Volunteer updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
                 }
-                _preWind.Show();//?
-                this.Close();
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-            catch (BLTemporaryNotAvailableException)
+        }
+        private async void AddressTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            EnableUp = false;
+
+            if (sender is TextBox textBox)
             {
-                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                string address = textBox.Text;
+
+                if (string.IsNullOrEmpty(address))
+                {
+                    EnableUp = true;
+                    CurrentVolunteer!.Latitude = null;
+                    CurrentVolunteer!.Longitude = null;
+                    return;
+                }
+
+                var coordinates = await s_bl.Call.CheckedAddress(address);
+
+                if (coordinates[0] == -1)
+                {
+                    MessageBox.Show("Network connection failed, please try again later :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if (coordinates[0] == null)
+                {
+                    MessageBox.Show("Wrong Address", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if ((coordinates![0] < 31.45 || coordinates[0] > 32) || (coordinates[1] < 34.85 || coordinates[1] > 35.4))
+                {
+                    MessageBox.Show("Sorry, this is outside our scope of activity, but we'll be there soon :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    EnableUp = true;
+                    CurrentVolunteer!.Latitude = coordinates[0]!.Value;
+                    CurrentVolunteer!.Longitude = coordinates[1]!.Value;
+                }
             }
         }
 

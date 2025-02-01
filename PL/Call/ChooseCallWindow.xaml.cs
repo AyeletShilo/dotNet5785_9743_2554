@@ -4,6 +4,7 @@ using PL.Volunteer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -25,6 +26,7 @@ namespace PL.Call
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private static int _id;
+        private static string _address;
         private VolunteerForVolWindow _preWind;
 
         //constructor
@@ -52,6 +54,15 @@ namespace PL.Call
         }
         public static readonly DependencyProperty VolunteerProperty =
            DependencyProperty.Register("Volunteer", typeof(BO.Volunteer), typeof(ChooseCallWindow), new PropertyMetadata(null));
+
+        public bool EnableUp
+        {
+            get { return (bool)GetValue(EnableUpProperty); }
+            set { SetValue(EnableUpProperty, value); }
+        }
+
+        public static readonly DependencyProperty EnableUpProperty =
+            DependencyProperty.Register("EnableUp", typeof(bool), typeof(ChooseCallWindow), new PropertyMetadata(true));
 
         public BO.CallType CallFilter { get; set; } = BO.CallType.None;
         public BO.OpenCallData CallSort { get; set; } = BO.OpenCallData.Id;
@@ -115,36 +126,112 @@ namespace PL.Call
                 });
         }
 
-        
-        
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
-            => s_bl.Call.AddObserver(callListObserver);
+        {
+            s_bl.Call.AddObserver(callListObserver);
+            s_bl.Volunteer.AddObserver(_id, callListObserver);
+        }
+            
 
         private void Window_Closed(object sender, EventArgs e)
-            => s_bl.Call.RemoveObserver(callListObserver);
+        {
+           s_bl.Call.RemoveObserver(callListObserver);
+            s_bl.Volunteer.RemoveObserver(_id, callListObserver);
+        }
+            
 
-       
+        private  void AddressTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            EnableUp = false;
+
+            //if (sender is TextBox textBox)
+            //{
+            //     _address = textBox.Text;
+
+            //    //if (string.IsNullOrEmpty(address))
+            //    //{
+            //    //    EnableUp = true;
+            //    //    Volunteer!.Latitude = null;
+            //    //    Volunteer!.Longitude = null;
+            //    //    return;
+            //    //}
+
+            //    //var coordinates = await s_bl.Call.CheckedAddress(address);
+
+            //    //if (coordinates[0] == -1)
+            //    //{
+            //    //    MessageBox.Show("Network connection failed, please try again later :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    //}
+            //    //else if (coordinates[0] == null)
+            //    //{
+            //    //    MessageBox.Show("Wrong Address", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    //}
+            //    //else if ((coordinates![0] < 31.45 || coordinates[0] > 32) || (coordinates[1] < 34.85 || coordinates[1] > 35.4))
+            //    //{
+            //    //    MessageBox.Show("Sorry, this is outside our scope of activity, but we'll be there soon :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    //}
+            //    //else
+            //    //{
+            //    //    EnableUp = true;
+            //    //    Volunteer!.Latitude = coordinates[0]!.Value;
+            //    //    Volunteer!.Longitude = coordinates[1]!.Value;
+            //    //}
+            //}
+        }
+
         /// <summary>
         /// Change of volunteer address
         /// </summary>
-        private void Address_Click(object sender, RoutedEventArgs e)
+        private async void Address_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if(!EnableUp)
             {
-                s_bl.Volunteer.Update(_id, Volunteer);
-                Volunteer = s_bl.Volunteer.Read(_id)!;
-                queryCallList();
-            }
-            catch (BLTemporaryNotAvailableException)
-            {
-                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+                if (string.IsNullOrEmpty(Volunteer.Address))
+                {
+                    EnableUp = true;
+                    Volunteer!.Latitude = null;
+                    Volunteer!.Longitude = null;
+                    return;
+                }
 
+                var coordinates = await s_bl.Call.CheckedAddress(Volunteer.Address);
+
+                if (coordinates[0] == -1)
+                {
+                    MessageBox.Show("Network connection failed, please try again later :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if (coordinates[0] == null)
+                {
+                    MessageBox.Show("Wrong Address", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if ((coordinates![0] < 31.45 || coordinates[0] > 32) || (coordinates[1] < 34.85 || coordinates[1] > 35.4))
+                {
+                    MessageBox.Show("Sorry, this is outside our scope of activity, but we'll be there soon :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    EnableUp = true;
+                    Volunteer!.Latitude = coordinates[0]!.Value;
+                    Volunteer!.Longitude = coordinates[1]!.Value;
+                }
+            }
+            if (EnableUp)
+            {
+                try
+                {
+                    s_bl.Volunteer.Update(_id, Volunteer);
+                    Volunteer = s_bl.Volunteer.Read(_id)!;
+                    queryCallList();
+                }
+                catch (BLTemporaryNotAvailableException)
+                {
+                    MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

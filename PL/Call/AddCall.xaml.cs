@@ -24,6 +24,7 @@ namespace PL.Call
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
         private Window _preWind;
 
+
         //constructor
         public AddCall(Window preWind)
         {
@@ -34,10 +35,6 @@ namespace PL.Call
 
         #region Properties
 
-        //public DateTime CurrentTime
-        //{
-        //    get { return s_bl.Admin.GetClock(); }
-        //}
         public DateTime CurrentTime
         {
             get { return s_bl.Admin.GetClock(); }
@@ -55,6 +52,15 @@ namespace PL.Call
         public static readonly DependencyProperty CurrentCallProperty =
             DependencyProperty.Register("CurrentCall", typeof(BO.Call), typeof(AddCall), new PropertyMetadata(null));
 
+        public bool EnableUp
+        {
+            get { return (bool)GetValue(EnableUpProperty); }
+            set { SetValue(EnableUpProperty, value); }
+        }
+
+        public static readonly DependencyProperty EnableUpProperty =
+            DependencyProperty.Register("EnableUp", typeof(bool), typeof(AddCall), new PropertyMetadata(false));
+
         #endregion
 
         /// <summary>
@@ -62,43 +68,62 @@ namespace PL.Call
         /// </summary>
         public void bthAdd_Click(object sender, RoutedEventArgs e)
         {
-            try
+            if (EnableUp)
             {
-                s_bl.Call.Create(CurrentCall!);
-                _preWind.Show();//?
-                this.Close();
-            }
-            catch (BlIntegrityOfValuesException ex3)
-            {
-                MessageBox.Show( ex3.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch(BLTemporaryNotAvailableException ex4)
-            {
-                MessageBox.Show($"Cannot perform the operation since Simulator is running:)");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                try
+                {
+                    s_bl.Call.Create(CurrentCall!);
+                    _preWind.Show();
+                    this.Close();
+                }
+                catch (BlIntegrityOfValuesException ex3)
+                {
+                    MessageBox.Show(ex3.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (BLTemporaryNotAvailableException ex4)
+                {
+                    MessageBox.Show($"Cannot perform the operation since Simulator is running:)", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
-        ///// <summary>
-        ///// Re-reading call's details
-        ///// </summary>
-        //private void RefreshCall() //?
-        //{
-        //    //int id = CurrentCall!.Id;
-        //    //CurrentCall = null;
-        //    //CurrentCall = s_bl.Call.Read(id);
-        //}
+        private async void CallAddressTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(CurrentCall.CallAddress))
+            {
+                return;
+            }
+                if (sender is TextBox textBox)
+            {
+                string address = textBox.Text;
 
-        //private void CallObserver() => RefreshCall();
+                var coordinates= await s_bl.Call.CheckedAddress(address);
 
-        //private void Window_Loaded(object sender, RoutedEventArgs e)
-        //    => s_bl.Call.AddObserver(CallObserver);
+                if (coordinates[0] == -1)
+                {
+                    MessageBox.Show("Network connection failed, please try again later :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if (coordinates[0] == null)
+                {
+                    MessageBox.Show("Wrong Address", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else if ((coordinates![0] < 31.45 || coordinates[0] > 32) || (coordinates[1] < 34.85 || coordinates[1] > 35.4))
+                {
+                    MessageBox.Show("Sorry, this is outside our scope of activity, but we'll be there soon:) ", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    EnableUp = true;
+                    CurrentCall.Latitude = coordinates[0]!.Value;
+                    CurrentCall.Longitude = coordinates[1]!.Value;
+                }
+            }
+        }
 
-        //private void Window_Closed(object sender, EventArgs e)
-        //    => s_bl.Call.RemoveObserver(CallObserver);
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {

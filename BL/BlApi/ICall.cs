@@ -17,4 +17,5 @@ public interface ICall : IObservable //stage 5
     void CallToTreatment(int volId, int callId);
     void GetAssignmentToEnd(int volId, int callId);
     void GetAssignmentToCancel(int volId, int callId);
+    Task<double?[]> CheckedAddress(string Address);
 }

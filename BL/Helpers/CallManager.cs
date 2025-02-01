@@ -1,4 +1,5 @@
-﻿using BlImplementation;
+﻿//using BlApi;
+using BlImplementation;
 using BO;
 using DalApi;
 using DO;
@@ -85,47 +86,20 @@ internal static class CallManager
     /// <exception cref="BO.BlIntegrityOfValuesException"></exception>
     internal static async Task updateCoordinates(DO.Call doCall)
     {
-        double?[] AddressCoordinate = await CallManager.GetCoordinates(doCall.CallAddress);
-
-        if (AddressCoordinate[0] is null)
-        {
-            lock (AdminManager.BlMutex)
-                _dal.Call.Update(
-                    new(doCall.Id,
-                    doCall.CallType,
-                    doCall.CallAddress/*"Wrong address"*/,
-                    -1, -1,
-                    doCall.OpenTime,
-                    doCall.Description,
-                    doCall.MaxTime));
-            return;
-        }
-
-        if ((AddressCoordinate![0] < 31.45 || AddressCoordinate[0] > 32) || (AddressCoordinate[1] < 34.85 || AddressCoordinate[1] > 35.4))
-        {
-            lock (AdminManager.BlMutex)
-                _dal.Call.Update(
-                    new(doCall.Id,
-                    doCall.CallType,
-                    doCall.CallAddress /*+ "Not In Range"*/,
-                    -2, -2,
-                    doCall.OpenTime,
-                    doCall.Description,
-                    doCall.MaxTime));
-            return;
-        }
+        double?[] addressCoordinate = await CallManager.GetCoordinates(doCall.CallAddress);
 
         lock (AdminManager.BlMutex)
             _dal.Call.Update(
                 new(doCall.Id,
                 doCall.CallType,
                 doCall.CallAddress,
-                (double)AddressCoordinate[0]!,
-                (double)AddressCoordinate[1]!,
+                (double)addressCoordinate[0]!,
+                (double)addressCoordinate[1]!,
                 doCall.OpenTime,
                 doCall.Description,
                 doCall.MaxTime));
     }
+
 
     /// <summary>
     /// This method takes an address as input and returns an array with the latitude and longitude.
@@ -136,8 +110,8 @@ internal static class CallManager
     internal static async Task<double?[]> GetCoordinates(string address)
     {
         // Checking if the address is null or empty
-        if (string.IsNullOrWhiteSpace(address))
-            throw new BO.BlNullPropertyException("Address cannot be empty or null." + nameof(address));
+        //if (string.IsNullOrWhiteSpace(address))
+        //    throw new BO.BlNullPropertyException("Address cannot be empty or null." + nameof(address));
 
         //Constructing the URL for the geocoding service with the provided address
         string apiKey = "pk.902e35436f8c579a871d8158aee1bde2";
@@ -150,7 +124,7 @@ internal static class CallManager
 
             // Checking the response status
             if (!response.IsSuccessStatusCode)
-                return new double?[] { null, null };
+                return new double?[] { -1, -1 };
 
             // Reading the content asynchronously
             string jsonResponse = await response.Content.ReadAsStringAsync();
@@ -161,15 +135,12 @@ internal static class CallManager
 
             // Checking if results are found
             if (results == null || results.Length != 1)
-                return new double?[] { -1, -1 };
+                return new double?[] { null, null};
 
             // Returning the coordinates
             return new double?[] { double.Parse(results[0].Lat!), double.Parse(results[0].Lon!) };
         }
     }
-
-
-
 
     /// <summary>
     /// Class to represent the structure of the geocoding response (latitude and longitude)

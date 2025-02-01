@@ -60,14 +60,15 @@
                     <TextBox Grid.Column="1" Grid.Row="2" 
                              Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
                              IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateDetailsKey}}" 
-                             Style="{StaticResource FormTextBoxStyle}" BorderBrush="{Binding CurrentCall.Latitude, Converter={StaticResource AddressToColorConverterKey}}"  
-                             TextChanged="TextBox_TextChanged">
+                             Style="{StaticResource FormTextBoxStyle}" 
+                             LostFocus="CallAddressTextBox_LostFocus"
+                             BorderBrush="{Binding EnableUp, Converter={StaticResource AddressToColorConverterKey}, Mode=TwoWay}">
                         <TextBox.ToolTip>
                             <ToolTip Width="Auto" Height="Auto" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
                                      Foreground="{StaticResource AyeletHardColor}">
                                 
                                 <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
-                                    <TextBlock TextWrapping="NoWrap" Text="{Binding CurrentCall.Latitude, Converter={StaticResource AddressToToolTipConverterKey}}" FontSize="14"/>
+                                    <TextBlock TextWrapping="NoWrap" Text="{Binding CurrentCall.CallAddress}" FontSize="14"/>
                                 </Border>
                             </ToolTip>
                         </TextBox.ToolTip>
@@ -82,15 +83,6 @@
                              TextWrapping="Wrap"  Height="70"
                              AcceptsReturn="False"
                              VerticalScrollBarVisibility="Hidden" Margin="0,5">
-                        <!--<TextBox.ToolTip>
-                            <ToolTip Width="200" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
-                                     Foreground="{StaticResource AyeletHardColor}">
-
-                                <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
-                                    <TextBlock TextWrapping="Wrap" Text="{Binding CurrentCall.Description, Mode=OneWay}" FontSize="14"/>
-                                </Border>
-                            </ToolTip>
-                        </TextBox.ToolTip>-->
                     </TextBox>
 
                     <Label Content="Open time:" 
@@ -116,8 +108,6 @@
                                ItemsSource="{Binding Source={StaticResource StatusCallKey}}" 
                                IsEnabled="False" 
                                BorderBrush= "Black" OpacityMask="#FF090909"/>
-                    <!--SelectionChanged="ComboBox_SelectionChanged"-->
-
                 </Grid>
             </GroupBox>
         </Border>

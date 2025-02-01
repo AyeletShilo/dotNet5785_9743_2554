@@ -31,13 +31,12 @@
         <local:FontSizeConverter x:Key="FontSizeConverterKey"/>
         <local:ConvertFontColor x:Key="ConvertFontColorKey"/>
         <local:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey" />
-        <!--<local:MaxTimeForEndTimeConverter x:Key="MaxTimeForEndTimeConverterKey"/>-->
         <local:TimeSpanToDateConverter x:Key="TimeSpanToDateConverterKey"/>
         <local:TimeSpanToDaysConverter x:Key="TimeSpanToDaysConverterKey"/>
         <local:CallMultiConverter x:Key="CallMultiConverterKey"/>
         <local:IntervalConverter x:Key="IntervalConverterKey"/>
         <local:AddressToColorConverter x:Key="AddressToColorConverterKey"/>
-        <local:AddressToToolTipConverter x:Key="AddressToToolTipConverterKey"/>
+        <!--<local:AddressToToolTipConverter x:Key="AddressToToolTipConverterKey"/>-->
 
 
         <!--#region Colors-->

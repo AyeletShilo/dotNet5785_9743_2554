@@ -5,6 +5,7 @@ using DO;
 using Helpers;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 
 
 namespace BlImplementation;
@@ -26,27 +27,6 @@ internal class CallImplementation : BlApi.ICall
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CallToTreatment(volId, callId);
-        #region draft
-        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        //BO.Call call = Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not exists");
-        //Func<DO.Assignment, bool>? predicate = assignment => assignment.CallId == callId && assignment.EndTreatment != DO.AssignmentEnum.SelfCancel
-        //                                                     && assignment.EndTreatment != DO.AssignmentEnum.CancelAdmin;
-        //IEnumerable<DO.Assignment> assignments;
-        //lock (AdminManager.BlMutex)
-        //    assignments = _dal.Assignment.ReadAll(predicate).ToList();
-        //if (assignments.Count() != 0)
-        //    throw new BO.BlDoesAlreadyExistException($"Assignment for call with ID={callId} already exists");
-        //if (call.Status != BO.CallStatus.InTreatment && call.Status != BO.CallStatus.Expired && call.Status != BO.CallStatus.Closed)
-        //{
-        //    lock (AdminManager.BlMutex)
-        //        _dal.Assignment.Create(new(0, callId, volId, AdminManager.Now, null, null));
-        //    CallManager.Observers.NotifyItemUpdated(call.Id);  //stage 5
-        //    VolunteerManager.Observers.NotifyItemUpdated(volId);  //stage 5
-        //    CallManager.Observers.NotifyListUpdated(); //stage 5
-        //}
-        //else
-        //    throw new BO.BlCantHandleItException($"Unable to assign");
-        #endregion
     }
 
     /// <summary>
@@ -57,35 +37,51 @@ internal class CallImplementation : BlApi.ICall
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.CheckFormat(callToAdd);
-        if (callToAdd.CallAddress == "")
-            throw new BO.BlIntegrityOfValuesException("Address must have a value.");
-        DO.Call oldCall;
-        lock (AdminManager.BlMutex)
-            oldCall = _dal.Call.Read(callToAdd.Id)!;
-        //DO.Call doCall = CallManager.CheckLogic(callToAdd); //can throw Ex
-        DO.Call doCall = new(callToAdd.Id, (DO.TypeOfCall)callToAdd.CallType, callToAdd.CallAddress, 0, 0, AdminManager.Now, callToAdd.Description, callToAdd.MaxCloseTime); //CallManager.CheckLogic(callToUpdate); //can throw Ex
         try
         {
+            DO.Call doCall = new(callToAdd.Id, (DO.TypeOfCall)callToAdd.CallType, callToAdd.CallAddress, 0, 0, AdminManager.Now, callToAdd.Description, callToAdd.MaxCloseTime); //can throw Ex
             lock (AdminManager.BlMutex)
                 _dal.Call.Create(doCall); //can throw Ex
+            CallManager.Observers.NotifyListUpdated();  //stage 5
+
         }
         catch (DO.DalXMLFileLoadCreateException ex)
         {
             throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
-        CallManager.Observers.NotifyListUpdated();  //stage 5
-        try
-        {
-            //compute the coordinates asynchronously without waiting for the results
-            _ = CallManager.updateCoordinates(doCall); //stage 7
-        }
-        catch (BO.BlIntegrityOfValuesException ex)
-        {
-            lock (AdminManager.BlMutex)
-                _dal.Call.Update(oldCall);
-            CallManager.Observers.NotifyListUpdated();  //stage 5
-            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
-        }
+        #region draft
+        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        //CallManager.CheckFormat(callToAdd);
+        //if (callToAdd.CallAddress == "")
+        //    throw new BO.BlIntegrityOfValuesException("Address must have a value.");
+        //DO.Call oldCall;
+        //lock (AdminManager.BlMutex)
+        //    oldCall = _dal.Call.Read(callToAdd.Id)!;
+        ////DO.Call doCall = CallManager.CheckLogic(callToAdd); //can throw Ex
+        //DO.Call doCall = new(callToAdd.Id, (DO.TypeOfCall)callToAdd.CallType, callToAdd.CallAddress, 0, 0, AdminManager.Now, callToAdd.Description, callToAdd.MaxCloseTime); //can throw Ex
+        //try
+        //{
+        //    lock (AdminManager.BlMutex)
+        //        _dal.Call.Create(doCall); //can throw Ex
+        //}
+        //catch (DO.DalXMLFileLoadCreateException ex)
+        //{
+        //    throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        //}
+        //CallManager.Observers.NotifyListUpdated();  //stage 5
+        //try
+        //{
+        //    //compute the coordinates asynchronously without waiting for the results
+        //    _ = CallManager.updateCoordinates(doCall); //stage 7
+        //}
+        //catch (BO.BlIntegrityOfValuesException ex)
+        //{
+        //    lock (AdminManager.BlMutex)
+        //        _dal.Call.Update(oldCall);
+        //    CallManager.Observers.NotifyListUpdated();  //stage 5
+        //    throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
+        //}
+        #endregion
     }
 
     /// <summary>
@@ -175,42 +171,6 @@ internal class CallImplementation : BlApi.ICall
     public IEnumerable<BO.OpenCallInList> GetOpenedCalls(int volId, BO.CallType? filter = null, BO.OpenCallData? sort = null)
     {
         return CallManager.GetOpenedCalls(volId, filter, sort);
-        #region draft
-        //lock (AdminManager.BlMutex)
-        //{
-        //    DO.Volunteer vol;
-        //    IEnumerable<DO.Call> oldCalls;
-        //    lock (AdminManager.BlMutex)
-        //    {
-        //        vol = _dal.Volunteer.Read(volId) ?? throw new BO.BlDoesNotExistException($"There is no volunteer with ID:{volId}");
-        //        oldCalls = _dal.Call.ReadAll(null);
-        //    }
-        //    var openCalls = from item in oldCalls
-        //                    let tmpCall = Read(item.Id)
-        //                    where (tmpCall.Status == BO.CallStatus.OpenInRisk || tmpCall.Status == BO.CallStatus.Opened) && CallManager.CorrectDis(vol, item.Latitude, item.Longitude)
-        //                    select CallManager.ToOpenCall(item, volId); //can throw Ex
-
-
-        //    openCalls = null == filter ? openCalls : from call in openCalls
-        //                                             where (BO.CallType)filter == call.CallType
-        //                                             select call;
-
-        //    openCalls = null == sort ? openCalls.OrderBy(c => c.Id)
-        //        : openCalls.OrderBy<BO.OpenCallInList, object>(call => (sort switch
-        //        {
-        //            BO.OpenCallData.Id => call.Id,
-        //            BO.OpenCallData.CallType => call.CallType,
-        //            BO.OpenCallData.Description => call.Description,
-        //            BO.OpenCallData.CallAddress => call.FullAddress,
-        //            BO.OpenCallData.OpenTime => call.OpenTime,
-        //            BO.OpenCallData.MaxCloseTime => call.MaxCloseTime,
-        //            BO.OpenCallData.VolDistance => call.VolDistance,
-        //            _ => call.Id
-        //        }));
-
-        //    return openCalls;
-        //}
-        #endregion
     }
 
     /// <summary>
@@ -248,46 +208,6 @@ internal class CallImplementation : BlApi.ICall
     public BO.Call Read(int callId)
     {
         return CallManager.Read(callId);
-        #region draft
-        //lock (AdminManager.BlMutex)
-        //{
-        //    var doCall = _dal.Call.Read(callId) ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does Not exist");
-
-        //    Func<DO.Assignment, bool> func = item => item.CallId == callId;
-
-        //    IEnumerable<DO.Assignment> dataAssignments = _dal.Assignment.ReadAll(func); //read all assignment of this Call.
-        //    var callAssignments = new List<BO.CallAssignInList>();
-        //    if (dataAssignments.Count() != 0)
-        //    {
-        //        callAssignments = dataAssignments.Select(assign => new BO.CallAssignInList
-        //        {
-        //            VolunteerId = assign.VolunteerId,
-        //            VolunteerName = (assign.VolunteerId != 0) ? _dal.Volunteer.Read(assign.VolunteerId).FullName : null,
-        //            InterTime = assign.InterTime,
-        //            EndTime = assign.EndTime.HasValue ? assign.EndTime : null,
-        //            EndTreatment = assign.EndTreatment.HasValue ? (BO.EndTreatment)assign.EndTreatment : null, /*BO.EndTreatment.None,*/
-
-        //        }).ToList();
-        //    }
-
-
-
-        //    var myStatus = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime) : BO.CallStatus.Opened;//הNULL מנוהל
-        //    return new()
-        //    {
-        //        Id = callId,
-        //        CallType = (BO.CallType)doCall.CallType,
-        //        Description = doCall.Description,
-        //        CallAddress = doCall.CallAddress,
-        //        Latitude = doCall.Latitude,
-        //        Longitude = doCall.Longitude,
-        //        OpenTime = doCall.OpenTime,
-        //        MaxCloseTime = doCall.MaxTime,
-        //        Status = dataAssignments.Count() != 0 ? CallManager.MakeStatus(dataAssignments.Last(), doCall.MaxTime) : BO.CallStatus.Opened, //הNULL מנוהל
-        //        CallAssignments = callAssignments
-        //    };
-        //}
-        #endregion
     }
 
     /// <summary>
@@ -357,16 +277,14 @@ internal class CallImplementation : BlApi.ICall
     public void Update(BO.Call callToUpdate)
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        CallManager.CheckFormat(callToUpdate);
-        DO.Call oldCall;
-        lock (AdminManager.BlMutex)
-            oldCall = _dal.Call.Read(callToUpdate.Id)!;
-
-        DO.Call doCall = new(callToUpdate.Id, (DO.TypeOfCall)callToUpdate.CallType, callToUpdate.CallAddress, 0, 0, callToUpdate.OpenTime, callToUpdate.Description, callToUpdate.MaxCloseTime); //CallManager.CheckLogic(callToUpdate); //can throw Ex
         try
         {
+            CallManager.CheckFormat(callToUpdate);
+            DO.Call doCall = new(callToUpdate.Id, (DO.TypeOfCall)callToUpdate.CallType, callToUpdate.CallAddress, callToUpdate.Latitude, callToUpdate.Longitude, callToUpdate.OpenTime, callToUpdate.Description, callToUpdate.MaxCloseTime);  //can throw Ex
             lock (AdminManager.BlMutex)
                 _dal.Call.Update(doCall); //can throw Ex
+            CallManager.Observers.NotifyItemUpdated(doCall.Id);  //stage 5
+            CallManager.Observers.NotifyListUpdated();  //stage 5
         }
         catch (DO.DalDoesNotExistException ex)
         {
@@ -376,22 +294,44 @@ internal class CallImplementation : BlApi.ICall
         {
             throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
         }
-        CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);  //stage 5
-        CallManager.Observers.NotifyListUpdated();  //stage 5
+        #region draft
+        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        //CallManager.CheckFormat(callToUpdate);
+        //DO.Call oldCall;
+        //lock (AdminManager.BlMutex)
+        //    oldCall = _dal.Call.Read(callToUpdate.Id)!;
 
-        try
-        {
-            //compute the coordinates asynchronously without waiting for the results
-            _ = CallManager.updateCoordinates(doCall); //stage 7
-        }
-        catch (BO.BlIntegrityOfValuesException ex)
-        {
-            lock (AdminManager.BlMutex)
-                _dal.Call.Update(oldCall);
-            CallManager.Observers.NotifyItemUpdated(doCall.Id);  //stage 5
-            CallManager.Observers.NotifyListUpdated();  //stage 5
-            throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
-        }
+        //DO.Call doCall = new(callToUpdate.Id, (DO.TypeOfCall)callToUpdate.CallType, callToUpdate.CallAddress, 0, 0, callToUpdate.OpenTime, callToUpdate.Description, callToUpdate.MaxCloseTime); //CallManager.CheckLogic(callToUpdate); //can throw Ex
+        //try
+        //{
+        //    lock (AdminManager.BlMutex)
+        //        _dal.Call.Update(doCall); //can throw Ex
+        //}
+        //catch (DO.DalDoesNotExistException ex)
+        //{
+        //    throw new BO.BlDoesNotExistException($"Call with ID={callToUpdate.Id} does Not exists", ex);
+        //}
+        //catch (DO.DalXMLFileLoadCreateException ex)
+        //{
+        //    throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
+        //}
+        //CallManager.Observers.NotifyItemUpdated(callToUpdate.Id);  //stage 5
+        //CallManager.Observers.NotifyListUpdated();  //stage 5
+
+        //try
+        //{
+        //    //compute the coordinates asynchronously without waiting for the results
+        //    _ = CallManager.updateCoordinates(doCall); //stage 7
+        //}
+        //catch (BO.BlIntegrityOfValuesException ex)
+        //{
+        //    lock (AdminManager.BlMutex)
+        //        _dal.Call.Update(oldCall);
+        //    CallManager.Observers.NotifyItemUpdated(doCall.Id);  //stage 5
+        //    CallManager.Observers.NotifyListUpdated();  //stage 5
+        //    throw new BO.BlIntegrityOfValuesException("Wrong Address. No coordinates found for the given address.");
+        //}
+        #endregion
 
     }
 
@@ -406,47 +346,6 @@ internal class CallImplementation : BlApi.ICall
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.UpdateCancelTreatment(volId, assignmentId);
-        #region draft
-        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        //try
-        //{
-        //    DO.Assignment assignment;
-        //    lock (AdminManager.BlMutex)
-        //    {
-        //        assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
-        //        DO.Volunteer volunteer = _dal.Volunteer.Read(volId) ?? throw new BO.BlDoesNotExistException($"volunteer with ID={volId} does not exists");
-        //        if ((volId == assignment.VolunteerId || volunteer.Job == DO.Role.Manager) && assignment.EndTime is null)
-        //        {
-        //            DO.Assignment updateAssignment;
-        //            if (volId == assignment.VolunteerId)
-        //            {
-        //                updateAssignment = new(assignmentId, assignment.CallId, volId,
-        //                    assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.SelfCancel);
-        //            }
-        //            else
-        //            {
-        //                updateAssignment = new(assignmentId, assignment.CallId, volId,
-        //                   assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.CancelAdmin);
-        //            }
-        //            _dal.Assignment.Update(updateAssignment); //can throw Ex
-        //        }
-        //        else
-        //            throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be canceled");
-        //    }
-
-        //    CallManager.Observers.NotifyItemUpdated(assignment.CallId);  //stage 5
-        //    CallManager.Observers.NotifyListUpdated();  //stage 5
-        //    VolunteerManager.Observers.NotifyListUpdated(); //stage 5
-        //}
-        //catch (DO.DalDoesNotExistException ex)
-        //{
-        //    throw new BO.BlDoesNotExistException($"item with ID: {assignmentId} does not exists", ex);
-        //}
-        //catch (DO.DalXMLFileLoadCreateException ex)
-        //{
-        //    throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
-        //}
-        #endregion
     }
 
     /// <summary>
@@ -460,70 +359,23 @@ internal class CallImplementation : BlApi.ICall
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CallManager.UpdateEndTreatment(volId, assignmentId);
-        #region draft
-        //AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        //try
-        //{
-        //    DO.Assignment updateAssignment;
-        //    lock (AdminManager.BlMutex)
-        //    {
-        //        DO.Assignment assignment = _dal.Assignment.Read(assignmentId) ?? throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists"); //can throw Ex
-        //        if (volId == assignment.VolunteerId && assignment.EndTreatment == null)
-        //        {
-        //            updateAssignment = new(assignmentId, assignment.CallId, volId,
-        //            assignment.InterTime, AdminManager.Now, DO.AssignmentEnum.TakenCare);
-        //            _dal.Assignment.Update(updateAssignment); //can throw Ex
-        //        }
-        //        else
-        //            throw new BO.BlCantUpdateException($"Assignment with ID: {assignmentId} cannot be closed");
-        //    }
-        //    CallManager.Observers.NotifyItemUpdated(updateAssignment.Id);  //stage 5
-        //    CallManager.Observers.NotifyListUpdated();  //stage 5
-        //    VolunteerManager.Observers.NotifyListUpdated(); //stage 5
-        //}
-        //catch (DO.DalDoesNotExistException ex)
-        //{
-        //    throw new BO.BlDoesNotExistException($"Assignment with ID={assignmentId} does not exists", ex);
-        //}
-        //catch (DO.DalXMLFileLoadCreateException ex)
-        //{
-        //    throw new BO.BlXMLFileLoadCreateException("Xml Error", ex);
-        //}
-        #endregion
     }
 
     public void GetAssignmentToEnd(int volId, int callId)
     {
         CallManager.GetAssignmentToEnd(volId, callId);
-        #region draft
-        //int assignId;
-        //lock (AdminManager.BlMutex)
-        //{ 
-        //    DO.Assignment assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment");
-        //    assignId = assignment.Id;
-        //}
-        //UpdateEndTreatment(volId, assignId);
-        #endregion
     }
 
     public void GetAssignmentToCancel(int volId, int callId)
     {
         CallManager.GetAssignmentToCancel(volId, callId);
-        #region draft
-        //int assignId;
-        //lock (AdminManager.BlMutex)
-        //{
-        //    DO.Assignment? assignment = _dal.Assignment.ReadAll().Where(a => a.CallId == callId).LastOrDefault() ?? throw new BO.BlDoesNotExistException($"Call with ID={callId} does not have a assignment");
-        //    assignId = assignment.Id;
-        //}
-        //UpdateCancelTreatment(volId, assignId);
-        #endregion
     }
 
-    //public void CheckedAddress(BO.Call callToUpdate)
-    //{
-
-    //}
+    public async Task<double?[]> CheckedAddress(string address)
+    {
+        double?[] addressCoordinate = await CallManager.GetCoordinates(address);
+        return addressCoordinate;
+    }
 
     #region Stage 5
     public void AddObserver(Action listObserver) =>

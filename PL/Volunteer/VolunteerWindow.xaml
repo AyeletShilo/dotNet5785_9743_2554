@@ -78,7 +78,6 @@
                               Margin="0,3"
                               SelectedValue="{Binding CurrentVolunteer.Job, Mode=TwoWay, NotifyOnValidationError=true}"
                               ItemsSource="{Binding Source={StaticResource RoleOptKey}}"/>
-                        <!--SelectionChanged="ComboBox_SelectionChanged"/>-->
 
                         <!-- Right Column -->
                         <Label Grid.Row="1" Grid.Column="3"
@@ -98,8 +97,11 @@
                            Content="Address:" 
                            Style="{StaticResource FormLabelStyle}"/>
                         <TextBox Grid.Column="4" Grid.Row="2" 
-                             Style="{StaticResource FormTextBoxStyle}"
-                             Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" ScrollViewer.PanningMode="HorizontalOnly"/>
+                                 Style="{StaticResource FormTextBoxStyle}"
+                                 Text="{Binding CurrentVolunteer.Address, Mode=TwoWay, NotifyOnValidationError=true, ValidatesOnExceptions=true}" 
+                                 ScrollViewer.PanningMode="HorizontalOnly"
+                                 LostFocus="AddressTextBox_LostFocus"
+                                 BorderBrush="{Binding EnableUp, Converter={StaticResource AddressToColorConverterKey}, Mode=TwoWay}"/>
 
 
                         <Label Grid.Row="3" Grid.Column="3"

@@ -23,8 +23,6 @@
                         <ColumnDefinition Width="4.5*"/>
                         <ColumnDefinition Width="7.5*"/>
                         <ColumnDefinition Width="3*"/>
-                        <!--<ColumnDefinition Width="4.5*"/>
-                        <ColumnDefinition Width="7.5*"/>-->
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -46,13 +44,14 @@
                            Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Grid.Column="1" Grid.Row="1"
                              Text="{Binding CurrentCall.CallAddress, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                             Style="{StaticResource FormTextBoxStyle}" BorderBrush="{Binding CurrentCall.Latitude, Converter={StaticResource AddressToColorConverterKey}}" >
+                             Style="{StaticResource FormTextBoxStyle}"
+                             LostFocus="CallAddressTextBox_LostFocus"
+                             BorderBrush="{Binding EnableUp, Converter={StaticResource AddressToColorConverterKey}, Mode=TwoWay}">
                         <TextBox.ToolTip>
                             <ToolTip Width="Auto" Height="Auto" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
-             Foreground="{StaticResource AyeletHardColor}">
-
+                                     Foreground="{StaticResource AyeletHardColor}">
                                 <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
-                                    <TextBlock TextWrapping="NoWrap" Text="{Binding CurrentCall.Latitude, Converter={StaticResource AddressToToolTipConverterKey}}" FontSize="14"/>
+                                    <TextBlock TextWrapping="NoWrap" Text="The address must contain a value." FontSize="14"/>
                                 </Border>
                             </ToolTip>
                         </TextBox.ToolTip>
@@ -62,8 +61,9 @@
                            Grid.Column="0" Grid.Row="2"
                            Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
-                        Text="{Binding CurrentCall.MaxCloseTime, StringFormat='{} dd/MM/yyyy HH:mm', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}" 
-                        IsReadOnly ="false" Style="{StaticResource FormTextBoxStyle}"/>
+                             Text="{Binding CurrentCall.MaxCloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true, FallbackValue='{}{0:dd/MM/yyyy 08:00}'}" 
+                             IsReadOnly ="false" Style="{StaticResource FormTextBoxStyle}"/>
+                    
                     <StackPanel Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" Margin="10">
                         <Label Content="Description:" 
                                  Style="{StaticResource FormLabelStyle}"/>
