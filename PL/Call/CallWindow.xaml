@@ -98,7 +98,16 @@
                     <TextBox Grid.Column="4" Grid.Row="1" 
                              Text="{Binding CurrentCall.MaxCloseTime,  StringFormat='{}{0:dd/MM/yy HH:mm}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true}"
                              IsReadOnly="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateMaxTimeKey}}"
-                             Style="{StaticResource FormTextBoxStyle}"/>
+                             Style="{StaticResource FormTextBoxStyle}">
+                        <TextBox.ToolTip>
+                            <ToolTip Width="Auto" Height="Auto" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
+                                     Foreground="{StaticResource AyeletHardColor}">
+                                <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
+                                    <TextBlock TextWrapping="NoWrap" Text="The correct format: dd/MM/yy HH:mm" FontSize="14"/>
+                                </Border>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
 
                     <Label Content="Call status:" 
                            Grid.Column="3" Grid.Row="2"

@@ -143,40 +143,6 @@ namespace PL.Call
         private  void AddressTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             EnableUp = false;
-
-            //if (sender is TextBox textBox)
-            //{
-            //     _address = textBox.Text;
-
-            //    //if (string.IsNullOrEmpty(address))
-            //    //{
-            //    //    EnableUp = true;
-            //    //    Volunteer!.Latitude = null;
-            //    //    Volunteer!.Longitude = null;
-            //    //    return;
-            //    //}
-
-            //    //var coordinates = await s_bl.Call.CheckedAddress(address);
-
-            //    //if (coordinates[0] == -1)
-            //    //{
-            //    //    MessageBox.Show("Network connection failed, please try again later :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    //}
-            //    //else if (coordinates[0] == null)
-            //    //{
-            //    //    MessageBox.Show("Wrong Address", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    //}
-            //    //else if ((coordinates![0] < 31.45 || coordinates[0] > 32) || (coordinates[1] < 34.85 || coordinates[1] > 35.4))
-            //    //{
-            //    //    MessageBox.Show("Sorry, this is outside our scope of activity, but we'll be there soon :)", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    //}
-            //    //else
-            //    //{
-            //    //    EnableUp = true;
-            //    //    Volunteer!.Latitude = coordinates[0]!.Value;
-            //    //    Volunteer!.Longitude = coordinates[1]!.Value;
-            //    //}
-            //}
         }
 
         /// <summary>
@@ -202,7 +168,7 @@ namespace PL.Call
                 }
                 else if (coordinates[0] == null)
                 {
-                    MessageBox.Show("Wrong Address", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Incorrect address, please enter a correct one.", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else if ((coordinates![0] < 31.45 || coordinates[0] > 32) || (coordinates[1] < 34.85 || coordinates[1] > 35.4))
                 {

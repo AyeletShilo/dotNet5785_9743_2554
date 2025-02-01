@@ -2,6 +2,7 @@
 using DO;
 using System.Diagnostics;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Threading.Channels;
 using System.Windows;
 using System.Windows.Data;
@@ -207,156 +208,6 @@ public class CallMultiConverter : IMultiValueConverter
 }
 
 /// <summary>
-/// Changes the background of call in list according to the call type
-/// </summary>
-class ConvertCallTypeToColor : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallType callType = (BO.CallType)value;
-        switch (callType)
-        {
-            case BO.CallType.Repairing:
-                return (SolidColorBrush)Application.Current.FindResource("Color1");
-            case BO.CallType.Talking:
-                return (SolidColorBrush)Application.Current.FindResource("Color2");
-            case BO.CallType.Cleaning:
-                return (SolidColorBrush)Application.Current.FindResource("Color3");
-            case BO.CallType.TechnologyHelp:
-                return (SolidColorBrush)Application.Current.FindResource("Color4");
-            case BO.CallType.Shopping:
-                return (SolidColorBrush)Application.Current.FindResource("Color5");
-            default:
-                return Brushes.White;
-        }
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-/// <summary>
-/// Changes the font of call in the list according to the call type
-/// </summary>
-class ConvertFontColor : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallType callType = (BO.CallType)value;
-        switch (callType)
-        {
-            case BO.CallType.Repairing:
-            case BO.CallType.Talking:
-                return (SolidColorBrush)Application.Current.FindResource("AyeletHardColor");
-            case BO.CallType.Cleaning:
-            case BO.CallType.TechnologyHelp:
-            case BO.CallType.Shopping:
-                return (SolidColorBrush)Application.Current.FindResource("CreamColor");
-            default:
-                return (SolidColorBrush)Application.Current.FindResource("AyeletHardColor");
-        }
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-class ConvertCallTypeToPitcher : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallType callType = (BO.CallType)value;
-        switch (callType)
-        {
-            case BO.CallType.Repairing:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/repairing.png"));
-            case BO.CallType.Talking:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/talking.png"));
-            case BO.CallType.Cleaning:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/cleaning.png"));
-            case BO.CallType.TechnologyHelp:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/tech.png"));
-            case BO.CallType.Shopping:
-                return new BitmapImage(new Uri("pack://application:,,,/Image/Shopping.png"));
-            default:
-                return null;
-        }
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-/// <summary>
-///  Changes the background of call in list according to the call type
-/// </summary>
-class ConvertVolTypeToColor : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallInTreatment callType = (BO.CallInTreatment)value;
-        switch (callType)
-        {
-            case BO.CallInTreatment.Repairing:
-                return Brushes.Yellow;
-            case BO.CallInTreatment.Talking:
-                return Brushes.Orange;
-            case BO.CallInTreatment.Cleaning:
-                return Brushes.Green;
-            case BO.CallInTreatment.TechnologyHelp:
-                return Brushes.PaleVioletRed;
-            case BO.CallInTreatment.Shopping:
-                return Brushes.Purple;
-            default:
-                return Brushes.White;
-        }
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
-
-
-public class ConvertStatusToColor : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallListStatus callType = (BO.CallListStatus)value;
-        switch (callType)
-        {
-            case BO.CallListStatus.Opened:
-                return Brushes.Yellow /*(SolidColorBrush)Application.Current.FindResource("Color1")*/;
-            case BO.CallListStatus.InTreatment:
-                return (SolidColorBrush)Application.Current.FindResource("Color2");
-            case BO.CallListStatus.InTreatmentInRisk:
-                return (SolidColorBrush)Application.Current.FindResource("Color3");
-            case BO.CallListStatus.Expired:
-                return (SolidColorBrush)Application.Current.FindResource("Color4");
-            case BO.CallListStatus.Closed:
-                return (SolidColorBrush)Application.Current.FindResource("Color5");
-            case BO.CallListStatus.OpenInRisk:
-                return Brushes.White;
-            default:
-                return Brushes.White;
-        }
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException("ConvertBack is not implemented");
-    }
-}
-
-
-/// <summary>
 /// Hiding the call filtering button when they are opened already filtered
 /// </summary>
 public class ConvertStatusToVisible : IValueConverter
@@ -490,24 +341,35 @@ public class TimeSpanToDaysConverter : IValueConverter
     }
 }
 
-public class SimulatorChengeConverter : IValueConverter
+public class DateTimeConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is TimeSpan timeSpan)
+        if (value is DateTime dateTime)
         {
-            return timeSpan.TotalDays.ToString("0");
+            return dateTime.ToString("dd/MM/yy HH:mm");
         }
-        return "0";
+        return string.Empty;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
+        string input = value as string;
+        DateTime parsedDate;
 
-        if (double.TryParse(value.ToString(), out double days))
+        if (string.IsNullOrWhiteSpace(input))
+            return DependencyProperty.UnsetValue;
+
+        if (Regex.IsMatch(input, @"^\d{1,2}/\d{1,2}/\d{2,4}$"))
         {
-            return TimeSpan.FromDays(days);
+            parsedDate = DateTime.ParseExact(input, "dd/MM/yy", CultureInfo.InvariantCulture);
+            parsedDate = parsedDate.AddHours(8);
         }
-        return TimeSpan.Zero;
+        else if (!DateTime.TryParseExact(input, "dd/MM/yy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDate))
+        {
+            return DependencyProperty.UnsetValue;
+        }
+
+        return parsedDate;
     }
 }

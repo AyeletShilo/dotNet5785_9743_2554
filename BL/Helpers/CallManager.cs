@@ -84,21 +84,21 @@ internal static class CallManager
     /// <param name="doCall">call of dal</param>
     /// <returns></returns>
     /// <exception cref="BO.BlIntegrityOfValuesException"></exception>
-    internal static async Task updateCoordinates(DO.Call doCall)
-    {
-        double?[] addressCoordinate = await CallManager.GetCoordinates(doCall.CallAddress);
+    //internal static async Task updateCoordinates(DO.Call doCall)
+    //{
+    //    double?[] addressCoordinate = await CallManager.GetCoordinates(doCall.CallAddress);
 
-        lock (AdminManager.BlMutex)
-            _dal.Call.Update(
-                new(doCall.Id,
-                doCall.CallType,
-                doCall.CallAddress,
-                (double)addressCoordinate[0]!,
-                (double)addressCoordinate[1]!,
-                doCall.OpenTime,
-                doCall.Description,
-                doCall.MaxTime));
-    }
+    //    lock (AdminManager.BlMutex)
+    //        _dal.Call.Update(
+    //            new(doCall.Id,
+    //            doCall.CallType,
+    //            doCall.CallAddress,
+    //            (double)addressCoordinate[0]!,
+    //            (double)addressCoordinate[1]!,
+    //            doCall.OpenTime,
+    //            doCall.Description,
+    //            doCall.MaxTime));
+    //}
 
 
     /// <summary>
@@ -134,7 +134,7 @@ internal static class CallManager
             var results = JsonSerializer.Deserialize<LocationResult[]>(jsonResponse, options);
 
             // Checking if results are found
-            if (results == null || results.Length != 1)
+            if (results == null || results.Length > 2)
                 return new double?[] { null, null};
 
             // Returning the coordinates

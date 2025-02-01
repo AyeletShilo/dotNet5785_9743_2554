@@ -179,9 +179,9 @@ public static class Initialization
         string[] Emails =
         {"amit234", "nirkush", "cbh", "bamb" ,"avi54","gila43" , "rkol", "chch" , "poli", "mgido", "ogami", "barzilay", "Kattani98","rAmitz", "perach" ,"jShapira"};
         string[] Addresses =
-        {$"Ha-Narkis 3,{location}", $"Jaffa 210,{location}", $"Brazil 101,{location}", $"Nechama 32,{location}", $"Bayit Va-Gan 46,{location}", $"Ha-Pisga 90,{location}",
-            $"Bar-Lev 119,{location}", $"Najara 19,{location}",$"Agron 5,{location}", $"Hilel 67,{location}",$"Iben-Ezra 27,{location}", $"Rivka 118,{location}",
-            $"Daniel 41,{location}", $"Ha-Sigalit 6,{location}", $"Dagan 5,{location}", $"Shmuel Hanavi 20, {location}"};
+        {$"Ha-Narkis 3,{location}", $"Jaffa 210,{location}", $"Brazil 101,{location}", $"Nechama 32,{location}", $"Bayit Va-Gan 46,{location}", $"Agmon 90,{location}",
+            $"David Niv 3,{location}", $"Najara 19,{location}",$"Agron 4,{location}", $"Hilel 16,{location}",$"Bialik 11,{location}", $"Rivka 2,{location}",
+            $"Daniel 7,{location}", $"Gat 6,{location}", $"Dagan 5,{location}", $"Shmuel Hanavi 30, {location}"};
         double[] latitudes =
         {   31.7771, 31.7814, 31.7859, 31.7790, 31.7798, 31.7742, 31.7725, 31.7633, 31.7808,
             31.7723, 31.7727, 31.7731, 31.7756, 31.7664, 31.7650 ,31.8017 };

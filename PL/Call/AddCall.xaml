@@ -61,8 +61,17 @@
                            Grid.Column="0" Grid.Row="2"
                            Style="{StaticResource FormLabelStyle}"/>
                     <TextBox Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"
-                             Text="{Binding CurrentCall.MaxCloseTime, StringFormat='{}{0:dd/MM/yyyy HH:mm}', Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true, FallbackValue='{}{0:dd/MM/yyyy 08:00}'}" 
-                             IsReadOnly ="false" Style="{StaticResource FormTextBoxStyle}"/>
+                             Text="{Binding CurrentCall.MaxCloseTime, Converter={StaticResource DateTimeConverterKey}, Mode=TwoWay, NotifyOnValidationError=true,  ValidatesOnExceptions=true, FallbackValue='{}{0:dd/MM/yyyy 08:00}'}" 
+                             IsReadOnly ="false" Style="{StaticResource FormTextBoxStyle}">
+                        <TextBox.ToolTip>
+                            <ToolTip Width="Auto" Height="Auto" BorderBrush="{StaticResource AyeletHardColor}"  Background="{StaticResource CreamColor}"
+                                     Foreground="{StaticResource AyeletHardColor}">
+                                <Border BorderBrush="Transparent" BorderThickness="1" Padding="5">
+                                    <TextBlock TextWrapping="NoWrap" Text="The correct format: dd/MM/yy HH:mm" FontSize="14"/>
+                                </Border>
+                            </ToolTip>
+                        </TextBox.ToolTip>
+                    </TextBox>
                     
                     <StackPanel Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" Margin="10">
                         <Label Content="Description:" 

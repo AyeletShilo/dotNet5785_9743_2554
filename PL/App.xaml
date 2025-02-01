@@ -25,7 +25,8 @@
         <local:MultiToIsEnabledConverter x:Key="MultiToIsEnabledConverterKey"/>
         <local:ConvertCallTypeToColor x:Key="ConvertCallTypeToColorKey" />
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
-        <local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>
+        <local:ConvertStatusToFontColor x:Key="ConvertStatusToFontColorKey"/>
+        <!--<local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>-->
         <local:ConvertCallTypeToPitcher x:Key="ConvertCallTypeToPitcherKey"/>
         <local:ConvertDeleteToVisible x:Key="ConvertDeleteToVisibleKey"/>
         <local:FontSizeConverter x:Key="FontSizeConverterKey"/>
@@ -36,6 +37,7 @@
         <local:CallMultiConverter x:Key="CallMultiConverterKey"/>
         <local:IntervalConverter x:Key="IntervalConverterKey"/>
         <local:AddressToColorConverter x:Key="AddressToColorConverterKey"/>
+        <local:DateTimeConverter x:Key="DateTimeConverterKey"/>
         <!--<local:AddressToToolTipConverter x:Key="AddressToToolTipConverterKey"/>-->
 
 
@@ -57,6 +59,14 @@
         <SolidColorBrush x:Key="Color4" Color="#6A7B5C"/>
         <SolidColorBrush x:Key="Color5" Color="#455D39"/>
 
+        <!--status Colors-->
+        <!--Enum Colors-->
+        <SolidColorBrush x:Key="status1" Color="#B9FF99"/>
+        <SolidColorBrush x:Key="status2" Color="#91F364"/>
+        <SolidColorBrush x:Key="status3" Color="#74B168"/>
+        <SolidColorBrush x:Key="status4" Color="#4EF500"/>
+        <SolidColorBrush x:Key="status5" Color="#153E02"/>
+        
         <!--#endregion-->
         
 

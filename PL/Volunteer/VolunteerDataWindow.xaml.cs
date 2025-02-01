@@ -115,7 +115,7 @@ namespace PL.Volunteer
                 }
                 else if (coordinates[0] == null)
                 {
-                    MessageBox.Show("Wrong Address", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Incorrect address, please enter a correct one.", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else if ((coordinates![0] < 31.45 || coordinates[0] > 32) || (coordinates[1] < 34.85 || coordinates[1] > 35.4))
                 {

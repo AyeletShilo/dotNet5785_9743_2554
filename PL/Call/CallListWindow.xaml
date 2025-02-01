@@ -88,6 +88,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="Background" Value="{Binding Path = Status, Converter={StaticResource ConvertStatusToColorKey}}" />
+                            <Setter Property="Foreground" Value="{Binding Path= Status, Converter={StaticResource ConvertStatusToFontColorKey}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
