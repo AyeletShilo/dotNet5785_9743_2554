@@ -149,7 +149,7 @@
                 Click="btnUpdate_Click"  
                 Margin="270,10,270,10"
                 Style="{StaticResource MainButtonStyle}"
-                IsEnabled="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateEnableKey}, Mode=TwoWay}"/>
+                IsEnabled="{Binding CurrentCall.Status, Converter={StaticResource ConvertUpdateTypeKey}, Mode=TwoWay}"/>
 
         <Button Style="{StaticResource BackArrowButton}"
                 Click="BackButton_Click"

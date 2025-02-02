@@ -18,7 +18,6 @@
         <local:OpenCallData x:Key="OpenCallsSortKey"/>
         <local:ConvertStatusToVisible x:Key="ConvertStatusToVisibleKey"/>
         <local:ConvertUpdateDetails x:Key = "ConvertUpdateDetailsKey" />
-        <local:ConvertUpdateEnable x:Key="ConvertUpdateEnableKey"/>
         <local:ConvertUpdateMaxTime x:Key = "ConvertUpdateMaxTimeKey" />
         <local:ConvertUpdateType x:Key = "ConvertUpdateTypeKey" />
         <local:ConvertActiveIsEnable x:Key="ConvertActiveIsEnableKey"/>
@@ -26,7 +25,6 @@
         <local:ConvertCallTypeToColor x:Key="ConvertCallTypeToColorKey" />
         <local:ConvertStatusToColor x:Key="ConvertStatusToColorKey"/>
         <local:ConvertStatusToFontColor x:Key="ConvertStatusToFontColorKey"/>
-        <!--<local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>-->
         <local:ConvertCallTypeToPitcher x:Key="ConvertCallTypeToPitcherKey"/>
         <local:ConvertDeleteToVisible x:Key="ConvertDeleteToVisibleKey"/>
         <local:FontSizeConverter x:Key="FontSizeConverterKey"/>
@@ -39,8 +37,11 @@
         <local:AddressToColorConverter x:Key="AddressToColorConverterKey"/>
         <local:DateTimeConverter x:Key="DateTimeConverterKey"/>
         <!--<local:AddressToToolTipConverter x:Key="AddressToToolTipConverterKey"/>-->
+        <!--<local:ConvertUpdateEnable x:Key="ConvertUpdateEnableKey"/>-->
+        <!--<local:ConvertVolTypeToColor x:Key="ConvertVolTypeToColorKey"/>-->
 
-
+        
+        
         <!--#region Colors-->
         <SolidColorBrush x:Key="PressedColor" Color="#c8c7b5"/>
         <SolidColorBrush x:Key="Greeny" Color="#B7E1A3"/>

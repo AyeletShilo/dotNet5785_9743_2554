@@ -26,42 +26,7 @@ public class ConvertUpdateToTrue : IValueConverter
     }
 }
 
-/// <summary>
-/// Does not allow changing the attribute when the window is used for adding rather than updating
-/// </summary>
-public class ConvertUpdateToVisible : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        if (value is string text && text.Equals("Update", StringComparison.OrdinalIgnoreCase))
-        {
-            return Visibility.Visible;
-        }
 
-        return Visibility.Collapsed;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException("ConvertBack is not implemented");
-    }
-}
-
-/// <summary>
-/// Does not allow entry to the call selection screen when there is a call in the volunteer's care
-/// </summary>
-public class NullToVisibilityConverter : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        return value == null ? Visibility.Collapsed : Visibility.Visible;
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException();
-    }
-}
 
 /// <summary>
 /// Removing the ability to update some call details based on call status
@@ -88,27 +53,6 @@ public class ConvertUpdateDetails : IValueConverter
     }
 }
 
-public class ConvertUpdateEnable : IValueConverter
-{
-    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        BO.CallStatus status = (BO.CallStatus)value;
-        switch (status)
-        {
-            case BO.CallStatus.Opened:
-                return true;
-            case BO.CallStatus.OpenInRisk:
-                return true;
-            default: return false;
-        }
-
-    }
-
-    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    {
-        throw new NotImplementedException("ConvertBack is not implemented");
-    }
-}
 
 /// <summary>
 /// Removing the ability to update some call details based on call status
@@ -174,6 +118,23 @@ public class ConvertActiveIsEnable : IValueConverter
     }
 }
 
+public class CallMultiConverter : IMultiValueConverter
+{
+    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    {
+
+        if (values[0] != null || (bool)values[1] == false)
+            return false;
+        return true;
+    }
+
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+#region visibility
 /// <summary>
 /// Hides the call in the volunteer's care details when there is no call or when it is for adding 
 /// </summary>
@@ -191,17 +152,38 @@ public class MultiToIsEnabledConverter : IMultiValueConverter
 }
 
 
-public class CallMultiConverter : IMultiValueConverter
+/// <summary>
+/// Does not allow changing the attribute when the window is used for adding rather than updating
+/// </summary>
+public class ConvertUpdateToVisible : IValueConverter
 {
-    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
+        if (value is string text && text.Equals("Update", StringComparison.OrdinalIgnoreCase))
+        {
+            return Visibility.Visible;
+        }
 
-        if (values[0] != null || (bool)values[1] == false)
-            return false;
-        return true;
+        return Visibility.Collapsed;
     }
 
-    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException("ConvertBack is not implemented");
+    }
+}
+
+/// <summary>
+/// Does not allow entry to the call selection screen when there is a call in the volunteer's care
+/// </summary>
+public class NullToVisibilityConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return value == null ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }
@@ -250,6 +232,7 @@ public class ConvertDeleteToVisible : IValueConverter
         throw new NotImplementedException("ConvertBack is not implemented");
     }
 }
+#endregion
 
 public class FontSizeConverter : IValueConverter
 {
@@ -265,6 +248,7 @@ public class FontSizeConverter : IValueConverter
     }
 }
 
+#region Time space
 /// <summary>
 /// convert timeSpan tobe on string format
 /// </summary>
@@ -373,3 +357,4 @@ public class DateTimeConverter : IValueConverter
         return parsedDate;
     }
 }
+#endregion
