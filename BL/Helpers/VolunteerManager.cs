@@ -58,44 +58,35 @@ internal static class VolunteerManager
     /// </summary>
     /// <param name="doVolunteer">The volunteer whose values ​​are being tested</param>
     /// <exception cref="BO.BlIntegrityOfValuesException">>Throws an exception if there is a problem with the logic of one of the values</exception>
-    internal static async Task updateCoordinates(DO.Volunteer doVolunteer, string? address = null, double? lat = null, double? lon = null)
-    {
-        if (doVolunteer.VolAddress != "" && doVolunteer.VolAddress != null)
-        {
+    //internal static async Task updateCoordinates(DO.Volunteer doVolunteer, string? address = null, double? lat = null, double? lon = null)
+    //{
+    //    if (doVolunteer.VolAddress != "" && doVolunteer.VolAddress != null)
+    //    {
 
-            double?[] AddressCoordinate = await CallManager.GetCoordinates(doVolunteer.VolAddress);
+    //        double?[] AddressCoordinate = await CallManager.GetCoordinates(doVolunteer.VolAddress);
 
-            if (AddressCoordinate is null)
-                lock (AdminManager.BlMutex)
-                    _dal.Volunteer.Update(new
-                        (doVolunteer.Id, doVolunteer.FullName,
-                        doVolunteer.PhoneNumber, doVolunteer.Email,
-                        doVolunteer.Password, doVolunteer.Job,
-                        doVolunteer.Active, doVolunteer.Distance,
-                        address, lat,
-                        lon, doVolunteer.MaxDistance));
+    //        if (AddressCoordinate is null)
+    //            lock (AdminManager.BlMutex)
+    //                _dal.Volunteer.Update(new
+    //                    (doVolunteer.Id, doVolunteer.FullName,
+    //                    doVolunteer.PhoneNumber, doVolunteer.Email,
+    //                    doVolunteer.Password, doVolunteer.Job,
+    //                    doVolunteer.Active, doVolunteer.Distance,
+    //                    address, lat,
+    //                    lon, doVolunteer.MaxDistance));
 
-            //if ((AddressCoordinate![0] < 31.45 && AddressCoordinate[0] > 32) || (AddressCoordinate[1] < 34.85 && AddressCoordinate[1] > 35.4))
-            //    lock (AdminManager.BlMutex)
-            //        _dal.Volunteer.Update(new
-            //            (doVolunteer.Id, doVolunteer.FullName,
-            //            doVolunteer.PhoneNumber, doVolunteer.Email,
-            //            doVolunteer.Password, doVolunteer.Job,
-            //            doVolunteer.Active, doVolunteer.Distance,
-            //            "Not In Range", -1,
-            //            -1, doVolunteer.MaxDistance));
+           
+    //        lock (AdminManager.BlMutex)
+    //            _dal.Volunteer.Update(new
+    //                (doVolunteer.Id, doVolunteer.FullName,
+    //                doVolunteer.PhoneNumber, doVolunteer.Email,
+    //                doVolunteer.Password, doVolunteer.Job,
+    //                doVolunteer.Active, doVolunteer.Distance,
+    //                doVolunteer.VolAddress, (double)AddressCoordinate[0]!,
+    //                (double)AddressCoordinate[1]!, doVolunteer.MaxDistance));
+    //    }
 
-            lock (AdminManager.BlMutex)
-                _dal.Volunteer.Update(new
-                    (doVolunteer.Id, doVolunteer.FullName,
-                    doVolunteer.PhoneNumber, doVolunteer.Email,
-                    doVolunteer.Password, doVolunteer.Job,
-                    doVolunteer.Active, doVolunteer.Distance,
-                    doVolunteer.VolAddress, (double)AddressCoordinate[0]!,
-                    (double)AddressCoordinate[1]!, doVolunteer.MaxDistance));
-        }
-
-    }
+    //}
 
 
         private static bool checkPass(string password)
@@ -126,8 +117,6 @@ internal static class VolunteerManager
 
         return isA && isa && isa && isdigit && isSign && isSame && isAbc;
     }
-
-
 
     /// <summary>
     /// Check that the ID received is correct
