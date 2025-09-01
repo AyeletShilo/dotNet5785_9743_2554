@@ -28,7 +28,7 @@ Coordinator addition,1 points
 Location: In the window title and taskbar
  Coordinator addition,1 points
 
- 7. IMultiValueConverter 
+7. IMultiValueConverter 
 Location: Converters-179,193
 Coordinator addition,1 points
 	
@@ -36,7 +36,7 @@ Coordinator addition,1 points
 Location: MainWindow->98-150 ,MainWindow.xaml-88,75
 Students addition,1 points
 
- 9.ControlTemplate 
+9 .ControlTemplate 
 Location fot exampple: App.Xaml-100 , 109- CallListwindow.xaml
 úåñôú øëæéí
 Coordinator addition,1 points
