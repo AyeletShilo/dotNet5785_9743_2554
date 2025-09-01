@@ -7,16 +7,16 @@ List of additions :
  Location : DalFacade->DO->Volunteer-23, DalFacade->DalXml->VolunteerImplementation
  Coordinator addition,2 points
 
- 2.Singleton
+ 2. Singleton
  Location : DalXml-27 ,DalList-24
  Coordinator addition,2 points
  
 
- 3.Initial password(BL)
+ 3. Initial password(BL)
  Location: VolunteerImplementation-261
  Coordinator addition,1 points
 
-4.Strong password
+4. Strong password
 Location: VolunteerManager-34,101
 Coordinator addition,1 points
 
@@ -24,7 +24,7 @@ Coordinator addition,1 points
  location for example: VolunteerWindow.xaml-91, Volunteer->validation 
  Coordinator addition,1 points
 
- 6.icon
+6. Icon
 Location: In the window title and taskbar
  Coordinator addition,1 points
 
@@ -38,14 +38,14 @@ Students addition,1 points
 
  9.ControlTemplate 
 Location fot exampple: App.Xaml-100 , 109- CallListwindow.xaml
-úåñôú øëæéí
+ÃºÃ¥Ã±Ã´Ãº Ã¸Ã«Ã¦Ã©Ã­
 Coordinator addition,1 points
 
 10. Triger
 Location for example: App.Xaml-233, AdminWindow.xaml-31
 Coordinator addition,1 points
 	
-11.graphics
+11. Graphics
 Location for example: App.xaml -263 ,VolunteerListWindow-101
 Coordinator addition,1 points
 
